@@ -108,7 +108,21 @@
     "search_not_found":"Không tìm thấy thông tin",
     "other":"Khác",
 
-    "input_search":"Nhập thông tin tìm kiếm"
+    "input_search":"Nhập thông tin tìm kiếm",
+
+
+    "detail_deal": "CHI TIẾT CƠ HỘI BÁN HÀNG",
+    "list_deal": "DANH SÁCH CƠ HỘI BÁN HÀNG",
+    "edit_deal": "CHỈNH SỬA CƠ HỘI BÁN HÀNG",
+
+    "according_order_source":"Theo nguồn đơn hàng",
+    "by_branch":"Theo chi nhánh",
+    "choose_branch":"Chọn chi nhánh",
+    "according_expected_ending":"Theo kết thúc dự kiến",
+    "according_actual_ending":"Theo kết thúc thực tế",
+    "warning_choose_full_fromdate_todate":"Vui lòng chọn đầy đủ từ ngày - đến ngày"
+
+
 
   }
   

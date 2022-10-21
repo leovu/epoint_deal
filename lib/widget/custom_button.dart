@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
+import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 
 class CustomButton extends StatelessWidget {
   final Color backgroundColor;

@@ -1,8 +1,8 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'package:epoint_deal_plugin/common/theme.dart';
+import 'package:epoint_deal_plugin/widget/custom_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/widget/custom_chip.dart';
 
 class CustomContentProjectItem extends StatelessWidget {
   final String title;

@@ -1,7 +1,7 @@
+import 'package:epoint_deal_plugin/common/lang_key.dart';
+import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/lang_key.dart';
-import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
 
 class CustomDataNotFound extends StatelessWidget {
   final String title;

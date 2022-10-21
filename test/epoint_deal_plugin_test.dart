@@ -9,7 +9,7 @@ class MockEpointDealPluginPlatform
     implements EpointDealPluginPlatform {
 
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  Future<String> getPlatformVersion() => Future.value('42');
 }
 
 void main() {

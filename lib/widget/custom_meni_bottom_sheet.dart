@@ -1,8 +1,7 @@
+import 'package:epoint_deal_plugin/common/lang_key.dart';
+import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/lang_key.dart';
-import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
-import 'package:lead_plugin_epoint/widget/custom_button.dart';
 
 class CustomMenuBottomSheet extends StatelessWidget {
   final Widget widget;
@@ -56,7 +55,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         if (allowBack)
                           Opacity(
                             child: InkWell(
-                              onTap: funcPop?? () => LeadNavigator.pop(context),
+                              onTap: funcPop?? () => Navigator.of(context).pop(),
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,

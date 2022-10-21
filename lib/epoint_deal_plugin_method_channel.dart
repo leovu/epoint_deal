@@ -10,7 +10,7 @@ class MethodChannelEpointDealPlugin extends EpointDealPluginPlatform {
   final methodChannel = const MethodChannel('epoint_deal_plugin');
 
   @override
-  Future<String?> getPlatformVersion() async {
+  Future<String> getPlatformVersion() async {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }

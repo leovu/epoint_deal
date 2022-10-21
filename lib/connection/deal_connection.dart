@@ -1,17 +1,30 @@
 import 'dart:io';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
+import 'package:epoint_deal_plugin/model/acount.dart';
+import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_customer_option_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
+import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
 class DealConnection {
-  static late BuildContext buildContext;
+  
+  static  BuildContext buildContext;
   static HTTPConnection connection = HTTPConnection();
-  // static Account account;
+  static Account account;
   // static Locale locale = Locale('vi', 'VN');
-  static late Locale locale;
+  static  Locale locale;
 
-  static Future<bool> init(String token, {String? domain}) async {
+  static Future<bool> init(String token, {String domain}) async {
     if (domain != null) {
       HTTPConnection.domain = domain;
       HTTPConnection.asscessToken = token;
@@ -21,16 +34,16 @@ class DealConnection {
     }
   }
 
-  static Future<ListCustomLeadModelReponse> getList(
-      BuildContext context, ListCustomLeadModelRequest model) async {
+  static Future<ListDealModelResponse> getList(
+      BuildContext context, ListDealModelRequest model) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/list-customer-lead', model.toJson());
+        '/customer-lead/customer-lead/list-deal', model.toJson());
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
       if (responseData.data != null) {
-        ListCustomLeadModelReponse data =
-            ListCustomLeadModelReponse.fromJson(responseData.data);
+        ListDealModelResponse data =
+            ListDealModelResponse.fromJson(responseData.data);
         return data;
       }
       return null;
@@ -38,22 +51,34 @@ class DealConnection {
     return null;
   }
 
-  static Future<DetailPotentialModelResponse> getdetailPotential(
-      BuildContext context, String customer_lead_code) async {
+  static Future<DetailDealModelResponse> getdetailPotential(
+      BuildContext context, String deal_code) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/detail-lead',
-        {"customer_lead_code": customer_lead_code});
+        '/customer-lead/customer-lead/detail-deal',
+        {"deal_code": deal_code});
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
-      DetailPotentialModelResponse data =
-          DetailPotentialModelResponse.fromJson(responseData.data);
+      DetailDealModelResponse data =
+          DetailDealModelResponse.fromJson(responseData.data);
       return data;
     }
     return null;
   }
 
-  static Future<GetCustomerOptionModelReponse> getCustomerOption(
+  static Future<BranchModelResponse> getBranch(
+      BuildContext context) async {
+    ResponseData responseData = await connection
+        .post('/customer-lead/customer-lead/get-branch', {});
+    if (responseData.isSuccess) {
+      BranchModelResponse data =
+          BranchModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+   static Future<GetCustomerOptionModelReponse> getCustomerOption(
       BuildContext context) async {
     ResponseData responseData = await connection
         .post('/customer-lead/customer-lead/get-customer-option', {});
@@ -64,6 +89,20 @@ class DealConnection {
     }
     return null;
   }
+  
+
+    static Future<OrderSourceModelResponse> getOrderSource(
+      BuildContext context) async {
+    ResponseData responseData = await connection
+        .post('/customer-lead/customer-lead/get-order-source', {});
+    if (responseData.isSuccess) {
+      OrderSourceModelResponse data =
+          OrderSourceModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
 
   static Future<GetPipelineModelReponse> getPipeline(
       BuildContext context) async {
@@ -91,42 +130,6 @@ class DealConnection {
     return null;
   }
 
-  static Future<GetProvinceModelReponse> getProvince(
-      BuildContext context) async {
-    ResponseData responseData =
-        await connection.post('/customer-lead/customer-lead/get-province', {});
-    if (responseData.isSuccess) {
-      GetProvinceModelReponse data =
-          GetProvinceModelReponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
-
-  static Future<GetDistrictModelReponse> getDistrict(
-      BuildContext context, int provinceid) async {
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/get-district',
-        {"provinceid": provinceid});
-    if (responseData.isSuccess) {
-      GetDistrictModelReponse data =
-          GetDistrictModelReponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
-
-  static Future<GetWardModelReponse> getWard(
-      BuildContext context, int districtid) async {
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/get-ward', {"districtid": districtid});
-    if (responseData.isSuccess) {
-      GetWardModelReponse data =
-          GetWardModelReponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
 
   static Future<GetAllocatorModelReponse> getAllocator(
       BuildContext context) async {
@@ -140,24 +143,24 @@ class DealConnection {
     return null;
   }
 
-  static Future<AddLeadModelResponse> addLead(
-      BuildContext context, AddLeadModelRequest model) async {
+  static Future<AddDealModelRequest> addLead(
+      BuildContext context, AddDealModelRequest model) async {
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/add-lead', model.toJson());
-    if (responseData.isSuccess) {
-      AddLeadModelResponse data =
-          AddLeadModelResponse.fromJson(responseData.data);
-      return data;
-    }
+        '/customer-lead/customer-lead/add-deals', model.toJson());
+    // if (responseData.isSuccess) {
+    //   AddLeadModelResponse data =
+    //       AddLeadModelResponse.fromJson(responseData.data);
+    //   return data;
+    // }
     return null;
   }
 
-  static Future<DescriptionModelResponse> deleteLead(
-      BuildContext context, String customer_lead_code) async {
+  static Future<DescriptionModelResponse> deleteDeal(
+      BuildContext context, String deal_code) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/delete-lead',
-        {"customer_lead_code": customer_lead_code});
+        '/customer-lead/customer-lead/delete-deal',
+        {"customer_lead_code": deal_code});
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
       DescriptionModelResponse data =
@@ -167,65 +170,65 @@ class DealConnection {
     return null;
   }
 
-  static Future<GetDealModelReponse> getDealName(BuildContext context) async {
-    ResponseData responseData =
-        await connection.post('/customer-lead/customer-lead/get-deal-name', {});
-    if (responseData.isSuccess) {
-      GetDealModelReponse data =
-          GetDealModelReponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
+  // static Future<GetDealModelReponse> getDealName(BuildContext context) async {
+  //   ResponseData responseData =
+  //       await connection.post('/customer-lead/customer-lead/get-deal-name', {});
+  //   if (responseData.isSuccess) {
+  //     GetDealModelReponse data =
+  //         GetDealModelReponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-  static Future<GetBranchModelReponse> getBranch(BuildContext context) async {
-    ResponseData responseData =
-        await connection.post('/customer-lead/customer-lead/get-branch', {});
-    if (responseData.isSuccess) {
-      GetBranchModelReponse data =
-          GetBranchModelReponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
+  // static Future<GetBranchModelReponse> getBranch(BuildContext context) async {
+  //   ResponseData responseData =
+  //       await connection.post('/customer-lead/customer-lead/get-branch', {});
+  //   if (responseData.isSuccess) {
+  //     GetBranchModelReponse data =
+  //         GetBranchModelReponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-  static Future<GetTagModelReponse> getTag(BuildContext context) async {
-    ResponseData responseData =
-        await connection.post('/customer-lead/customer-lead/get-tag', {});
-    if (responseData.isSuccess) {
-      GetTagModelReponse data = GetTagModelReponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
+  // static Future<GetTagModelReponse> getTag(BuildContext context) async {
+  //   ResponseData responseData =
+  //       await connection.post('/customer-lead/customer-lead/get-tag', {});
+  //   if (responseData.isSuccess) {
+  //     GetTagModelReponse data = GetTagModelReponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-  static Future<DescriptionModelResponse> updateLead(
-      BuildContext context, EditPotentialRequestModel model) async {
-    showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/update-lead', model.toJson());
-    Navigator.of(context).pop();
-    if (responseData.isSuccess) {
-      DescriptionModelResponse data =
-          DescriptionModelResponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
+  // static Future<DescriptionModelResponse> updateLead(
+  //     BuildContext context, EditPotentialRequestModel model) async {
+  //   showLoading(context);
+  //   ResponseData responseData = await connection.post(
+  //       '/customer-lead/customer-lead/update-lead', model.toJson());
+  //   Navigator.of(context).pop();
+  //   if (responseData.isSuccess) {
+  //     DescriptionModelResponse data =
+  //         DescriptionModelResponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-  static Future<DescriptionModelResponse> assignRevokeLead(
-      BuildContext context, AssignRevokeLeadRequestModel model) async {
-    showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/assign-revoke-lead', model.toJson());
-    Navigator.of(context).pop();
-    if (responseData.isSuccess) {
-      DescriptionModelResponse data =
-          DescriptionModelResponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
+  // static Future<DescriptionModelResponse> assignRevokeLead(
+  //     BuildContext context, AssignRevokeLeadRequestModel model) async {
+  //   showLoading(context);
+  //   ResponseData responseData = await connection.post(
+  //       '/customer-lead/customer-lead/assign-revoke-lead', model.toJson());
+  //   Navigator.of(context).pop();
+  //   if (responseData.isSuccess) {
+  //     DescriptionModelResponse data =
+  //         DescriptionModelResponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(

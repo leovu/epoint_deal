@@ -19,7 +19,7 @@ class EpointDealPluginWeb extends EpointDealPluginPlatform {
 
   /// Returns a [String] containing the version of the platform.
   @override
-  Future<String?> getPlatformVersion() async {
+  Future<String> getPlatformVersion() async {
     final version = html.window.navigator.userAgent;
     return version;
   }

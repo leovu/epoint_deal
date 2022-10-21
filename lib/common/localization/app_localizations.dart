@@ -27,7 +27,7 @@ class AppLocalizations {
   }
 
   Future<Map<String, dynamic>> configLanguage(String lang) async {
-  var jsonString = await rootBundle.loadString('packages/lead_plugin_epoint/assets/languages/lead_$lang.json', cache: false);
+  var jsonString = await rootBundle.loadString('packages/epoint_deal_plugin/assets/languages/deal_$lang.json', cache: false);
   Map<String, dynamic> jsonMap = json.decode(jsonString);
   if (jsonMap != null) {
     return jsonMap;
@@ -39,10 +39,6 @@ class AppLocalizations {
   }
 
 }
-
-// LocalizationsDelegate is a factory for a set of localized resources
-// ignore: lines_longer_than_80_chars
-// In this case, the localized strings will be gotten in an AppLocalizations object
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 

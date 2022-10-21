@@ -1,5 +1,5 @@
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
 
 class CustomImageIcon extends StatelessWidget {
   final Widget child;

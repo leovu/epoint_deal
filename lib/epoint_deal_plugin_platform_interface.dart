@@ -23,7 +23,7 @@ abstract class EpointDealPluginPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
+  Future<String> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

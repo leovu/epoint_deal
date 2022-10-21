@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,7 +15,7 @@ class HTTPConnection {
 
   Future<ResponseData>post(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': LeadConnection.locale.languageCode};
+    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
     // if(LeadConnection.account != null) {
       // headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
       headers['Authorization'] = 'Bearer ${asscessToken}';
@@ -63,9 +64,9 @@ class HTTPConnection {
   }
   Future<ResponseData>delete(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': LeadConnection.locale.languageCode};
-    if(LeadConnection.account != null) {
-      headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
+    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
+    if(DealConnection.account != null) {
+      headers['Authorization'] = 'Bearer ${DealConnection.account.accessToken}';
     }
     String jsonBody = json.encode(body);
     if (kDebugMode) {
@@ -107,9 +108,9 @@ class HTTPConnection {
   }
   Future<ResponseData>get(String path) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'brand-code':brandCode, 'lang': LeadConnection.locale.languageCode};
-    if(LeadConnection.account != null) {
-      headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
+    final headers = {'brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
+    if(DealConnection.account != null) {
+      headers['Authorization'] = 'Bearer ${DealConnection.account.accessToken}';
     }
     if (kDebugMode) {
       print('***** GET *****');

@@ -1,51 +1,33 @@
+import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:epoint_deal_plugin/epoint_deal_plugin.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    locale: const Locale('vi','VN'),
+    title: 'Navigation Basics',
+    debugShowCheckedModeBanner: false,
+    home:  MyApp(),
+  ));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
 
+class MyApp extends StatefulWidget {
+  MyApp({Key key, this.locale}) : super(key: key);
+final Locale locale;
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _epointDealPlugin = EpointDealPlugin();
 
+
+class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _epointDealPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +37,19 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+      child: InkWell(
+        child: Text("Open deal"),
+        onTap: () async {
+           var result = await EpointDealPlugin.open(context,const Locale(LangKey.langVi, 'VN'), 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY2NjI2MTE4MywiZXhwIjoxNjY2MjgyNzgzLCJuYmYiOjE2NjYyNjExODMsImp0aSI6IkNqNHlHaEhvanhJMEhEMkkiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.qXenPAzg2_kYKY_zXkTgURZcncF6r8kUwr5V8UpvyA4',
+     0,domain: 'https://staff-api.stag.epoints.vn', brandCode: 'qc');
+
+     if (result != null) {
+
+       print(result);
+     }
+        },
+      ),
+    ),
       ),
     );
   }

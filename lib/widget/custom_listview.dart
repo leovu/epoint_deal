@@ -1,6 +1,6 @@
 
+import 'package:epoint_deal_plugin/widget/custom_scroll_behavior.dart';
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/widget/custom_scroll_behavior.dart';
 
 class CustomListView extends StatelessWidget {
 
