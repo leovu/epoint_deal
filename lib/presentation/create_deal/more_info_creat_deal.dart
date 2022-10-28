@@ -46,6 +46,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   List<TagData> tagsData;
   List<TagData> tagsSelected;
 
+  List<Map<String,dynamic>> productSelected = [];
+
   String tagsString = "";
 
   @override
@@ -67,6 +69,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                               List<Map<String,dynamic>> result = await Global.openListProduct();
                               if (result != null) {
                                 if (result.length > 0) {
+                                  productSelected.clear();
                                   for (int i = 0 ; i < result.length ; i ++) {
                                     widget.detailDeal.product.add(Product(
                                 objectType: result[i]["object_type"] ?? "",
@@ -75,7 +78,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                                 objectId: result[i]["object_id"] ?? "",
                                 quantity: result[i]["quantity"] ?? "",
                                 price: result[i]["price"] ?? "",
-                                amount: result[i]["amount"] ?? ""));
+                                amount:(result[i]["quantity"] ?? 0)*(result[i]["price"] ?? 0))
+                                );
+                                productSelected.add(widget.detailDeal.product[i].toJson());
                                   };
                                 }
                               }
@@ -187,19 +192,27 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                         ),
                         InkWell(
                           onTap: () async {
+                            for (int i = 0 ; i < widget.detailDeal.product.length ; i ++) {
+                              productSelected.add(widget.detailDeal.product[i].toJson());
+                            }
                             if (Global.openListProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.openListProduct();
+                              List<Map<String,dynamic>> result = await Global.addMoreProduct(productSelected);
                               if (result != null) {
                                 if (result.length > 0) {
+                                  productSelected.clear();
                                   for (int i = 0 ; i < result.length ; i ++) {
                                     widget.detailDeal.product.add(Product(
                                 objectType: result[i]["object_type"] ?? "",
                                 objectName: result[i]["object_name"] ?? "",
                                 objectCode: result[i]["objectCode"] ?? "",
                                 objectId: result[i]["object_id"] ?? "",
-                                quantity: result[i]["quantity"] ?? "",
-                                price: result[i]["price"] ?? "",
-                                amount: result[i]["amount"] ?? ""));
+                                quantity: result[i]["quantity"] ?? 0,
+                                price: result[i]["price"] ?? 0,
+                                amount: (result[i]["quantity"] ?? 0)*(result[i]["price"] ?? 0)
+                                )
+                                );
+
+                                productSelected.add(widget.detailDeal.product[i].toJson());
                                   };
                                 }
                               }
@@ -499,11 +512,13 @@ widget.detailDeal.tag.add(tagsSelected[i].tagId);
           // xoa item
           {
         widget.detailDeal.product.removeAt(index);
+
         setState(() {});
       },
           // - so luong
           () {
         minusItem(widget.detailDeal.product[index]);
+
       },
           // + so luong
           () {

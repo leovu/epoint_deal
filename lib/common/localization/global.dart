@@ -6,4 +6,9 @@ class Global {
   
 
   static Function openListProduct;
+
+  static Function addMoreProduct;
+
+  static Function createJob;
+
 }
