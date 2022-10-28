@@ -15,7 +15,7 @@ class EpointDealPlugin {
     return EpointDealPluginPlatform.instance.getPlatformVersion();
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode , Function getListProduct}) async {
+  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String deal_code , Function getListProduct}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -43,7 +43,7 @@ class EpointDealPlugin {
       } else if (create == 1) {
         await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => DetailDealScreen()));
+                builder: (context) => DetailDealScreen(deal_code: deal_code,)));
         return null;
       } else {
         await Navigator.of(context).push(
