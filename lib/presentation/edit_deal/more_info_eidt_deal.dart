@@ -86,6 +86,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                               List<Map<String,dynamic>> result = await Global.getListProduct();
                               if (result != null) {
                                 if (result.length > 0) {
+                                  widget.detail.productBuy.clear();
                                   for (int i = 0 ; i < result.length ; i ++) {
                                     widget.detail.productBuy.add(ProductBuy(
                                 objectType: result[i]["object_type"] ?? "",
@@ -644,19 +645,21 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                  // width: MediaQuery.of(context).size.width - 80,
-                  child: RichText(
-                      text: TextSpan(
-                          text: item?.objectName ?? "",
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal),
-                          children: [
-                    TextSpan(
-                        text: "", style: TextStyle(color: Color(0xFF8E8E8E)))
-                  ]))),
+              Expanded(
+                child: Container(
+                    // width: MediaQuery.of(context).size.width - 80,
+                    child: RichText(
+                        text: TextSpan(
+                            text: item?.objectName ?? "",
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal),
+                            children: [
+                      TextSpan(
+                          text: "", style: TextStyle(color: Color(0xFF8E8E8E)))
+                    ]))),
+              ),
               InkWell(
                   onTap: ontapDelete,
                   child: Icon(
