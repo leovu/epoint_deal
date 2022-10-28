@@ -423,7 +423,7 @@ Navigator.of(context).pop();
                   customerSelected.customerCode = customer.customerCode;
                   customerSelected.customerName = customer.fullName;
                   _phoneNumberText.text = "";
-                  // _dealNameText.text = "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
+                  _dealNameText.text = "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
 
                   setState(() {});
                 }

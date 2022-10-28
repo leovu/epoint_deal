@@ -82,8 +82,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               (widget.detail.productBuy.length == 0)
                   ? InkWell(
                       onTap: () async {
-                        if (Global.addMoreProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.addMoreProduct();
+                        if (Global.getListProduct != null)  {
+                              List<Map<String,dynamic>> result = await Global.getListProduct();
                               if (result != null) {
                                 if (result.length > 0) {
                                   for (int i = 0 ; i < result.length ; i ++) {
@@ -173,8 +173,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                         ),
                         InkWell(
                           onTap: () async {
-                            if (Global.addMoreProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.addMoreProduct();
+                            if (Global.getListProduct != null)  {
+                              List<Map<String,dynamic>> result = await Global.getListProduct();
                               if (result != null) {
                                 if (result.length > 0) {
                                   for (int i = 0 ; i < result.length ; i ++) {
