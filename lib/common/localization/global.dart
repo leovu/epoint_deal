@@ -5,7 +5,7 @@ class Global {
   static bool validateClosingDueDate = true;
   
 
-  static Function openListProduct;
+  // static Function openListProduct;
 
   static Function addMoreProduct;
 

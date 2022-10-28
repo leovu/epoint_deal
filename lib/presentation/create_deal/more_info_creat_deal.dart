@@ -65,8 +65,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               (widget.detailDeal.product.length == 0)
                   ? InkWell(
                       onTap: () async {
-                        if (Global.openListProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.openListProduct();
+                        if (Global.addMoreProduct != null)  {
+                              List<Map<String,dynamic>> result = await Global.addMoreProduct();
                               if (result != null) {
                                 if (result.length > 0) {
                                   productSelected.clear();
@@ -195,7 +195,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                             for (int i = 0 ; i < widget.detailDeal.product.length ; i ++) {
                               productSelected.add(widget.detailDeal.product[i].toJson());
                             }
-                            if (Global.openListProduct != null)  {
+                            if (Global.addMoreProduct != null)  {
                               List<Map<String,dynamic>> result = await Global.addMoreProduct(productSelected);
                               if (result != null) {
                                 if (result.length > 0) {
@@ -532,6 +532,7 @@ widget.detailDeal.tag.add(tagsSelected[i].tagId);
       return;
     } else {
       item.quantity -= 1;
+       item.amount = item.quantity * item.price;
     }
 
     setState(() {});
@@ -539,6 +540,7 @@ widget.detailDeal.tag.add(tagsSelected[i].tagId);
 
   void plusItem(Product item) {
     item.quantity += 1;
+    item.amount = item.quantity * item.price;
     setState(() {});
   }
 

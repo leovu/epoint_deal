@@ -15,7 +15,7 @@ class EpointDealPlugin {
     return EpointDealPluginPlatform.instance.getPlatformVersion();
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String deal_code , Function getListProduct, Function addMoreProduct, Function createJob}) async {
+  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String deal_code , Function addMoreProduct, Function createJob}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -24,11 +24,6 @@ class EpointDealPlugin {
     }
     if(token != null) {
       HTTPConnection.asscessToken = token;
-    }
-
-    if (getListProduct != null) {
-      Global.openListProduct = getListProduct;
-
     }
 
     if (addMoreProduct != null) {
