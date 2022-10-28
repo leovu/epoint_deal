@@ -21,6 +21,7 @@ class Assets {
   static String iconSource = "packages/epoint_deal_plugin/assets/icons/ic_epoint_source.png";
   static String iconFanpage = "packages/epoint_deal_plugin/assets/icons/ic_epoint_fanpage.png";
   static String imgFeatureDeveloping = "packages/epoint_deal_plugin/assets/images/img_feature_developing.png";
+  static String imgEpoint = "packages/epoint_deal_plugin/assets/images/img_epoint.png";
   static String iconEdit = "packages/epoint_deal_plugin/assets/icons/ic_epoint_edit.png";
   static String iconWait = "packages/epoint_deal_plugin/assets/icons/ic_epoint_wait.png";
   static String iconDelete = "packages/epoint_deal_plugin/assets/icons/ic_epoint_delete.png";
@@ -35,5 +36,10 @@ class Assets {
   static String iconMessenger = "packages/epoint_deal_plugin/assets/icons/ic_mess.png";
   static String iconZalo = "packages/epoint_deal_plugin/assets/icons/ic_zalo.png";
   static String iconFilter = "packages/epoint_deal_plugin/assets/icons/ic-epoint_filter.png";
+  static String iconDealName = "packages/epoint_deal_plugin/assets/icons/ic_epoint_deal_name.png";
+  static String iconTag = "packages/epoint_deal_plugin/assets/icons/ic_epoint_tag.png";
+  static String iconOrderSource = "packages/epoint_deal_plugin/assets/icons/ic_epoint_order_source.png";
+  static String iconProbability = "packages/epoint_deal_plugin/assets/icons/ic_epoint_percent.png";
+  static String iconDealDetail = "packages/epoint_deal_plugin/assets/icons/ic_epoint_deal_detail.png";
 
 }

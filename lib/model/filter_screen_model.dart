@@ -35,4 +35,25 @@ class FilterScreenModel {
 
         );
   }
+
+     Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['filterModel'] = filterModel.toJson();
+    data['fromDate_created_at'] = fromDate_created_at;
+    data['toDate_created_at'] = toDate_created_at;
+    data['id_created_at'] = id_created_at ?? "";
+
+    data['fromDate_closing_date'] = fromDate_closing_date;
+    data['toDate_closing_date'] = toDate_closing_date;
+    data['id_closing_date'] = id_closing_date ?? "";
+
+    data['fromDate_closing_due_date'] = fromDate_closing_due_date;
+    data['toDate_closing_due_date'] = toDate_closing_due_date;
+    data['id_closing_due_date'] = id_closing_due_date ?? "";
+
+    return data;
+  }
+
+
+
 }

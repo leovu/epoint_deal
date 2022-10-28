@@ -132,7 +132,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
         ),
         backgroundColor: AppColors.primaryColor,
         title: Text(
-          AppLocalizations.text(LangKey.listPotential),
+          AppLocalizations.text(LangKey.list_deal),
           style: const TextStyle(color: Colors.white, fontSize: 16.0),
         ),
         leadingWidth: 20.0,
@@ -143,18 +143,19 @@ class _ListDealScreenState extends State<ListDealScreen> {
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => FilterDealCustomer(
                             filterScreenModel: filterScreenModel,
-                            pipeLineData: pipeLineData,
-                            branchData: branchData,
                           )
                         )
                       );
               print("bbbb");
 
               if (result != null) {
+                filterScreenModel = result;
                 filterModel = result.filterModel;
                 print("aaaaa");
                 filterModel.page = 1;
                 getData(false);
+              } else {
+
               }
             },
             child: Padding(
@@ -175,10 +176,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
           var result = await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CreateDealScreen()));
 
-          if (result != null) {
-            if (result.status) {
+          if (result != null && result) {
               getData(false);
-            }
           }
         },
         child: const Icon(Icons.add),
@@ -314,7 +313,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         margin: EdgeInsets.only(right: 5),
                         height: 40,
                         decoration: BoxDecoration(
-                            color: Color(0xFF11B482),
+                            color: (item?.backgroundColorJourney != null) ? HexColor(item?.backgroundColorJourney ) : Color(0xFF11B482),
                             borderRadius: BorderRadius.circular(50)),
                         child: Center(
                           child: Text(
@@ -351,7 +350,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
               height: 50,
               width: 50,
               decoration: BoxDecoration(
-                color: Color(0xFF06A605),
+                color: Color.fromRGBO(6, 166, 5, 1),
                 borderRadius: BorderRadius.circular(50),
                 // border:  Border.all(color: AppColors.white,)
               ),
@@ -400,4 +399,17 @@ class _ListDealScreenState extends State<ListDealScreen> {
     // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
     return await launch("tel:" + phone.replaceAll(regSpace, ""));
   }
+}
+
+
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }

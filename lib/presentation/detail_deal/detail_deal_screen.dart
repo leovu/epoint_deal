@@ -5,17 +5,19 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
+import 'package:epoint_deal_plugin/model/request/assign_revoke_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
+import 'package:epoint_deal_plugin/presentation/detail_deal/allocator_screen.dart';
 import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_screen.dart';
 import 'package:epoint_deal_plugin/widget/custom_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailDealScreen extends StatefulWidget {
- String deal_code;
- DetailDealScreen({ Key key,this.deal_code }) : super(key: key);
+  String deal_code;
+  DetailDealScreen({Key key, this.deal_code}) : super(key: key);
 
   @override
   _DetailDealScreenState createState() => _DetailDealScreenState();
@@ -25,9 +27,18 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   final ScrollController _controller = ScrollController();
   DetailDealData detail;
 
+  final formatter = NumberFormat.currency(
+    locale: 'vi_VN',
+    decimalDigits: 0,
+    symbol: '',
+  );
+
   @override
   void initState() {
     super.initState();
+
+    final formattedValue = formatter.format(num.parse('1200000.00'));
+    print(formattedValue);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getData();
@@ -35,8 +46,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   }
 
   void getData() async {
-    var dataDetail = await DealConnection.getdetailPotential(
-        context, widget.deal_code);
+    var dataDetail =
+        await DealConnection.getdetailDeal(context, widget.deal_code);
     if (dataDetail != null) {
       detail = dataDetail.data;
       setState(() {});
@@ -58,7 +69,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         ),
         backgroundColor: AppColors.primaryColor,
         title: Text(
-          AppLocalizations.text(LangKey.detailPotential),
+          AppLocalizations.text(LangKey.detail_deal),
           style: const TextStyle(color: Colors.white, fontSize: 18.0),
         ),
         leadingWidth: 20.0,
@@ -84,8 +95,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           AppLocalizations.text(LangKey.edit),
                           Assets.iconEdit,
                           Color.fromARGB(255, 89, 177, 150), () async {
-                        bool result = await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => EditDealScreen()));
+                        bool result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    EditDealScreen(detail: detail)));
 
                         if (result != null) {
                           if (result) {
@@ -115,65 +128,64 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           }
                         }
                       }),
-                      (detail?.staffName != null)
+                      (detail?.saleId == null)
                           ? _buildFunction(
                               AppLocalizations.text(LangKey.assignment),
                               Assets.iconAssignment,
                               Color(0xFF2F9AF4), () async {
-                              // int staffID = await LeadNavigator.push(
-                              //     context, AllocatorScreen());
+                              int staffID = await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => AllocatorScreen()));
 
-                              // if (staffID != null) {
-                              //   DescriptionModelResponse result =
-                              //       await LeadConnection.assignRevokeLead(
-                              //           context,
-                              //           AssignRevokeLeadRequestModel(
-                              //               type: "assign",
-                              //               customerLeadCode:
-                              //                   detail.customerLeadCode,
-                              //               saleId: staffID,
-                              //               timeRevokeLead: 30));
+                              if (staffID != null) {
+                                DescriptionModelResponse result =
+                                    await DealConnection.assignRevokeLead(
+                                        context,
+                                        AssignRevokeDealModelRequest(
+                                            type: "assign",
+                                            dealCode: detail.dealCode,
+                                            saleId: staffID,
+                                            timeRevokeLead: 30));
 
-                              //   if (result != null) {
-                              //     if (result.errorCode == 0) {
-                              //       print(result.errorDescription);
+                                if (result != null) {
+                                  if (result.errorCode == 0) {
+                                    print(result.errorDescription);
 
-                              //       await DealConnection.showMyDialog(
-                              //           context, result.errorDescription);
-                              //       getData();
-                              //     } else {
-                              //       DealConnection.showMyDialog(
-                              //           context, result.errorDescription);
-                              //     }
-                              //   }
-                              // }
+                                    await DealConnection.showMyDialog(
+                                        context, result.errorDescription);
+                                    getData();
+                                  } else {
+                                    DealConnection.showMyDialog(
+                                        context, result.errorDescription);
+                                  }
+                                }
+                              }
                             })
                           : _buildFunction(
                               AppLocalizations.text(LangKey.recall),
                               Assets.iconRecall,
                               Color(0xFF2F9AF4), () async {
-                              // DescriptionModelResponse result =
-                              //     await LeadConnection.assignRevokeLead(
-                              //         context,
-                              //         AssignRevokeLeadRequestModel(
-                              //             type: "revoke",
-                              //             customerLeadCode:
-                              //                 detail.customerLeadCode,
-                              //             saleId: detail.saleId,
-                              //             timeRevokeLead: 30));
+                              DescriptionModelResponse result =
+                                  await DealConnection.assignRevokeLead(
+                                      context,
+                                      AssignRevokeDealModelRequest(
+                                          type: "revoke",
+                                          dealCode: detail.dealCode,
+                                          saleId: detail.saleId,
+                                          timeRevokeLead: 30));
 
-                              // if (result != null) {
-                              //   if (result.errorCode == 0) {
-                              //     print(result.errorDescription);
+                              if (result != null) {
+                                if (result.errorCode == 0) {
+                                  print(result.errorDescription);
 
-                              //     await LeadConnection.showMyDialog(
-                              //         context, result.errorDescription);
-                              //     getData();
-                              //   } else {
-                              //     LeadConnection.showMyDialog(
-                              //         context, result.errorDescription);
-                              //   }
-                              // }
+                                  await DealConnection.showMyDialog(
+                                      context, result.errorDescription);
+                                  getData();
+                                } else {
+                                  DealConnection.showMyDialog(
+                                      context, result.errorDescription);
+                                }
+                              }
                             }),
                       _buildFunction(
                           AppLocalizations.text(LangKey.createJobs),
@@ -190,14 +202,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 controller: _controller,
                 children: buildInfomation(),
               )),
-              buildButtonConvert(
-                  AppLocalizations.text(LangKey.convertCustomers), () {
-                print("chuyen doi khach hang");
-              }),
-              buildButtonConvert(
-                  AppLocalizations.text(LangKey.convertCustomersWithDeal), () {
-                print("chuyen doi khach hang co tao deal");
-              }),
               Container(
                 height: 20.0,
               )
@@ -255,15 +259,21 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               children: [
                 _phoneNumberItem(),
                 const Divider(),
-                _infoItem(AppLocalizations.text(LangKey.customerSource),
-                    detail?.amount ?? "" + "VND"),
+                _infoItem(
+                    // AppLocalizations.text(LangKey.customerSource),
+                    "Giá deal",
+                    formatter.format(num.parse(detail?.amount ?? "")) + "VNĐ"),
                 const Divider(),
-                _infoItem(AppLocalizations.text(LangKey.customerStyle),
+                _infoItem(
+                    // AppLocalizations.text(LangKey.customerStyle),
+                    "Mã deal",
                     detail?.dealCode ?? ""),
                 const Divider(),
-                (detail?.staffName != null) ? _infoItem(AppLocalizations.text(LangKey.allottedPerson),
-                    detail?.staffName ?? "") : Container(),
-                 (detail?.staffName != null) ? Divider() : Container(),
+                (detail?.staffName != null)
+                    ? _infoItem(AppLocalizations.text(LangKey.allottedPerson),
+                        detail?.staffName ?? "")
+                    : Container(),
+                (detail?.staffName != null) ? Divider() : Container(),
                 _infoItem(AppLocalizations.text(LangKey.pipeline),
                     detail?.pipelineCode ?? ""),
               ],
@@ -307,27 +317,27 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               width: 10.0,
             ),
             (lenght > 0)
-                ? journeyitem(AppLocalizations.text(LangKey.newDeal),
+                ? journeyitem(detail.journeyTracking[0].journeyName,
                     detail.journeyTracking[0].check, 130.0)
                 : Container(),
             (lenght > 1)
-                ? journeyitem(AppLocalizations.text(LangKey.haveInfomation),
+                ? journeyitem((detail.journeyTracking[1].journeyName),
                     detail.journeyTracking[1].check, 190.0)
                 : Container(),
             (lenght > 2)
-                ? journeyitem(AppLocalizations.text(LangKey.consulting),
+                ? journeyitem((detail.journeyTracking[2].journeyName),
                     detail?.journeyTracking[2].check, 190.0)
                 : Container(),
             (lenght > 3)
-                ? journeyitem(AppLocalizations.text(LangKey.negotiate),
+                ? journeyitem((detail.journeyTracking[3].journeyName),
                     detail.journeyTracking[3].check, 190.0)
                 : Container(),
             (lenght > 4)
-                ? journeyitem(AppLocalizations.text(LangKey.success),
+                ? journeyitem((detail.journeyTracking[4].journeyName),
                     detail.journeyTracking[4].check, 180.0)
                 : Container(),
             (lenght > 5)
-                ? journeyitem(AppLocalizations.text(LangKey.fail),
+                ? journeyitem((detail.journeyTracking[5].journeyName),
                     detail.journeyTracking[5].check, 180.0)
                 : Container(),
             Container(
@@ -425,7 +435,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         child: Container(
             decoration: BoxDecoration(
                 color: color,
-                border:  Border(
+                border: Border(
                     top: BorderSide(color: AppColors.lineColor, width: 2.0),
                     right: BorderSide(color: AppColors.lineColor, width: 2.0))),
             height: 30,
@@ -442,7 +452,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       child: Row(
         children: [
           Container(
-            width: (MediaQuery.of(context).size.width) / 1.9,
+            width: (MediaQuery.of(context).size.width) / 2.1,
             child: Row(
               children: [
                 if (icon != null)
@@ -487,7 +497,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       child: Row(
         children: [
           Container(
-            width: (MediaQuery.of(context).size.width) / 1.9,
+            width: (MediaQuery.of(context).size.width) / 2.1,
             child: Row(
               children: [
                 Container(
@@ -579,28 +589,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       ),
     );
   }
-
-  Widget buildButtonConvert(String title, Function ontap) {
-    return Container(
-      margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
-      height: 40,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
-      child: InkWell(
-        onTap: ontap,
-        child: Center(
-          child: Text(
-            // AppLocalizations.text(LangKey.convertCustomers),
-            title,
-            style: AppTextStyles.style16WhiteBold,
-            maxLines: 1,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class DetailPotentialTabModel {
@@ -637,15 +625,15 @@ class _SSubDetailDealCustomerCustomerState
         typeID: 1,
         selected: true),
     DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.infomationDeal),
+        typeName: AppLocalizations.text(LangKey.recentActivity),
         typeID: 2,
         selected: false),
     DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.customerCare),
+        typeName: AppLocalizations.text(LangKey.customerInformation),
         typeID: 3,
         selected: false),
     DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.historyCare),
+        typeName: AppLocalizations.text(LangKey.customerCare),
         typeID: 4,
         selected: false)
   ];
@@ -661,7 +649,11 @@ class _SSubDetailDealCustomerCustomerState
         // Container(
         //   height: 20,
         // ),
-        (index == 0) ? generalInfomation() : dealInfomation()
+        (index == 2)
+            ? generalInfomation()
+            : (index == 0)
+                ? detailInformation()
+                : dealInfomation()
       ],
     );
   }
@@ -674,17 +666,17 @@ class _SSubDetailDealCustomerCustomerState
           index = 0;
           selectedTab(0);
         }),
-        option(AppLocalizations.text(LangKey.infomationDeal),
+        option(AppLocalizations.text(LangKey.recentActivity),
             tabPotentials[1].selected, 100, () {
           index = 1;
           selectedTab(1);
         }),
-        option(AppLocalizations.text(LangKey.customerCare),
+        option(AppLocalizations.text(LangKey.customerInformation),
             tabPotentials[2].selected, 150, () {
           index = 2;
           selectedTab(2);
         }),
-        option(AppLocalizations.text(LangKey.historyCare),
+        option(AppLocalizations.text(LangKey.customerCare),
             tabPotentials[3].selected, 120, () {
           index = 3;
           selectedTab(3);
@@ -753,8 +745,27 @@ class _SSubDetailDealCustomerCustomerState
 
           const Divider(),
 
-          _infoItem(
-              AppLocalizations.text(LangKey.email), widget.detail?.phone ?? "",
+          _infoItem(AppLocalizations.text(LangKey.fullName),
+              widget.detail?.customerName ?? "",
+              icon: Assets.iconStyleCustomer),
+          const Divider(),
+          _infoItem(AppLocalizations.text(LangKey.phoneNumber),
+              widget.detail?.phone ?? "",
+              icon: Assets.iconCall),
+          const Divider(),
+
+          _infoItem(AppLocalizations.text(LangKey.customerStyle),
+              widget.detail?.typeCustomer ?? "",
+              icon: Assets.iconSourceCustomer),
+          const Divider(),
+
+          _infoItem(AppLocalizations.text(LangKey.customerSource),
+              widget.detail?.orderSourceName ?? "",
+              icon: Assets.iconPerson),
+          const Divider(),
+
+          _infoItem(AppLocalizations.text(LangKey.email),
+              widget.detail?.customerEmail ?? "",
               icon: Assets.iconEmail),
           const Divider(),
           sexInfo(widget.detail?.customerGender ?? ""),
@@ -778,14 +789,93 @@ class _SSubDetailDealCustomerCustomerState
           _infoItem(AppLocalizations.text(LangKey.businessFocalPoint),
               widget.detail?.staffName ?? "",
               icon: Assets.iconPoint),
-          const Divider(),
-          // _infoItem(
-          //     AppLocalizations.text(LangKey.zalo), widget.detail?.zalo ?? "",
-          //     icon: Assets.iconSource, icon2: Assets.iconZalo),
           // const Divider(),
-          // _infoItem(AppLocalizations.text(LangKey.fanpage),
-          //     widget.detail?.fanpage ?? "",
-          //     icon: Assets.iconFanpage, icon2: Assets.iconMessenger)
+          // _infoItem(
+          //     AppLocalizations.text(LangKey.zalo), widget.detail?. ?? "",
+          //     icon: Assets.iconSource, icon2: Assets.iconZalo),
+        ],
+      ),
+    );
+  }
+
+  Widget detailInformation() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Padding(
+          //   padding: const EdgeInsets.all(8),
+          //   child: Text(
+          //     AppLocalizations.text(LangKey.picture),
+          //     style: TextStyle(
+          //         fontSize: AppTextSizes.size15,
+          //         color: const Color(0xFF858080),
+          //         fontWeight: FontWeight.normal),
+          //   ),
+          // ),
+          Divider(),
+
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.allottedPerson),
+            widget.detail?.staffName ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.product),
+            widget.detail?.productNameBuy ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.expectedEndingDate),
+            widget.detail?.closingDate ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.actualEndDate),
+            widget.detail?.closingDueDate ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.reasonForFailure),
+            widget.detail?.reasonLoseCode ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.agency),
+            widget.detail?.branchName ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.orderSource),
+            widget.detail?.orderSourceName ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.probability),
+            NumberFormat.currency(
+                  locale: 'vi_VN',
+                  decimalDigits: 0,
+                  symbol: '',
+                ).format(num.parse(widget.detail?.probability ?? "0")) + "%",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.dealDetail),
+            widget.detail?.dealDescription ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.dateCreated),
+            widget.detail?.createdAt ?? "",
+          ),
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.lastModifiedDate),
+            widget.detail?.updatedAt ?? "",
+          ),
+          Divider(),
         ],
       ),
     );
@@ -837,6 +927,37 @@ class _SSubDetailDealCustomerCustomerState
     );
   }
 
+  Widget _infoDetailItem(String title, String content, {TextStyle style}) {
+    return Container(
+      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+      margin: EdgeInsets.only(left: 15.0 / 2),
+      child: Row(
+        children: [
+          Container(
+            width: (MediaQuery.of(context).size.width) / 1.9,
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 8.0),
+                  child: Text(
+                    title,
+                    style: AppTextStyles.style15BlackNormal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              child: Text(
+            content,
+            style: style ?? AppTextStyles.style15BlackNormal,
+            // maxLines: 1,
+          )),
+        ],
+      ),
+    );
+  }
+
   Widget dealInfomation() {
     return Container(
       margin: EdgeInsets.only(top: 50.0, bottom: 100.0),
@@ -860,7 +981,7 @@ class _SSubDetailDealCustomerCustomerState
 
   Widget sexInfo(String sex) {
     return Container(
-      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
       margin: EdgeInsets.only(left: 15.0 / 2),
       child: Row(
         children: [
@@ -869,7 +990,7 @@ class _SSubDetailDealCustomerCustomerState
             child: Row(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(right: 10.0),
+                  margin: const EdgeInsets.only(right: 4.0),
                   height: 20.0,
                   width: 20.0,
                   child: Image.asset(Assets.iconSex),
@@ -885,34 +1006,40 @@ class _SSubDetailDealCustomerCustomerState
               ],
             ),
           ),
-          sex != ""  ? Container(
-            height: 40,
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-                color: AppColors.darkGrey,
-                borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              children: [
-                sex != "other" ? Container(
-                  margin: const EdgeInsets.only(
-                    right: 4.0,
+          sex != ""
+              ? Container(
+                  height: 40,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: AppColors.darkGrey,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      sex != "other"
+                          ? Container(
+                              margin: const EdgeInsets.only(
+                                right: 4.0,
+                              ),
+                              height: 20.0,
+                              width: 20.0,
+                              child: sex == "male"
+                                  ? Image.asset(Assets.iconMale)
+                                  : Image.asset(Assets.iconFemale),
+                            )
+                          : Container(),
+                      Text(
+                        sex == "other"
+                            ? AppLocalizations.text(LangKey.other)
+                            : sex == "male"
+                                ? AppLocalizations.text(LangKey.male)
+                                : AppLocalizations.text(LangKey.female),
+                        style: AppTextStyles.style15BlackNormal,
+                        maxLines: 1,
+                      )
+                    ],
                   ),
-                  height: 20.0,
-                  width: 20.0,
-                  child: sex == "male"
-                      ? Image.asset(Assets.iconMale)
-                      : Image.asset(Assets.iconFemale),
-                ) : Container(),
-                Text(
-                  sex == "other" ? AppLocalizations.text(LangKey.other) : sex == "male"
-                      ? AppLocalizations.text(LangKey.male)
-                      : AppLocalizations.text(LangKey.female),
-                  style: AppTextStyles.style15BlackNormal,
-                  maxLines: 1,
                 )
-              ],
-            ),
-          ) : Container()
+              : Container()
         ],
       ),
     );

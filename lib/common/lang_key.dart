@@ -114,12 +114,28 @@ class LangKey {
   static const String detail_deal = "detail_deal";
   static const String list_deal = "list_deal";
   static const String edit_deal = "edit_deal";
-  
+  static const String editDealTolowcase = "edit_deal_tolowcase";
+
   static const String accordingOrderSource = "according_order_source";
   static const String byBranch = "by_branch";
   static const String chooseBranch = "choose_branch";
   static const String accordingExpectedEnding = "according_expected_ending";
   static const String accordingActualEnding = "according_actual_ending";
-  static const String warningChooseFullFromdateTodate = "warning_choose_full_fromdate_todate";
-  
+  static const String warningChooseFullFromdateTodate =
+      "warning_choose_full_fromdate_todate";
+  static const String inputDealName = "input_deal_name";
+  static const String dealInfomation = "deal_infomation";
+  static const String listCustomer = "list_customer";
+  static const String choose_customer = "choose_customer";
+  static const String expectedEndingDate = "expected_ending_date";
+
+  static const String yourOrder = "your_order";
+  static const String chooseMoreItem = "choose_more_item";
+  static const String addProduct = "add_product";
+  static const String creatDeal = "creat_deal";
+  static const String showMore = "show_more";
+  static const String customer = "customer";
+  static const String listLead = "list_lead";
+  static const String fullName = "fullname";
+  static const String dealOf = "deal_of";
 }

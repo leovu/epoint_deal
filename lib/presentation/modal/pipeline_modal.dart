@@ -1,12 +1,14 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class PipelineModal extends StatefulWidget {
   List<PipelineData> pipeLineData = <PipelineData>[];
- PipelineModal({ Key key, this.pipeLineData });
+  PipelineData pipelineSelected;
+ PipelineModal({ Key key, this.pipeLineData, this.pipelineSelected });
 
   @override
   _PipelineModalState createState() => _PipelineModalState();
@@ -14,6 +16,22 @@ class PipelineModal extends StatefulWidget {
 
 class _PipelineModalState extends State<PipelineModal> {
   final ScrollController _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+        PipelineData result = widget.pipeLineData.firstWhereOrNull((element) => element.pipelineCode == widget.pipelineSelected?.pipelineCode);
+      if (result != null) {
+         widget.pipelineSelected = result;
+         result.selected = true;
+      }
+         setState(() {
+           
+         });
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {

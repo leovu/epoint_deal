@@ -1,14 +1,15 @@
-class ListDealModelResponse {
+class ListCustomLeadModelReponse {
   int errorCode;
   String errorDescription;
-  ListDealData data;
+  ListCustomLeadData data;
 
-  ListDealModelResponse({this.errorCode, this.errorDescription, this.data});
+  ListCustomLeadModelReponse(
+      {this.errorCode, this.errorDescription, this.data});
 
-  ListDealModelResponse.fromJson(Map<String, dynamic> json) {
-    errorCode = json['ErrorCode'];
-    errorDescription = json['ErrorDescription'];
-    data = json['Data'] != null ? new ListDealData.fromJson(json['Data']) : null;
+  ListCustomLeadModelReponse.fromJson(Map<String, dynamic> json) {
+    errorCode = json['ErrorCode'] ?? null;
+    errorDescription = json['ErrorDescription'] ?? null;
+    data = json['Data'] != null ? new ListCustomLeadData.fromJson(json['Data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,20 +23,20 @@ class ListDealModelResponse {
   }
 }
 
-class ListDealData {
-  PageInfo pageInfo;
-  List<DealItems> items;
+class ListCustomLeadData {
+  ListCustomLeadPageInfo pageInfo;
+  List<ListCustomLeadItems> items;
 
-  ListDealData({this.pageInfo, this.items});
+  ListCustomLeadData({this.pageInfo, this.items});
 
-  ListDealData.fromJson(Map<String, dynamic> json) {
+  ListCustomLeadData.fromJson(Map<String, dynamic> json) {
     pageInfo = json['PageInfo'] != null
-        ? new PageInfo.fromJson(json['PageInfo'])
+        ? new ListCustomLeadPageInfo.fromJson(json['PageInfo'])
         : null;
     if (json['Items'] != null) {
-      items = <DealItems>[];
+      items = <ListCustomLeadItems>[];
       json['Items'].forEach((v) {
-        items.add(new DealItems.fromJson(v));
+        items.add(new ListCustomLeadItems.fromJson(v));
       });
     }
   }
@@ -52,7 +53,7 @@ class ListDealData {
   }
 }
 
-class PageInfo {
+class ListCustomLeadPageInfo {
   int total;
   int itemPerPage;
   int from;
@@ -64,7 +65,7 @@ class PageInfo {
   int nextPage;
   List<int> pageRange;
 
-  PageInfo(
+  ListCustomLeadPageInfo(
       {this.total,
       this.itemPerPage,
       this.from,
@@ -76,7 +77,7 @@ class PageInfo {
       this.nextPage,
       this.pageRange});
 
-  PageInfo.fromJson(Map<String, dynamic> json) {
+  ListCustomLeadPageInfo.fromJson(Map<String, dynamic> json) {
     total = json['total'] ?? 0 ;
     itemPerPage = json['itemPerPage'] ?? 10;
     from = json['from'] ?? 0;
@@ -105,82 +106,70 @@ class PageInfo {
   }
 }
 
-class DealItems {
-  String dealName;
+class ListCustomLeadItems {
+  String avatar;
+  String leadFullName;
+  String customerType;
   String phone;
-  String createdAt;
-  String staffFullName;
-  String typeCustomer;
-  String customerCode;
-  String dealCode;
-  String pipelineCode;
-  String journeyCode;
   String journeyName;
-  String branchCode;
-  String branchName;
-  String orderSourceName;
+  String zalo;
+  String staffFullName;
+  int saleId;
+  String tagName;
+  String customerSourceName;
+  int isConvert;
   String pipelineName;
-  String customerName;
-  String backgroundColorJourney;
+  String customerLeadCode;
   bool selected;
 
-  DealItems(
-      {this.dealName,
+  ListCustomLeadItems(
+      {this.avatar,
+      this.leadFullName,
+      this.customerType,
       this.phone,
-      this.createdAt,
-      this.staffFullName,
-      this.typeCustomer,
-      this.customerCode,
-      this.dealCode,
-      this.pipelineCode,
-      this.journeyCode,
       this.journeyName,
-      this.branchCode,
-      this.branchName,
-      this.orderSourceName,
+      this.zalo,
+      this.staffFullName,
+      this.saleId,
+      this.tagName,
+      this.customerSourceName,
+      this.isConvert,
       this.pipelineName,
-      this.customerName,
-      this.backgroundColorJourney,
+      this.customerLeadCode,
       this.selected});
 
-  DealItems.fromJson(Map<String, dynamic> json) {
-    dealName = json['deal_name'];
-    phone = json['phone'];
-    createdAt = json['created_at'];
-    staffFullName = json['staff_full_name'];
-    typeCustomer = json['type_customer'];
-    customerCode = json['customer_code'];
-    dealCode = json['deal_code'];
-    pipelineCode = json['pipeline_code'];
-    journeyCode = json['journey_code'];
+  ListCustomLeadItems.fromJson(Map<String, dynamic> json) {
+    avatar = json['avatar'] ?? "" ;
+    leadFullName = json['lead_full_name'] ?? "";
+    customerType = json['customer_type'] ?? "";
+    phone = json['phone'] ?? "";
     journeyName = json['journey_name'];
-    branchCode = json['branch_code'];
-    branchName = json['branch_name'];
-    orderSourceName = json['order_source_name'];
+    zalo = json['zalo'];
+    staffFullName = json['staff_full_name'];
+    saleId = json['sale_id'];
+    tagName = json['tag_name'];
+    customerSourceName = json['customer_source_name'];
+    isConvert = json['is_convert'];
     pipelineName = json['pipeline_name'];
-    customerName = json['customer_name'];
-    backgroundColorJourney = json['background_color_journey'];
+    customerLeadCode = json['customer_lead_code'];
     selected = json['selected'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['deal_name'] = this.dealName;
+    data['avatar'] = this.avatar;
+    data['lead_full_name'] = this.leadFullName;
+    data['customer_type'] = this.customerType;
     data['phone'] = this.phone;
-    data['created_at'] = this.createdAt;
-    data['staff_full_name'] = this.staffFullName;
-    data['type_customer'] = this.typeCustomer;
-    data['customer_code'] = this.customerCode;
-    data['deal_code'] = this.dealCode;
-    data['pipeline_code'] = this.pipelineCode;
-    data['journey_code'] = this.journeyCode;
     data['journey_name'] = this.journeyName;
-    data['branch_code'] = this.branchCode;
-    data['branch_name'] = this.branchName;
-    data['order_source_name'] = this.orderSourceName;
+    data['zalo'] = this.zalo;
+    data['staff_full_name'] = this.staffFullName;
+    data['sale_id'] = this.saleId;
+    data['tag_name'] = this.tagName;
+    data['customer_source_name'] = this.customerSourceName;
+    data['is_convert'] = this.isConvert;
     data['pipeline_name'] = this.pipelineName;
-    data['customer_name'] = this.customerName;
-     data['background_color_journey'] = this.backgroundColorJourney;
+    data['customer_lead_code'] = this.customerLeadCode;
     data['selected'] = this.selected;
     return data;
   }

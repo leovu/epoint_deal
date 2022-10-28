@@ -32,6 +32,7 @@ class BranchData {
   String branchName;
   String address;
   String branchCode;
+  String avatar;
   bool selected;
 
   BranchData({this.branchId, this.branchName, this.address, this.branchCode,this.selected});
@@ -41,6 +42,7 @@ class BranchData {
     branchName = json['branch_name'];
     address = json['address'];
     branchCode = json['branch_code'];
+    avatar = json['avatar'];
     selected = json['selected'] ?? false;
   }
 
@@ -50,6 +52,7 @@ class BranchData {
     data['branch_name'] = this.branchName;
     data['address'] = this.address;
     data['branch_code'] = this.branchCode;
+    data['avatar'] = this.avatar;
     data['selected'] = this.selected;
     return data;
   }

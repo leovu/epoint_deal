@@ -27,11 +27,10 @@
     "inprogress_deal": "Đang triển khai",
     "details": "Thông tin chi tiết",
     "recent_activity": "Hoạt động gần đây",
-    "customer_information": "Thông tin khách hàng tiềm năng",
+    "customer_information": "Thông tin khách hàng",
     "customer_care": "Chăm sóc khách hàng",
     "allotted_person": "Người được phân bổ",
     "product": "Sản phẩm",
-    "expected_end_date": "Ngày kết thúc dự kiến",
     "actual_end_date": "Ngày kết thúc thực tế",
     "reason_for_failure": "Lý do thất bại",
     "agency": "Chi nhánh",
@@ -76,7 +75,8 @@
     "customer_time_frame":"Khung thời gian tự chọn",
     "personal":"Cá nhân",
     "business":"Doanh nghiệp",
-    "general_infomation":"Thông tin chung",
+    "general_infomation":"Thông tin chi tiết",
+
     "infomation_deal":"Thông tin deal",
     "history_care":"Lịch sử chăm sóc",
     "picture":"Hình ảnh",
@@ -114,14 +114,29 @@
     "detail_deal": "CHI TIẾT CƠ HỘI BÁN HÀNG",
     "list_deal": "DANH SÁCH CƠ HỘI BÁN HÀNG",
     "edit_deal": "CHỈNH SỬA CƠ HỘI BÁN HÀNG",
+    "edit_deal_tolowcase": "Chỉnh sửa cơ hội bán hàng ",
 
     "according_order_source":"Theo nguồn đơn hàng",
     "by_branch":"Theo chi nhánh",
     "choose_branch":"Chọn chi nhánh",
     "according_expected_ending":"Theo kết thúc dự kiến",
     "according_actual_ending":"Theo kết thúc thực tế",
-    "warning_choose_full_fromdate_todate":"Vui lòng chọn đầy đủ từ ngày - đến ngày"
+    "warning_choose_full_fromdate_todate":"Vui lòng chọn đầy đủ từ ngày - đến ngày",
+    "input_deal_name":"Nhập tên deal",
+    "deal_infomation":"Thông tin cơ hội bán hàng",
+    "creat_deal":"Tạo cơ hội bán hàng",
+    "list_customer": "Danh sách khách hàng",
+    "choose_customer":"Chọn khách hàng",
+    "expected_ending_date":"Ngày kết thúc dự kiến",
 
+    "your_order":"Đơn hàng của bạn",
+    "choose_more_item":"+ Chọn thêm",
+    "add_product":"Thêm sản phẩm",
+    "show_more":"Xem thêm",
+    "customer":"customer",
+    "list_lead": "Danh sách khách hàng tiềm năng",
+    "fullname":"Họ và tên",
+    "deal_of":"Deal của"
 
 
   }

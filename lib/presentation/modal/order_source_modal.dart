@@ -1,37 +1,38 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
-import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
-class AllocatorModal extends StatefulWidget {
-  List<AllocatorData> allocatorData = <AllocatorData>[];
-  AllocatorData allocatorSelected;
-   AllocatorModal({ Key key ,this.allocatorData, this.allocatorSelected}) : super(key: key);
+class OrderSourcesModal extends StatefulWidget {
+List<OrderSourceData> orderSourceData;
+OrderSourceData orderSourceSelected;
+   OrderSourcesModal({ Key key ,this.orderSourceData,this.orderSourceSelected}) ;
 
   @override
-  _AllocatorModalState createState() => _AllocatorModalState();
+  _OrderSourcesModalState createState() => _OrderSourcesModalState();
 }
 
-class _AllocatorModalState extends State<AllocatorModal> {
+class _OrderSourcesModalState extends State<OrderSourcesModal> {
  final ScrollController _controller = ScrollController();
+
 
 @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        AllocatorData result = widget.allocatorData.firstWhereOrNull((element) => element.staffId == widget.allocatorSelected?.staffId);
+        OrderSourceData result = widget.orderSourceData.firstWhereOrNull((element) => element.orderSourceName == widget.orderSourceSelected?.orderSourceName);
       if (result != null) {
-         widget.allocatorSelected = result;
+         widget.orderSourceSelected = result;
          result.selected = true;
       }
          setState(() {
            
          });
     });
-  }
 
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,7 +48,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(),
-              Text(AppLocalizations.text(LangKey.chooseAllottedPerson),style: TextStyle(
+              Text(AppLocalizations.text(LangKey.orderSource),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
                   fontWeight: FontWeight.w400),),
@@ -80,9 +81,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
   List<Widget> _listWidget() {
     return List.generate(
-        widget.allocatorData.length,
+        widget.orderSourceData.length,
         (index) => _buildItem(
-                widget.allocatorData[index].fullName, widget.allocatorData[index].selected,
+                widget.orderSourceData[index].orderSourceName, widget.orderSourceData[index].selected,
                 () {
               selectedItem(index);
             }));
@@ -109,7 +110,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   }
 
   selectedItem(int index) async {
-    List<AllocatorData> models = widget.allocatorData;
+    List<OrderSourceData> models = widget.orderSourceData;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

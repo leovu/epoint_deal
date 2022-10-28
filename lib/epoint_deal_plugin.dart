@@ -1,5 +1,6 @@
 
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.dart';
@@ -14,7 +15,7 @@ class EpointDealPlugin {
     return EpointDealPluginPlatform.instance.getPlatformVersion();
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode}) async {
+  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode , Function getListProduct}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -24,6 +25,11 @@ class EpointDealPlugin {
     if(token != null) {
       HTTPConnection.asscessToken = token;
     }
+
+    if (getListProduct != null) {
+      Global.openListProduct = getListProduct;
+
+    }
     DealConnection.locale = locale;
     DealConnection.buildContext = context;
     await AppLocalizations(DealConnection.locale).load();
@@ -32,19 +38,25 @@ class EpointDealPlugin {
       if (create == 0 ) {
         Map<String, dynamic> event =  await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => ListDealScreen()));
+                builder: (context) => CreateDealScreen()));
         return event;
       } else if (create == 1) {
         await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => DetailDealScreen()));
         return null;
-      } 
+      } else {
+        await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => ListDealScreen()));
+      }
     }else {
       loginError(DealConnection.buildContext, 'Fail');
       return null;
     }
   }
+
+
 
   static void loginError(BuildContext context, String title) async {
     return showDialog<void>(

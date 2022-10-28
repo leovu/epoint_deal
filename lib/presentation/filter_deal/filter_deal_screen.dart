@@ -21,16 +21,11 @@ import 'package:epoint_deal_plugin/presentation/modal/branch_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class FilterDealCustomer extends StatefulWidget {
-  List<PipelineData> pipeLineData = <PipelineData>[];
-  List<BranchData> branchData = <BranchData>[];
   FilterScreenModel filterScreenModel = FilterScreenModel();
 
-  FilterDealCustomer(
-      {Key key, this.filterScreenModel, this.pipeLineData, this.branchData})
-      : super(key: key);
+  FilterDealCustomer({Key key, this.filterScreenModel}) : super(key: key);
 
   @override
   _FilterDealCustomerState createState() => _FilterDealCustomerState();
@@ -69,8 +64,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         createDateID: 6,
         selected: false)
   ];
-   CreateDateModel createDateSeleted = CreateDateModel();
-
+  CreateDateModel createDateSeleted = CreateDateModel();
 
   List<ClosingDateModel> closingDateOptions = [
     ClosingDateModel(
@@ -155,14 +149,50 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
   List<BranchData> branchData;
   BranchData branchSelected;
 
+  FilterScreenModel filterScreenModel = FilterScreenModel(
+      filterModel: ListDealModelRequest(
+          search: "",
+          page: 1,
+          orderSourceName: "",
+          branchName: "",
+          createdAt: "",
+          closingDate: "",
+          closingDueDate: "",
+          pipelineName: "",
+          journeyName: ""),
+      fromDate_closing_date: null,
+      fromDate_closing_due_date: null,
+      fromDate_created_at: null,
+      toDate_created_at: null,
+      id_created_at: "",
+      id_closing_date: "",
+      toDate_closing_date: null,
+      toDate_closing_due_date: null,
+      id_closing_due_date: "");
+
   @override
   void initState() {
     super.initState();
+    filterScreenModel = FilterScreenModel(
+          filterModel: ListDealModelRequest.fromJson(
+              widget.filterScreenModel.filterModel.toJson()),
+          fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
+          toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
+          id_closing_date: widget.filterScreenModel.id_closing_date,
+          fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+          toDate_created_at: widget.filterScreenModel.toDate_created_at,
+          id_created_at: widget.filterScreenModel.id_created_at,
+          fromDate_closing_due_date:
+              widget.filterScreenModel.fromDate_closing_due_date,
+          toDate_closing_due_date:
+              widget.filterScreenModel.toDate_closing_due_date,
+          id_closing_due_date: widget.filterScreenModel.id_closing_due_date);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      
+      
       DealConnection.showLoading(context);
       await getData();
-      // await bindingModel();
       Navigator.of(context).pop();
 
       setState(() {});
@@ -185,14 +215,12 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       pipeLineData = pipelines.data;
     }
 
-    bindingModel ();
+    bindingModel();
   }
 
-
-void bindingModel () async {
-
-  for (int i = 0; i < orderSourceData.length; i++) {
-      if (widget.filterScreenModel.filterModel.orderSourceName != "") {
+  void bindingModel() async {
+    for (int i = 0; i < orderSourceData.length; i++) {
+      if (filterScreenModel.filterModel.orderSourceName != "") {
         if (widget.filterScreenModel.filterModel.orderSourceName ==
             orderSourceData[i].orderSourceName) {
           orderSourceData[i].selected = true;
@@ -202,56 +230,57 @@ void bindingModel () async {
       }
     }
 
-    if (widget.filterScreenModel.filterModel.branchName != "") {
+    if (filterScreenModel.filterModel.branchName != "") {
       BranchData data = branchData.firstWhere((element) =>
           element.branchName ==
           widget.filterScreenModel.filterModel.branchName);
       branchSelected = data;
+      branchSelected.selected = true;
     }
 
-    if (widget.filterScreenModel.filterModel.pipelineName != "") {
+    if (filterScreenModel.filterModel.pipelineName != "") {
       PipelineData data = pipeLineData.firstWhere((element) =>
           element.pipelineName ==
           widget.filterScreenModel.filterModel.pipelineName);
       pipelineSelected = data;
+      pipelineSelected.selected = true;
 
       var journeys = await DealConnection.getJourney(
           context, pipelineSelected.pipelineCode);
       if (journeys != null) {
         journeysData = journeys.data;
 
-        if (widget.filterScreenModel.filterModel.journeyName != "") {
+        if (filterScreenModel.filterModel.journeyName != "") {
           JourneyData data = journeysData.firstWhere((element) =>
               element.journeyName ==
               widget.filterScreenModel.filterModel.journeyName);
           journeySelected = data;
+          journeySelected.selected = true;
         }
       }
     }
-    if (widget.filterScreenModel.id_created_at != "") {
+    if (filterScreenModel.id_created_at != "") {
       int index = int.parse(widget.filterScreenModel.id_created_at);
       createDateSeleted = createDateOptions[index];
     } else {
       createDateSeleted = null;
     }
 
-    if (widget.filterScreenModel.id_closing_date != "") {
+    if (filterScreenModel.id_closing_date != "") {
       int index = int.parse(widget.filterScreenModel.id_closing_date);
       closingDateSeleted = closingDateOptions[index];
     } else {
       closingDateSeleted = null;
     }
 
-    if (widget.filterScreenModel.id_closing_due_date != "") {
+    if (filterScreenModel.id_closing_due_date != "") {
       int index = int.parse(widget.filterScreenModel.id_closing_due_date);
       closingDueDateSeleted = closingDueDateOptions[index];
     } else {
       closingDueDateSeleted = null;
     }
     setState(() {});
-
-}
-
+  }
 
   @override
   void dispose() {
@@ -313,7 +342,6 @@ void bindingModel () async {
         orderSourceData: orderSourceData,
       ),
 
-
       Container(height: 10.0),
       Text(
         AppLocalizations.text(LangKey.byBranch),
@@ -332,7 +360,7 @@ void bindingModel () async {
           false, ontap: () async {
         print("Chon chi nhanh");
 
-        BranchData branch = await showModalBottomSheet( 
+        BranchData branch = await showModalBottomSheet(
             context: context,
             useRootNavigator: true,
             isScrollControlled: true,
@@ -350,8 +378,7 @@ void bindingModel () async {
             });
         if (branch != null) {
           branchSelected = branch;
-          widget.filterScreenModel.filterModel.branchName =
-              branchSelected.branchName;
+          filterScreenModel.filterModel.branchName = branchSelected.branchName;
 
           setState(() {});
         }
@@ -366,9 +393,9 @@ void bindingModel () async {
             fontWeight: FontWeight.bold),
       ),
       FilterByCreateDate(
-        filterScreenModel: widget.filterScreenModel,
+        filterScreenModel: filterScreenModel,
         createDateOptions: createDateOptions,
-        id_create_at: widget.filterScreenModel.id_created_at,
+        id_create_at: filterScreenModel.id_created_at,
       ),
 
       Text(
@@ -380,9 +407,9 @@ void bindingModel () async {
       ),
 
       FilterByClosingDate(
-        filterScreenModel: widget.filterScreenModel,
+        filterScreenModel: filterScreenModel,
         closingDateOptions: closingDateOptions,
-        id_closing_date: widget.filterScreenModel.id_closing_date,
+        id_closing_date: filterScreenModel.id_closing_date,
       ),
 
       Text(
@@ -394,9 +421,9 @@ void bindingModel () async {
       ),
 
       FilterByClosingDueDate(
-        filterScreenModel: widget.filterScreenModel,
+        filterScreenModel: filterScreenModel,
         closingDueDateOptions: closingDueDateOptions,
-        id_closing_due_date:  widget.filterScreenModel.id_closing_due_date,
+        id_closing_due_date: filterScreenModel.id_closing_due_date,
       ),
 
       Text(
@@ -440,10 +467,10 @@ void bindingModel () async {
           }
 
           pipelineSelected = pipeline;
-          widget.filterScreenModel.filterModel.pipelineName =
+          filterScreenModel.filterModel.pipelineName =
               pipelineSelected.pipelineName;
 
-          widget.filterScreenModel.filterModel.journeyName = "";
+          filterScreenModel.filterModel.journeyName = "";
 
           var journeys = await DealConnection.getJourney(
               context, pipelineSelected.pipelineCode);
@@ -491,12 +518,10 @@ void bindingModel () async {
             });
         if (journey != null) {
           journeySelected = journey;
-          widget.filterScreenModel.filterModel.journeyName =
+          filterScreenModel.filterModel.journeyName =
               journeySelected.journeyName;
 
-          setState(() {
-            // await LeadConnection.getDistrict(context, province.provinceid);
-          });
+          setState(() {});
         }
       }),
     ];
@@ -516,8 +541,13 @@ void bindingModel () async {
             onTap: () {
               print("ap dung");
 
-              if (Global.validateCreateDate == false || Global.validateClosingDate == false || Global.validateClosingDueDate == false) {
-                DealConnection.showMyDialog(context, AppLocalizations.text(LangKey.warningChooseFullFromdateTodate));
+              if (Global.validateCreateDate == false ||
+                  Global.validateClosingDate == false ||
+                  Global.validateClosingDueDate == false) {
+                DealConnection.showMyDialog(
+                    context,
+                    AppLocalizations.text(
+                        LangKey.warningChooseFullFromdateTodate));
                 return;
               }
 
@@ -526,11 +556,13 @@ void bindingModel () async {
 
               if (orderSource.orderSourceName ==
                   AppLocalizations.text(LangKey.all)) {
-                widget.filterScreenModel.filterModel.orderSourceName = "";
+                filterScreenModel.filterModel.orderSourceName = "";
               } else {
-                widget.filterScreenModel.filterModel.orderSourceName =
+                filterScreenModel.filterModel.orderSourceName =
                     orderSource.orderSourceName;
               }
+
+              widget.filterScreenModel = filterScreenModel;
               Navigator.of(context).pop(widget.filterScreenModel);
             },
             child: Center(
@@ -576,7 +608,6 @@ void bindingModel () async {
   }
 
   void clearData() async {
-
     widget.filterScreenModel = FilterScreenModel(
         filterModel: ListDealModelRequest(
             search: "",
@@ -598,56 +629,66 @@ void bindingModel () async {
         toDate_closing_due_date: null,
         id_closing_due_date: "");
 
-    for(int i = 0; i < createDateOptions.length ; i++) {
-          createDateOptions[i].selected = false;
+
+        filterScreenModel = FilterScreenModel(
+          filterModel: ListDealModelRequest.fromJson(
+              widget.filterScreenModel.filterModel.toJson()),
+          fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
+          toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
+          id_closing_date: widget.filterScreenModel.id_closing_date,
+          fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+          toDate_created_at: widget.filterScreenModel.toDate_created_at,
+          id_created_at: widget.filterScreenModel.id_created_at,
+          fromDate_closing_due_date:
+              widget.filterScreenModel.fromDate_closing_due_date,
+          toDate_closing_due_date:
+              widget.filterScreenModel.toDate_closing_due_date,
+          id_closing_due_date: widget.filterScreenModel.id_closing_due_date);
+
+          
+
+    for (int i = 0; i < createDateOptions.length; i++) {
+      createDateOptions[i].selected = false;
     }
     createDateSeleted = null;
 
-    for(int i = 0; i < closingDateOptions.length ; i++) {
-          closingDateOptions[i].selected = false;
+    for (int i = 0; i < closingDateOptions.length; i++) {
+      closingDateOptions[i].selected = false;
     }
     closingDateSeleted = null;
 
-    for(int i = 0; i < closingDueDateOptions.length ; i++) {
-          closingDueDateOptions[i].selected = false;
+    for (int i = 0; i < closingDueDateOptions.length; i++) {
+      closingDueDateOptions[i].selected = false;
     }
     closingDueDateSeleted = null;
-    
-    for(int i = 0; i < branchData.length ; i++) {
-        if (i == 0) {
-          branchData[i].selected = true;
-        } else {
-          branchData[i].selected = false;
-        }
-    }
-     branchSelected = null;
 
-    for(int i = 0; i < orderSourceData.length ; i++) {
-        if (i == 0) {
-          orderSourceData[i].selected = true;
-        } else {
-          orderSourceData[i].selected = false;
-        }
+    for (int i = 0; i < branchData.length; i++) {
+      branchData[i].selected = false;
+    }
+    branchSelected = null;
+
+    for (int i = 0; i < orderSourceData.length; i++) {
+      if (i == 0) {
+        orderSourceData[i].selected = true;
+      } else {
+        orderSourceData[i].selected = false;
+      }
     }
 
-
-    for(int i = 0; i < pipeLineData.length ; i++) {
-        if (i == 0) {
-          pipeLineData[i].selected = true;
-        } else {
-          pipeLineData[i].selected = false;
-        }
+    for (int i = 0; i < pipeLineData.length; i++) {
+      pipeLineData[i].selected = false;
     }
     pipelineSelected = null;
     journeysData = [];
     journeySelected = null;
-    
+
+    Global.validateCreateDate = true;
+    Global.validateClosingDate = true;
+    Global.validateClosingDueDate = true;
 
     // initModel() ;
 
-    setState(() {
-      
-    });
+    setState(() {});
 
     // LeadConnection.showLoading(context);
     // await getData();

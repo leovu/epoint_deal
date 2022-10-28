@@ -1,3 +1,5 @@
+import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+
 class DetailDealModelResponse {
   int errorCode;
   String errorDescription;
@@ -38,7 +40,7 @@ class DetailDealData {
   String reasonLoseCode;
   String branchName;
   String orderSourceName;
-  String tag;
+  List<int> tag;
   String probability;
   String dealDescription;
   int saleId;
@@ -53,6 +55,8 @@ class DetailDealData {
   String province;
   String district;
   String address;
+  String backgroundColorJourney;
+  String productNameBuy;
   List<JourneyTracking> journeyTracking;
   List<ProductBuy> productBuy;
 
@@ -87,6 +91,8 @@ class DetailDealData {
       this.province,
       this.district,
       this.address,
+      this.backgroundColorJourney,
+      this.productNameBuy,
       this.journeyTracking,
       this.productBuy});
 
@@ -106,7 +112,7 @@ class DetailDealData {
     reasonLoseCode = json['reason_lose_code'];
     branchName = json['branch_name'];
     orderSourceName = json['order_source_name'];
-    tag = json['tag'];
+    tag = json['tag']?.cast<int>() ?? [];
     probability = json['probability'];
     dealDescription = json['deal_description'];
     saleId = json['sale_id'];
@@ -120,7 +126,9 @@ class DetailDealData {
     customerGender = json['customer_gender'];
     province = json['province'];
     district = json['district'];
-    address = json['address'];
+    backgroundColorJourney = json['background_color_journey'];
+    district = json['district'];
+    productNameBuy = json['product_name_buy'];
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
       json['journey_tracking'].forEach((v) {
@@ -130,7 +138,7 @@ class DetailDealData {
     if (json['product_buy'] != null) {
       productBuy = <ProductBuy>[];
       json['product_buy'].forEach((v) {
-        productBuy.add(new ProductBuy.fromJson(v));
+        productBuy.add(ProductBuy.fromJson(v));
       });
     }
   }
@@ -167,6 +175,8 @@ class DetailDealData {
     data['province'] = this.province;
     data['district'] = this.district;
     data['address'] = this.address;
+    data['background_color_journey'] = this.backgroundColorJourney;
+    data['product_name_buy'] = this.productNameBuy;
     if (this.journeyTracking != null) {
       data['journey_tracking'] =
           this.journeyTracking.map((v) => v.toJson()).toList();
