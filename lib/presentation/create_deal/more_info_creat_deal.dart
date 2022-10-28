@@ -66,7 +66,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                   ? InkWell(
                       onTap: () async {
                         if (Global.getListProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.getListProduct();
+                              List<Map<String,dynamic>> result = await Global.getListProduct(null);
                               if (result != null) {
                                 if (result.length > 0) {
                                   productSelected.clear();
@@ -75,9 +75,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                                 objectType: result[i]["object_type"] ?? "",
                                 objectName: result[i]["object_name"] ?? "",
                                 objectCode: result[i]["objectCode"] ?? "",
-                                objectId: result[i]["object_id"] ?? "",
-                                quantity: result[i]["quantity"] ?? "",
-                                price: result[i]["price"] ?? "",
+                                objectId: result[i]["object_id"] ?? 0,
+                                quantity: result[i]["quantity"] ?? 0,
+                                price: result[i]["price"] ?? 0,
                                 amount:(result[i]["quantity"] ?? 0)*(result[i]["price"] ?? 0))
                                 );
                                 productSelected.add(widget.detailDeal.product[i].toJson());
@@ -205,7 +205,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                                 objectType: result[i]["object_type"] ?? "",
                                 objectName: result[i]["object_name"] ?? "",
                                 objectCode: result[i]["objectCode"] ?? "",
-                                objectId: result[i]["object_id"] ?? "",
+                                objectId: result[i]["object_id"] ?? 0,
                                 quantity: result[i]["quantity"] ?? 0,
                                 price: result[i]["price"] ?? 0,
                                 amount: (result[i]["quantity"] ?? 0)*(result[i]["price"] ?? 0)

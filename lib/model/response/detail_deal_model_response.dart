@@ -230,10 +230,10 @@ class ProductBuy {
   int objectId;
   String objectName;
   String objectType;
-  int price;
+  double price;
   int quantity;
   int discount;
-  int amount;
+  double amount;
 
   ProductBuy(
       {this.dealDetailId,

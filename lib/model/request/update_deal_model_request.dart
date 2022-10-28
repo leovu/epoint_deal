@@ -13,7 +13,7 @@ class UpdateDealModelRequest {
   int orderSourceId;
   double probability;
   String dealDescription;
-  int amount;
+  double amount;
   List<Product> product;
 
   UpdateDealModelRequest(

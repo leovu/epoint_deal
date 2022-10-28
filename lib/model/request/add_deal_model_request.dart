@@ -12,7 +12,7 @@ class AddDealModelRequest {
   int orderSourceId;
   double probability;
   String dealDescription;
-  int amount;
+  double amount;
   List<Product> product;
 
   AddDealModelRequest(
@@ -82,10 +82,10 @@ class Product {
   String objectType;
   String objectName;
   String objectCode;
-  String objectId;
+  int objectId;
   int quantity;
-  int price;
-  int amount;
+  double price;
+  double amount;
 
   Product(
       {this.objectType,

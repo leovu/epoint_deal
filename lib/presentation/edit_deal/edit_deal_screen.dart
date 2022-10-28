@@ -910,7 +910,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
           } else {
             DealConnection.showLoading(context);
 
-            int amount = 0;
+            double amount = 0;
             if (widget.detail.productBuy.length > 0) {
               for (int i = 0; i < widget.detail.productBuy.length; i++) {
 
@@ -919,7 +919,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
                     objectType: widget.detail.productBuy[i].objectType,
                     objectName: widget.detail.productBuy[i].objectName,
                     objectCode: "",
-                    objectId: "${widget.detail.productBuy[i].objectId}",
+                    objectId: widget.detail.productBuy[i].objectId,
                     quantity: widget.detail.productBuy[i].quantity,
                     price: widget.detail.productBuy[i].price,
                     amount: widget.detail.productBuy[i].amount

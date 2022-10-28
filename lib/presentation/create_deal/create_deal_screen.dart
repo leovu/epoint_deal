@@ -749,7 +749,7 @@ Navigator.of(context).pop();
           } else {
             DealConnection.showLoading(context);
 
-            int amount = 0;
+            double amount = 0;
             if (detailDeal.product.length > 0) {
               for (int i = 0; i < detailDeal.product.length; i++) {
                 amount += detailDeal.product[i].amount*detailDeal.product[i].quantity;
