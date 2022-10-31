@@ -59,8 +59,10 @@ GetCustomerModelResponse _model ;
 
             for (int i = 0; i < _model.data.length ; i++) {
         if ((widget.dealItem?.customerCode ?? "") ==  _model.data[i].customerCode ) {
+           widget.listCustomer[i].selected = true;
           _model.data[i].selected = true;
         } else {
+          widget.listCustomer[i].selected = false;
           _model.data[i].selected = false;
         }
       }
@@ -182,7 +184,7 @@ GetCustomerModelResponse _model ;
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(widget.listCustomer,event);
+        searchModel(_model.data,event);
         print(event.toLowerCase());
         if (_searchext != null) {
           print(_searchext.text);

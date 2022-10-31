@@ -137,5 +137,10 @@ class LangKey {
   static const String customer = "customer";
   static const String listLead = "list_lead";
   static const String fullName = "fullname";
-  static const String dealOf = "deal_of";
+  static const String dealOf = "deal_of"; 
+  static const String warningDeleteDeal = "are_you_sure_delete_deal?"; 
+  static const String branch = "branch";
+  static const String choooseTag = "chooose_tag";
+  static const String warningChooseCustomerType = "please_choose_customer_type";
+  static const String warningChooseAllRequiredInfo = "please_enter_and_select_all_required_infomation";
 }

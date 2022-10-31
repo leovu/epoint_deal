@@ -445,7 +445,7 @@ Navigator.of(context).pop();
                 }
 
                 } else {
-                  DealConnection.showMyDialog(context, "Vui lòng chọn loại khách hàng*");
+                  DealConnection.showMyDialog(context, AppLocalizations.text(LangKey.warningChooseCustomerType));
                 }
                
               })
@@ -745,7 +745,7 @@ Navigator.of(context).pop();
               customerSelected == null ||
               selectedClosingDueDate == null) {
             DealConnection.showMyDialog(
-                context, 'Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
+                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DealConnection.showLoading(context);
 

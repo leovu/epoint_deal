@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/assign_revoke_deal_model_request.dart';
@@ -94,16 +95,18 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       _buildFunction(
                           AppLocalizations.text(LangKey.edit),
                           Assets.iconEdit,
-                          Color.fromARGB(255, 89, 177, 150), () async {
-                        bool result = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    EditDealScreen(detail: detail)));
+                          Color(0xFF59B196), () async {
+                        if (detail.journeyCode != "PJD_DEAL_END") {
+                          bool result = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditDealScreen(detail: detail)));
 
-                        if (result != null) {
-                          if (result) {
-                            getData();
-                            ;
+                          if (result != null) {
+                            if (result) {
+                              getData();
+                              ;
+                            }
                           }
                         }
                       }),
@@ -111,7 +114,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           AppLocalizations.text(LangKey.delete),
                           Assets.iconDelete,
                           Color.fromARGB(255, 231, 86, 86), () async {
-                        DescriptionModelResponse result =
+
+                            DealConnection.showMyDialogWithFunction(context,AppLocalizations.text(LangKey.warningDeleteDeal), ontap: () async {
+
+                              DescriptionModelResponse result =
                             await DealConnection.deleteDeal(
                                 context, detail.dealCode);
 
@@ -127,6 +133,28 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 context, result.errorDescription);
                           }
                         }
+                            });
+
+                        // DescriptionModelResponse result =
+                        //     await DealConnection.deleteDeal(
+                        //         context, detail.dealCode);
+
+                        // if (result != null) {
+                        //   if (result.errorCode == 0) {
+                        //     print(result.errorDescription);
+
+                        //     await DealConnection.showMyDialog(
+                        //         context, result.errorDescription);
+                        //     Navigator.of(context).pop(true);
+                        //   } else {
+                        //     DealConnection.showMyDialog(
+                        //         context, result.errorDescription);
+                        //   }
+                        // }
+
+
+
+
                       }),
                       (detail?.saleId == null)
                           ? _buildFunction(
@@ -190,7 +218,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       _buildFunction(
                           AppLocalizations.text(LangKey.createJobs),
                           Assets.iconTask,
-                          Color.fromARGB(255, 243, 180, 125), () {
+                          Color.fromARGB(255, 243, 180, 125), () async {
+                        await Global.createJob(widget.deal_code);
+
                         print("task");
                       })
                     ],
@@ -260,13 +290,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 _phoneNumberItem(),
                 const Divider(),
                 _infoItem(
-                    // AppLocalizations.text(LangKey.customerSource),
-                    "Giá deal",
+                    AppLocalizations.text(LangKey.dealPrice),
                     formatter.format(num.parse(detail?.amount ?? "")) + "VNĐ"),
                 const Divider(),
                 _infoItem(
-                    // AppLocalizations.text(LangKey.customerStyle),
-                    "Mã deal",
+                    AppLocalizations.text(LangKey.dealCode),
                     detail?.dealCode ?? ""),
                 const Divider(),
                 (detail?.staffName != null)
@@ -858,7 +886,8 @@ class _SSubDetailDealCustomerCustomerState
                   locale: 'vi_VN',
                   decimalDigits: 0,
                   symbol: '',
-                ).format(num.parse(widget.detail?.probability ?? "0")) + "%",
+                ).format(num.parse(widget.detail?.probability ?? "0")) +
+                "%",
           ),
           Divider(),
           _infoDetailItem(

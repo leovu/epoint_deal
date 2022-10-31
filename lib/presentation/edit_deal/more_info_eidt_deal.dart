@@ -44,10 +44,11 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   FocusNode _detailDealFocusNode = FocusNode();
 
   List<OrderSourceData> orderSourceData;
-  // OrderSourceData orderSourceSelected;
+  OrderSourceData orderSourceSelected;
 
   // List<TagData> tagsData;
   List<TagData> tagsSelected;
+  String tagsString = "";
 
 
   @override
@@ -295,25 +296,40 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 )
               : Container(),
           (widget.branchData != null)
-              ? Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    //  color: Colors.black,
-                  ),
-                  height: 170,
-                  child: SingleChildScrollView(
-                    physics: ClampingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: listBranch(),
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              AppLocalizations.text(LangKey.branch),
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: const Color(0xFF858080),
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+                  Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        //  color: Colors.black,
+                      ),
+                      height: 170,
+                      child: SingleChildScrollView(
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: listBranch(),
+                        ),
+                      ),
                     ),
-                  ),
-                )
+                ],
+              )
               : Container(),
           Container(
             height: 15,
           ),
-          _buildTextField("Tag", widget.tagsString, Assets.iconTag, false, true, false,
+          _buildTextField("Tag", (widget.tagsString != "") ? widget.tagsString : tagsString, Assets.iconTag, false, true, false,
               ontap: () async {
             print("Tag");
             FocusScope.of(context).unfocus();
@@ -335,17 +351,17 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 });
             if (listTagsSelected != null) {
               widget.detail.tag = <int>[];
-              widget.tagsString = "";
+              tagsString = "";
               tagsSelected = listTagsSelected;
 
               for (int i = 0; i < tagsSelected.length; i++) {
                 if (tagsSelected[i].selected) {
                   widget.detail.tag.add(tagsSelected[i].tagId);
 
-                  if (widget.tagsString == "") {
-                    widget.tagsString = tagsSelected[i].name;
+                  if (tagsString == "") {
+                    tagsString = tagsSelected[i].name;
                   } else {
-                    widget.tagsString += ", ${tagsSelected[i].name}";
+                    tagsString += ", ${tagsSelected[i].name}";
                   }
                 }
               }
@@ -354,12 +370,13 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           }),
           _buildTextField(
               AppLocalizations.text(LangKey.orderSource),
-              widget.orderSourceSelected?.orderSourceName ?? "",
+              widget.detail?.orderSourceName ?? "",
               Assets.iconTag,
               false,
               true,
               false, ontap: () async {
             print("nguon don hang");
+            
             FocusScope.of(context).unfocus();
             if (orderSourceData == null || orderSourceData.length == 0) {
               DealConnection.showLoading(context);
@@ -386,6 +403,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                       );
                     });
                 if (orderSource != null) {
+                  widget.detail?.orderSourceName = orderSource.orderSourceName;
                   widget.orderSourceSelected = orderSource;
                   widget.detailDeal.orderSourceId =
                       widget.orderSourceSelected.orderSourceId;
@@ -410,7 +428,10 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                     );
                   });
               if (orderSource != null) {
-                widget.orderSourceSelected = orderSource;
+                // widget.orderSourceSelected = orderSource;
+                widget.detail?.orderSourceName = orderSource.orderSourceName;
+                widget.detailDeal.orderSourceId =
+                      widget.orderSourceSelected.orderSourceId;
                 setState(() {});
               }
             }
@@ -555,7 +576,6 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       child: InkWell(
         onTap: (ontap != null) ? ontap : null,
         child: TextField(
-          
           enabled: textfield,
           readOnly: !textfield,
           controller: fillText,
@@ -620,15 +640,15 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             if (fillText != null) {
               print(fillText.text);
               if (fillText == _probabilityText) {
-                widget.detailDeal.probability =
-                    double.tryParse(fillText.text) ?? 0;
+                widget.detail.probability =
+                    fillText.text;
                      if (widget.detailDeal.probability > 100) {
                   _probabilityText.text = "100";
-                  widget.detailDeal.probability = 100;
+                  widget.detail.probability = "100";
                   _probabilityText.selection = TextSelection.fromPosition(TextPosition(offset: _probabilityText.text.length));
                 }
               } else {
-                widget.detailDeal.dealDescription = fillText.text;
+                widget.detail.dealDescription = fillText.text;
               }
             }
           },

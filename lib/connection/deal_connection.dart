@@ -19,6 +19,7 @@ import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_respo
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -194,13 +195,13 @@ class DealConnection {
     return null;
   }
 
-  static Future<AddDealModelResponse> updateDeal(
+  static Future<UpdateDealModelResponse> updateDeal(
       BuildContext context, UpdateDealModelRequest model) async {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/update-deal', model.toJson());
     if (responseData.isSuccess) {
       var data =
-          AddDealModelResponse.fromJson(responseData.data);
+          UpdateDealModelResponse.fromJson(responseData.data);
       // print("Thanh conmg");
       return data;
     }
@@ -342,6 +343,52 @@ class DealConnection {
                 Navigator.of(context).pop();
               },
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Future showMyDialogWithFunction(BuildContext context, String title ,{Function ontap}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title:  Text(''),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Center(
+                    child: Text(
+                  'Thông báo\n',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                )),
+                Center(child: Text(title)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [TextButton(
+                child: Center(child: Text('Không',
+                style: TextStyle(
+                  color: Colors.red
+                ),)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+
+              TextButton(
+                child: Center(child: Text('Có')),
+                onPressed: ontap,
+              ),],
+              ),
+            )
           ],
         );
       },

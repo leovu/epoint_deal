@@ -63,7 +63,6 @@
     "delete":"Xóa",
     "create_jobs":"Tạo công việc",
     "recall":"Thu hồi",
-
     "filter":"BỘ LỌC",
     "by_label":"Theo nhãn",
     "by_customer_type":"Theo loại khách hàng",
@@ -76,17 +75,13 @@
     "personal":"Cá nhân",
     "business":"Doanh nghiệp",
     "general_infomation":"Thông tin chi tiết",
-
     "infomation_deal":"Thông tin deal",
     "history_care":"Lịch sử chăm sóc",
     "picture":"Hình ảnh",
     "staff":"Nhân viên",
     "input_phonenumber":"Nhập số điện thoại",
-
     "assigned": "Đã phân công",
     "unassigned": "Chưa phân công",
-
-
     "all": "Tất cả",
     "today":"Hôm nay",
     "tomorrow":"Hôm qua",
@@ -95,27 +90,20 @@
     "in_month":"Trong tháng",
     "last_month":"Tháng trước",
     "date_option":"Tùy chọn ngày",
-
     "confirm":"Xác nhận",
     "from_date":"Từ ngày...",
     "to_date":"Đến ngày...",
-
     "by_convert_status":"Theo tình trạng chuyển đổi",
     "by_allocator":"Theo người được phân bổ",
     "by_pipeline":"Theo pipeline",
     "by_journey":"Theo hành trình",
-
     "search_not_found":"Không tìm thấy thông tin",
     "other":"Khác",
-
     "input_search":"Nhập thông tin tìm kiếm",
-
-
     "detail_deal": "CHI TIẾT CƠ HỘI BÁN HÀNG",
     "list_deal": "DANH SÁCH CƠ HỘI BÁN HÀNG",
     "edit_deal": "CHỈNH SỬA CƠ HỘI BÁN HÀNG",
     "edit_deal_tolowcase": "Chỉnh sửa cơ hội bán hàng ",
-
     "according_order_source":"Theo nguồn đơn hàng",
     "by_branch":"Theo chi nhánh",
     "choose_branch":"Chọn chi nhánh",
@@ -128,7 +116,6 @@
     "list_customer": "Danh sách khách hàng",
     "choose_customer":"Chọn khách hàng",
     "expected_ending_date":"Ngày kết thúc dự kiến",
-
     "your_order":"Đơn hàng của bạn",
     "choose_more_item":"+ Chọn thêm",
     "add_product":"Thêm sản phẩm",
@@ -136,8 +123,12 @@
     "customer":"customer",
     "list_lead": "Danh sách khách hàng tiềm năng",
     "fullname":"Họ và tên",
-    "deal_of":"Deal của"
-
+    "deal_of":"Deal của",
+    "are_you_sure_delete_deal?":"Bạn có chắc chắn muốn xóa deal?" ,
+    "branch":"Chi nhánh",
+    "chooose_tag":"Chọn Tag",
+    "please_choose_customer_type":"Vui lòng chọn loại khách hàng*",
+    "please_enter_and_select_all_required_infomation":"Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)"
 
   }
   

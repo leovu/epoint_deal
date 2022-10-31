@@ -3,7 +3,6 @@ import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/allocator_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';

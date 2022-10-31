@@ -11,9 +11,13 @@ class UpdateDealModelRequest {
   String closingDate;
   List<int> tag;
   int orderSourceId;
-  double probability;
+  num probability;
   String dealDescription;
-  double amount;
+  String customerCode;
+  String branchCode;
+  num amount;
+
+
   List<Product> product;
 
   UpdateDealModelRequest(
@@ -30,6 +34,8 @@ class UpdateDealModelRequest {
       this.probability,
       this.dealDescription,
       this.amount,
+      this.customerCode,
+      this.branchCode,
       this.product});
 
   UpdateDealModelRequest.fromJson(Map<String, dynamic> json) {
@@ -46,6 +52,8 @@ class UpdateDealModelRequest {
     probability = json['probability'];
     dealDescription = json['deal_description'];
     amount = json['amount'];
+    customerCode = json['customer_code'];
+    branchCode = json['branch_code'];
     if (json['product'] != null) {
       product = <Product>[];
       json['product'].forEach((v) {
@@ -68,7 +76,8 @@ class UpdateDealModelRequest {
     data['order_source_id'] = this.orderSourceId;
     data['probability'] = this.probability;
     data['deal_description'] = this.dealDescription;
-    data['amount'] = this.amount;
+    data['customer_code'] = this.customerCode;
+    data['branch_code'] = this.branchCode;
     if (this.product != null) {
       data['product'] = this.product.map((v) => v.toJson()).toList();
     }

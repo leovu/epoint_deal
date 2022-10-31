@@ -20,6 +20,7 @@ import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_respo
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/edit_deal/more_info_eidt_deal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/allocator_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/customer_type_modal.dart';
@@ -558,7 +559,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
                   }
                 } else {
                   DealConnection.showMyDialog(
-                      context, "Vui lòng chọn loại khách hàng");
+                      context, AppLocalizations.text(LangKey.warningChooseCustomerType));
                 }
               })
             : Container(),
@@ -906,7 +907,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
               customerSelected == null ||
               selectedClosingDueDate == null) {
             DealConnection.showMyDialog(
-                context, 'Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
+                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DealConnection.showLoading(context);
 
@@ -933,20 +934,20 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
               }
             }
 
-            AddDealModelResponse result = await DealConnection.updateDeal(
+            UpdateDealModelResponse result = await DealConnection.updateDeal(
                 context,
                 UpdateDealModelRequest(
                   dealCode: widget.detail.dealCode,
                     dealName: _dealNameText.text,
                     saleId: allocatorSelected.staffId,
                     typeCustomer: customerTypeSelected.customerTypeNameEn,
-                    // customerCode: customerSelected.customerCode,
+                    customerCode: customerSelected.customerCode,
                     phone: _phoneNumberText.text,
                     pipelineCode: pipelineSelected.pipelineCode,
                     journeyCode: journeySelected.journeyCode,
                     closingDate:
                         "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
-                    // branchCode: detailDeal.branchCode,
+                    branchCode: detailDeal.branchCode,
                     tag: widget.detail.tag,
                     orderSourceId: detailDeal.orderSourceId,
                     probability: double.parse(widget.detail?.probability ?? ""),

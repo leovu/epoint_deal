@@ -34,7 +34,7 @@ class _TagsModalState extends State<TagsModal> {
             children: [
               Container(),
               Text(
-                "Tag",
+                AppLocalizations.text(LangKey.choooseTag),
                 style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.black,

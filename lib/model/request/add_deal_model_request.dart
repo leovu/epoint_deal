@@ -84,8 +84,8 @@ class Product {
   String objectCode;
   int objectId;
   int quantity;
-  double price;
-  double amount;
+  num price;
+  num amount;
 
   Product(
       {this.objectType,
