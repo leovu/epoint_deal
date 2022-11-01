@@ -48,7 +48,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
       for (int i = 0; i < widget.closingDateOptions.length ; i++) {
           if (widget.closingDateOptions[i].closingDateID == int.parse(widget.filterScreenModel.id_closing_date) ) {
             widget.closingDateOptions[i].selected = true;
-            widget.id_closing_date =  "${widget.closingDateOptions[i].closingDateID}}";
+            widget.id_closing_date =  "${widget.closingDateOptions[i].closingDateID}";
           } else {
             widget.closingDateOptions[i].selected = false;
           }
@@ -62,8 +62,6 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return (widget.closingDateOptions != null)
         ? Column(
             children: [
