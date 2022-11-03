@@ -143,4 +143,10 @@ class LangKey {
   static const String choooseTag = "chooose_tag";
   static const String warningChooseCustomerType = "please_choose_customer_type";
   static const String warningChooseAllRequiredInfo = "please_enter_and_select_all_required_infomation";
+
+  static const String yes = "yes";
+  static const String no = "no";
+  static const String notify = "notify";
+  static const String argree = "argree";
+
 }

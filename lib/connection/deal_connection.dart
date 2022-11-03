@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:epoint_deal_plugin/common/lang_key.dart';
+import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/acount.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
@@ -328,7 +330,7 @@ class DealConnection {
               children: <Widget>[
                 Center(
                     child: Text(
-                  'Thông báo\n',
+                  AppLocalizations.text(LangKey.notify) + "\n",
                   style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
                 )),
@@ -338,7 +340,7 @@ class DealConnection {
           ),
           actions: <Widget>[
             TextButton(
-              child: Center(child: Text('Đồng ý')),
+              child: Center(child: Text(AppLocalizations.text(LangKey.argree))),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -349,7 +351,7 @@ class DealConnection {
     );
   }
 
-  static Future showMyDialogWithFunction(BuildContext context, String title ,{Function ontap}) async {
+   static Future showMyDialogWithFunction(BuildContext context, String title ,{Function ontap}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -361,7 +363,7 @@ class DealConnection {
               children: <Widget>[
                 Center(
                     child: Text(
-                  'Thông báo\n',
+                  AppLocalizations.text(LangKey.notify) + "\n",
                   style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
                 )),
@@ -374,7 +376,7 @@ class DealConnection {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [TextButton(
-                child: Center(child: Text('Không',
+                child: Center(child: Text(AppLocalizations.text(LangKey.no),
                 style: TextStyle(
                   color: Colors.red
                 ),)),
@@ -384,7 +386,7 @@ class DealConnection {
               ),
 
               TextButton(
-                child: Center(child: Text('Có')),
+                child: Center(child: Text(AppLocalizations.text(LangKey.yes))),
                 onPressed: ontap,
               ),],
               ),

@@ -128,7 +128,11 @@
     "branch":"Chi nhánh",
     "chooose_tag":"Chọn Tag",
     "please_choose_customer_type":"Vui lòng chọn loại khách hàng*",
-    "please_enter_and_select_all_required_infomation":"Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)"
+    "please_enter_and_select_all_required_infomation":"Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)",
+    "yes":"Có",
+    "no":"Không",
+    "notify":"Thông báo",
+    "argree":"Đồng ý"
 
   }
   

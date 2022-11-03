@@ -27,6 +27,7 @@ class DetailDealScreen extends StatefulWidget {
 class _DetailDealScreenState extends State<DetailDealScreen> {
   final ScrollController _controller = ScrollController();
   DetailDealData detail;
+   bool allowPop = false;
 
   final formatter = NumberFormat.currency(
     locale: 'vi_VN',
@@ -63,21 +64,31 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
+    return WillPopScope(
+      onWillPop: () {
+        if(allowPop){
+              Navigator.of(context).pop(allowPop);
+        } else {
+          Navigator.of(context).pop();
+        }
+        return;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
+          backgroundColor: AppColors.primaryColor,
+          title: Text(
+            AppLocalizations.text(LangKey.detail_deal),
+            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+          ),
+          leadingWidth: 20.0,
         ),
-        backgroundColor: AppColors.primaryColor,
-        title: Text(
-          AppLocalizations.text(LangKey.detail_deal),
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
-        ),
-        leadingWidth: 20.0,
+        body: Container(
+            decoration: const BoxDecoration(color: AppColors.white),
+            child: buildBody()),
       ),
-      body: Container(
-          decoration: const BoxDecoration(color: AppColors.white),
-          child: buildBody()),
     );
   }
 
@@ -104,6 +115,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
                           if (result != null) {
                             if (result) {
+                              allowPop = true;
                               getData();
                               ;
                             }
@@ -120,6 +132,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               DescriptionModelResponse result =
                             await DealConnection.deleteDeal(
                                 context, detail.dealCode);
+
+                                 Navigator.of(context).pop();
 
                         if (result != null) {
                           if (result.errorCode == 0) {
@@ -291,7 +305,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 const Divider(),
                 _infoItem(
                     AppLocalizations.text(LangKey.dealPrice),
-                    formatter.format(num.parse(detail?.amount ?? "")) + "VNĐ"),
+                    formatter.format(num.parse(detail?.amount ?? "")) + "VND", style: TextStyle(
+      fontSize: AppTextSizes.size16,
+      color: AppColors.bluePrimary,
+      fontWeight: FontWeight.w500)),
                 const Divider(),
                 _infoItem(
                     AppLocalizations.text(LangKey.dealCode),
@@ -503,7 +520,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Expanded(
               child: Text(
             content,
-            style: style ?? AppTextStyles.style15BlackNormal,
+            style: style ?? TextStyle(
+      fontSize: AppTextSizes.size15,
+      color: AppColors.black,
+      fontWeight: FontWeight.normal),
             // maxLines: 1,
           )),
           if (icon2 != null)
@@ -571,6 +591,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     final regSpace = RegExp(r"\s+");
     // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
     return await launch("tel:" + phone.replaceAll(regSpace, ""));
+  }
+
+
+   Future<bool> _openChathub(String link) async {
+    return await launch(link);
   }
 
   Widget _buildAvatar(String name) {
