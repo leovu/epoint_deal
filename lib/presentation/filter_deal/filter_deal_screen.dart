@@ -34,6 +34,8 @@ class FilterDealCustomer extends StatefulWidget {
 class _FilterDealCustomerState extends State<FilterDealCustomer> {
   final ScrollController _controller = ScrollController();
 
+  bool allowPop = false;
+
   List<CreateDateModel> createDateOptions = [
     CreateDateModel(
         createDateName: AppLocalizations.text(LangKey.today),
@@ -290,20 +292,52 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
+    return WillPopScope(
+      onWillPop: () {
+        if(allowPop){
+
+           widget.filterScreenModel = FilterScreenModel(
+        filterModel: ListDealModelRequest(
+            search: "",
+            page: 1,
+            orderSourceName: "",
+            branchName: "",
+            createdAt: "",
+            closingDate: "",
+            closingDueDate: "",
+            pipelineName: "",
+            journeyName: ""),
+        fromDate_closing_date: null,
+        fromDate_closing_due_date: null,
+        fromDate_created_at: null,
+        toDate_created_at: null,
+        id_created_at: "",
+        id_closing_date: "",
+        toDate_closing_date: null,
+        toDate_closing_due_date: null,
+        id_closing_due_date: "");
+
+              Navigator.of(context).pop(widget.filterScreenModel);
+        } else {
+          Navigator.of(context).pop();
+        }
+        return;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+            ),
+            backgroundColor: AppColors.primaryColor,
+            title: Text(
+              AppLocalizations.text(LangKey.filter),
+              style: const TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
           ),
-          backgroundColor: AppColors.primaryColor,
-          title: Text(
-            AppLocalizations.text(LangKey.filter),
-            style: const TextStyle(color: Colors.white, fontSize: 20.0),
-          ),
-        ),
-        body: Container(
-            decoration: const BoxDecoration(color: AppColors.white),
-            child: _buildBody()));
+          body: Container(
+              decoration: const BoxDecoration(color: AppColors.white),
+              child: _buildBody())),
+    );
   }
 
   Widget _buildBody() {
@@ -588,6 +622,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                   width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
           child: InkWell(
             onTap: () async {
+              allowPop = true;
               print("xoa");
               await clearData();
             },

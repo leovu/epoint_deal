@@ -38,10 +38,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   @override
   void initState() {
     super.initState();
-
-    final formattedValue = formatter.format(num.parse('1200000.00'));
-    print(formattedValue);
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getData();
     });
@@ -233,9 +229,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           AppLocalizations.text(LangKey.createJobs),
                           Assets.iconTask,
                           Color.fromARGB(255, 243, 180, 125), () async {
-                        await Global.createJob(widget.deal_code);
-
-                        print("task");
+                        if (Global.createJob != null) {
+                          await Global.createJob(widget.deal_code);
+                        }
                       })
                     ],
                   )),

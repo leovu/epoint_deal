@@ -28,7 +28,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
   ScrollController _controller = ScrollController();
   final TextEditingController _searchtext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<DealItems> items = <DealItems>[];
+  List<DealItems> items;
 
   List<PipelineData> pipeLineData = <PipelineData>[];
   List<OrderSourceData> orderSourceData = <OrderSourceData>[];
@@ -146,12 +146,10 @@ class _ListDealScreenState extends State<ListDealScreen> {
                           )
                         )
                       );
-              print("bbbb");
 
               if (result != null) {
                 filterScreenModel = result;
                 filterModel = result.filterModel;
-                print("aaaaa");
                 filterModel.page = 1;
                 getData(false);
               } else {
@@ -198,10 +196,13 @@ class _ListDealScreenState extends State<ListDealScreen> {
               controller: _controller,
               // separator: const Divider(),
               children: [
-                (items == null || items?.length == 0)
-                    ? CustomDataNotFound()
-                    : Column(
-                        children: items.map((e) => potentialItem(e)).toList()),
+                (items == null)
+                    ? Container()
+                    : (items.length > 0)
+                        ? Column(
+                            children:
+                                items.map((e) => _dealItem(e)).toList())
+                        : CustomDataNotFound(),
                 Container(height: 100)
               ],
             ),
@@ -265,7 +266,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
     );
   }
 
-  Widget potentialItem(DealItems item) {
+  Widget _dealItem(DealItems item) {
     return Stack(
       children: [
         InkWell(
