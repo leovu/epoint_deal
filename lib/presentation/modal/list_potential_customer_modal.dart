@@ -138,7 +138,7 @@ ListCustomLeadData _model ;
             AppLocalizations.text(LangKey.listLead),
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
-          leadingWidth: 20.0,
+          // leadingWidth: 20.0,
         ),
         body: Container(
             decoration: const BoxDecoration(color: Colors.white),

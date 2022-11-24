@@ -65,7 +65,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
             AppLocalizations.text(LangKey.staff),
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
-          leadingWidth: 20.0,
+          // leadingWidth: 20.0,
         ),
         body: Container(
             decoration: const BoxDecoration(color: Colors.white),
@@ -87,7 +87,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   controller: _controller,
                   separator: Divider(),
-                  children: (_model != null) ? _listWidget() : [CustomDataNotFound()],
+                  children: (_model != null) ? (_model.data.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
                 ))
               : Container(),
           Container(

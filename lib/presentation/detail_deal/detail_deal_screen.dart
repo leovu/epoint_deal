@@ -79,7 +79,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             AppLocalizations.text(LangKey.detail_deal),
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
-          leadingWidth: 20.0,
+          // leadingWidth: 20.0,
         ),
         body: Container(
             decoration: const BoxDecoration(color: AppColors.white),
