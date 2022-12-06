@@ -47,8 +47,14 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     var dataDetail =
         await DealConnection.getdetailDeal(context, widget.deal_code);
     if (dataDetail != null) {
-      detail = dataDetail.data;
+      if (dataDetail.errorCode == 0) {
+        detail = dataDetail.data;
       setState(() {});
+      } else {
+        await DealConnection.showMyDialog(
+                                  context, dataDetail.errorDescription, isCancle: false );
+        Navigator.of(context).pop();
+      }
     }
   }
 

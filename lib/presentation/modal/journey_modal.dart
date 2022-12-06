@@ -47,11 +47,11 @@ class _JourneyModalState extends State<JourneyModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30),
               Text(AppLocalizations.text(LangKey.chooseItinerary),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+                  fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -80,8 +80,8 @@ class _JourneyModalState extends State<JourneyModal> {
   }
 
   List<Widget> _listWidget() {
-    return (widget.journeys != null && widget.journeys.length > 0) ? List.generate(
-        widget.journeys?.length,
+    return (widget.journeys != null) ? List.generate(
+        widget.journeys.length,
         (index) => _buildItem(
                 widget.journeys[index].journeyName, widget.journeys[index].selected,
                 () {
@@ -99,7 +99,7 @@ class _JourneyModalState extends State<JourneyModal> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   color: selected ? Colors.orange : Colors.black,
                   fontWeight: FontWeight.normal),
             )

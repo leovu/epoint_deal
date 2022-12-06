@@ -88,13 +88,12 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   List<CustomerTypeModel> customerTypeData = [
     CustomerTypeModel(
-        // customerTypeName: AppLocalizations.text(LangKey.personal),
-        customerTypeName: "Khách hàng",
-        customerTypeNameEn: "customer",
+        customerTypeName: AppLocalizations.text(LangKey.customerVi),
+        customerTypeNameEn: AppLocalizations.text(LangKey.customer),
         customerTypeID: 1,
-        selected: false),
+        selected: true),
     CustomerTypeModel(
-        customerTypeName: "Khách hàng tiềm năng",
+        customerTypeName: AppLocalizations.text(LangKey.potentialCustomer),
         customerTypeNameEn: "lead",
         customerTypeID: 2,
         selected: false),

@@ -2,6 +2,7 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
+import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
@@ -32,13 +33,13 @@ class _TagsModalState extends State<TagsModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30),
               Text(
                 AppLocalizations.text(LangKey.choooseTag),
                 style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.black,
-                    fontWeight: FontWeight.w400),
+                    fontWeight: FontWeight.w500),
               ),
               InkWell(
                 onTap: () {
@@ -78,12 +79,12 @@ class _TagsModalState extends State<TagsModal> {
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
+    return ( widget.tagsData != null) ? List.generate(
         widget.tagsData.length,
         (index) => _buildItem(widget.tagsData[index].name,
                 widget.tagsData[index].selected, () {
               selectedItem(widget.tagsData[index]);
-            }));
+            })):[CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
@@ -99,7 +100,7 @@ class _TagsModalState extends State<TagsModal> {
                 Text(
                   title,
                   style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 17.0,
                       color: selected ? Colors.orange : Colors.black,
                       fontWeight: FontWeight.normal),
                 )

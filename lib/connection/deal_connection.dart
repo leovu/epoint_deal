@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/acount.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
@@ -239,28 +240,6 @@ class DealConnection {
   }
     
 
-  // static Future<GetDealModelReponse> getDealName(BuildContext context) async {
-  //   ResponseData responseData =
-  //       await connection.post('/customer-lead/customer-lead/get-deal-name', {});
-  //   if (responseData.isSuccess) {
-  //     GetDealModelReponse data =
-  //         GetDealModelReponse.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
-  // static Future<GetBranchModelReponse> getBranch(BuildContext context) async {
-  //   ResponseData responseData =
-  //       await connection.post('/customer-lead/customer-lead/get-branch', {});
-  //   if (responseData.isSuccess) {
-  //     GetBranchModelReponse data =
-  //         GetBranchModelReponse.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
   static Future<GetTagModelReponse> getTag(BuildContext context) async {
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/get-tag', {});
@@ -271,33 +250,6 @@ class DealConnection {
     return null;
   }
 
-  // static Future<DescriptionModelResponse> updateLead(
-  //     BuildContext context, EditPotentialRequestModel model) async {
-  //   showLoading(context);
-  //   ResponseData responseData = await connection.post(
-  //       '/customer-lead/customer-lead/update-lead', model.toJson());
-  //   Navigator.of(context).pop();
-  //   if (responseData.isSuccess) {
-  //     DescriptionModelResponse data =
-  //         DescriptionModelResponse.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
-  // static Future<DescriptionModelResponse> assignRevokeLead(
-  //     BuildContext context, AssignRevokeLeadRequestModel model) async {
-  //   showLoading(context);
-  //   ResponseData responseData = await connection.post(
-  //       '/customer-lead/customer-lead/assign-revoke-lead', model.toJson());
-  //   Navigator.of(context).pop();
-  //   if (responseData.isSuccess) {
-  //     DescriptionModelResponse data =
-  //         DescriptionModelResponse.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(
@@ -318,40 +270,71 @@ class DealConnection {
         });
   }
 
-  static Future showMyDialog(BuildContext context, String title) async {
+ static Future showMyDialog(BuildContext context, String title, {bool isCancle = true}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:  Text(''),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(),
+                    Center(
+                        child: Text(
+                      AppLocalizations.text(LangKey.notify) + "\n",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    )),
+
+                    isCancle ? InkWell(
+                      child: Icon(Icons.clear,size: 20,),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ) : Container()
+                  ],
+                ),
                 Center(
                     child: Text(
-                  AppLocalizations.text(LangKey.notify) + "\n",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.grey[700]),
                 )),
-                Center(child: Text(title)),
               ],
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: Center(child: Text(AppLocalizations.text(LangKey.argree))),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            Container(
+              margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
+              height: 40,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextButton(
+                child: Center(
+                    child: Text(
+                  AppLocalizations.text(LangKey.argree),
+                  style: TextStyle(color: AppColors.white),
+                )),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            )
           ],
         );
       },
     );
   }
 
-   static Future showMyDialogWithFunction(BuildContext context, String title ,{Function ontap}) async {
+  static Future showMyDialogWithFunction(BuildContext context, String title,
+      {Function ontap}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -361,13 +344,32 @@ class DealConnection {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(),
+                    Center(
+                        child: Text(
+                      AppLocalizations.text(LangKey.notify) + "\n",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    )),
+
+                    InkWell(
+                      child: Icon(Icons.clear,size: 20,),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ),
                 Center(
                     child: Text(
-                  AppLocalizations.text(LangKey.notify) + "\n",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[700]),
                 )),
-                Center(child: Text(title)),
               ],
             ),
           ),
@@ -375,20 +377,23 @@ class DealConnection {
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [TextButton(
-                child: Center(child: Text(AppLocalizations.text(LangKey.no),
-                style: TextStyle(
-                  color: Colors.red
-                ),)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-
-              TextButton(
-                child: Center(child: Text(AppLocalizations.text(LangKey.yes))),
-                onPressed: ontap,
-              ),],
+                children: [
+                  TextButton(
+                    child: Center(
+                        child: Text(
+                      AppLocalizations.text(LangKey.no),
+                      style: TextStyle(color: Color(0xFF0067AC)),
+                    )),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child:
+                        Center(child: Text(AppLocalizations.text(LangKey.yes))),
+                    onPressed: ontap,
+                  ),
+                ],
               ),
             )
           ],

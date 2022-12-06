@@ -2,6 +2,7 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
@@ -46,11 +47,11 @@ class _AllocatorModalState extends State<AllocatorModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30,),
               Text(AppLocalizations.text(LangKey.chooseAllottedPerson),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+                  fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -79,13 +80,13 @@ class _AllocatorModalState extends State<AllocatorModal> {
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
+    return (widget.allocatorData != null) ? List.generate(
         widget.allocatorData.length,
         (index) => _buildItem(
                 widget.allocatorData[index].fullName, widget.allocatorData[index].selected,
                 () {
               selectedItem(index);
-            }));
+            })) : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
@@ -98,7 +99,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   color: selected ? Colors.orange : Colors.black,
                   fontWeight: FontWeight.normal),
             )

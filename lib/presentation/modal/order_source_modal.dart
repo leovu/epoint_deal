@@ -2,6 +2,7 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
@@ -47,11 +48,11 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30),
               Text(AppLocalizations.text(LangKey.orderSource),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+                  fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -80,13 +81,13 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
+    return (widget.orderSourceData != null) ? List.generate(
         widget.orderSourceData.length,
         (index) => _buildItem(
                 widget.orderSourceData[index].orderSourceName, widget.orderSourceData[index].selected,
                 () {
               selectedItem(index);
-            }));
+            })) : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
@@ -99,7 +100,7 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   color: selected ? Colors.orange : Colors.black,
                   fontWeight: FontWeight.normal),
             )
