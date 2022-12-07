@@ -134,7 +134,9 @@
     "notify":"Thông báo",
     "argree":"Đồng ý",
     "potential_customer":"Khách hàng tiềm năng",
-    "customer_vi":"Khách hàng"
+    "customer_vi":"Khách hàng",
+    "phone_number_not_correct_format":"Số điện thoại không đúng định dạng"
+
 
   }
   

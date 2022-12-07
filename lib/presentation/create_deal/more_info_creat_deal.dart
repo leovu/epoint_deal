@@ -320,20 +320,36 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               )
             : Container(),
         (widget.branchData != null)
-            ? Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  //  color: Colors.black,
-                ),
-                height: 170,
-                child: SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: listBranch(),
+            ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              AppLocalizations.text(LangKey.agency),
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: const Color(0xFF858080),
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+
+                Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      //  color: Colors.black,
+                    ),
+                    height: 170,
+                    child: SingleChildScrollView(
+                      physics: ClampingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: listBranch(),
+                      ),
+                    ),
                   ),
-                ),
-              )
+              ],
+            )
             : Container(),
         Container(
           height: 15,

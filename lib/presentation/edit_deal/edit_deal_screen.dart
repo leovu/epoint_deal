@@ -109,9 +109,9 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel();
 
-List<Product> productUpdate = <Product>[];
+  List<Product> productUpdate = <Product>[];
 
-AddDealModelRequest detailDeal = AddDealModelRequest(
+  AddDealModelRequest detailDeal = AddDealModelRequest(
       dealName: "",
       saleId: 0,
       typeCustomer: "",
@@ -283,7 +283,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
     orderSourceSelected = OrderSourceData(
         orderSourceName: widget.detail?.orderSourceName ?? "", selected: true);
 
-        detailDeal.orderSourceId = orderSourceSelected.orderSourceId;
+    detailDeal.orderSourceId = orderSourceSelected.orderSourceId;
 
     _closingDueDateText.text = DateFormat("dd/MM/yyyy")
         .format(DateTime.parse(widget.detail.closingDate));
@@ -557,8 +557,8 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
                     setState(() {});
                   }
                 } else {
-                  DealConnection.showMyDialog(
-                      context, AppLocalizations.text(LangKey.warningChooseCustomerType));
+                  DealConnection.showMyDialog(context,
+                      AppLocalizations.text(LangKey.warningChooseCustomerType));
                 }
               })
             : Container(),
@@ -568,7 +568,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
                 AppLocalizations.text(LangKey.inputPhonenumber),
                 "",
                 Assets.iconCall,
-                true,
+                false,
                 false,
                 true,
                 fillText: _phoneNumberText,
@@ -898,35 +898,39 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
+          
+          if (_phoneNumberText.text.isNotEmpty) {}
+          if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) ||
+              (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+            print("so dien thoai sai oy");
+            DealConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat));
+            return;
+          }
+
           if (_dealNameText.text == "" ||
-              _phoneNumberText.text == "" ||
+              // _phoneNumberText.text == "" ||
               customerTypeSelected == null ||
               pipelineSelected == null ||
               journeySelected == null ||
               customerSelected == null ||
               selectedClosingDueDate == null) {
-            DealConnection.showMyDialog(
-                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
+            DealConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DealConnection.showLoading(context);
 
             double amount = 0;
             if (widget.detail.productBuy.length > 0) {
               for (int i = 0; i < widget.detail.productBuy.length; i++) {
-
-                productUpdate.add(
-                  Product(
+                productUpdate.add(Product(
                     objectType: widget.detail.productBuy[i].objectType,
                     objectName: widget.detail.productBuy[i].objectName,
                     objectCode: "",
                     objectId: widget.detail.productBuy[i].objectId,
                     quantity: widget.detail.productBuy[i].quantity,
                     price: widget.detail.productBuy[i].price,
-                    amount: widget.detail.productBuy[i].amount
-
-
-                  )
-                );
+                    amount: widget.detail.productBuy[i].amount));
 
                 amount += widget.detail.productBuy[i].amount *
                     widget.detail.productBuy[i].quantity;
@@ -936,7 +940,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
             UpdateDealModelResponse result = await DealConnection.updateDeal(
                 context,
                 UpdateDealModelRequest(
-                  dealCode: widget.detail.dealCode,
+                    dealCode: widget.detail.dealCode,
                     dealName: _dealNameText.text,
                     saleId: allocatorSelected.staffId,
                     typeCustomer: customerTypeSelected.customerTypeNameEn,
@@ -952,8 +956,7 @@ AddDealModelRequest detailDeal = AddDealModelRequest(
                     probability: double.parse(widget.detail?.probability ?? ""),
                     dealDescription: widget.detail.dealDescription,
                     amount: amount,
-                    product: productUpdate
-                    ));
+                    product: productUpdate));
             Navigator.of(context).pop();
             if (result != null) {
               if (result.errorCode == 0) {

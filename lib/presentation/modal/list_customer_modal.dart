@@ -97,7 +97,7 @@ GetCustomerModelResponse _model ;
         children: [
           _buildSearch(),
           (widget.listCustomer != null)
-              ? Expanded(
+              ? (widget.listCustomer.length > 0) ? Expanded(
                   child: CustomListView(
                   shrinkWrap: true,
                   padding: EdgeInsets.only(
@@ -106,8 +106,8 @@ GetCustomerModelResponse _model ;
                   controller: _controller,
                   separator: Divider(),
                   children: _listWidget(),
-                ))
-              : CustomDataNotFound(),
+                )) : CustomDataNotFound()
+              : Container(),
           Container(
             height: 20.0,
           )

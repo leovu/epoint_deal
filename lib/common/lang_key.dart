@@ -150,5 +150,6 @@ class LangKey {
   static const String argree = "argree";
   static const String potentialCustomer = "potential_customer";
   static const String customerVi = "customer_vi";
+  static const String phoneNumberNotCorrectFormat = "phone_number_not_correct_format";
 
 }

@@ -98,14 +98,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
   ListCustomLeadItems leadItem = ListCustomLeadItems();
 
-  
-
   CustomerTypeModel customerTypeSelected = CustomerTypeModel(
-        // customerTypeName: AppLocalizations.text(LangKey.personal),
-        customerTypeName: AppLocalizations.text(LangKey.customerVi),
-        customerTypeNameEn: AppLocalizations.text(LangKey.customer),
-        customerTypeID: 1,
-        selected: true);
+      // customerTypeName: AppLocalizations.text(LangKey.personal),
+      customerTypeName: AppLocalizations.text(LangKey.customerVi),
+      customerTypeNameEn: AppLocalizations.text(LangKey.customer),
+      customerTypeID: 1,
+      selected: true);
 
   ObjectPopCreateDealModel modelResponse = ObjectPopCreateDealModel();
 
@@ -153,7 +151,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
       var branchs = await DealConnection.getBranch(context);
-      
+
       if (branchs != null) {
         branchData = branchs.data;
       }
@@ -163,15 +161,15 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         pipeLineData = pipelines.data;
         pipelineSelected = pipeLineData[0];
       }
-  var journeys =
-        await DealConnection.getJourney(context, pipelineSelected.pipelineCode);
-    if (journeys != null) {
-      journeysData = journeys.data;
+      var journeys = await DealConnection.getJourney(
+          context, pipelineSelected.pipelineCode);
+      if (journeys != null) {
+        journeysData = journeys.data;
 
-      journeySelected = journeysData[0];
-    }
+        journeySelected = journeysData[0];
+      }
 
-Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
       setState(() {});
     });
@@ -255,6 +253,108 @@ Navigator.of(context).pop();
         Container(
           height: 10,
         ),
+// loại khách hàng
+        _buildTextField(
+            AppLocalizations.text(LangKey.customerStyle),
+            customerTypeSelected?.customerTypeName ?? "",
+            Assets.iconStyleCustomer,
+            true,
+            true,
+            false, ontap: () async {
+          print("loại khách hàng");
+          FocusScope.of(context).unfocus();
+
+          CustomerTypeModel customerType = await showModalBottomSheet(
+              context: context,
+              useRootNavigator: true,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return GestureDetector(
+                  child: CustomerTypeModal(
+                    customerTypeData: customerTypeData,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                );
+              });
+          if (customerType != null) {
+            if (customerType.customerTypeID ==
+                    customerTypeSelected?.customerTypeID ??
+                0) {
+              return;
+            }
+
+            customerTypeSelected = customerType;
+            customerSelected = DealItems(customerCode: "", customerName: "");
+            leadItem = ListCustomLeadItems(customerLeadCode: "");
+
+            setState(() {});
+          }
+
+          // print("loại khách hàng");
+        }),
+
+// chọn khách hàng
+        _buildTextField(
+                AppLocalizations.text(LangKey.choose_customer),
+                customerSelected?.customerName ?? "",
+                Assets.iconPerson,
+                true,
+                true,
+                false, ontap: () async {
+                FocusScope.of(context).unfocus();
+
+                if (customerTypeSelected.customerTypeNameEn ==
+                    AppLocalizations.text(LangKey.customer)) {
+                  CustomerData customer =
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ListCustomerModal(
+                                listCustomer: listCustomer,
+                                dealItem: customerSelected,
+                              )));
+
+                  if (customer != null) {
+                    customerSelected.customerCode = customer.customerCode;
+                    customerSelected.customerName = customer.fullName;
+                    _phoneNumberText.text = "";
+                    // _dealNameText.text =
+                    //     "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
+
+                    setState(() {});
+                  }
+                } else if (customerTypeSelected.customerTypeNameEn == "lead") {
+                  ListCustomLeadItems result =
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ListCustomerPotentialModal(
+                                items: items,
+                                leadItem: leadItem,
+                              )));
+
+                  if (result != null) {
+                    customerSelected.customerCode = result.customerLeadCode;
+                    customerSelected.customerName = result.leadFullName;
+                    leadItem.customerLeadCode = result.customerLeadCode;
+                    _phoneNumberText.text = result.phone;
+
+                    setState(() {});
+                  }
+                } else {
+                  DealConnection.showMyDialog(context,
+                      AppLocalizations.text(LangKey.warningChooseCustomerType));
+                }
+              }),
+
+            // phone
+              _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber),
+                "", Assets.iconCall, false, false, true,
+                fillText: _phoneNumberText,
+                focusNode: _phoneNumberFocusNode,
+                inputType: TextInputType.number),
+
+
 // nhập tên deal
         _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
             Assets.iconDealName, true, false, true,
@@ -262,8 +362,123 @@ Navigator.of(context).pop();
             focusNode: _dealNameFocusNode,
             inputType: TextInputType.text),
 
-// chọn người được phân bổ
-        _buildTextField(
+        !showMoreInfoDeal
+            ? InkWell(
+                onTap: () {
+                  showMoreInfoDeal = !showMoreInfoDeal;
+                  setState(() {});
+                },
+                child: Center(
+                  child: Column(
+                    children: [
+                      Divider(),
+                      Text(
+                        AppLocalizations.text(LangKey.showMore),
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            color: const Color(0xFF0067AC),
+                            fontWeight: FontWeight.normal),
+                      ),
+                      Container(
+                        height: 6.0,
+                      ),
+                      Image.asset(
+                        Assets.iconDropDown,
+                        width: 16.0,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
+
+
+        // chọn pipeline
+        showMoreInfoDeal
+            ? _buildTextField(
+                AppLocalizations.text(LangKey.choosePipeline),
+                pipelineSelected?.pipelineName ?? "",
+                Assets.iconChance,
+                true,
+                true,
+                false, ontap: () async {
+                FocusScope.of(context).unfocus();
+                PipelineData pipeline = await showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
+                        child: PipelineModal(
+                            pipeLineData: pipeLineData,
+                            pipelineSelected: pipelineSelected),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                      );
+                    });
+                if (pipeline != null) {
+                  if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                    journeySelected = null;
+                  }
+
+                  pipelineSelected = pipeline;
+                  DealConnection.showLoading(context);
+                  var journeys = await DealConnection.getJourney(
+                      context, pipelineSelected.pipelineCode);
+                  Navigator.of(context).pop();
+                  if (journeys != null) {
+                    journeysData = journeys.data;
+                  }
+                  setState(() {});
+                }
+              })
+            : Container(),
+
+        // chọn hành trình
+        showMoreInfoDeal
+            ? _buildTextField(
+                AppLocalizations.text(LangKey.chooseItinerary),
+                journeySelected?.journeyName ?? "",
+                Assets.iconItinerary,
+                true,
+                true,
+                false, ontap: () async {
+                print("Chọn hành trình");
+
+                FocusScope.of(context).unfocus();
+
+                JourneyData journey = await showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
+                        child: JourneyModal(
+                            journeys: journeysData,
+                            journeySelected: journeySelected),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                      );
+                    });
+                if (journey != null) {
+                  journeySelected = journey;
+                  setState(() {
+                    // await LeadConnection.getDistrict(context, province.provinceid);
+                  });
+                }
+              })
+            : Container(),
+
+            // chọn người được phân bổ
+
+            showMoreInfoDeal
+            ? _buildTextField(
             AppLocalizations.text(LangKey.chooseAllottedPerson),
             allocatorSelected?.fullName ?? "",
             Assets.iconName,
@@ -326,222 +541,9 @@ Navigator.of(context).pop();
               setState(() {});
             }
           }
-        }),
+        }) : Container(),
 
-        // Loại khách hàng
-        _buildTextField(
-            AppLocalizations.text(LangKey.customerStyle),
-            customerTypeSelected?.customerTypeName ?? "",
-            Assets.iconStyleCustomer,
-            true,
-            true,
-            false, ontap: () async {
-          print("loại khách hàng");
-          FocusScope.of(context).unfocus();
 
-          CustomerTypeModel customerType = await showModalBottomSheet(
-              context: context,
-              useRootNavigator: true,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) {
-                return GestureDetector(
-                  child: CustomerTypeModal(
-                    customerTypeData: customerTypeData,
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                );
-              });
-          if (customerType != null) {
-            if (customerType .customerTypeID == customerTypeSelected?.customerTypeID ?? 0) {
-              return;
-            }
-
-            customerTypeSelected = customerType;
-            customerSelected = DealItems(customerCode: "",customerName :"");
-            leadItem = ListCustomLeadItems(customerLeadCode: "");
-
-            setState(() {});
-          }
-
-          // print("loại khách hàng");
-        }),
-        !showMoreInfoDeal
-            ? InkWell(
-                onTap: () {
-                  showMoreInfoDeal = !showMoreInfoDeal;
-                  setState(() {});
-                },
-                child: Center(
-                  child: Column(
-                    children: [
-                      Divider(),
-                      Text(
-                        AppLocalizations.text(LangKey.showMore),
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            color: const Color(0xFF0067AC),
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Container(
-                        height: 6.0,
-                      ),
-                      Image.asset(
-                        Assets.iconDropDown,
-                        width: 16.0,
-                      )
-                    ],
-                  ),
-                ),
-              )
-            : Container(),
-
-// chọn khách hàng
-        showMoreInfoDeal
-            ? _buildTextField(
-                AppLocalizations.text(LangKey.choose_customer),
-                customerSelected?.customerName ?? "",
-                Assets.iconPerson,
-                true,
-                true,
-                false, ontap: () async {
-                FocusScope.of(context).unfocus();
-
-                if (customerTypeSelected.customerTypeNameEn == AppLocalizations.text(LangKey.customer))  {
-                   CustomerData customer =
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ListCustomerModal(
-                              listCustomer: listCustomer,
-                              dealItem: customerSelected,
-                            )));
-
-                if (customer != null) {
-                  customerSelected.customerCode = customer.customerCode;
-                  customerSelected.customerName = customer.fullName;
-                  _phoneNumberText.text = "";
-                  _dealNameText.text = "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
-
-                  setState(() {});
-                }
-                } else if(customerTypeSelected.customerTypeNameEn == "lead")  {
-                     ListCustomLeadItems result =
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ListCustomerPotentialModal(
-                              items: items,
-                              leadItem: leadItem,
-                            )));
-
-                if (result != null) {
-                  customerSelected.customerCode = result.customerLeadCode;
-                  customerSelected.customerName = result.leadFullName;
-                  leadItem.customerLeadCode = result.customerLeadCode;
-                  _phoneNumberText.text = result.phone;
-                
-                  setState(() {});
-                }
-
-                } else {
-                  DealConnection.showMyDialog(context, AppLocalizations.text(LangKey.warningChooseCustomerType));
-                }
-               
-              })
-            : Container(),
-// phone
-        showMoreInfoDeal
-            ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber),
-                "", Assets.iconCall, true, false, true,
-                fillText: _phoneNumberText,
-                focusNode: _phoneNumberFocusNode,
-                inputType: TextInputType.number)
-            : Container(),
-
-        // chọn pipeline
-        showMoreInfoDeal
-            ? _buildTextField(
-                AppLocalizations.text(LangKey.choosePipeline),
-                pipelineSelected?.pipelineName ?? "",
-                Assets.iconChance,
-                true,
-                true,
-                false, ontap: () async {
-                FocusScope.of(context).unfocus();
-                  PipelineData pipeline = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return GestureDetector(
-                          child: PipelineModal(
-                            pipeLineData: pipeLineData,
-                            pipelineSelected:pipelineSelected
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          behavior: HitTestBehavior.opaque,
-                        );
-                      });
-                  if (pipeline != null) {
-                    if (pipelineSelected?.pipelineName !=
-                        pipeline.pipelineName) {
-                      journeySelected = null;
-                    }
-
-                    pipelineSelected = pipeline;
-                    DealConnection.showLoading(context);
-                    var journeys = await DealConnection.getJourney(
-                        context, pipelineSelected.pipelineCode);
-                    Navigator.of(context).pop();
-                    if (journeys != null) {
-                      journeysData = journeys.data;
-                    }
-                    setState(() {});
-                  }
-              })
-            : Container(),
-
-        // chọn hành trình
-        showMoreInfoDeal
-            ? _buildTextField(
-                AppLocalizations.text(LangKey.chooseItinerary),
-                journeySelected?.journeyName ?? "",
-                Assets.iconItinerary,
-                true,
-                true,
-                false, ontap: () async {
-                print("Chọn hành trình");
-
-                FocusScope.of(context).unfocus();
-
-                JourneyData journey = await showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) {
-                      return GestureDetector(
-                        child: JourneyModal(
-                          journeys: journeysData,
-                          journeySelected:journeySelected
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        behavior: HitTestBehavior.opaque,
-                      );
-                    });
-                if (journey != null) {
-                  journeySelected = journey;
-                  setState(() {
-                    // await LeadConnection.getDistrict(context, province.provinceid);
-                  });
-                }
-              })
-            : Container(),
 // chọn ngày kết thúc thực tế
         showMoreInfoDeal
             ? Container(
@@ -736,22 +738,33 @@ Navigator.of(context).pop();
         onTap: () async {
           // print("theemmm khtn");
 
+          if (_phoneNumberText.text.isNotEmpty) {
+            if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) ||
+                (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+              print("so dien thoai sai oy");
+              DealConnection.showMyDialog(context,
+                  AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat));
+              return;
+            }
+          }
+
           if (_dealNameText.text == "" ||
-              _phoneNumberText.text == "" ||
+              // _phoneNumberText.text == "" ||
               customerTypeSelected == null ||
               pipelineSelected == null ||
               journeySelected == null ||
               customerSelected == null ||
               selectedClosingDueDate == null) {
-            DealConnection.showMyDialog(
-                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
+            DealConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DealConnection.showLoading(context);
 
             double amount = 0;
             if (detailDeal.product.length > 0) {
               for (int i = 0; i < detailDeal.product.length; i++) {
-                amount += detailDeal.product[i].amount*detailDeal.product[i].quantity;
+                amount += detailDeal.product[i].amount *
+                    detailDeal.product[i].quantity;
               }
             }
             AddDealModelResponse result = await DealConnection.addDeal(
@@ -764,7 +777,8 @@ Navigator.of(context).pop();
                     phone: _phoneNumberText.text,
                     pipelineCode: pipelineSelected.pipelineCode,
                     journeyCode: journeySelected.journeyCode,
-                    closingDate: "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+                    closingDate:
+                        "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
                     branchCode: detailDeal.branchCode,
                     tag: detailDeal.tag,
                     orderSourceId: detailDeal.orderSourceId,
@@ -780,8 +794,7 @@ Navigator.of(context).pop();
                     context, result.errorDescription);
                 if (result.data != null) {
                   modelResponse = ObjectPopCreateDealModel(
-                      deal_id: result.data.dealId,
-                      status: true);
+                      deal_id: result.data.dealId, status: true);
                 }
                 Navigator.of(context).pop(modelResponse.toJson());
               } else {
@@ -807,4 +820,3 @@ Navigator.of(context).pop();
     );
   }
 }
-

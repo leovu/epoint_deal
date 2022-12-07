@@ -174,8 +174,11 @@ class _ListDealScreenState extends State<ListDealScreen> {
           var result = await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CreateDealScreen()));
 
-          if (result != null && result) {
+          if (result != null ) {
+            var status = result["status"];
+            if (status) {
               getData(false);
+            }
           }
         },
         child: const Icon(Icons.add),
