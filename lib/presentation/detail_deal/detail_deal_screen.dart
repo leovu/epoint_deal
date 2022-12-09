@@ -52,7 +52,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       setState(() {});
       } else {
         await DealConnection.showMyDialog(
-                                  context, dataDetail.errorDescription, isCancle: false );
+                                  context, dataDetail.errorDescription);
         Navigator.of(context).pop();
       }
     }
