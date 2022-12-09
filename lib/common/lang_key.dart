@@ -5,6 +5,7 @@ class LangKey {
   static const String error = "error";
   static const String success = "success";
   static const String fail = "fail";
+  static const String warning = "warning";
   static const String filterNameCodePhone = "filter_Name_Code_Phone";
   static const String inputFullname = "input_fullname";
   static const String inputAddress = "input_address";
