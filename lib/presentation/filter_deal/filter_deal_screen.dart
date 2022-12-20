@@ -581,7 +581,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                 DealConnection.showMyDialog(
                     context,
                     AppLocalizations.text(
-                        LangKey.warningChooseFullFromdateTodate));
+                        LangKey.warningChooseFullFromdateTodate),warning: true);
                 return;
               }
 

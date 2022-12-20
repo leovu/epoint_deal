@@ -12,6 +12,7 @@ import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tags_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -55,12 +56,14 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.detail?.probability != null) {
+      if (widget.detail?.probability != "" ) {
         _probabilityText.text = NumberFormat.currency(
-              locale: 'vi_VN',
-              decimalDigits: 0,
+              locale: 'en_US',
+              decimalDigits: 1,
               symbol: '',
             ).format(num.parse(widget.detail?.probability ?? ""));
+      } else {
+         _probabilityText.text = "";
       }
 
       _detailDealText.text = widget.detail?.dealDescription ?? "";
@@ -251,7 +254,11 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 )
               : Container(),
 
-          showAdditionDeal ? moreInfo() : Container()
+          // showAdditionDeal ? moreInfo() : Container()
+           CustomSizeTransaction(
+            open: showAdditionDeal,
+            child: moreInfo(),
+          )
         ],
       ),
     );
@@ -291,7 +298,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                         )
                       ],
                     ),
-                    Container(height: 15.0)
+                    // Container(height: 15.0)
                   ],
                 )
               : Container(),
@@ -639,17 +646,22 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             print(event.toLowerCase());
             if (fillText != null) {
               print(fillText.text);
+              if (fillText != null) {
+              print(fillText.text);
               if (fillText == _probabilityText) {
-                widget.detail.probability =
-                    fillText.text;
-                     if (widget.detailDeal.probability > 100) {
+                widget.detailDeal.probability =
+                    double.tryParse(fillText.text) ?? 0;
+                    widget.detail?.probability = fillText.text;
+                if (widget.detailDeal.probability > 100) {
                   _probabilityText.text = "100";
-                  widget.detail.probability = "100";
-                  _probabilityText.selection = TextSelection.fromPosition(TextPosition(offset: _probabilityText.text.length));
+                  widget.detail?.probability = "100";
+                  _probabilityText.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _probabilityText.text.length));
                 }
               } else {
-                widget.detail.dealDescription = fillText.text;
+                widget.detailDeal.dealDescription = fillText.text;
               }
+            }
             }
           },
         ),

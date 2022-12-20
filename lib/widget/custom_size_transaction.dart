@@ -1,6 +1,5 @@
 
 import 'package:epoint_deal_plugin/common/theme.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
 class CustomSizeTransaction extends StatefulWidget {

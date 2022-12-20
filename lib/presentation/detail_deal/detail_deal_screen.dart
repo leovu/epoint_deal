@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -909,12 +908,11 @@ class _SSubDetailDealCustomerCustomerState
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.probability),
-            NumberFormat.currency(
-                  locale: 'vi_VN',
-                  decimalDigits: 0,
+            widget.detail?.probability != "" ? NumberFormat.currency(
+                  locale: 'en_US',
+                  decimalDigits: 1,
                   symbol: '',
-                ).format(num.parse(widget.detail?.probability ?? "0")) +
-                "%",
+                ).format(num.parse(widget.detail?.probability ?? "0")) + "%"  : "" ,
           ),
           Divider(),
           _infoDetailItem(

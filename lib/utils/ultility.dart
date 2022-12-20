@@ -18,7 +18,7 @@ extension IterableModifier<E> on Iterable<E> {
 }
 
 class Validators {
-  var validatePhone = RegExp(r"^[+#*()\[\]]*([0-9][ ext+-pw#*()\[\]]*){10,45}$");
+  var validatePhone = RegExp(r'(0)+([0-9]{9,10})\b');
   var validateNumber = RegExp(r"^[\d]*$");
 
  bool isValidPhone(String phone){

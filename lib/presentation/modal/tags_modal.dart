@@ -27,7 +27,9 @@ class _TagsModalState extends State<TagsModal> {
           color: Colors.white,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-      height: MediaQuery.of(context).size.height * 0.8,
+      // height: MediaQuery.of(context).size.height * 0.8,
+
+      height: widget.tagsData.length*40.0 + 250.0 ,
       child: Column(
         children: [
           Row(
