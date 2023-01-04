@@ -6,12 +6,15 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/customer_type.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_option_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
@@ -20,12 +23,12 @@ import 'package:epoint_deal_plugin/model/response/order_source_model_response.da
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/edit_deal/more_info_eidt_deal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/allocator_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/customer_type_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_potential_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
+import 'package:epoint_deal_plugin/presentation/multi_staff_screen_potentail/ui/multi_staff_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -84,6 +87,18 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   List<BranchData> branchData;
   BranchData branchSelected;
+
+  List<WorkListStaffModel> _modelStaff = [];
+  List<WorkListStaffModel> _modelStaffSelected = [
+    WorkListStaffModel(
+      staffId:  0,
+           staffName: "",
+           staffAvatar:  "",
+           branchId:  0,
+           departmentId: 0,
+           isSelected: false
+    )
+  ];
 
   List<CustomerTypeModel> customerTypeData = [
     CustomerTypeModel(
@@ -167,6 +182,15 @@ class _EditDealScreenState extends State<EditDealScreen>
         tagsData = tags.data;
       }
 
+       var response = await DealConnection.workListStaff(
+        context, WorkListStaffRequestModel(manageProjectId: null));
+    if (response != null) {
+      _modelStaff = response.data ?? [];
+    } else {
+      _modelStaff = [];
+    }
+    
+
       bindingData();
     });
   }
@@ -174,20 +198,44 @@ class _EditDealScreenState extends State<EditDealScreen>
   void bindingData() async {
     _dealNameText.text = widget.detail?.dealName ?? "";
 
-    allocatorSelected = AllocatorData(
-        fullName: widget.detail?.staffName,
-        staffId: widget.detail?.saleId,
-        selected: true);
+    // allocatorSelected = AllocatorData(
+    //     fullName: widget.detail?.staffName,
+    //     staffId: widget.detail?.saleId,
+    //     selected: true);
 
-    for (int i = 0; i < allocatorData.length; i++) {
-      if ((widget.detail?.saleId ?? 0) == allocatorData[i].staffId) {
-        allocatorData[i].selected = true;
+    // for (int i = 0; i < allocatorData.length; i++) {
+    //   if ((widget.detail?.saleId ?? 0) == allocatorData[i].staffId) {
+    //     allocatorData[i].selected = true;
+    //     allocatorSelected = allocatorData[i];
+    //      _modelSelected = [WorkListStaffModel(
+    //        staffId: allocatorSelected.staffId,
+    //        staffName: allocatorSelected.fullName,
+    //        isSelected: true
+    //      )]; 
 
-        allocatorSelected = allocatorData[i];
+    //   } else {
+    //     allocatorData[i].selected = false;
+    //   }
+    // }
+
+    for (int i = 0; i < _modelStaff.length; i++) {
+      if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
+        _modelStaff[i].isSelected = true;
+        // allocatorSelected = allocatorData[i];
+         _modelStaffSelected = [WorkListStaffModel(
+           staffId:  _modelStaff[i].staffId,
+           staffName:  _modelStaff[i].staffName,
+           staffAvatar:  _modelStaff[i].staffAvatar,
+           branchId:  _modelStaff[i].branchId,
+           departmentId:  _modelStaff[i].departmentId,
+           isSelected:  _modelStaff[i].isSelected
+         )]; 
+
       } else {
-        allocatorData[i].selected = false;
+        _modelStaff[i].isSelected = false;
       }
     }
+
 
     for (int i = 0; i < customerTypeData.length; i++) {
       if ((widget.detail?.typeCustomer ?? 0) ==
@@ -237,7 +285,9 @@ class _EditDealScreenState extends State<EditDealScreen>
     }
 
     var journeys =
-        await DealConnection.getJourney(context, pipelineSelected.pipelineCode);
+        await DealConnection.getJourney(context, GetJourneyModelRequest(
+            pipelineCode: [pipelineSelected.pipelineCode]
+          ));
     if (journeys != null) {
       journeysData = journeys.data;
     }
@@ -391,14 +441,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 builder: (context) {
-                  return GestureDetector(
-                    child: CustomerTypeModal(
-                      customerTypeData: customerTypeData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
+                  return CustomerTypeModal(
+                    customerTypeData: customerTypeData,
                   );
                 });
             if (customerType != null) {
@@ -538,14 +582,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
                                 builder: (context) {
-                                  return GestureDetector(
-                                    child: PipelineModal(
-                                      pipeLineData: pipeLineData,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    behavior: HitTestBehavior.opaque,
+                                  return PipelineModal(
+                                    pipeLineData: pipeLineData,
                                   );
                                 });
                             if (pipeline != null) {
@@ -557,7 +595,9 @@ class _EditDealScreenState extends State<EditDealScreen>
                               pipelineSelected = pipeline;
                               DealConnection.showLoading(context);
                               var journeys = await DealConnection.getJourney(
-                                  context, pipelineSelected.pipelineCode);
+                                  context, GetJourneyModelRequest(
+            pipelineCode: [pipelineSelected.pipelineCode]
+          ));
                               Navigator.of(context).pop();
                               if (journeys != null) {
                                 journeysData = journeys.data;
@@ -572,14 +612,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
                               builder: (context) {
-                                return GestureDetector(
-                                  child: PipelineModal(
-                                    pipeLineData: pipeLineData,
-                                  ),
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  behavior: HitTestBehavior.opaque,
+                                return PipelineModal(
+                                  pipeLineData: pipeLineData,
                                 );
                               });
                           if (pipeline != null) {
@@ -591,7 +625,9 @@ class _EditDealScreenState extends State<EditDealScreen>
                             pipelineSelected = pipeline;
                             DealConnection.showLoading(context);
                             var journeys = await DealConnection.getJourney(
-                                context, pipelineSelected.pipelineCode);
+                                context, GetJourneyModelRequest(
+            pipelineCode: [pipelineSelected.pipelineCode]
+          ));
                             Navigator.of(context).pop();
                             if (journeys != null) {
                               journeysData = journeys.data;
@@ -605,7 +641,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 // chọn người được phân bổ
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
-                    allocatorSelected?.fullName ?? "",
+                   (_modelStaffSelected != null) ? _modelStaffSelected[0]?.staffName ?? "" : "",
                     Assets.iconName,
                     true,
                     true,
@@ -613,60 +649,70 @@ class _EditDealScreenState extends State<EditDealScreen>
                   FocusScope.of(context).unfocus();
                   print("Chọn người được phân bổ");
 
-                  if (allocatorData == null || allocatorData.length == 0) {
-                    DealConnection.showLoading(context);
-                    var allocators = await DealConnection.getAllocator(context);
-                    Navigator.of(context).pop();
+                   _modelStaffSelected = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MultipleStaffScreenDeal(
+                                          models: _modelStaffSelected,
+                                        )));
 
-                    if (allocators != null) {
-                      allocatorData = allocators.data;
+                            if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
+                              print(_modelStaffSelected);
+                              
+                                  setState(() {});
+                              }
+                    }
 
-                      AllocatorData allocator = await showModalBottomSheet(
-                          context: context,
-                          useRootNavigator: true,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) {
-                            return GestureDetector(
-                              child: AllocatorModal(
-                                  allocatorData: allocatorData,
-                                  allocatorSelected: allocatorSelected),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              behavior: HitTestBehavior.opaque,
-                            );
-                          });
-                      if (allocator != null) {
-                        allocatorSelected = allocator;
-                        // widget.detailPotential?.saleId = allocatorSelected.staffId;
-                        setState(() {});
-                      }
-                    }
-                  } else {
-                    AllocatorData allocator = await showModalBottomSheet(
-                        context: context,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) {
-                          return GestureDetector(
-                            child: AllocatorModal(
-                              allocatorData: allocatorData,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            behavior: HitTestBehavior.opaque,
-                          );
-                        });
-                    if (allocator != null) {
-                      allocatorSelected = allocator;
-                      // widget.detailPotential?.saleId = allocatorSelected.staffId;
-                      setState(() {});
-                    }
-                  }
-                }),
+
+                  // if (allocatorData == null || allocatorData.length == 0) {
+                  //   DealConnection.showLoading(context);
+                  //   var allocators = await DealConnection.getAllocator(context);
+                  //   Navigator.of(context).pop();
+
+                  //   if (allocators != null) {
+                  //     allocatorData = allocators.data;
+
+                  //     AllocatorData allocator = await showModalBottomSheet(
+                  //         context: context,
+                  //         useRootNavigator: true,
+                  //         isScrollControlled: true,
+                  //         backgroundColor: Colors.transparent,
+                  //         builder: (context) {
+                  //           return AllocatorModal(
+                  //               allocatorData: allocatorData,
+                  //               allocatorSelected: allocatorSelected);
+                  //         });
+                  //     if (allocator != null) {
+                  //       allocatorSelected = allocator;
+                  //       // widget.detailPotential?.saleId = allocatorSelected.staffId;
+                  //       setState(() {});
+                  //     }
+                  //   }
+                  // } else {
+                  //   AllocatorData allocator = await showModalBottomSheet(
+                  //       context: context,
+                  //       useRootNavigator: true,
+                  //       isScrollControlled: true,
+                  //       backgroundColor: Colors.transparent,
+                  //       builder: (context) {
+                  //         return GestureDetector(
+                  //           child: AllocatorModal(
+                  //             allocatorData: allocatorData,
+                  //           ),
+                  //           onTap: () {
+                  //             Navigator.of(context).pop();
+                  //           },
+                  //           behavior: HitTestBehavior.opaque,
+                  //         );
+                  //       });
+                  //   if (allocator != null) {
+                  //     allocatorSelected = allocator;
+                  //     // widget.detailPotential?.saleId = allocatorSelected.staffId;
+                  //     setState(() {});
+                  //   }
+                  // }
+                // }
+                ),
 
                 // chọn hành trình
                 _buildTextField(
@@ -686,14 +732,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (context) {
-                        return GestureDetector(
-                          child: JourneyModal(
-                            journeys: journeysData,
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          behavior: HitTestBehavior.opaque,
+                        return JourneyModal(
+                          journeys: journeysData,
                         );
                       });
                   if (journey != null) {
@@ -944,7 +984,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 UpdateDealModelRequest(
                     dealCode: widget.detail.dealCode,
                     dealName: _dealNameText.text,
-                    saleId: allocatorSelected.staffId,
+                    saleId: _modelStaffSelected[0].staffId,
                     typeCustomer: customerTypeSelected.customerTypeNameEn,
                     customerCode: customerSelected.customerCode,
                     phone: _phoneNumberText.text,

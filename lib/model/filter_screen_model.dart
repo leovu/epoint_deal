@@ -17,7 +17,16 @@ class FilterScreenModel {
   DateTime toDate_closing_due_date;
   String id_closing_due_date;
 
-  FilterScreenModel({this.filterModel, this.fromDate_created_at, this.toDate_created_at, this.id_created_at, this.id_closing_date,this.toDate_closing_date,this.fromDate_closing_date, this.fromDate_closing_due_date,this.id_closing_due_date,this.toDate_closing_due_date});
+   DateTime fromDate_history_care_date;
+  DateTime toDate_history_care_date;
+  String id_history_care_date;
+
+  DateTime fromDate_work_schedule_date;
+  DateTime toDate_work_schedule_date;
+  String id_work_schedule_date;
+
+  FilterScreenModel({this.filterModel, this.fromDate_created_at, this.toDate_created_at, this.id_created_at, this.id_closing_date,this.toDate_closing_date,this.fromDate_closing_date, 
+  this.fromDate_closing_due_date,this.id_closing_due_date,this.toDate_closing_due_date,this.fromDate_history_care_date,this.toDate_history_care_date,this.id_history_care_date,this.fromDate_work_schedule_date,this.toDate_work_schedule_date,this.id_work_schedule_date});
 
   factory FilterScreenModel.fromJson(Map<String, dynamic> parsedJson) {
     return FilterScreenModel(
@@ -32,6 +41,14 @@ class FilterScreenModel {
         fromDate_closing_due_date: parsedJson['fromDate_closing_due_date'],
         toDate_closing_due_date: parsedJson['toDate_closing_due_date'],
         id_closing_due_date: parsedJson['id_closing_due_date'],
+
+        fromDate_history_care_date: parsedJson['fromDate_history_care_date'],
+        toDate_history_care_date: parsedJson['toDate_history_care_date'],
+        id_history_care_date: parsedJson['id_history_care_date'],
+
+        fromDate_work_schedule_date: parsedJson['fromDate_work_schedule_date'],
+        toDate_work_schedule_date: parsedJson['toDate_work_schedule_date'],
+        id_work_schedule_date: parsedJson['id_work_schedule_date'],
 
         );
   }
@@ -50,6 +67,15 @@ class FilterScreenModel {
     data['fromDate_closing_due_date'] = fromDate_closing_due_date;
     data['toDate_closing_due_date'] = toDate_closing_due_date;
     data['id_closing_due_date'] = id_closing_due_date ?? "";
+
+
+    data['fromDate_history_care_date'] = fromDate_history_care_date;
+    data['toDate_history_care_date'] = toDate_history_care_date;
+    data['id_history_care_date'] = id_history_care_date ?? "";
+
+    data['fromDate_work_schedule_date'] = fromDate_work_schedule_date;
+    data['toDate_work_schedule_date'] = toDate_work_schedule_date;
+    data['id_work_schedule_date'] = id_work_schedule_date ?? "";
 
     return data;
   }

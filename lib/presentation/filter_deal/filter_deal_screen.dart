@@ -8,18 +8,27 @@ import 'package:epoint_deal_plugin/model/closing_date_model.dart';
 import 'package:epoint_deal_plugin/model/closing_due_date_model.dart';
 import 'package:epoint_deal_plugin/model/create_date_model.dart';
 import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
+import 'package:epoint_deal_plugin/model/history_customer_care_date.dart';
+import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/get_status_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/work_schedule_date.dart';
+import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_branch.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_closing_date.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_closing_due_date.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_create_date.dart';
+import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_journey.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_order_source.dart';
+import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_pipeline.dart';
+import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_work_status.dart';
+import 'package:epoint_deal_plugin/presentation/filter_deal/filter_history_care_date.dart';
 import 'package:epoint_deal_plugin/presentation/modal/branch_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
+import 'package:epoint_deal_plugin/presentation/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:flutter/material.dart';
 
 class FilterDealCustomer extends StatefulWidget {
@@ -130,6 +139,68 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         closingDueDateID: 6,
         selected: false)
   ];
+
+  List<HistoryCareDateModel> historyCareDateOptions = [
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.today),
+        historyCareDateID: 0,
+        selected: false),
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.tomorrow),
+        historyCareDateID: 1,
+        selected: false),
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.seven_day_ago),
+        historyCareDateID: 2,
+        selected: false),
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.thirty_day_ago),
+        historyCareDateID: 3,
+        selected: false),
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.in_month),
+        historyCareDateID: 4,
+        selected: false),
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.last_month),
+        historyCareDateID: 5,
+        selected: false),
+    HistoryCareDateModel(
+        historyCareDateName: AppLocalizations.text(LangKey.date_option),
+        historyCareDateID: 6,
+        selected: false)
+  ];
+
+  List<WorkScheduleModel> workScheduleDateOptions = [
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.today),
+        workscheduleDateID: 0,
+        selected: false),
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.tomorrow),
+        workscheduleDateID: 1,
+        selected: false),
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.seven_day_ago),
+        workscheduleDateID: 2,
+        selected: false),
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.thirty_day_ago),
+        workscheduleDateID: 3,
+        selected: false),
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.in_month),
+        workscheduleDateID: 4,
+        selected: false),
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.last_month),
+        workscheduleDateID: 5,
+        selected: false),
+    WorkScheduleModel(
+        workscheduleDateName: AppLocalizations.text(LangKey.date_option),
+        workscheduleDateID: 6,
+        selected: false)
+  ];
   ClosingDueDateModel closingDueDateSeleted;
 
   List<OrderSourceData> orderSourceData = [
@@ -147,21 +218,38 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   List<JourneyData> journeysData;
   JourneyData journeySelected = JourneyData();
+  List<WorkListStaffModel> _modelStaffSSupportSelected = [];
+  List<GetStatusWorkData> statusWorkData;
 
   List<BranchData> branchData;
   BranchData branchSelected;
+
+  List<int> statusWorkID = [];
+
+  String branchString = "";
+  String statusWorkString = "";
+  String tagsString = "";
+  String staffs = "";
+  String customerSourceString = "";
+  String pipelineString = "";
+  String journeyString = "";
 
   FilterScreenModel filterScreenModel = FilterScreenModel(
       filterModel: ListDealModelRequest(
           search: "",
           page: 1,
           orderSourceName: "",
-          branchName: "",
           createdAt: "",
           closingDate: "",
           closingDueDate: "",
-          pipelineName: "",
-          journeyName: ""),
+          branchId: [],
+          staffId: [],
+          pipelineId: [],
+          journeyName: [],
+          manageStatusId: [],
+          careHistory: ""
+
+          ),
       fromDate_closing_date: null,
       fromDate_closing_due_date: null,
       fromDate_created_at: null,
@@ -170,29 +258,53 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       id_closing_date: "",
       toDate_closing_date: null,
       toDate_closing_due_date: null,
-      id_closing_due_date: "");
+      id_closing_due_date: "",
+      fromDate_history_care_date: null,
+      toDate_history_care_date: null,
+      fromDate_work_schedule_date: null,
+      toDate_work_schedule_date: null,
+      id_history_care_date: "",
+      id_work_schedule_date: "",
+      
+      
+      )
+      
+      ;
 
   @override
   void initState() {
     super.initState();
     filterScreenModel = FilterScreenModel(
-          filterModel: ListDealModelRequest.fromJson(
-              widget.filterScreenModel.filterModel.toJson()),
-          fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
-          toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
-          id_closing_date: widget.filterScreenModel.id_closing_date,
-          fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-          toDate_created_at: widget.filterScreenModel.toDate_created_at,
-          id_created_at: widget.filterScreenModel.id_created_at,
-          fromDate_closing_due_date:
-              widget.filterScreenModel.fromDate_closing_due_date,
-          toDate_closing_due_date:
-              widget.filterScreenModel.toDate_closing_due_date,
-          id_closing_due_date: widget.filterScreenModel.id_closing_due_date);
+        filterModel: ListDealModelRequest.fromJson(
+            widget.filterScreenModel.filterModel.toJson()),
+        fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
+        toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
+        id_closing_date: widget.filterScreenModel.id_closing_date,
+        fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+        toDate_created_at: widget.filterScreenModel.toDate_created_at,
+        id_created_at: widget.filterScreenModel.id_created_at,
+        fromDate_closing_due_date:
+            widget.filterScreenModel.fromDate_closing_due_date,
+        toDate_closing_due_date:
+            widget.filterScreenModel.toDate_closing_due_date,
+        id_closing_due_date: widget.filterScreenModel.id_closing_due_date,
+        fromDate_history_care_date:
+            widget.filterScreenModel.fromDate_history_care_date,
+        toDate_history_care_date:
+            widget.filterScreenModel.toDate_history_care_date,
+        fromDate_work_schedule_date:
+            widget.filterScreenModel.fromDate_work_schedule_date,
+        toDate_work_schedule_date:
+            widget.filterScreenModel.toDate_work_schedule_date,
+        id_history_care_date: widget.filterScreenModel.id_history_care_date,
+        id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
+        
+        
+        
+        
+        );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      
-      
       DealConnection.showLoading(context);
       await getData();
       Navigator.of(context).pop();
@@ -232,35 +344,37 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
     }
 
-    if (filterScreenModel.filterModel.branchName != "") {
-      BranchData data = branchData.firstWhere((element) =>
-          element.branchName ==
-          widget.filterScreenModel.filterModel.branchName);
-      branchSelected = data;
-      branchSelected.selected = true;
-    }
+    // if (filterScreenModel.filterModel.branchName != "") {
+    //   BranchData data = branchData.firstWhere((element) =>
+    //       element.branchName ==
+    //       widget.filterScreenModel.filterModel.branchName);
+    //   branchSelected = data;
+    //   branchSelected.selected = true;
+    // }
 
-    if (filterScreenModel.filterModel.pipelineName != "") {
-      PipelineData data = pipeLineData.firstWhere((element) =>
-          element.pipelineName ==
-          widget.filterScreenModel.filterModel.pipelineName);
-      pipelineSelected = data;
-      pipelineSelected.selected = true;
+    // if (filterScreenModel.filterModel.pipelineName != "") {
+    //   PipelineData data = pipeLineData.firstWhere((element) =>
+    //       element.pipelineName ==
+    //       widget.filterScreenModel.filterModel.pipelineName);
+    //   pipelineSelected = data;
+    //   pipelineSelected.selected = true;
 
-      var journeys = await DealConnection.getJourney(
-          context, pipelineSelected.pipelineCode);
-      if (journeys != null) {
-        journeysData = journeys.data;
+    //   var journeys = await DealConnection.getJourney(
+    //       context, GetJourneyModelRequest(
+    //         pipelineCode: [pipelineSelected.pipelineCode]
+    //       ));
+    //   if (journeys != null) {
+    //     journeysData = journeys.data;
 
-        if (filterScreenModel.filterModel.journeyName != "") {
-          JourneyData data = journeysData.firstWhere((element) =>
-              element.journeyName ==
-              widget.filterScreenModel.filterModel.journeyName);
-          journeySelected = data;
-          journeySelected.selected = true;
-        }
-      }
-    }
+    //     if (filterScreenModel.filterModel.journeyName != "") {
+    //       JourneyData data = journeysData.firstWhere((element) =>
+    //           element.journeyName ==
+    //           widget.filterScreenModel.filterModel.journeyName);
+    //       journeySelected = data;
+    //       journeySelected.selected = true;
+    //     }
+    //   }
+    // }
     if (filterScreenModel.id_created_at != "") {
       int index = int.parse(widget.filterScreenModel.id_created_at);
       createDateSeleted = createDateOptions[index];
@@ -294,30 +408,32 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if(allowPop){
+        if (allowPop) {
+          widget.filterScreenModel = FilterScreenModel(
+              filterModel: ListDealModelRequest(
+                  search: "",
+                  page: 1,
+                  orderSourceName: "",
+          createdAt: "",
+          closingDate: "",
+          closingDueDate: "",
+          branchId: [],
+          staffId: [],
+          pipelineId: [],
+          journeyName: [],
+          manageStatusId: [],
+          careHistory: ""),
+              fromDate_closing_date: null,
+              fromDate_closing_due_date: null,
+              fromDate_created_at: null,
+              toDate_created_at: null,
+              id_created_at: "",
+              id_closing_date: "",
+              toDate_closing_date: null,
+              toDate_closing_due_date: null,
+              id_closing_due_date: "");
 
-           widget.filterScreenModel = FilterScreenModel(
-        filterModel: ListDealModelRequest(
-            search: "",
-            page: 1,
-            orderSourceName: "",
-            branchName: "",
-            createdAt: "",
-            closingDate: "",
-            closingDueDate: "",
-            pipelineName: "",
-            journeyName: ""),
-        fromDate_closing_date: null,
-        fromDate_closing_due_date: null,
-        fromDate_created_at: null,
-        toDate_created_at: null,
-        id_created_at: "",
-        id_closing_date: "",
-        toDate_closing_date: null,
-        toDate_closing_due_date: null,
-        id_closing_due_date: "");
-
-              Navigator.of(context).pop(widget.filterScreenModel);
+          Navigator.of(context).pop(widget.filterScreenModel);
         } else {
           Navigator.of(context).pop();
         }
@@ -387,36 +503,40 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       Container(height: 10.0),
       _buildTextField(
           AppLocalizations.text(LangKey.chooseBranch),
-          branchSelected?.address ?? "",
+          branchString,
           Assets.iconItinerary,
           false,
           true,
           false, ontap: () async {
         print("Chon chi nhanh");
+        List<int> branchID = [];
+        var branchDataSelected = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => FilterByBranch(branchData: branchData)));
 
-        BranchData branch = await showModalBottomSheet(
-            context: context,
-            useRootNavigator: true,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) {
-              return GestureDetector(
-                child: BranchModal(
-                  branchData: branchData,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                behavior: HitTestBehavior.opaque,
-              );
-            });
-        if (branch != null) {
-          branchSelected = branch;
-          filterScreenModel.filterModel.branchName = branchSelected.branchName;
+                if (branchDataSelected != null) {
+                  // widget.detailDeal.tag = [];
+                  branchString = "";
+                  branchData = branchDataSelected;
 
-          setState(() {});
-        }
+                  for (int i = 0; i < branchData.length; i++) {
+                    if (branchData[i].selected) {
+                      branchID.add(branchData[i].branchId);
+                      if (branchString == "") {
+                        branchString = branchData[i].branchName;
+                      } else {
+                        branchString += ", ${branchData[i].branchName}";
+                      }
+                    }
+                  }
+
+                  filterScreenModel.filterModel.branchId = branchID;
+                  setState(() {});
+                }
+
+
       }),
+      Container(height: 10.0),
 
       // theo ngày tạo
       Text(
@@ -461,6 +581,49 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       ),
 
       Text(
+        AppLocalizations.text(LangKey.byAllocator),
+        style: TextStyle(
+            fontSize: 16.0,
+            color: const Color(0xFF0067AC),
+            fontWeight: FontWeight.bold),
+      ),
+
+      Container(
+        height: 10.0,
+      ),
+
+       _buildTextField(AppLocalizations.text(LangKey.chooseAllottedPerson),
+          staffs, Assets.iconName, false, true, false, ontap: () async {
+        print("Chọn người được phân bổ");
+        List<int> listStaff = [];
+        _modelStaffSSupportSelected =
+            await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MultipleStaffScreenCustomerCare(
+                      models: _modelStaffSSupportSelected,
+                    )));
+
+        if (_modelStaffSSupportSelected != null &&
+            _modelStaffSSupportSelected.length > 0) {
+          staffs = "";
+          for (int i = 0; i < _modelStaffSSupportSelected.length; i++) {
+            if (_modelStaffSSupportSelected[i].isSelected) {
+              listStaff.add(_modelStaffSSupportSelected[i].staffId);
+              if (staffs == "") {
+                staffs = _modelStaffSSupportSelected[i].staffName;
+              } else {
+                staffs += ", ${_modelStaffSSupportSelected[i].staffName}";
+              }
+            }
+          }
+          filterScreenModel.filterModel.staffId = listStaff;
+          setState(() {});
+        }
+      }),
+      Container(height: 10.0),
+
+      
+
+      Text(
         AppLocalizations.text(LangKey.byPipeline),
         style: TextStyle(
             fontSize: 16.0,
@@ -469,51 +632,50 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       ),
 
       Container(height: 10.0),
-
       // chọn pipeline
       _buildTextField(
           AppLocalizations.text(LangKey.choosePipeline),
-          pipelineSelected?.pipelineName ?? "",
+          pipelineString,
           Assets.iconChance,
           false,
           true,
           false, ontap: () async {
         print("Pipeline");
-        PipelineData pipeline = await showModalBottomSheet(
-            context: context,
-            useRootNavigator: true,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) {
-              return GestureDetector(
-                child: PipelineModal(
-                  pipeLineData: pipeLineData,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                behavior: HitTestBehavior.opaque,
-              );
-            });
+
+        List<int> pipelineSelected = [];
+        List<String> pipelineStringSelected = [];
+        List<PipelineData> pipeline = await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => FilterByPipeline(pipeLineData)));
+
         if (pipeline != null) {
-          if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
-            journeySelected = null;
+          journeyString = "";
+          pipelineString = "";
+          pipeLineData = pipeline;
+
+          for (int i = 0; i < pipeLineData.length; i++) {
+            if (pipeLineData[i].selected) {
+              pipelineSelected.add(pipeLineData[i].pipelineId);
+              pipelineStringSelected.add(pipeLineData[i].pipelineCode);
+              if (pipelineString == "") {
+                pipelineString = pipeLineData[i].pipelineName;
+              } else {
+                pipelineString += ", ${pipeLineData[i].pipelineName}";
+              }
+            }
           }
+          filterScreenModel.filterModel.pipelineId = pipelineSelected;
 
-          pipelineSelected = pipeline;
-          filterScreenModel.filterModel.pipelineName =
-              pipelineSelected.pipelineName;
-
-          filterScreenModel.filterModel.journeyName = "";
-
-          var journeys = await DealConnection.getJourney(
-              context, pipelineSelected.pipelineCode);
+          var journeys = await DealConnection.getJourney(context,
+              GetJourneyModelRequest(pipelineCode: pipelineStringSelected));
           if (journeys != null) {
             journeysData = journeys.data;
           }
+
           setState(() {});
         }
       }),
+
       Container(height: 10.0),
 
       Text(
@@ -527,37 +689,105 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       Container(height: 10.0),
       _buildTextField(
           AppLocalizations.text(LangKey.chooseItinerary),
-          journeySelected?.journeyName ?? "",
+          journeyString,
           Assets.iconItinerary,
           false,
           true,
           false, ontap: () async {
         print("Chọn hành trình");
 
-        JourneyData journey = await showModalBottomSheet(
-            context: context,
-            useRootNavigator: true,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) {
-              return GestureDetector(
-                child: JourneyModal(
-                  journeys: journeysData,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                behavior: HitTestBehavior.opaque,
-              );
-            });
-        if (journey != null) {
-          journeySelected = journey;
-          filterScreenModel.filterModel.journeyName =
-              journeySelected.journeyName;
+        List<int> journeySelected = [];
+        List<JourneyData> journeys =
+            await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => FilterByJourney(
+                      journeys: journeysData,
+                    )));
 
+        if (journeys != null) {
+          journeyString = "";
+          journeysData = journeys;
+
+          for (int i = 0; i < journeysData.length; i++) {
+            if (journeysData[i].selected) {
+              journeySelected.add(journeysData[i].journeyId);
+              if (journeyString == "") {
+                journeyString = journeysData[i].journeyName;
+              } else {
+                journeyString += ", ${journeysData[i].journeyName}";
+              }
+            }
+          }
+          filterScreenModel.filterModel.journeyName = journeySelected;
           setState(() {});
         }
       }),
+      Container(height: 10.0),
+
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.text(LangKey.byHistoryCustomerCare),
+            style: TextStyle(
+                fontSize: 16.0,
+                color: const Color(0xFF0067AC),
+                fontWeight: FontWeight.bold),
+          ),
+          FilterHistoryCareDate(
+            filterScreenModel: filterScreenModel,
+            historyCareDateOptions: historyCareDateOptions,
+            id_history_care_date: filterScreenModel.id_history_care_date,
+          ),
+        ],
+      ),
+
+      Container(height: 10.0),
+
+         Text(
+        AppLocalizations.text(LangKey.byWorkStatus),
+        style: TextStyle(
+            fontSize: 16.0,
+            color: const Color(0xFF0067AC),
+            fontWeight: FontWeight.bold),
+      ),
+      Container(height: 10.0),
+
+      _buildTextField(
+          AppLocalizations.text(LangKey.chooseWorkStatus),
+          statusWorkString,
+          Assets.iconName,
+          false,
+          true,
+          false , ontap: () async {
+
+        
+
+            var statuswork = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => FilterByWorkStatus(statusWorkData: statusWorkData)));
+
+                if (statuswork != null) {
+                  statusWorkID = [];
+                  
+                  statusWorkString = "";
+                  statusWorkData = statuswork;
+
+                  for (int i = 0; i < statusWorkData.length; i++) {
+                    if (statusWorkData[i].selected) {
+                      statusWorkID.add(statusWorkData[i].manageStatusId);
+                      if (statusWorkString == "") {
+                        statusWorkString = statusWorkData[i].manageStatusName;
+                      } else {
+                        statusWorkString += ", ${statusWorkData[i].manageStatusName}";
+                      }
+                    }
+                  }
+                  setState(() {});
+                }
+
+      }),
+
+
     ];
   }
 
@@ -577,11 +807,14 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
               if (Global.validateCreateDate == false ||
                   Global.validateClosingDate == false ||
-                  Global.validateClosingDueDate == false) {
+                  Global.validateClosingDueDate == false ||
+                  Global.validateHistoryCareDate == false ||
+                  Global.validateWorkScheduleDate == false) {
                 DealConnection.showMyDialog(
                     context,
                     AppLocalizations.text(
-                        LangKey.warningChooseFullFromdateTodate),warning: true);
+                        LangKey.warningChooseFullFromdateTodate),
+                    warning: true);
                 return;
               }
 
@@ -648,12 +881,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             search: "",
             page: 1,
             orderSourceName: "",
-            branchName: "",
-            createdAt: "",
-            closingDate: "",
-            closingDueDate: "",
-            pipelineName: "",
-            journeyName: ""),
+          createdAt: "",
+          closingDate: "",
+          closingDueDate: "",
+          branchId: [],
+          staffId: [],
+          pipelineId: [],
+          journeyName: [],
+          manageStatusId: [],
+          careHistory: ""),
         fromDate_closing_date: null,
         fromDate_closing_due_date: null,
         fromDate_created_at: null,
@@ -662,25 +898,38 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         id_closing_date: "",
         toDate_closing_date: null,
         toDate_closing_due_date: null,
-        id_closing_due_date: "");
+        id_closing_due_date: "",
+        fromDate_history_care_date: null,
+        toDate_history_care_date: null,
+        fromDate_work_schedule_date: null,
+        toDate_work_schedule_date: null,
+        id_history_care_date: "",
+        id_work_schedule_date: "");
 
-
-        filterScreenModel = FilterScreenModel(
-          filterModel: ListDealModelRequest.fromJson(
-              widget.filterScreenModel.filterModel.toJson()),
-          fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
-          toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
-          id_closing_date: widget.filterScreenModel.id_closing_date,
-          fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-          toDate_created_at: widget.filterScreenModel.toDate_created_at,
-          id_created_at: widget.filterScreenModel.id_created_at,
-          fromDate_closing_due_date:
-              widget.filterScreenModel.fromDate_closing_due_date,
-          toDate_closing_due_date:
-              widget.filterScreenModel.toDate_closing_due_date,
-          id_closing_due_date: widget.filterScreenModel.id_closing_due_date);
-
-          
+    filterScreenModel = FilterScreenModel(
+        filterModel: ListDealModelRequest.fromJson(
+            widget.filterScreenModel.filterModel.toJson()),
+        fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
+        toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
+        id_closing_date: widget.filterScreenModel.id_closing_date,
+        fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+        toDate_created_at: widget.filterScreenModel.toDate_created_at,
+        id_created_at: widget.filterScreenModel.id_created_at,
+        fromDate_closing_due_date:
+            widget.filterScreenModel.fromDate_closing_due_date,
+        toDate_closing_due_date:
+            widget.filterScreenModel.toDate_closing_due_date,
+        id_closing_due_date: widget.filterScreenModel.id_closing_due_date,
+        fromDate_history_care_date:
+            widget.filterScreenModel.fromDate_history_care_date,
+        toDate_history_care_date:
+            widget.filterScreenModel.toDate_history_care_date,
+        fromDate_work_schedule_date:
+            widget.filterScreenModel.fromDate_work_schedule_date,
+        toDate_work_schedule_date:
+            widget.filterScreenModel.toDate_work_schedule_date,
+        id_history_care_date: widget.filterScreenModel.id_history_care_date,
+        id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date);
 
     for (int i = 0; i < createDateOptions.length; i++) {
       createDateOptions[i].selected = false;
@@ -702,6 +951,14 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     }
     branchSelected = null;
 
+    for (int i = 0; i < historyCareDateOptions.length; i++) {
+      historyCareDateOptions[i].selected = false;
+    }
+
+    for (int i = 0; i < workScheduleDateOptions.length; i++) {
+      workScheduleDateOptions[i].selected = false;
+    }
+
     for (int i = 0; i < orderSourceData.length; i++) {
       if (i == 0) {
         orderSourceData[i].selected = true;
@@ -721,6 +978,9 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     Global.validateClosingDate = true;
     Global.validateClosingDueDate = true;
 
+    Global.validateHistoryCareDate = true;
+    Global.validateWorkScheduleDate = true;
+
     // initModel() ;
 
     setState(() {});
@@ -732,12 +992,13 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   Widget _buildTextField(String title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap, TextEditingController fillText}) {
+      {Function ontap, TextEditingController fillText, int maxlines}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
         onTap: ontap,
         child: TextField(
+          maxLines: maxlines ?? 1,
           enabled: textfield,
           readOnly: !textfield,
           controller: fillText,
@@ -770,6 +1031,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                 : Text(
                     content,
                     style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),

@@ -42,4 +42,29 @@ class Assets {
   static String iconProbability = "packages/epoint_deal_plugin/assets/icons/ic_epoint_percent.png";
   static String iconDealDetail = "packages/epoint_deal_plugin/assets/icons/ic_epoint_deal_detail.png";
 
+  static String iconCalendar = "packages/epoint_deal_plugin/assets/icons/ic_epoint_calendar.png";
+  static String iconCustomerCare = "packages/epoint_deal_plugin/assets/icons/ic_epoint_customer_care.png";
+  static String iconOutdate = "packages/epoint_deal_plugin/assets/icons/ic_epoint_outdate.png";
+  static String iconFABMenu = "packages/epoint_deal_plugin/assets/icons/ic_epoint_fab_menu.png";
+  static String iconInteraction = "packages/epoint_deal_plugin/assets/icons/ic_interaction.png";
+
+  static String iconEstablish = "packages/epoint_deal_plugin/assets/icons/ic_epoint_establish.png";
+  static String iconRepresentative = "packages/epoint_deal_plugin/assets/icons/ic_epoint_representative.png";
+  static String iconTax = "packages/epoint_deal_plugin/assets/icons/ic_epoint_tax.png";
+  static String iconBirthday = "packages/epoint_deal_plugin/assets/icons/ic_epoint_birthday.png";
+  static String iconMenu = "packages/epoint_deal_plugin/assets/icons/ic_epoint_menu.png";
+  static String iconWorkTitle = "packages/epoint_deal_plugin/assets/icons/ic_epoint_work_title.png";
+  static String iconStatus = "packages/epoint_deal_plugin/assets/icons/ic_epoint_status_care.png";
+  static String iconProject = "packages/epoint_deal_plugin/assets/icons/ic_epoint_project.png";
+  static String iconNumberEmployees = "packages/epoint_deal_plugin/assets/icons/ic_epoint_number_employees.png";
+
+  static String iconComment = "packages/epoint_deal_plugin/assets/icons/ic_epoint_comment.png";
+  static String iconFiles = "packages/epoint_deal_plugin/assets/icons/ic_epoint_file.png";
+  static String iconTimeDetail = "packages/epoint_deal_plugin/assets/icons/ic_epoint_time_detail.png";
+  static String iconCamera = "packages/epoint_deal_plugin/assets/icons/ic_epoint_camera.png";
+  static String iconBranch = "packages/epoint_deal_plugin/assets/icons/ic_epoint_branch.png";
+  static String iconNumberProduct = "packages/epoint_deal_plugin/assets/icons/ic_epoint_number_product.png";
+  static String iconShipper = "packages/epoint_deal_plugin/assets/icons/ic_epoint_shipper.png";
+
+
 }

@@ -29,7 +29,7 @@ class DetailDealData {
   String dealCode;
   String dealName;
   String phone;
-  String amount;
+  num amount;
   String typeCustomer;
   String customerCode;
   String journeyName;

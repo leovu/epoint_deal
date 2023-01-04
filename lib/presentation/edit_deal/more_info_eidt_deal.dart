@@ -346,14 +346,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 builder: (context) {
-                  return GestureDetector(
-                    child: TagsModal(
-                      tagsData: widget.tagsData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
+                  return TagsModal(
+                    tagsData: widget.tagsData,
                   );
                 });
             if (listTagsSelected != null) {

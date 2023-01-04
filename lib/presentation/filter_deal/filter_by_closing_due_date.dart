@@ -62,6 +62,7 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
   Widget build(BuildContext context) {
     return (widget.closingDueDateOptions != null)
         ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 margin: EdgeInsets.only(top: 16.0, bottom: 16.0),

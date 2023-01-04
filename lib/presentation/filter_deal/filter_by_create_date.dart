@@ -73,6 +73,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
     } ;
     return (widget.createDateOptions != null)
         ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 margin: EdgeInsets.only(top: 16.0, bottom: 16.0),

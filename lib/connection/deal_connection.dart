@@ -4,10 +4,16 @@ import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/acount.dart';
+import 'package:epoint_deal_plugin/model/request/add_business_areas_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/add_tag_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/add_work_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/assign_revoke_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/list_project_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/add_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
@@ -16,13 +22,20 @@ import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dar
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_option_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/get_status_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_type_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/list_business_areas_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
+import 'package:epoint_deal_plugin/model/response/list_project_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -81,10 +94,8 @@ class DealConnection {
 
    static Future<GetCustomerModelResponse> getCustomer(
       BuildContext context) async {
-        showLoading(context);
     ResponseData responseData = await connection
         .post('/customer-lead/customer-lead/get-customer', {});
-        Navigator.of(context).pop();
     if (responseData.isSuccess) {
       GetCustomerModelResponse data =
           GetCustomerModelResponse.fromJson(responseData.data);
@@ -160,10 +171,10 @@ class DealConnection {
   }
 
   static Future<GetJourneyModelReponse> getJourney(
-      BuildContext context, String pipeline_code) async {
+      BuildContext context, GetJourneyModelRequest model) async {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/get-journey',
-        {"pipeline_code": pipeline_code});
+        {"pipeline_code": model.toJson()});
     if (responseData.isSuccess) {
       GetJourneyModelReponse data =
           GetJourneyModelReponse.fromJson(responseData.data);
@@ -250,6 +261,136 @@ class DealConnection {
     return null;
   }
 
+   static Future<WorkListBranchResponseModel> workListBranch(
+      BuildContext context) async {
+    // showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/manage-work/list-branch',{});
+    if (responseData.isSuccess) {
+      WorkListBranchResponseModel data =
+          WorkListBranchResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+  static Future<WorkListStaffResponseModel> workListStaff(
+      BuildContext context, WorkListStaffRequestModel model) async {
+    // showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/manage-work/list-staff',model.toJson());
+    if (responseData.isSuccess) {
+      WorkListStaffResponseModel data =
+          WorkListStaffResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+   static Future<WorkListDepartmentResponseModel> workListDepartment(
+      BuildContext context) async {
+    ResponseData responseData = await connection.post(
+        '/manage-work/list-department',{});
+    if (responseData.isSuccess) {
+      WorkListDepartmentResponseModel data =
+          WorkListDepartmentResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+       static Future<GetTypeWorkModelResponse> getTypeWork(
+      BuildContext context) async {
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/get-type-work',{});
+    if (responseData.isSuccess) {
+      GetTypeWorkModelResponse data =
+          GetTypeWorkModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+    static Future<ListBusinessAreasModelResponse> getListBusinessAreas(
+      BuildContext context) async {
+    // showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/list-business-areas',{});
+    if (responseData.isSuccess) {
+      
+      ListBusinessAreasModelResponse data =
+          ListBusinessAreasModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+       static Future<DescriptionModelResponse> addBusinessAreas(
+      BuildContext context, AddBusinessAreasModelRequest model) async {
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/add-business-areas',model.toJson());
+    if (responseData.isSuccess) {
+      DescriptionModelResponse data =
+          DescriptionModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+    static Future<DescriptionModelResponse> addTag(
+      BuildContext context, AddTagModelRequest model) async {
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/add-tag', model.toJson());
+    if (responseData.isSuccess) {
+      DescriptionModelResponse data =
+          DescriptionModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+    static Future<ListProjectModelResponse> getListProject(
+      BuildContext context, ListProjectModelRequest model) async {
+    showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/project-management/list-project', model.toJson());
+    Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      if (responseData.data != null) {
+        ListProjectModelResponse data =
+            ListProjectModelResponse.fromJson(responseData.data);
+        return data;
+      }
+      return null;
+    }
+    return null;
+  }
+
+   static Future<GetStatusWorkResponseModel> getStatusWork(
+      BuildContext context) async {
+    ResponseData responseData = await connection
+        .post('/customer-lead/customer-lead/get-status-work', {});
+    if (responseData.isSuccess) {
+      GetStatusWorkResponseModel data =
+          GetStatusWorkResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+    static Future<DescriptionModelResponse> addWork(
+      BuildContext context, AddWorkRequestModel model) async {
+    // showLoading(context);
+    ResponseData responseData =
+        await connection.post('/manage-work/add-work', model.toJson());
+    if (responseData.isSuccess) {
+      DescriptionModelResponse data =
+          DescriptionModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+  
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(

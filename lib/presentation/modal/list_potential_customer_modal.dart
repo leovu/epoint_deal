@@ -1,5 +1,6 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
@@ -7,6 +8,8 @@ import 'package:epoint_deal_plugin/presentation/detail_deal/allocator_screen.dar
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
+import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:flutter/material.dart';
 
 class ListCustomerPotentialModal extends StatefulWidget {
@@ -28,17 +31,20 @@ ListCustomLeadData _model ;
 
   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
       search: "",
-      page: 1,
-      statusAssign: "",
-      customerType: "business",
-      tagId: "",
-      customerSourceName: "",
-      isConvert: "",
-      staffFullName: "",
-      pipelineName: "",
-      journeyName: "",
-      createdAt: "",
-      allocationDate: "");
+          page: 1,
+          statusAssign: "",
+          customerType: "",
+          tagId: [],
+          customerSourceId: [],
+          staffId: [],
+          pipelineId: [],
+          journeyId: [],
+          careHistory: "",
+          isConvert: "",
+          createdAt: "",
+          allocationDate: "",
+
+      );
 
   int currentPage = 1;
   int nextPage = 2;
@@ -77,15 +83,16 @@ ListCustomLeadData _model ;
             search: _searchext.text,
             page: filterModel.page,
             statusAssign: "",
-            customerType: "",
-            tagId: "",
-            customerSourceName: "",
-            isConvert: "",
-            staffFullName: "",
-            pipelineName: "",
-            journeyName: "",
-            createdAt: "",
-            allocationDate: ""));
+          customerType: "",
+          tagId: [],
+          customerSourceId: [],
+          staffId: [],
+          pipelineId: [],
+          journeyId: [],
+          careHistory: "",
+          isConvert: "",
+          createdAt: "",
+          allocationDate: "",));
     if (model != null) {
       if (!loadMore) {
         widget.items = [];
@@ -162,7 +169,7 @@ ListCustomLeadData _model ;
                   separator: Divider(),
                   children: _listWidget(),
                 ))
-              : CustomDataNotFound(),
+              : dataNotFound(),
           Container(
             height: 20.0,
           )
@@ -176,7 +183,27 @@ ListCustomLeadData _model ;
         _model.items.length,
         (index) => _buildItemStaff(_model.items[index], () {
               selectedStaff(index);
-            })) : [CustomDataNotFound()];
+            })) : [dataNotFound()];
+  }
+
+   Widget dataNotFound() {
+    return CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                      physics: NeverScrollableScrollPhysics(),
+                      separator: Divider(),
+                      children: List.generate(
+                        5,
+                        (index) => Container(
+                  margin: EdgeInsets.only(top: 15.0),
+                  child: CustomShimmer(
+                    child: CustomSkeleton(
+          height: 50,
+          radius: 5.0),
+                  ),
+                ),
+            ));
   }
 
   selectedStaff(int index) async {
@@ -205,7 +232,7 @@ ListCustomLeadData _model ;
                   item.leadFullName,
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: item.selected ? Colors.orange : Colors.black,
+                      color: item.selected ? AppColors.primaryColor : Colors.black,
                       fontWeight: FontWeight.normal),
                   maxLines: 1,
                 ),

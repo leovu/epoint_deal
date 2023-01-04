@@ -2,6 +2,7 @@ import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
@@ -12,6 +13,7 @@ import 'package:epoint_deal_plugin/presentation/modal/tags_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
+import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -363,94 +365,82 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                 ],
               )
             : Container(),
-        Container(
-          height: 15,
-        ),
-        _buildTextField("Tag", tagsString, Assets.iconTag, false, true, false,
-            ontap: () async {
-          print("Tag");
-          FocusScope.of(context).unfocus();
+        // Container(
+        //   height: 15,
+        // ),
+        // _buildTextField("Tag", tagsString, Assets.iconTag, false, true, false,
+        //     ontap: () async {
+        //   print("Tag");
+        //   FocusScope.of(context).unfocus();
 
-          if (tagsData == null || tagsData.length == 0) {
-            DealConnection.showLoading(context);
-            var tags = await DealConnection.getTag(context);
-            Navigator.of(context).pop();
-            if (tags != null) {
-              tagsData = tags.data;
+        //   if (tagsData == null || tagsData.length == 0) {
+        //     DealConnection.showLoading(context);
+        //     var tags = await DealConnection.getTag(context);
+        //     Navigator.of(context).pop();
+        //     if (tags != null) {
+        //       tagsData = tags.data;
 
-              var listTagsSelected = await showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) {
-                    return GestureDetector(
-                      child: TagsModal(
-                        tagsData: tagsData,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      behavior: HitTestBehavior.opaque,
-                    );
-                  });
-              if (listTagsSelected != null) {
-                widget.detailDeal.tag = [];
-                tagsString = "";
-                tagsSelected = listTagsSelected;
+        //       var listTagsSelected = await showModalBottomSheet(
+        //           context: context,
+        //           useRootNavigator: true,
+        //           isScrollControlled: true,
+        //           backgroundColor: Colors.transparent,
+        //           builder: (context) {
+        //             return TagsModal(
+        //               tagsData: tagsData,
+        //             );
+        //           });
+        //       if (listTagsSelected != null) {
+        //         widget.detailDeal.tag = [];
+        //         tagsString = "";
+        //         tagsSelected = listTagsSelected;
 
-                for (int i = 0; i < tagsSelected.length; i++) {
-                  if (tagsSelected[i].selected) {
-                    widget.detailDeal.tag.add(tagsSelected[i].tagId);
-                    if (tagsString == "") {
-                      tagsString = tagsSelected[i].name;
-                    } else {
-                      tagsString += ", ${tagsSelected[i].name}";
-                    }
-                  }
-                }
-                setState(() {});
-              }
-            }
-          } else {
-            var listTagsSelected = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: TagsModal(
-                      tagsData: tagsData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
-            if (listTagsSelected != null) {
-              widget.detailDeal.tag = [];
-              tagsString = "";
-              tagsSelected = listTagsSelected;
+        //         for (int i = 0; i < tagsSelected.length; i++) {
+        //           if (tagsSelected[i].selected) {
+        //             widget.detailDeal.tag.add(tagsSelected[i].tagId);
+        //             if (tagsString == "") {
+        //               tagsString = tagsSelected[i].name;
+        //             } else {
+        //               tagsString += ", ${tagsSelected[i].name}";
+        //             }
+        //           }
+        //         }
+        //         setState(() {});
+        //       }
+        //     }
+        //   } else {
+        //     var listTagsSelected = await showModalBottomSheet(
+        //         context: context,
+        //         useRootNavigator: true,
+        //         isScrollControlled: true,
+        //         backgroundColor: Colors.transparent,
+        //         builder: (context) {
+        //           return TagsModal(
+        //             tagsData: tagsData,
+        //           );
+        //         });
+        //     if (listTagsSelected != null) {
+        //       widget.detailDeal.tag = [];
+        //       tagsString = "";
+        //       tagsSelected = listTagsSelected;
 
-              for (int i = 0; i < tagsSelected.length; i++) {
-                if (tagsSelected[i].selected) {
-                  widget.detailDeal.tag.add(tagsSelected[i].tagId);
+        //       for (int i = 0; i < tagsSelected.length; i++) {
+        //         if (tagsSelected[i].selected) {
+        //           widget.detailDeal.tag.add(tagsSelected[i].tagId);
 
-                  if (tagsString == "") {
-                    tagsString = tagsSelected[i].name;
-                  } else {
-                    tagsString += ", ${tagsSelected[i].name}";
-                  }
-                }
-              }
-              setState(() {});
-            }
-          }
-        }),
+        //           if (tagsString == "") {
+        //             tagsString = tagsSelected[i].name;
+        //           } else {
+        //             tagsString += ", ${tagsSelected[i].name}";
+        //           }
+        //         }
+        //       }
+        //       setState(() {});
+        //     }
+        //   }
+        // }),
         _buildTextField(
-            AppLocalizations.text(LangKey.orderSource),
+            "Nguồn cơ hội bán hàng",
             orderSourceSelected?.orderSourceName ?? "",
             Assets.iconTag,
             false,
@@ -471,14 +461,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
                   builder: (context) {
-                    return GestureDetector(
-                      child: OrderSourcesModal(
-                        orderSourceData: orderSourceData,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      behavior: HitTestBehavior.opaque,
+                    return OrderSourcesModal(
+                      orderSourceData: orderSourceData,
                     );
                   });
               if (orderSource != null) {
@@ -495,14 +479,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 builder: (context) {
-                  return GestureDetector(
-                    child: OrderSourcesModal(
-                      orderSourceData: orderSourceData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
+                  return OrderSourcesModal(
+                    orderSourceData: orderSourceData,
                   );
                 });
             if (orderSource != null) {
@@ -511,17 +489,29 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             }
           }
         }),
-        _buildTextField(AppLocalizations.text(LangKey.probability), "",
+        _buildTextField("Nhập xác suất thành công (%)", "",
             Assets.iconProbability, false, false, true,
             fillText: _probabilityText,
             focusNode: _probabilityFocusNode,
             inputType: TextInputType.number,
             maxLenght: 3),
-        _buildTextField(AppLocalizations.text(LangKey.dealDetail), "",
-            Assets.iconDealDetail, false, false, true,
-            fillText: _detailDealText,
-            focusNode: _detailDealFocusNode,
-            inputType: TextInputType.text),
+        // _buildTextField(AppLocalizations.text(LangKey.dealDetail), "",
+        //     Assets.iconDealDetail, false, false, true,
+        //     fillText: _detailDealText,
+        //     focusNode: _detailDealFocusNode,
+        //     inputType: TextInputType.text),
+
+        Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: CustomTextField(
+              maxLines: 4,
+              backgroundColor: Colors.transparent,
+              borderColor: AppColors.borderColor,
+              hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
+              controller: _detailDealText,
+              focusNode: _detailDealFocusNode,
+            ),
+          ),
       ],
     );
   }

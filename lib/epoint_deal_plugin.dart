@@ -1,6 +1,7 @@
 
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.dart';
@@ -39,6 +40,7 @@ class EpointDealPlugin {
 
     DealConnection.locale = locale;
     DealConnection.buildContext = context;
+    AppSizes.init(context);
     await AppLocalizations(DealConnection.locale).load();
     bool result = await DealConnection.init(token,domain: domain);
     if(result) {

@@ -1,5 +1,6 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
@@ -7,14 +8,15 @@ import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
+import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:flutter/material.dart';
 
 class ListCustomerModal extends StatefulWidget {
-
-   DealItems dealItem = DealItems();
+  DealItems dealItem = DealItems();
   List<CustomerData> listCustomer = <CustomerData>[];
-  
- ListCustomerModal({ Key key, this.dealItem,this.listCustomer });
+
+  ListCustomerModal({Key key, this.dealItem, this.listCustomer});
 
   @override
   _ListCustomerModalState createState() => _ListCustomerModalState();
@@ -25,8 +27,8 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-GetCustomerModelResponse _model ;
-
+  GetCustomerModelResponse _model;
+  int indexSelected;
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ GetCustomerModelResponse _model ;
       getData(false);
     });
   }
-
 
   @override
   void dispose() {
@@ -46,20 +47,19 @@ GetCustomerModelResponse _model ;
   getData(bool loadMore, {int page}) async {
     keyboardDismissOnTap(context);
     FocusScope.of(context).unfocus();
-    GetCustomerModelResponse model = await DealConnection.getCustomer(
-        context);
+    GetCustomerModelResponse model = await DealConnection.getCustomer(context);
     if (model != null) {
-        widget.listCustomer = model.data;
+      widget.listCustomer = model.data;
 
-        _model = GetCustomerModelResponse(
-        data: (widget.listCustomer ?? <CustomerData>[])
-            .map((e) => CustomerData.fromJson(e.toJson()))
-            .toList());
+      _model = GetCustomerModelResponse(
+          data: (widget.listCustomer ?? <CustomerData>[])
+              .map((e) => CustomerData.fromJson(e.toJson()))
+              .toList());
 
-
-            for (int i = 0; i < _model.data.length ; i++) {
-        if ((widget.dealItem?.customerCode ?? "") ==  _model.data[i].customerCode ) {
-           widget.listCustomer[i].selected = true;
+      for (int i = 0; i < _model.data.length; i++) {
+        if ((widget.dealItem?.customerCode ?? "") ==
+            _model.data[i].customerCode) {
+          widget.listCustomer[i].selected = true;
           _model.data[i].selected = true;
         } else {
           widget.listCustomer[i].selected = false;
@@ -97,31 +97,35 @@ GetCustomerModelResponse _model ;
         children: [
           _buildSearch(),
           (widget.listCustomer != null)
-              ? (widget.listCustomer.length > 0) ? Expanded(
-                  child: CustomListView(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.only(
-                      top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: AlwaysScrollableScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(),
-                  children: _listWidget(),
-                )) : CustomDataNotFound()
+              ? (widget.listCustomer.length > 0)
+                  ? Expanded(
+                      child: CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      controller: _controller,
+                      separator: Divider(),
+                      children: _listWidget(),
+                    ))
+                  : dataNotFound()
               : Container(),
           Container(
             height: 20.0,
-          )
+          ),
         ],
       ),
     );
   }
 
   List<Widget> _listWidget() {
-    return (_model?.data != null && _model?.data.length > 0) ? List.generate(
-        _model.data.length,
-        (index) => _buildItemStaff(_model.data[index], () {
-              selectedCustomer(index);
-            })) : [CustomDataNotFound()];
+    return (_model?.data != null && _model?.data.length > 0)
+        ? List.generate(
+            _model.data.length,
+            (index) => _buildItemStaff(_model.data[index], () {
+                  selectedCustomer(index);
+                }))
+        : [dataNotFound()];
   }
 
   selectedCustomer(int index) async {
@@ -130,6 +134,8 @@ GetCustomerModelResponse _model ;
       models[i].selected = false;
     }
     models[index].selected = true;
+
+    indexSelected = index;
     setState(() {
       Navigator.of(context).pop(models[index]);
     });
@@ -150,8 +156,9 @@ GetCustomerModelResponse _model ;
                   item?.fullName ?? "",
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: item.selected ? Colors.orange : Colors.black,
-                      fontWeight: FontWeight.normal),
+                      color:
+                          item.selected ? AppColors.primaryColor : Colors.black,
+                      fontWeight:item.selected ? FontWeight.bold : FontWeight.normal),
                   maxLines: 1,
                 ),
               ),
@@ -160,6 +167,26 @@ GetCustomerModelResponse _model ;
         ),
       ),
     );
+  }
+
+  Widget dataNotFound() {
+    return CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                      physics: NeverScrollableScrollPhysics(),
+                      separator: Divider(),
+                      children: List.generate(
+                        5,
+                        (index) => Container(
+                  margin: EdgeInsets.only(top: 15.0),
+                  child: CustomShimmer(
+                    child: CustomSkeleton(
+          height: 50,
+          radius: 5.0),
+                  ),
+                ),
+            ));
   }
 
   Widget _buildSearch() {
@@ -184,21 +211,19 @@ GetCustomerModelResponse _model ;
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(_model.data,event);
+        searchModel(_model.data, event);
         print(event.toLowerCase());
         if (_searchext != null) {
           print(_searchext.text);
-          
         }
       },
     );
   }
 
-   searchModel(List<CustomerData> model, String value) {
+  searchModel(List<CustomerData> model, String value) {
     if (model == null || value.isEmpty) {
       _model.data = widget.listCustomer;
-      setState(() {
-      });
+      setState(() {});
     } else {
       try {
         List<CustomerData> models = model.where((model) {
@@ -213,12 +238,9 @@ GetCustomerModelResponse _model ;
           return result;
         }).toList();
         _model.data = models;
-        setState(() {
-      });
+        setState(() {});
       } catch (_) {
-        setState(() {
-        
-      });
+        setState(() {});
       }
     }
   }

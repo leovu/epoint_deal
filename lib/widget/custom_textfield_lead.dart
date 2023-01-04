@@ -41,6 +41,7 @@ class CustomTextField extends StatelessWidget {
   final String error;
   final double radius;
   final Widget suffixChild;
+  final Color borderColor;
   final TextCapitalization textCapitalization;
 
   CustomTextField(
@@ -79,7 +80,8 @@ class CustomTextField extends StatelessWidget {
       this.hintStyle,
       this.suffixSize,
       this.suffixChild,
-      this.textCapitalization, this.selectionControls});
+      this.textCapitalization, this.selectionControls,
+      this.borderColor,});
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,7 @@ class CustomTextField extends StatelessWidget {
                       ? AppColors.redColor
                       : (enableBorder
                           ? AppColors.primaryColor
-                          : AppColors.lightGrey),
+                          : AppColors.borderColor),
                   style: BorderStyle.solid)),
           child: Row(
             children: [

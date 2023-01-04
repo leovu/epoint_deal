@@ -6,10 +6,12 @@ import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.dart';
+import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_deal.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_deal_screen.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
@@ -33,8 +35,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
   List<PipelineData> pipeLineData = <PipelineData>[];
   List<OrderSourceData> orderSourceData = <OrderSourceData>[];
   List<BranchData> branchData = <BranchData>[];
-
-
+  List<WorkListStaffModel> models = [];
 
   int currentPage = 1;
   int nextPage = 2;
@@ -43,12 +44,15 @@ class _ListDealScreenState extends State<ListDealScreen> {
       search: "",
       page: 1,
       orderSourceName: "",
-      branchName: "",
       createdAt: "",
       closingDate: "",
       closingDueDate: "",
-      pipelineName: "",
-      journeyName: "");
+      branchId: [],
+      staffId: [],
+      pipelineId: [],
+      journeyName: [],
+      manageStatusId: [],
+      careHistory: "");
 
   FilterScreenModel filterScreenModel = FilterScreenModel();
 
@@ -59,16 +63,23 @@ class _ListDealScreenState extends State<ListDealScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       filterScreenModel = FilterScreenModel(
-          filterModel: filterModel,
-          fromDate_closing_date: null,
-          fromDate_closing_due_date: null,
-          fromDate_created_at: null,
-          toDate_created_at: null,
-          id_created_at: "",
-          id_closing_date: "",
-          toDate_closing_date: null,
-          toDate_closing_due_date: null,
-          id_closing_due_date: "");
+        filterModel: filterModel,
+        fromDate_closing_date: null,
+        fromDate_closing_due_date: null,
+        fromDate_created_at: null,
+        toDate_created_at: null,
+        id_created_at: "",
+        id_closing_date: "",
+        toDate_closing_date: null,
+        toDate_closing_due_date: null,
+        id_closing_due_date: "",
+        fromDate_history_care_date: null,
+        toDate_history_care_date: null,
+        id_history_care_date: "",
+        fromDate_work_schedule_date: null,
+        toDate_work_schedule_date: null,
+        id_work_schedule_date: "",
+      );
       getData(false);
     });
   }
@@ -80,12 +91,15 @@ class _ListDealScreenState extends State<ListDealScreen> {
             search: _searchtext.text,
             page: filterModel.page,
             orderSourceName: filterModel.orderSourceName,
-            branchName: filterModel.branchName,
             createdAt: filterModel.createdAt,
             closingDate: filterModel.closingDate,
             closingDueDate: filterModel.closingDueDate,
-            pipelineName: filterModel.pipelineName,
-            journeyName: filterModel.journeyName));
+            branchId: filterModel.branchId,
+            staffId: filterModel.staffId,
+            pipelineId: filterModel.pipelineId,
+            journeyName: filterModel.journeyName,
+            manageStatusId: filterModel.manageStatusId,
+            careHistory: filterModel.careHistory));
     if (model != null) {
       if (!loadMore) {
         items = [];
@@ -136,25 +150,21 @@ class _ListDealScreenState extends State<ListDealScreen> {
           style: const TextStyle(color: Colors.white, fontSize: 16.0),
         ),
         // leadingWidth: 20.0,
-        actions: [  
+        actions: [
           InkWell(
             onTap: () async {
               FilterScreenModel result =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => FilterDealCustomer(
                             filterScreenModel: filterScreenModel,
-                          )
-                        )
-                      );
+                          )));
 
               if (result != null) {
                 filterScreenModel = result;
                 filterModel = result.filterModel;
                 filterModel.page = 1;
                 getData(false);
-              } else {
-
-              }
+              } else {}
             },
             child: Padding(
               padding: EdgeInsets.only(right: 8.0),
@@ -168,20 +178,25 @@ class _ListDealScreenState extends State<ListDealScreen> {
       ),
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor,
         onPressed: () async {
           //  ObjectPopDetailModel result = await LeadNavigator.push(context, CreatePotentialCustomer());
 
           var result = await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CreateDealScreen()));
 
-          if (result != null ) {
+          if (result != null) {
             var status = result["status"];
             if (status) {
               getData(false);
             }
           }
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: AppColors.white,
+          size: 40,
+        ),
       ),
     );
   }
@@ -203,8 +218,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                     ? Container()
                     : (items.length > 0)
                         ? Column(
-                            children:
-                                items.map((e) => _dealItem(e)).toList())
+                            children: items.map((e) => _dealItemV2(e)).toList())
                         : CustomDataNotFound(),
                 Container(height: 100)
               ],
@@ -269,14 +283,117 @@ class _ListDealScreenState extends State<ListDealScreen> {
     );
   }
 
-  Widget _dealItem(DealItems item) {
+  // Widget _dealItem(DealItems item) {
+  //   return Stack(
+  //     children: [
+  //       InkWell(
+  //         onTap: () async {
+  //           bool result = await Navigator.of(context).push(MaterialPageRoute(
+  //               builder: (context) =>
+  //                   DetailDealScreen(deal_code: item.dealCode)));
+
+  //           if (result != null && result) {
+  //             getData(false);
+  //           }
+  //         },
+  //         child: Container(
+  //           margin: EdgeInsets.only(bottom: 10.0),
+  //           decoration: BoxDecoration(
+  //               color: Color(0xFFF6F6F7),
+  //               borderRadius: BorderRadius.circular(5),
+  //               border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Container(
+  //                 padding: const EdgeInsets.all(5.0),
+  //                 margin: EdgeInsets.only(bottom: 8.0, left: 8.0),
+  //                 child: Row(
+  //                   children: [
+  //                     Container(
+  //                       margin: const EdgeInsets.only(right: 10.0),
+  //                       height: 20.0,
+  //                       width: 20.0,
+  //                       child: Image.asset(Assets.iconDeal),
+  //                     ),
+  //                     Expanded(
+  //                       child: Text(
+  //                         item.dealName,
+  //                         style: TextStyle(
+  //                             fontSize: 16.0,
+  //                             color: AppColors.primaryColor,
+  //                             fontWeight: FontWeight.w500),
+  //                         // maxLines: 1,
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       padding: EdgeInsets.all(15.0 / 1.5),
+  //                       margin: EdgeInsets.only(right: 5),
+  //                       height: 40,
+  //                       decoration: BoxDecoration(
+  //                           color: (item?.backgroundColorJourney != null) ? HexColor(item?.backgroundColorJourney ) : Color(0xFF11B482),
+  //                           borderRadius: BorderRadius.circular(50)),
+  //                       child: Center(
+  //                         child: Text(
+  //                           item.journeyName,
+  //                           style: AppTextStyles.style14WhiteWeight400,
+  //                         ),
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //               infoItem(Assets.iconPerson, item?.customerName ?? "", false),
+  //               infoItem(Assets.iconCall, item?.phone ?? "", false),
+  //               infoItem(
+  //                   Assets.iconChance,
+  //                   "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
+  //                   false),
+  //               infoItem(Assets.iconTime, item?.createdAt ?? "", false),
+  //               infoItem(Assets.iconName, item?.staffFullName ?? "", true),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       Positioned(
+  //         right: 10,
+  //         bottom: 20,
+  //         child: InkWell(
+  //           onTap: () async {
+  //             print(item.phone);
+  //             await callPhone(item?.phone ?? "");
+  //           },
+  //           child: Container(
+  //             padding: EdgeInsets.all(20.0 / 2),
+  //             height: 50,
+  //             width: 50,
+  //             decoration: BoxDecoration(
+  //               color: Color.fromRGBO(6, 166, 5, 1),
+  //               borderRadius: BorderRadius.circular(50),
+  //               // border:  Border.all(color: AppColors.white,)
+  //             ),
+  //             child: Center(
+  //                 child: Image.asset(
+  //               Assets.iconCall,
+  //               color: AppColors.white,
+  //             )),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  Widget _dealItemV2(DealItems item) {
     return Stack(
       children: [
         InkWell(
           onTap: () async {
             bool result = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    DetailDealScreen(deal_code: item.dealCode)));
+                builder: (context) => DetailDealScreen(
+                      deal_code: item.dealCode,
+                      indexTab: 0,
+                    )));
 
             if (result != null && result) {
               getData(false);
@@ -285,7 +402,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
           child: Container(
             margin: EdgeInsets.only(bottom: 10.0),
             decoration: BoxDecoration(
-                color: Color(0xFFF6F6F7),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 1),
+                    blurRadius: 2,
+                    color: Colors.black.withOpacity(0.3),
+                  )
+                ],
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
             child: Column(
@@ -293,8 +417,9 @@ class _ListDealScreenState extends State<ListDealScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(5.0),
-                  margin: EdgeInsets.only(bottom: 8.0, left: 8.0),
+                  margin: EdgeInsets.only(bottom: 8.0, left: 5.0, top: 5.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         margin: const EdgeInsets.only(right: 10.0),
@@ -305,6 +430,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       Expanded(
                         child: Text(
                           item.dealName,
+                          textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: AppColors.primaryColor,
@@ -312,18 +438,32 @@ class _ListDealScreenState extends State<ListDealScreen> {
                           // maxLines: 1,
                         ),
                       ),
+                      // Container(
+                      //   padding: EdgeInsets.all(15.0 / 1.5),
+                      //   margin: EdgeInsets.only(right: 5),
+                      //   height: 40,
+                      //   decoration: BoxDecoration(
+                      //       color: (item?.backgroundColorJourney != null) ? HexColor(item?.backgroundColorJourney ) : Color(0xFF11B482),
+                      //       borderRadius: BorderRadius.circular(50)),
+                      //   child: Center(
+                      //     child: Text(
+                      //       item.journeyName,
+                      //       style: AppTextStyles.style14WhiteWeight400,
+                      //     ),
+                      //   ),
+                      // )
                       Container(
-                        padding: EdgeInsets.all(15.0 / 1.5),
-                        margin: EdgeInsets.only(right: 5),
-                        height: 40,
+                        padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                        height: 24,
                         decoration: BoxDecoration(
-                            color: (item?.backgroundColorJourney != null) ? HexColor(item?.backgroundColorJourney ) : Color(0xFF11B482),
-                            borderRadius: BorderRadius.circular(50)),
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.circular(10.0)),
                         child: Center(
-                          child: Text(
-                            item.journeyName,
-                            style: AppTextStyles.style14WhiteWeight400,
-                          ),
+                          child: Text("Mới - 80%",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600)),
                         ),
                       )
                     ],
@@ -331,19 +471,201 @@ class _ListDealScreenState extends State<ListDealScreen> {
                 ),
                 infoItem(Assets.iconPerson, item?.customerName ?? "", false),
                 infoItem(Assets.iconCall, item?.phone ?? "", false),
-                infoItem(
-                    Assets.iconChance,
-                    "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
-                    false),
                 infoItem(Assets.iconTime, item?.createdAt ?? "", false),
                 infoItem(Assets.iconName, item?.staffFullName ?? "", true),
+                Container(
+                  padding: const EdgeInsets.only(left: 8, bottom: 8.0),
+                  margin: EdgeInsets.only(bottom: 8.0, left: 5.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10.0),
+                        height: 15.0,
+                        width: 15.0,
+                        child: Image.asset(Assets.iconInteraction),
+                      ),
+                      Expanded(
+                        child: RichText(
+                            text: TextSpan(
+                                text: "27/08/2022" + " ",
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                                children: [
+                              TextSpan(
+                                  text: "(1 ngày)",
+                                  style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal))
+                            ])),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 6.0, bottom: 6.0),
+                  margin: EdgeInsets.only(left: 5.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10.0),
+                        height: 15.0,
+                        width: 15.0,
+                        child: Image.asset(Assets.iconTag),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "35.000 VND",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold),
+                          // maxLines: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 13.0, right: 10.0, top: 21.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
+                          show: true, number: 202, ontap: () async {
+                        bool result =
+                            await Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => DetailDealScreen(
+                                      deal_code: item.dealCode,
+                                      indexTab: 1,
+                                    )));
+
+                        if (result != null && result) {
+                          getData(false);
+                        }
+                        print("1");
+                      }),
+                      _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
+                          show: true, number: 30, ontap: () async {
+                        bool result =
+                            await Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => DetailDealScreen(
+                                      deal_code: item.dealCode,
+                                      indexTab: 1,
+                                    )));
+
+                        if (result != null && result) {
+                          getData(false);
+                        }
+                        print("2");
+                      }),
+                      _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
+                          ontap: () async {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CustomerCareDeal(
+                                  item: item,
+                                )));
+                        print("CustomerCare");
+                      }),
+                      // _actionItem(Assets.iconTask, Color(0xFFCD6000),
+                      //     ontap: () {
+                      //   print("4");
+                      // }),
+                      // (item.staffFullName == null) ? _actionItem(Assets.iconAssignment, Color(0xFF0067AC),
+                      //     ontap: () async {
+
+                      //       models = await Navigator.of(context).push(
+                      //           MaterialPageRoute(
+                      //               builder: (context) =>
+                      //                   MultipleStaffScreenDeal(
+                      //                     models: models,
+                      //                   )));
+
+                      //       if (models != null && models.length > 0) {
+                      //         int staffID = models[0].staffId;
+
+                      //         if (staffID != null) {
+                      //           DescriptionModelResponse result =
+                      //               await DealConnection.assignRevokeLead(
+                      //                   context,
+                      //                   AssignRevokeDealModelRequest(
+                      //                       type: "assign",
+                      //                       dealCode: item.dealCode,
+                      //                       saleId: staffID,
+                      //                       timeRevokeLead: 30));
+
+                      //           if (result != null) {
+                      //             if (result.errorCode == 0) {
+                      //               print(result.errorDescription);
+
+                      //               await DealConnection.showMyDialog(
+                      //                   context, result.errorDescription);
+                      //               getData(true);
+                      //             } else {
+                      //               DealConnection.showMyDialog(
+                      //                   context, result.errorDescription);
+                      //             }
+                      //           }
+                      //         }
+
+                      //         print(models);
+                      //       }
+
+                      //       print("iconAssignment");
+
+                      //   print("5");
+                      // }):
+
+                      // _actionItem(Assets.iconRecall, Color(0xFFFFAD02),
+                      //     ontap: () async {
+                      //       DealConnection.showMyDialogWithFunction(
+                      //           context,
+                      //           AppLocalizations.text(
+                      //               LangKey.warningRecallStaff),
+                      //           ontap: () async {
+                      //         DescriptionModelResponse result =
+                      //             await DealConnection.assignRevokeLead(
+                      //                 context,
+                      //                 AssignRevokeDealModelRequest(
+                      //                     type: "revoke",
+                      //                     dealCode: item.dealCode,
+                      //                     saleId: 100,
+                      //                     timeRevokeLead: 30));
+
+                      //         Navigator.of(context).pop();
+
+                      //         if (result != null) {
+                      //           if (result.errorCode == 0) {
+                      //             print(result.errorDescription);
+
+                      //             await DealConnection.showMyDialog(
+                      //                 context, result.errorDescription);
+                      //             getData(true);
+                      //           } else {
+                      //             DealConnection.showMyDialog(
+                      //                 context, result.errorDescription);
+                      //           }
+                      //         }
+                      //       });
+
+                      //       print("iconAssignment");
+
+                      //   print("5");
+                      // })
+                    ],
+                  ),
+                )
               ],
             ),
           ),
         ),
         Positioned(
           right: 10,
-          bottom: 20,
+          top: 50,
           child: InkWell(
             onTap: () async {
               print(item.phone);
@@ -370,13 +692,61 @@ class _ListDealScreenState extends State<ListDealScreen> {
     );
   }
 
+  Widget _actionItem(String icon, Color color,
+      {num number, bool show = false, Function ontap}) {
+    return InkWell(
+      onTap: ontap,
+      child: Container(
+          margin: EdgeInsets.only(left: 17),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                    color: color, borderRadius: BorderRadius.circular(1000.0)),
+                child: Center(
+                  child: Image.asset(
+                    icon,
+                    scale: 2.5,
+                  ),
+                ),
+              ),
+              show
+                  ? Positioned(
+                      left: 30,
+                      bottom: 30,
+                      child: Container(
+                        width: (number > 99)
+                            ? 30
+                            : (number > 9)
+                                ? 25
+                                : 22,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Color(0xFFF45E38)),
+                        child: Center(
+                            child: Text("${number ?? 0}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600))),
+                      ))
+                  : Container()
+            ],
+          )),
+    );
+  }
+
   Widget infoItem(String icon, String title, bool minWidth) {
     return Container(
       width: minWidth
           ? MediaQuery.of(context).size.width - 80
           : MediaQuery.of(context).size.width - 40,
       // height: 40,
-      padding: const EdgeInsets.only(left: 8, bottom: 8.0),
+      padding: const EdgeInsets.only(left: 5, bottom: 8.0),
       margin: EdgeInsets.only(left: 15.0 / 2, bottom: 8.0),
       child: Row(
         children: [
@@ -404,7 +774,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
     return await launch("tel:" + phone.replaceAll(regSpace, ""));
   }
 }
-
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {

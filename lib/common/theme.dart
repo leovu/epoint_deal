@@ -74,98 +74,51 @@ class AppColors {
   static const ash = Color(0xFF7D8290);
   static const colorDot = Color(0xFFADB1B9);
   static const disableColor = Color(0xFFDADADA);
+   static const hintColor = Color(0xFF8E8E8E);
+   static const borderColor = Color(0xFFE5E5E5);
 }
 
 class AppFonts {
   static const font = "SF Pro Text";
 }
 
-// class AppSizes {
-//   static double maxWidth;
-//   static double maxHeight;
-//   static double ultraPadding;
-//   static double maxPadding;
-//   static double minPadding;
-//   static double sizeOnTap;
-//   static double statusBarHeight;
-//   static double bottomHeight;
-//   static double sizeAppBar;
-//   static double screenHeight;
-//   static double border2;
-//   static double border5;
-//   static double border4;
-//   static double border8;
-//   static double border10;
-//   static double border15;
-//   static double border16;
-//   static double border18;
-//   static double border24;
-//   static double titleImageSize;
-//   static double iconSize;
-//   static double dotSize;
-//   static double loadmoreHeight;
-//   static int maximumNumber;
-//   static double smallButton;
-//   static double totalMax;
-//   static double heightLoadMore = 40.0;
-//   static double double22 = 22.0;
-//   static double avatarSize;
+class AppSizes {
+  static double maxWidth;
+  static double maxHeight;
+  static double ultraPadding;
+  static double maxPadding;
+  static double minPadding;
+  static double sizeOnTap;
+  static double sizeOnTapCheckIn;
+  static double statusBarHeight;
+  static double bottomHeight;
+  static double sizeAppBar;
+  static double screenHeight;
+  static double iconSize;
+  static double lineSize;
+  static double paddingSearch;
+  static const timelineHeight = 80.0;
+  static const timeWidth = 30.0;
+  static const totalTimeline = 48;
+  static const totalMinuteOfTimeline = 30;
 
-//   static double tabBarHeight;
-
-//   static init(BuildContext context) {
-//     maxWidth = MediaQuery.of(context).size.width;
-//     maxHeight = MediaQuery.of(context).size.height;
-//     statusBarHeight = MediaQuery.of(context).padding.top;
-//     bottomHeight = MediaQuery.of(context).padding.bottom;
-//     if (AppSizes.isLargeScreen(context)) {
-//       maxPadding = 20.0;
-//       minPadding = 15.0;
-//       maxWidth = AppSizeWebConfig.maxWidthWeb;
-//       // maxHeight = 926;
-//       avatarSize = maxWidth / 6;
-//     } else {
-//       maxPadding = maxWidth * 0.05;
-//       minPadding = maxPadding / 2;
-//       avatarSize = maxWidth / 4;
-//     }
-//     ultraPadding = maxWidth * 0.1;
-//     sizeOnTap = 48.0;
-//     sizeAppBar = statusBarHeight + kToolbarHeight;
-//     screenHeight = maxHeight - statusBarHeight;
-//     border2 = 2.0;
-//     border5 = 5.0;
-//     border4 = 4.0;
-//     border8 = 8.0;
-//     border10 = 10.0;
-//     border15 = 15.0;
-//     border16 = 16.0;
-//     border18 = 18.0;
-//     border24 = 24.0;
-//     titleImageSize = 20.0;
-//     tabBarHeight = 46.0;
-//     iconSize = 24.0;
-//     dotSize = 4.0;
-//     loadmoreHeight = 40.0;
-//     maximumNumber = 9999999;
-//     smallButton = 25.0;
-//     totalMax = 9999999999999.0;
-//     heightLoadMore = 40.0 + maxPadding;
-//   }
-
-//   static bool isSmallScreen(BuildContext context) {
-//     return MediaQuery.of(context).size.width < 800;
-//   }
-
-//   static bool isLargeScreen(BuildContext context) {
-//     return MediaQuery.of(context).size.width > 800;
-//   }
-
-// static bool isMediumScreen(BuildContext context) {
-//   return MediaQuery.of(context).size.width >= 800 &&
-//       MediaQuery.of(context).size.width <= 1200;
-// }
-// }
+  static init(BuildContext context) {
+    maxWidth = MediaQuery.of(context).size.width;
+    maxHeight = MediaQuery.of(context).size.height;
+    statusBarHeight = MediaQuery.of(context).padding.top;
+    bottomHeight = MediaQuery.of(context).padding.bottom;
+    ultraPadding = maxWidth * 0.1;
+    sizeOnTapCheckIn = 64;
+    sizeOnTap = 40.0;
+    maxPadding = sizeOnTap / 2;
+    minPadding = maxPadding / 2;
+    sizeAppBar = statusBarHeight + kToolbarHeight;
+    screenHeight = maxHeight - statusBarHeight;
+    iconSize = 24;
+    lineSize = 0.5;
+    paddingSearch = 57;
+  }
+}
 
 class AppKeys {
   static const String keyHUD = "HUD";
@@ -194,6 +147,10 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+   static TextStyle style15WhiteBold = TextStyle(
+      fontSize: AppTextSizes.size15,
+      color: AppColors.white,
+      fontWeight: FontWeight.bold);
 
   static TextStyle style12WhiteWeight700Italic = TextStyle(
     fontSize: AppTextSizes.size12,
@@ -506,6 +463,8 @@ class AppAnimation {
   static Duration duration = Duration(milliseconds: 500);
   static Curve curve = Curves.fastOutSlowIn;
 }
+
+
 
 
 class AppFormat {
