@@ -28,6 +28,7 @@ import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_potential_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
+import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
 import 'package:epoint_deal_plugin/presentation/multi_staff_screen_potentail/ui/multi_staff_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
@@ -87,6 +88,8 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   List<BranchData> branchData;
   BranchData branchSelected;
+
+   bool selectedCustomer = false;
 
   List<WorkListStaffModel> _modelStaff = [];
   List<WorkListStaffModel> _modelStaffSelected = [
@@ -425,36 +428,124 @@ class _EditDealScreenState extends State<EditDealScreen>
             height: 10,
           ),
           // Loại khách hàng
-          _buildTextField(
-              AppLocalizations.text(LangKey.customerStyle),
-              customerTypeSelected?.customerTypeName ?? "",
-              Assets.iconStyleCustomer,
-              true,
-              true,
-              false, ontap: () async {
-            print("loại khách hàng");
-            FocusScope.of(context).unfocus();
+          // _buildTextField(
+          //     AppLocalizations.text(LangKey.customerStyle),
+          //     customerTypeSelected?.customerTypeName ?? "",
+          //     Assets.iconStyleCustomer,
+          //     true,
+          //     true,
+          //     false, ontap: () async {
+          //   print("loại khách hàng");
+          //   FocusScope.of(context).unfocus();
 
-            CustomerTypeModel customerType = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return CustomerTypeModal(
-                    customerTypeData: customerTypeData,
-                  );
-                });
-            if (customerType != null) {
-              customerTypeSelected = customerType;
+          //   CustomerTypeModel customerType = await showModalBottomSheet(
+          //       context: context,
+          //       useRootNavigator: true,
+          //       isScrollControlled: true,
+          //       backgroundColor: Colors.transparent,
+          //       builder: (context) {
+          //         return CustomerTypeModal(
+          //           customerTypeData: customerTypeData,
+          //         );
+          //       });
+          //   if (customerType != null) {
+          //     customerTypeSelected = customerType;
+          //     customerSelected = DealItems(customerCode: "", customerName: "");
+          //     leadItem = ListCustomLeadItems(customerLeadCode: "");
+          //     _phoneNumberText.text = "";
+          //     setState(() {});
+          //   }
+
+          //   // print("loại khách hàng");
+          // }),
+
+           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              InkWell(
+                onTap: () {
+                  // detailPotential.customerType = "business";
+                  customerTypeSelected = customerTypeData[1];
+                  customerSelected = DealItems(customerCode: "", customerName: "");
+              leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  selectedCustomer = false;
+                  setState(() {});
+                },
+                child: Container(
+                  height: 42.0,
+                  width: MediaQuery.of(context).size.width / 2 - 19,
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: !selectedCustomer
+                          ? AppColors.primaryColor
+                          : Color(0xFFF2F2F2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.text(LangKey.potentialCustomer),
+                      style: TextStyle(
+                          color: !selectedCustomer
+                              ? Colors.white
+                              : Color(0xFF8E8E8E),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+                  // detailPotential.customerType = "personal";
+                  customerTypeSelected = customerTypeData[0];
               customerSelected = DealItems(customerCode: "", customerName: "");
               leadItem = ListCustomLeadItems(customerLeadCode: "");
-              _phoneNumberText.text = "";
-              setState(() {});
-            }
+                  selectedCustomer = true;
+                  setState(() {});
+                },
+                child: Container(
+                  height: 42.0,
+                  width: AppSizes.maxWidth / 2 - 19,
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: selectedCustomer
+                          ? AppColors.primaryColor
+                          : Color(0xFFF2F2F2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.text(LangKey.customerVi),
+                      style: TextStyle(
+                          color: selectedCustomer
+                              ? Colors.white
+                              : Color(0xFF8E8E8E),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
 
-            // print("loại khách hàng");
-          }),
+          Container(
+            height: 15,
+          ),
 
           // chọn khách hàng
           _buildTextField(
@@ -478,7 +569,7 @@ class _EditDealScreenState extends State<EditDealScreen>
               if (customer != null) {
                 customerSelected.customerCode = customer.customerCode;
                 customerSelected.customerName = customer.fullName;
-                _phoneNumberText.text = "";
+                // _phoneNumberText.text = "";
 
                 setState(() {});
               }
@@ -494,7 +585,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 customerSelected.customerCode = result.customerLeadCode;
                 customerSelected.customerName = result.leadFullName;
                 leadItem.customerLeadCode = result.customerLeadCode;
-                _phoneNumberText.text = result.phone;
+                // _phoneNumberText.text = result.phone;
 
                 setState(() {});
               }
@@ -504,8 +595,64 @@ class _EditDealScreenState extends State<EditDealScreen>
                   warning: true);
             }
           }),
+
+          !selectedCustomer
+              ? (customerSelected.customerCode != "") ? Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom: 15.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Loại khách hàng: ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            width: 20.0,
+                          ),
+                          Text(
+                            "Doanh nghiệp",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 15.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Số điện thoại: ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            width: 20.0,
+                          ),
+                          Text(
+                            "0347621673",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ) : Container()
+              : Container(),
+
           // phone
-          _buildTextField(
+         selectedCustomer ? _buildTextField(
             AppLocalizations.text(LangKey.inputPhonenumber),
             "",
             Assets.iconCall,
@@ -515,7 +662,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             fillText: _phoneNumberText,
             focusNode: _phoneNumberFocusNode,
             inputType: TextInputType.number,
-          ),
+          ) : Container(),
 
 // nhập tên deal
           _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
@@ -743,15 +890,77 @@ class _EditDealScreenState extends State<EditDealScreen>
                     });
                   }
                 }),
-// chọn ngày kết thúc thực tế
-                Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    // width: (MediaQuery.of(context).size.width - 60) / 2 - 8,
-                    child: _buildDatePicker(
-                        AppLocalizations.text(LangKey.expectedEndingDate),
-                        _closingDueDateText, () {
-                      _showClosingDueDate();
-                    })),
+
+                     _buildTextField(AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
+              tagsString, Assets.iconTag, false, true, false, ontap: () async {
+            print("Tag");
+            FocusScope.of(context).unfocus();
+            List<int> tagsSeletecd = [];
+
+            if (tagsData == null || tagsData.length == 0) {
+              DealConnection.showLoading(context);
+              var tags = await DealConnection.getTag(context);
+              Navigator.of(context).pop();
+              if (tags != null) {
+                tagsData = tags.data;
+
+                var listTagsSelected = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => TagsModal(tagsData: tagsData)));
+
+                if (listTagsSelected != null) {
+                  // widget.detailDeal.tag = [];
+                  tagsString = "";
+                  tagsData = listTagsSelected;
+
+                  for (int i = 0; i < tagsData.length; i++) {
+                    if (tagsData[i].selected) {
+                      tagsSeletecd.add(tagsData[i].tagId);
+                      if (tagsString == "") {
+                        tagsString = tagsData[i].name;
+                      } else {
+                        tagsString += ", ${tagsData[i].name}";
+                      }
+                    }
+                  }
+                  // detailPotential.tagId = tagsSeletecd;
+                  setState(() {});
+                }
+              }
+            } else {
+              var listTagsSelected = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => TagsModal(tagsData: tagsData)));
+              if (listTagsSelected != null) {
+                // widget.detailDeal.tag = [];
+                tagsString = "";
+                tagsData = listTagsSelected;
+
+                for (int i = 0; i < tagsData.length; i++) {
+                  if (tagsData[i].selected) {
+                    tagsSeletecd.add(tagsData[i].tagId);
+                    if (tagsString == "") {
+                      tagsString = tagsData[i].name;
+                    } else {
+                      tagsString += ", ${tagsData[i].name}";
+                    }
+                  }
+                }
+                // detailPotential.tagId = tagsSeletecd;
+                setState(() {});
+              }
+            }
+          }),
+          
+// // chọn ngày kết thúc thực tế
+//                 Container(
+//                     margin: const EdgeInsets.only(bottom: 10.0),
+//                     // width: (MediaQuery.of(context).size.width - 60) / 2 - 8,
+//                     child: _buildDatePicker(
+//                         AppLocalizations.text(LangKey.expectedEndingDate),
+//                         _closingDueDateText, () {
+//                       _showClosingDueDate();
+//                     })),
               ],
             ),
           ),
@@ -761,7 +970,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             branchData: branchData,
             detailDeal: detailDeal,
             orderSourceSelected: orderSourceSelected,
-            tagsData: tagsData,
+            // tagsData: tagsData,
             tagsString: tagsString,
           )
         ]),
@@ -851,6 +1060,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 : Text(
                     content,
                     style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),

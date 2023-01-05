@@ -759,9 +759,6 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           false,
           true,
           false , ontap: () async {
-
-        
-
             var statuswork = await Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => FilterByWorkStatus(statusWorkData: statusWorkData)));
@@ -784,10 +781,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                   }
                   setState(() {});
                 }
-
       }),
-
-
     ];
   }
 

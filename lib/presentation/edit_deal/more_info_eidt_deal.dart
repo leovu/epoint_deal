@@ -2,6 +2,7 @@ import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
@@ -9,10 +10,10 @@ import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dar
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/tags_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
+import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -336,41 +337,41 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           Container(
             height: 15,
           ),
-          _buildTextField("Tag", (widget.tagsString != "") ? widget.tagsString : tagsString, Assets.iconTag, false, true, false,
-              ontap: () async {
-            print("Tag");
-            FocusScope.of(context).unfocus();
-            var listTagsSelected = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return TagsModal(
-                    tagsData: widget.tagsData,
-                  );
-                });
-            if (listTagsSelected != null) {
-              widget.detail.tag = <int>[];
-              tagsString = "";
-              tagsSelected = listTagsSelected;
+          // _buildTextField("Tag", (widget.tagsString != "") ? widget.tagsString : tagsString, Assets.iconTag, false, true, false,
+          //     ontap: () async {
+          //   print("Tag");
+          //   FocusScope.of(context).unfocus();
+          //   var listTagsSelected = await showModalBottomSheet(
+          //       context: context,
+          //       useRootNavigator: true,
+          //       isScrollControlled: true,
+          //       backgroundColor: Colors.transparent,
+          //       builder: (context) {
+          //         return TagsModal(
+          //           tagsData: widget.tagsData,
+          //         );
+          //       });
+          //   if (listTagsSelected != null) {
+          //     widget.detail.tag = <int>[];
+          //     tagsString = "";
+          //     tagsSelected = listTagsSelected;
 
-              for (int i = 0; i < tagsSelected.length; i++) {
-                if (tagsSelected[i].selected) {
-                  widget.detail.tag.add(tagsSelected[i].tagId);
+          //     for (int i = 0; i < tagsSelected.length; i++) {
+          //       if (tagsSelected[i].selected) {
+          //         widget.detail.tag.add(tagsSelected[i].tagId);
 
-                  if (tagsString == "") {
-                    tagsString = tagsSelected[i].name;
-                  } else {
-                    tagsString += ", ${tagsSelected[i].name}";
-                  }
-                }
-              }
-              setState(() {});
-            }
-          }),
+          //         if (tagsString == "") {
+          //           tagsString = tagsSelected[i].name;
+          //         } else {
+          //           tagsString += ", ${tagsSelected[i].name}";
+          //         }
+          //       }
+          //     }
+          //     setState(() {});
+          //   }
+          // }),
           _buildTextField(
-              AppLocalizations.text(LangKey.orderSource),
+               "Nguồn cơ hội bán hàng",
               widget.detail?.orderSourceName ?? "",
               Assets.iconTag,
               false,
@@ -437,16 +438,22 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               }
             }
           }),
-          _buildTextField(AppLocalizations.text(LangKey.probability), "",
+          _buildTextField("Nhập xác suất thành công (%)", "",
               Assets.iconProbability, false, false, true,
               fillText: _probabilityText,
               focusNode: _probabilityFocusNode,
               inputType: TextInputType.number),
-          _buildTextField(AppLocalizations.text(LangKey.dealDetail), "",
-              Assets.iconDealDetail, false, false, true,
-              fillText: _detailDealText,
+         Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: CustomTextField(
+              maxLines: 4,
+              backgroundColor: Colors.transparent,
+              borderColor: AppColors.borderColor,
+              hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
+              controller: _detailDealText,
               focusNode: _detailDealFocusNode,
-              inputType: TextInputType.text),
+            ),
+          ),
         ],
       ),
     );
@@ -612,6 +619,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 : Text(
                     content,
                     style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),

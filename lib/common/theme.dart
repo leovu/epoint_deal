@@ -147,11 +147,34 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
-   static TextStyle style15WhiteBold = TextStyle(
+  static TextStyle style12BlackBold = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.black,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12grey200Normal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.grey200Color,
+      fontWeight: FontWeight.normal);
+   static TextStyle style14PrimaryBold = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.primaryColor,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12grey500Bold = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.grey500Color,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12grey500Normal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.grey500Color,
+      fontWeight: FontWeight.normal);
+  static TextStyle style16PrimaryBold = TextStyle(
+      fontSize: AppTextSizes.size16,
+      color: AppColors.primaryColor,
+      fontWeight: FontWeight.bold);
+  static TextStyle style15WhiteBold = TextStyle(
       fontSize: AppTextSizes.size15,
       color: AppColors.white,
       fontWeight: FontWeight.bold);
-
   static TextStyle style12WhiteWeight700Italic = TextStyle(
     fontSize: AppTextSizes.size12,
     color: AppColors.white,

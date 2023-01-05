@@ -393,6 +393,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                 builder: (context) => DetailDealScreen(
                       deal_code: item.dealCode,
                       indexTab: 0,
+                      id: 667,
                     )));
 
             if (result != null && result) {
@@ -542,6 +543,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 builder: (context) => DetailDealScreen(
                                       deal_code: item.dealCode,
                                       indexTab: 1,
+                                      id: 667,
                                     )));
 
                         if (result != null && result) {
@@ -556,6 +558,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 builder: (context) => DetailDealScreen(
                                       deal_code: item.dealCode,
                                       indexTab: 1,
+                                      id: 667,
                                     )));
 
                         if (result != null && result) {

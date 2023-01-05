@@ -874,6 +874,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 : Text(
                     content,
                     style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),

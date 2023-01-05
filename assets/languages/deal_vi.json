@@ -222,7 +222,14 @@
     "image": "Hình ảnh",
     "answering": "Đang trả lời",
     "enter_comment": "Nhập bình luận",
-    "order_history":"Lịch sử đơn hàng"
+    "order_history":"Lịch sử đơn hàng",
+
+    "camera": "Camera",
+    "location": "Vị trí",
+    "storage": "Bộ nhớ",
+    "notification": "Thông báo",
+    "allow": "Cho phép",
+    "message_permission": "Chọn Cài đặt vào Thông tin ứng dụng, chọn vào Quyền (Permissions), bật truy cập và vào lại màn hình này để sử dụng quyền"
 
 
   }

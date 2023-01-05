@@ -239,4 +239,11 @@ class LangKey {
   static const String enter_comment = "enter_comment";
   static const String order_history = "order_history";
 
+  static const String camera = "camera";
+  static const String location = "location";
+  static const String storage = "storage";
+  static const String notification = "notification";
+  static const String allow = "allow";
+  static const String message_permission = "message_permission";
+
 }

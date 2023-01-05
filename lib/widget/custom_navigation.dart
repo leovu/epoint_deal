@@ -22,4 +22,9 @@ class CustomNavigator {
           );
         });
   }
+
+   static canPop(BuildContext context) {
+    ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
+    return parentRoute?.canPop ?? false;
+  }
 }

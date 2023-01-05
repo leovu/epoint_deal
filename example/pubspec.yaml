@@ -17,6 +17,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^0.8.6
+  draggable_fab: ^0.1.4
+  rxdart: ^0.27.4
+  http: ^0.13.5
+  file_picker: ^5.2.4
+
+dependency_overrides:
+  permission:
+    git:
+      url: https://github.com/leovu/permission
+      ref: 1.0.6
 
   epoint_deal_plugin:
     # When depending on this package from a real application you should use:

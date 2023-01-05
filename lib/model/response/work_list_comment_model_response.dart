@@ -3,10 +3,11 @@ class WorkListCommentResponseModel {
 
   WorkListCommentResponseModel({this.data});
 
-  WorkListCommentResponseModel.fromJson(List<dynamic> json) {
-    if (json != null) {
+  WorkListCommentResponseModel.fromJson(Map<String, dynamic> json) {
+
+    if (json['Data'] != null) {
       data = <WorkListCommentModel>[];
-      json.forEach((v) {
+      json['Data'].forEach((v) {
         data.add(new WorkListCommentModel.fromJson(v));
       });
     }

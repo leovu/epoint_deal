@@ -15,6 +15,8 @@ import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_reques
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_project_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/work_create_comment_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/add_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
@@ -35,6 +37,7 @@ import 'package:epoint_deal_plugin/model/response/order_source_model_response.da
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -409,6 +412,33 @@ class DealConnection {
             ],
           );
         });
+  }
+
+    static Future<WorkListCommentResponseModel> workListComment(
+      BuildContext context, WorkListCommentRequestModel model) async {
+    // showLoading(context);
+    ResponseData responseData = await connection
+        .post('/manage-work/list-comment', model.toJson());
+    if (responseData.isSuccess) {
+      WorkListCommentResponseModel data =
+          WorkListCommentResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+   static Future<WorkListCommentResponseModel> workCreatedComment(
+      BuildContext context, WorkCreateCommentRequestModel model) async {
+    showLoading(context);
+    ResponseData responseData =
+        await connection.post('/manage-work/created-comment', model.toJson());
+        Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      WorkListCommentResponseModel data =
+          WorkListCommentResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
   }
 
  static Future showMyDialog(BuildContext context, String title, {bool warning = false}) async {

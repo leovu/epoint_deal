@@ -13,6 +13,52 @@ class HTTPConnection {
   static String brandCode = '';
   static String asscessToken = '';
 
+  Future<ResponseData> upload(String path, MultipartFileModel model) async {
+    final uri = Uri.parse('$domain$path');
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'qc': DealConnection.locale.languageCode});
+    request.files.add(
+      http.MultipartFile(
+        'file_name',
+        model.file.readAsBytes().asStream(),
+        model.file.lengthSync(),
+        filename: model.file.path.split("/").last,
+      ),
+    );
+    // if(body != null) {
+    //   for (var key in body.keys) {
+    //     request.fields[key] = body[key];
+    //   }
+    // }
+    if (kDebugMode) {
+      print('***** Upload *****');
+      print(uri);
+      print(request.headers);
+      print('***** Upload *****');
+    }
+    var streamResponse = await request.send();
+    var response = await http.Response.fromStream(streamResponse);
+    if(response.statusCode == 200) {
+      ResponseData data = ResponseData();
+      data.isSuccess = true;
+      try {
+        String responseBody = response.body;
+        data.data = jsonDecode(responseBody);
+      }catch(_) {}
+      return data;
+    }
+    else {
+      ResponseData data = ResponseData();
+      data.isSuccess = false;
+      try {
+        String responseBody = response.body;
+        data.data = jsonDecode(responseBody);
+      }catch(_) {}
+      return data;
+    }
+  }
+
+
   Future<ResponseData>post(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
     final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
@@ -145,5 +191,19 @@ class HTTPConnection {
 class ResponseData {
    bool isSuccess;
    Map<String,dynamic> data;
+}
+
+class MultipartFileModel {
+  File file;
+  String name;
+
+  MultipartFileModel({this.file, this.name});
+
+   Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+     data['file'] = this.file;
+    data['name'] = this.name;
+    return data;
+  }
 }
 
