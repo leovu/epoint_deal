@@ -19,7 +19,6 @@ dependencies:
     sdk: flutter
   image_picker: ^0.8.6
   draggable_fab: ^0.1.4
-  rxdart: ^0.27.4
   http: ^0.13.5
   file_picker: ^5.2.4
   flutter_html: ^3.0.0-alpha.6

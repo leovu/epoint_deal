@@ -1,13 +1,17 @@
 
 
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
+import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_work_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_status_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
@@ -15,6 +19,7 @@ import 'package:epoint_deal_plugin/model/response/get_type_work_response_model.d
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/list_project_model_response.dart';
 import 'package:epoint_deal_plugin/model/type_card_model.dart';
+import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_projects_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/status_work_modal.dart';
@@ -22,6 +27,8 @@ import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/type_of_work_modal.dart';
 import 'package:epoint_deal_plugin/presentation/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
+import 'package:epoint_deal_plugin/utils/custom_document_picker.dart';
+import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -35,9 +42,9 @@ import 'package:intl/intl.dart';
 
 class CustomerCareDeal extends StatefulWidget {
 
-DealItems item;
+DetailDealData detail;
 
-   CustomerCareDeal({Key key,this.item}) : super(key: key);
+   CustomerCareDeal({Key key,this.detail}) : super(key: key);
 
   @override
   _CustomerCareDealState createState() => _CustomerCareDealState();
@@ -130,9 +137,12 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
   bool showMore = false;
   bool has_approved = false;
 
+  CustomerCareBloc _bloc;
+
   @override
   void initState() {
     super.initState();
+    _bloc = CustomerCareBloc(context);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       // await callApi();
@@ -168,54 +178,47 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     super.didChangeMetrics();
   }
 
-  // _showDocumentPicker() async {
-  //   List<File> files = await openMultiDocument(
-  //       context,
-  //       params: [
-  //         "pdf",
-  //         "doc",
-  //         "docx",
-  //         "xls",
-  //         "xlsx",
-  //         "xlsm",
-  //       ]
-  //   );
+    _uploadFile() async {
+    File file = await CustomDocumentPicker.openDocument(
+        context,
+        params: [
+          "txt",
+          "pdf",
+          "doc",
+          "docx",
+          "xls",
+          "xlsx",
+          "xlsm",
+          "pptx",
+          "ppt",
+          "jpeg",
+          "jpg",
+          "png"
+        ]
+    );
 
-  //   if((files?.length ?? 0) != 0){
-  //     // DealConnection.showLoading(context);
-  //     for(var e in files){
-  //       await DealConnection.workUploadFile(context,MultipartFileModel(
-  //           name: "link",
-  //           file: e
-  //       ));
-  //     }
-      
-  //     Navigator.of(context).pop();
-  //   }
-  // }
+    if(file != null){
+      _bloc.workUploadFile(MultipartFileModel(
+          name: "link",
+          file: file
+      ));
+    }
+  }
 
-  //   static Future<List<File>> openMultiDocument(
-  //     BuildContext context, {
-  //       List<String> params,
-  //     }) async {
-  //   try {
-  //     bool permission = true;
-  //     // permission = await CustomPermissionRequest.request(
-  //     //     context, PermissionRequestType.STORAGE);
+    static Future<List<File>> openMultiDocument(
+      BuildContext context, {
+        List<String> params,
+      }) async {
+    try {
+      bool permission = true;
+      permission = await CustomPermissionRequest.request(
+          context, PermissionRequestType.STORAGE);
 
-  //     if (!permission) return null;
-  //   } catch (_) {
-  //     return null;
-  //   }
-
-  //   FilePickerResult files = await FilePicker.platform.pickFiles(
-  //       type: FileType.custom,
-  //       allowedExtensions: params,
-  //       allowMultiple: true
-  //   );
-
-  //   return files == null ? null : files.files.map((e) => File(e.path)).toList();
-  // }
+      if (!permission) return null;
+    } catch (_) {
+      return null;
+    }
+  }
 
 
 
@@ -573,7 +576,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       )
                     ],
                   ),
-                  (widget.item.typeCustomer == "business") ? Container(
+                  (widget.detail.typeCustomer == "business") ? Container(
                     margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -600,7 +603,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                         //   width: 11.0,
                         // ),
                         Text(
-                          widget.item.dealName,
+                          widget.detail.dealName,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: const Color(0xFF121212),
@@ -1081,14 +1084,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                 await DealConnection.showMyDialog(
                     context, result.errorDescription);
 
-                // Navigator.of(context).pop(true);
-
-                Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailDealScreen(
-                              deal_code: widget.item.dealCode,
-                                  customerCare: true,
-                                  indexTab: 2,
-                                )));
+                Navigator.of(context).pop(true);
 
               } else {
                 DealConnection.showMyDialog(context, result.errorDescription);

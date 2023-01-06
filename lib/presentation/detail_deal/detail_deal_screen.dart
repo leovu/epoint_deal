@@ -1,4 +1,3 @@
-
 import 'package:draggable_expandable_fab/draggable_expandable_fab.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -13,6 +12,7 @@ import 'package:epoint_deal_plugin/model/response/description_model_response.dar
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
+import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_deal.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/comment_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_screen.dart';
 import 'package:epoint_deal_plugin/utils/custom_image_picker.dart';
@@ -38,7 +38,13 @@ class DetailDealScreen extends StatefulWidget {
   bool customerCare;
   int id;
   Function(int) onCallback;
-  DetailDealScreen({Key key, this.deal_code, this.indexTab, this.customerCare,this.id,this.onCallback})
+  DetailDealScreen(
+      {Key key,
+      this.deal_code,
+      this.indexTab,
+      this.customerCare,
+      this.id,
+      this.onCallback})
       : super(key: key);
 
   @override
@@ -51,7 +57,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   DetailDealData detail;
   bool allowPop = false;
   CommentBloc _bloc;
-   FocusNode _focusComment = FocusNode();
+  FocusNode _focusComment = FocusNode();
   TextEditingController _controllerComment = TextEditingController();
   String _file;
   WorkListCommentModel _callbackModel;
@@ -116,36 +122,33 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       }
     }
 
-     _bloc.workListComment(WorkListCommentRequestModel(
-      manageWorkId: widget.id
-    ));
+    _bloc.workListComment(WorkListCommentRequestModel(dealId: detail.dealId));
   }
 
-      openFile(BuildContext context, String name, String path){
+  openFile(BuildContext context, String name, String path) {
     Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => CustomFileView(path, name)));
-  // CustomNavigator.push(context, CustomFileView(path, name));
-}
+        MaterialPageRoute(builder: (context) => CustomFileView(path, name)));
+    // CustomNavigator.push(context, CustomFileView(path, name));
+  }
 
-_send(){
-    if(_controllerComment.text.isEmpty && _file == null){
+  _send() {
+    if (_controllerComment.text.isEmpty && _file == null) {
       return;
     }
-    _bloc.workCreatedComment(WorkCreateCommentRequestModel(
-      manageWorkId: widget.id,
-      manageParentCommentId: (_callbackModel?.manageParentCommentId) ?? (_callbackModel?.manageCommentId),
-      message: _controllerComment.text,
-      path: _file
-    ), _controllerComment, widget.onCallback);
+    _bloc.workCreatedComment(
+        WorkCreateCommentRequestModel(
+            dealID: detail.dealId,
+            dealParentCommentId: (_callbackModel?.dealParentCommentId) ??
+                (_callbackModel?.dealCommentId),
+            message: _controllerComment.text,
+            path: _file),
+        _controllerComment,
+        widget.onCallback);
   }
 
-    _showOption(){
+  _showOption() {
     CustomImagePicker.showPicker(context, (file) {
-      _bloc.workUploadFile(MultipartFileModel(
-          name: "link",
-          file: file
-      ));
+      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
     });
   }
 
@@ -231,9 +234,18 @@ _send(){
                     backgroundColor: Color(0xFFCD6000),
                     heroTag: "btn2",
                     onPressed: () async {
-                      if (Global.createJob != null) {
-                        await Global.createJob();
-                      }
+                      // if (Global.createJob != null) {
+                      //   await Global.createJob();
+                      // }
+
+                      bool result = await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CustomerCareDeal(
+                                  detail: detail,
+                                )));
+                                if (result) {
+                                  getData();
+                                  selectedTab(1);
+                                }
 
                       print("iconTask");
                     },
@@ -302,18 +314,18 @@ _send(){
                   heroTag: "btn4",
                   onPressed: () async {
                     // if (detail.journeyCode != "PJD_DEAL_END") {
-                      bool result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  EditDealScreen(detail: detail)));
+                    bool result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EditDealScreen(detail: detail)));
 
-                      if (result != null) {
-                        if (result) {
-                          allowPop = true;
-                          getData();
-                          ;
-                        }
+                    if (result != null) {
+                      if (result) {
+                        allowPop = true;
+                        getData();
+                        ;
                       }
+                    }
                     // }
 
                     print("iconEdit");
@@ -348,21 +360,19 @@ _send(){
               Expanded(
                   child: ListView(
                 padding: EdgeInsets.zero,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: (index == 2) ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
                 controller: _controller,
                 children: buildInfomation(),
               )),
-
-              (index == 2) ?  Positioned(
-                  bottom: 0,
-                  // left: 10,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white
-                    ),
-                    width: AppSizes.maxWidth,
-                    child: _buildChatBox())) : Container(),
-
+              (index == 2)
+                  ? Positioned(
+                      bottom: 0,
+                      // left: 10,
+                      child: Container(
+                          decoration: BoxDecoration(color: Colors.white),
+                          width: AppSizes.maxWidth,
+                          child: _buildChatBox()))
+                  : Container(),
               Container(
                 height: 20.0,
               )
@@ -370,7 +380,7 @@ _send(){
           );
   }
 
-    Widget buildListOption() {
+  Widget buildListOption() {
     return Row(
       children: [
         option(AppLocalizations.text(LangKey.generalInfomation),
@@ -397,7 +407,7 @@ _send(){
     );
   }
 
-   selectedTab(int index) async {
+  selectedTab(int index) async {
     List<DetailPotentialTabModel> models = tabDeal;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
@@ -407,7 +417,7 @@ _send(){
     setState(() {});
   }
 
-    Widget option(String title, bool show, double width, Function ontap) {
+  Widget option(String title, bool show, double width, Function ontap) {
     return Column(
       children: [
         Container(
@@ -443,7 +453,6 @@ _send(){
     );
   }
 
-
   List<Widget> buildInfomation() {
     return [
       Column(
@@ -451,61 +460,59 @@ _send(){
         children: [
           Container(
               margin: EdgeInsets.only(top: 70), child: _dealInformationV2()),
-
           Column(
-      children: [
-        SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: buildListOption(),
-        ),
-        Container(
-          height: 20,
-        ),
-        (index == 0)
-            ? detailInformation()
-            : (index == 1)
-                ? customerCare()
-                : (index == 2)
-                    ? Container(
-                          width: AppSizes.maxWidth,
-                          height: AppSizes.maxHeight,
-                          child: _buildComments())
-                    : orderHistory()
-      ],
-    ),
+            children: [
+              SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                child: buildListOption(),
+              ),
+              Container(
+                height: 20,
+              ),
+              (index == 0)
+                  ? detailInformation()
+                  : (index == 1)
+                      ? customerCare()
+                      : (index == 2)
+                          ? Column(
+                              children: [
+                                Container(
+                                    width: AppSizes.maxWidth,
+                                    height: AppSizes.maxHeight - 310,
+                                    child: _buildComments()),
+                              ],
+                            )
+                          : orderHistory()
+            ],
+          ),
         ],
       )
     ];
   }
 
-    Widget _buildEmpty(){
+  Widget _buildEmpty() {
     return CustomEmpty(
       title: AppLocalizations.text(LangKey.comment_empty),
     );
   }
 
-
-  Widget _buildContainer(List<WorkListCommentModel> models){
-    // print(MediaQuery.of(context).padding.bottom);
+  Widget _buildContainer(List<WorkListCommentModel> models) {
     return Container(
-      padding: EdgeInsets.only(bottom: 400 + MediaQuery.of(context).padding.bottom ),
-      child: CustomListView(
-        // physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.symmetric(
-            vertical: AppSizes.minPadding,
-            horizontal: AppSizes.maxPadding
-        ),
-        children: models == null
-            ? List.generate(4, (index) => _buildComment(null))
-            : models.map((e) => _buildComment(e)).toList(),
-      ),
-    );
+        padding: EdgeInsets.only(
+            bottom: 60),
+        child: CustomListView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(
+              vertical: AppSizes.minPadding, horizontal: AppSizes.maxPadding),
+          children: models == null
+              ? List.generate(4, (index) => _buildComment(null))
+              : models.map((e) => _buildComment(e)).toList(),
+        ));
   }
 
-    Widget _buildComment(WorkListCommentModel model){
-
-    if(model == null){
+  Widget _buildComment(WorkListCommentModel model) {
+    if (model == null) {
       return CustomShimmer(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -515,14 +522,21 @@ _send(){
               height: AppSizes.sizeOnTap,
               radius: AppSizes.sizeOnTap,
             ),
-            Container(width: AppSizes.minPadding,),
-            Expanded(child: Column(
+            Container(
+              width: AppSizes.minPadding,
+            ),
+            Expanded(
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(height: 5.0,),
-                CustomSkeleton(width: AppSizes.maxWidth / 3,),
                 Container(
-                  padding:  EdgeInsets.only(top: 5.0),
+                  height: 5.0,
+                ),
+                CustomSkeleton(
+                  width: AppSizes.maxWidth / 3,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 5.0),
                   child: CustomSkeleton(),
                 ),
               ],
@@ -532,7 +546,8 @@ _send(){
       );
     }
 
-    double avatarSize = model.isSubComment?AppSizes.sizeOnTap / 2:AppSizes.sizeOnTap;
+    double avatarSize =
+        model.isSubComment ? AppSizes.sizeOnTap / 2 : AppSizes.sizeOnTap;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,8 +557,11 @@ _send(){
           url: model.staffAvatar,
           name: model.staffName,
         ),
-        Container(width: AppSizes.minPadding,),
-        Expanded(child: CustomListView(
+        Container(
+          width: AppSizes.minPadding,
+        ),
+        Expanded(
+            child: CustomListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
@@ -554,34 +572,31 @@ _send(){
               model.staffName ?? "",
               style: AppTextStyles.style12BlackBold,
             ),
-            if((model.message ?? "").isNotEmpty)
+            if ((model.message ?? "").isNotEmpty)
               CustomHtml(
                 model.message,
                 physics: NeverScrollableScrollPhysics(),
               ),
-            if((model.path ?? "").isNotEmpty)
+            if ((model.path ?? "").isNotEmpty)
               Container(
-                constraints: BoxConstraints(
-                  maxHeight: AppSizes.maxHeight * 0.2
-                ),
+                constraints:
+                    BoxConstraints(maxHeight: AppSizes.maxHeight * 0.2),
                 child: Row(
                   children: [
                     Flexible(
                         child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.borderColor),
-                              borderRadius: BorderRadius.circular(_imageRadius)
-                          ),
-                          child: InkWell(
-                            child: CustomNetworkImage(
-                                url: model.path,
-                                fit: BoxFit.contain,
-                                radius: _imageRadius
-                            ),
-                            onTap: () => openFile(context, AppLocalizations.text(LangKey.image), model.path),
-                          ),
-                        )
-                    )
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.borderColor),
+                          borderRadius: BorderRadius.circular(_imageRadius)),
+                      child: InkWell(
+                        child: CustomNetworkImage(
+                            url: model.path,
+                            fit: BoxFit.contain,
+                            radius: _imageRadius),
+                        onTap: () => openFile(context,
+                            AppLocalizations.text(LangKey.image), model.path),
+                      ),
+                    ))
                   ],
                 ),
               ),
@@ -591,7 +606,9 @@ _send(){
                   model.timeText ?? "",
                   style: AppTextStyles.style12grey500Normal,
                 ),
-                Container(width: AppSizes.maxPadding,),
+                Container(
+                  width: AppSizes.maxPadding,
+                ),
                 InkWell(
                   child: Text(
                     AppLocalizations.text(LangKey.callback),
@@ -601,13 +618,14 @@ _send(){
                 )
               ],
             ),
-            if((model.listObject?.length ?? 0) != 0)
+            if ((model.listObject?.length ?? 0) != 0)
               CustomListView(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 separatorPadding: 5.0,
-                children: model.listObject.map((e) => _buildComment(e)).toList(),
+                children:
+                    model.listObject.map((e) => _buildComment(e)).toList(),
               )
           ],
         ))
@@ -615,93 +633,91 @@ _send(){
     );
   }
 
-   Widget _buildChatBox(){
+  Widget _buildChatBox() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.grey)
-        )
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.maxPadding,
-        vertical: 5.0
-      ),
+      decoration:
+          BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      padding:
+          EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
       child: Column(
         children: [
           StreamBuilder(
-            stream: _bloc.outputCallback,
-            initialData: null,
-            builder: (_, snapshot){
-              _callbackModel = snapshot.data;
-              if(_callbackModel == null){
-                return Container();
-              }
-              return Container(
-                padding: EdgeInsets.only(bottom: AppSizes.minPadding),
-                child: InkWell(
+              stream: _bloc.outputCallback,
+              initialData: null,
+              builder: (_, snapshot) {
+                _callbackModel = snapshot.data;
+                if (_callbackModel == null) {
+                  return Container();
+                }
+                return Container(
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                  child: InkWell(
+                    child: Row(
+                      children: [
+                        Flexible(
+                            child: RichText(
+                          text: TextSpan(
+                              text: AppLocalizations.text(LangKey.answering) +
+                                  " ",
+                              style: AppTextStyles.style12grey200Normal,
+                              children: [
+                                TextSpan(
+                                    text: _callbackModel.staffName ?? "",
+                                    style: AppTextStyles.style12BlackBold)
+                              ]),
+                        )),
+                        Container(
+                          width: AppSizes.minPadding,
+                        ),
+                        Icon(
+                          Icons.close,
+                          color: AppColors.grey200Color,
+                          size: 12.0,
+                        )
+                      ],
+                    ),
+                    onTap: () => _bloc.setCallback(null),
+                  ),
+                );
+              }),
+          StreamBuilder(
+              stream: _bloc.outputFile,
+              initialData: null,
+              builder: (_, snapshot) {
+                _file = snapshot.data;
+
+                if (_file == null) {
+                  return Container();
+                }
+
+                return Container(
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: Row(
                     children: [
-                      Flexible(child: RichText(
-                        text: TextSpan(
-                            text: AppLocalizations.text(LangKey.answering) + " ",
-                            style: AppTextStyles.style12grey200Normal,
-                            children: [
-                              TextSpan(
-                                  text: _callbackModel.staffName ?? "",
-                                  style: AppTextStyles.style12BlackBold
-                              )
-                            ]
+                      InkWell(
+                        child: CustomNetworkImage(
+                          radius: 10.0,
+                          width: _fileSize,
+                          url: _file,
                         ),
-                      )),
-                      Container(width: AppSizes.minPadding,),
-                      Icon(
-                        Icons.close,
-                        color: AppColors.grey200Color,
-                        size: 12.0,
+                        onTap: () => openFile(context,
+                            AppLocalizations.text(LangKey.image), _file),
+                      ),
+                      Container(
+                        width: AppSizes.minPadding,
+                      ),
+                      CustomButton(
+                        text: AppLocalizations.text(LangKey.delete),
+                        backgroundColor: Colors.transparent,
+                        borderColor: AppColors.primaryColor,
+                        style: AppTextStyles.style14PrimaryBold,
+                        isExpand: false,
+                        onTap: () => _bloc.setFile(null),
                       )
                     ],
                   ),
-                  onTap: () => _bloc.setCallback(null),
-                ),
-              );
-            }
-          ),
-          StreamBuilder(
-            stream: _bloc.outputFile,
-            initialData: null,
-            builder: (_, snapshot){
-              _file = snapshot.data;
-
-              if(_file == null){
-                return Container();
-              }
-
-              return Container(
-                padding: EdgeInsets.only(bottom: AppSizes.minPadding),
-                child: Row(
-                  children: [
-                    InkWell(
-                      child: CustomNetworkImage(
-                        radius: 10.0,
-                        width: _fileSize,
-                        url: _file,
-                      ),
-                      onTap: () => openFile(context, AppLocalizations.text(LangKey.image), _file),
-                    ),
-                    Container(width: AppSizes.minPadding,),
-                    CustomButton(
-                      text: AppLocalizations.text(LangKey.delete),
-                      backgroundColor: Colors.transparent,
-                      borderColor: AppColors.primaryColor,
-                      style: AppTextStyles.style14PrimaryBold,
-                      isExpand: false,
-                      onTap: () => _bloc.setFile(null),
-                    )
-                  ],
-                ),
-              );
-            }
-          ),
+                );
+              }),
           Row(
             children: [
               InkWell(
@@ -712,15 +728,20 @@ _send(){
                 ),
                 onTap: _showOption,
               ),
-              Container(width: AppSizes.minPadding,),
-              Expanded(child: CustomTextField(
+              Container(
+                width: AppSizes.minPadding,
+              ),
+              Expanded(
+                  child: CustomTextField(
                 focusNode: _focusComment,
                 controller: _controllerComment,
                 backgroundColor: Colors.transparent,
                 borderColor: AppColors.borderColor,
                 hintText: AppLocalizations.text(LangKey.enter_comment),
               )),
-              Container(width: AppSizes.minPadding,),
+              Container(
+                width: AppSizes.minPadding,
+              ),
               InkWell(
                 child: Icon(
                   Icons.send,
@@ -731,30 +752,29 @@ _send(){
               ),
             ],
           ),
-          Container(height: 15.0,)
+          Container(
+            height: 15.0,
+          )
         ],
       ),
     );
   }
-  
 
-    Widget _buildComments(){
+  Widget _buildComments() {
     return StreamBuilder(
-      stream: _bloc.outputModels,
-      initialData: null,
-      builder: (_, snapshot){
-        List<WorkListCommentModel> models = snapshot.data;
-        return ContainerDataBuilder(
-          data: models,
-          emptyBuilder: _buildEmpty(),
-          skeletonBuilder: _buildContainer(null),
-          bodyBuilder: () => _buildContainer(models),
-          // onRefresh: () => _onRefresh(),
-        );
-      }
-    );
+        stream: _bloc.outputModels,
+        initialData: null,
+        builder: (_, snapshot) {
+          List<WorkListCommentModel> models = snapshot.data;
+          return ContainerDataBuilder(
+            data: models,
+            emptyBuilder: _buildEmpty(),
+            skeletonBuilder: _buildContainer(null),
+            bodyBuilder: () => _buildContainer(models),
+            // onRefresh: () => _onRefresh(),
+          );
+        });
   }
-
 
   // thông tin chi tiết
   Widget detailInformation() {
@@ -843,7 +863,7 @@ _send(){
     );
   }
 
-    Widget _infoDetailItem(String title, String content, {TextStyle style}) {
+  Widget _infoDetailItem(String title, String content, {TextStyle style}) {
     return Container(
       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
       margin: EdgeInsets.only(left: 15.0 / 2),
@@ -874,8 +894,6 @@ _send(){
     );
   }
 
-
-
   Widget _dealInformationV2() {
     return Stack(
       clipBehavior: Clip.none,
@@ -888,11 +906,11 @@ _send(){
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+                border: (index != 2) ? Border.all(width: 1, color: Color(0xFFC3C8D3)) : null),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
+                ( index != 2) ? Center(
                   child: Container(
                     padding: EdgeInsets.only(right: 8.0, top: 8.0),
                     margin: EdgeInsets.only(top: 25.0),
@@ -968,8 +986,8 @@ _send(){
                       ],
                     ),
                   ),
-                ),
-                Container(
+                ) : Container(),
+                (index != 2) ? Container(
                   padding: EdgeInsets.only(right: 8.0),
                   margin: EdgeInsets.only(right: 8.0, top: 16.0),
                   child: Row(
@@ -1100,7 +1118,7 @@ _send(){
                       )
                     ],
                   ),
-                ),
+                ) : Container(),
               ],
             ),
           ),
@@ -1145,7 +1163,7 @@ _send(){
     );
   }
 
-   Widget customerCare() {
+  Widget customerCare() {
     return Container(
       margin: EdgeInsets.only(bottom: 20.0),
       child: Column(
@@ -1153,7 +1171,6 @@ _send(){
       ),
     );
   }
-
 
   Widget customerCareItem() {
     return InkWell(
@@ -1393,7 +1410,7 @@ _send(){
     );
   }
 
-    Widget _tagItem() {
+  Widget _tagItem() {
     return Container(
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
@@ -1428,7 +1445,6 @@ _send(){
       ),
     );
   }
-
 
   Widget _actionItem(String icon, Color color,
       {num number, bool show = false, Function ontap}) {
@@ -1478,7 +1494,7 @@ _send(){
     );
   }
 
-   Widget orderHistory() {
+  Widget orderHistory() {
     return Container(
       padding: EdgeInsets.all(10.0),
       child: Column(
@@ -1534,20 +1550,31 @@ _send(){
           ),
           CustomInfoItem(icon: Assets.iconTime, title: "15:00 14 tháng 7,2022"),
           CustomInfoItem(icon: Assets.iconBranch, title: "Chi nhánh 1"),
-          CustomInfoItem(icon: Assets.iconShipper, title: "Giao hàng - 2022-12-24 13:30"),
+          CustomInfoItem(
+              icon: Assets.iconShipper, title: "Giao hàng - 2022-12-24 13:30"),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(child: CustomInfoItem(icon: Assets.iconDeal, title: "1 sản phẩm")),
+              Expanded(
+                  child: CustomInfoItem(
+                      icon: Assets.iconDeal, title: "1 sản phẩm")),
               Row(
                 children: [
-                  Image.asset(Assets.iconTag,scale: 2.5,),
-                  SizedBox(width: 10.0,),
-                  Text("35.000 VND",style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),)
+                  Image.asset(
+                    Assets.iconTag,
+                    scale: 2.5,
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(
+                    "35.000 VND",
+                    style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  )
                 ],
               )
             ],
@@ -1616,7 +1643,7 @@ _send(){
     return await launch(link);
   }
 
-Widget _buildAvatar(String name) {
+  Widget _buildAvatar(String name) {
     return Container(
       width: 87.0,
       height: 87.0,

@@ -36,3 +36,18 @@ class Validators {
   }
 
 }
+
+// extension NavigatorStateExtension on NavigatorState {
+//   removeHUD() {
+//     bool isHUDOn = false;
+//     popUntil((route) {
+//       if (route.settings.name == AppKeys.keyHUD) {
+//         isHUDOn = true;
+//       }
+//       return true;
+//     });
+
+//     if(isHUDOn)
+//       CustomNavigator.hideProgressDialog();
+//   }
+// }

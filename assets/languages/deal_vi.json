@@ -229,8 +229,19 @@
     "storage": "Bộ nhớ",
     "notification": "Thông báo",
     "allow": "Cho phép",
-    "message_permission": "Chọn Cài đặt vào Thông tin ứng dụng, chọn vào Quyền (Permissions), bật truy cập và vào lại màn hình này để sử dụng quyền"
-
-
+    "message_permission": "Chọn Cài đặt vào Thông tin ứng dụng, chọn vào Quyền (Permissions), bật truy cập và vào lại màn hình này để sử dụng quyền",
+    
+    "search_for_services": "Tìm kiếm dịch vụ",
+    "search_for_products_and_services": "Tìm kiếm sản phẩm - dịch vụ",
+    "done": "Xong",
+    "total_money": "Tổng tiền",
+    "service": "Dịch vụ",
+    "minutes": "Phút",
+    "view_detail": "Xem chi tiết",
+    "service_description": "Mô tả dịch vụ",
+    "add_to_cart": "Thêm giỏ hàng",
+    "quantity": "Số lượng",
+    "buy_now": "Mua ngay",
+    "detail_description": "Mô tả chi tiết"
   }
   

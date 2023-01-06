@@ -8,8 +8,12 @@ import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tags_modal.dart';
+import 'package:epoint_deal_plugin/presentation/order_category/ui/order_category_screen.dart';
+import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
@@ -67,27 +71,29 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               (widget.detailDeal.product.length == 0)
                   ? InkWell(
                       onTap: () async {
-                        if (Global.getListProduct != null) {
-                          List<Map<String, dynamic>> result =
-                              await Global.getListProduct(null);
-                          if (result != null) {
-                            if (result.length > 0) {
-                              productSelected.clear();
-                              for (int i = 0; i < result.length; i++) {
-                                widget.detailDeal.product.add(Product(
-                                    objectType: result[i]["object_type"] ?? "",
-                                    objectName: result[i]["object_name"] ?? "",
-                                    objectCode: result[i]["objectCode"] ?? "",
-                                    objectId: result[i]["object_id"] ?? 0,
-                                    quantity: result[i]["quantity"] ?? 0,
-                                    price: result[i]["price"] ?? 0,
-                                    amount: (result[i]["quantity"] ?? 0) *
-                                        (result[i]["price"] ?? 0)));
-                                productSelected
-                                    .add(widget.detailDeal.product[i].toJson());
-                              }
-                              ;
+                        final result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => OrderCategoryScreen()));
+                        GlobalCart.shared.clearCart();
+                        print(result);
+
+                        if (result != null) {
+                          if (result.length > 0) {
+                            productSelected.clear();
+                            for (int i = 0; i < result.length; i++) {
+                              widget.detailDeal.product.add(Product(
+                                  objectType: result[i]["object_type"] ?? "",
+                                  objectName: result[i]["object_name"] ?? "",
+                                  objectCode: result[i]["objectCode"] ?? "",
+                                  objectId: result[i]["object_id"] ?? 0,
+                                  quantity: result[i]["quantity"] ?? 0,
+                                  price: result[i]["price"] ?? 0,
+                                  amount: (result[i]["quantity"] ?? 0) *
+                                      (result[i]["price"] ?? 0)));
+                              productSelected
+                                  .add(widget.detailDeal.product[i].toJson());
                             }
+                            ;
                           }
                         }
                         setState(() {});
@@ -197,15 +203,34 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                         ),
                         InkWell(
                           onTap: () async {
+                            if (productSelected.length > 0) {
+                              productSelected.forEach((v) {
+                                if (v['object_type'] == 'product') {
+                                  ProductModel item =
+                                      ProductModel.fromJsonOrderDetail(v);
+                                  GlobalCart.shared.addProduct(item, item.qty);
+                                } else {
+                                  ServiceModel item =
+                                      ServiceModel.fromJsonOrderDetail(v);
+                                  GlobalCart.shared.addService(item, item.qty);
+                                }
+                              });
+                            }
+
+                            final result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        OrderCategoryScreen()));
+                            GlobalCart.shared.clearCart();
+                            print(result);
+
                             for (int i = 0;
                                 i < widget.detailDeal.product.length;
                                 i++) {
                               productSelected
                                   .add(widget.detailDeal.product[i].toJson());
                             }
-                            if (Global.getListProduct != null) {
-                              List<Map<String, dynamic>> result =
-                                  await Global.getListProduct(productSelected);
+     
                               if (result != null) {
                                 widget.detailDeal.product.clear();
                                 if (result.length > 0) {
@@ -230,7 +255,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                                   ;
                                 }
                               }
-                            }
+                            
                             setState(() {});
                           },
                           child: Text(
@@ -305,34 +330,33 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
     return Column(
       children: [
         Container(height: 15.0),
-        showAdditionDeal ?
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              AppLocalizations.text(LangKey.moreInformation),
-              style: TextStyle(
-                  fontSize: 16.0,
-                  color: const Color(0xFF0067AC),
-                  fontWeight: FontWeight.normal),
-            ),
-            InkWell(
-              onTap: () {
-                showAdditionDeal = !showAdditionDeal;
-                setState(() {});
-              },
-              child: Text(
-                AppLocalizations.text(LangKey.collapse),
-                style: TextStyle(
-                    fontSize: 16.0,
-                    color: const Color(0xFF0067AC),
-                    fontWeight: FontWeight.normal),
-              ),
-            )
-          ],
-        )
-        
-        : Container(),
+        showAdditionDeal
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.text(LangKey.moreInformation),
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        color: const Color(0xFF0067AC),
+                        fontWeight: FontWeight.normal),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showAdditionDeal = !showAdditionDeal;
+                      setState(() {});
+                    },
+                    child: Text(
+                      AppLocalizations.text(LangKey.collapse),
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: const Color(0xFF0067AC),
+                          fontWeight: FontWeight.normal),
+                    ),
+                  )
+                ],
+              )
+            : Container(),
         // Container(height: 15.0),
         (widget.branchData != null)
             ? Column(
@@ -502,16 +526,16 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
         //     inputType: TextInputType.text),
 
         Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: CustomTextField(
-              maxLines: 4,
-              backgroundColor: Colors.transparent,
-              borderColor: AppColors.borderColor,
-              hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
-              controller: _detailDealText,
-              focusNode: _detailDealFocusNode,
-            ),
+          margin: EdgeInsets.only(bottom: 10),
+          child: CustomTextField(
+            maxLines: 4,
+            backgroundColor: Colors.transparent,
+            borderColor: AppColors.borderColor,
+            hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
+            controller: _detailDealText,
+            focusNode: _detailDealFocusNode,
           ),
+        ),
       ],
     );
   }

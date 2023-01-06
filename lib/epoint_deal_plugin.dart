@@ -7,6 +7,7 @@ import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/list_deal/list_deal_screen.dart';
+import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:flutter/material.dart';
 
 import 'epoint_deal_plugin_platform_interface.dart';
@@ -36,6 +37,9 @@ class EpointDealPlugin {
       Global.createJob = createJob;
 
     }
+
+    Global.branch_code = brandCode;
+    GlobalCart.shared.init();
 
 
     DealConnection.locale = locale;

@@ -283,107 +283,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
     );
   }
 
-  // Widget _dealItem(DealItems item) {
-  //   return Stack(
-  //     children: [
-  //       InkWell(
-  //         onTap: () async {
-  //           bool result = await Navigator.of(context).push(MaterialPageRoute(
-  //               builder: (context) =>
-  //                   DetailDealScreen(deal_code: item.dealCode)));
-
-  //           if (result != null && result) {
-  //             getData(false);
-  //           }
-  //         },
-  //         child: Container(
-  //           margin: EdgeInsets.only(bottom: 10.0),
-  //           decoration: BoxDecoration(
-  //               color: Color(0xFFF6F6F7),
-  //               borderRadius: BorderRadius.circular(5),
-  //               border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 padding: const EdgeInsets.all(5.0),
-  //                 margin: EdgeInsets.only(bottom: 8.0, left: 8.0),
-  //                 child: Row(
-  //                   children: [
-  //                     Container(
-  //                       margin: const EdgeInsets.only(right: 10.0),
-  //                       height: 20.0,
-  //                       width: 20.0,
-  //                       child: Image.asset(Assets.iconDeal),
-  //                     ),
-  //                     Expanded(
-  //                       child: Text(
-  //                         item.dealName,
-  //                         style: TextStyle(
-  //                             fontSize: 16.0,
-  //                             color: AppColors.primaryColor,
-  //                             fontWeight: FontWeight.w500),
-  //                         // maxLines: 1,
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       padding: EdgeInsets.all(15.0 / 1.5),
-  //                       margin: EdgeInsets.only(right: 5),
-  //                       height: 40,
-  //                       decoration: BoxDecoration(
-  //                           color: (item?.backgroundColorJourney != null) ? HexColor(item?.backgroundColorJourney ) : Color(0xFF11B482),
-  //                           borderRadius: BorderRadius.circular(50)),
-  //                       child: Center(
-  //                         child: Text(
-  //                           item.journeyName,
-  //                           style: AppTextStyles.style14WhiteWeight400,
-  //                         ),
-  //                       ),
-  //                     )
-  //                   ],
-  //                 ),
-  //               ),
-  //               infoItem(Assets.iconPerson, item?.customerName ?? "", false),
-  //               infoItem(Assets.iconCall, item?.phone ?? "", false),
-  //               infoItem(
-  //                   Assets.iconChance,
-  //                   "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
-  //                   false),
-  //               infoItem(Assets.iconTime, item?.createdAt ?? "", false),
-  //               infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Positioned(
-  //         right: 10,
-  //         bottom: 20,
-  //         child: InkWell(
-  //           onTap: () async {
-  //             print(item.phone);
-  //             await callPhone(item?.phone ?? "");
-  //           },
-  //           child: Container(
-  //             padding: EdgeInsets.all(20.0 / 2),
-  //             height: 50,
-  //             width: 50,
-  //             decoration: BoxDecoration(
-  //               color: Color.fromRGBO(6, 166, 5, 1),
-  //               borderRadius: BorderRadius.circular(50),
-  //               // border:  Border.all(color: AppColors.white,)
-  //             ),
-  //             child: Center(
-  //                 child: Image.asset(
-  //               Assets.iconCall,
-  //               color: AppColors.white,
-  //             )),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _dealItemV2(DealItems item) {
     return Stack(
       children: [
@@ -455,16 +354,18 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       // )
                       Container(
                         padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                        height: 24,
                         decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
+                            color: HexColor(item.backgroundColorJourney ?? "#0067AC"),
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Center(
-                          child: Text("Mới - 80%",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w600)),
+                          child: Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text(item.journeyName,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600)),
+                          ),
                         ),
                       )
                     ],
@@ -488,14 +389,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       Expanded(
                         child: RichText(
                             text: TextSpan(
-                                text: "27/08/2022" + " ",
+                                text: item.createdAt + " ",
                                 style: TextStyle(
                                     fontSize: 14.0,
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal),
                                 children: [
                               TextSpan(
-                                  text: "(1 ngày)",
+                                  text: "(${item.diffDay ?? 0} ngày)",
                                   style: TextStyle(
                                       color: AppColors.primaryColor,
                                       fontSize: 14.0,
@@ -519,7 +420,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          "35.000 VND",
+                          AppFormat.moneyFormatDot.format(item.amount) + " VND",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               color: AppColors.primaryColor,
@@ -537,7 +438,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
-                          show: true, number: 202, ontap: () async {
+                          show: true, number: item?.relatedWork ?? 0, ontap: () async {
                         bool result =
                             await Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => DetailDealScreen(
@@ -552,7 +453,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         print("1");
                       }),
                       _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                          show: true, number: 30, ontap: () async {
+                          show: true, number: item.appointment ?? 0, ontap: () async {
                         bool result =
                             await Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => DetailDealScreen(
@@ -566,14 +467,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         }
                         print("2");
                       }),
-                      _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
-                          ontap: () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CustomerCareDeal(
-                                  item: item,
-                                )));
-                        print("CustomerCare");
-                      }),
+                      // _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
+                      //     ontap: () async {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //       builder: (context) => CustomerCareDeal(
+                      //             item: item,
+                      //           )));
+                      //   print("CustomerCare");
+                      // }),
                       // _actionItem(Assets.iconTask, Color(0xFFCD6000),
                       //     ontap: () {
                       //   print("4");

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AppColors {
+  static const subColor = Color(0xFF2F2E41);
   static const primaryColor = Color(0xFF0067AC);
   static const primary50Color = Color(0xFFF9DECF);
   static const white = Color(0xFFFFFFFF);
@@ -44,6 +45,7 @@ class AppColors {
   static const grey200Color = Color(0xFFF4F4F4);
   static const greyF8Color = Color(0xFFF8F8F8);
   static const redAccColor = Color(0xFFFF8F8F);
+  static const red500 = Color(0xFFF44336);
   static const blueAccColor = Color(0xFF75AEFF);
   static const colorIconVersion = Color(0xFF4D515E);
   static const colorBgTextField = Color(0xFFF5F5F6);
@@ -58,6 +60,7 @@ class AppColors {
   static const lineBorderColor = Color(0xFFD2D5DB);
   static const grayBackGround = Color(0xFFE5E5E5);
   static const brown = Color(0xFFC59A70);
+  
 
   static const backgroundNotification = Color(0xFFECF4FF);
   static const grey34 = Color(0xFFF3F4F7);
@@ -147,6 +150,26 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+  static TextStyle style14HintNormal = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal);
+  static TextStyle style12HintNormal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal);
+  static TextStyle style17BlackBold = TextStyle(
+      fontSize: AppTextSizes.size17,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
+  static TextStyle style13HintNormal = TextStyle(
+      fontSize: AppTextSizes.size13,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal);
+  static TextStyle style13WhiteNormal = TextStyle(
+      fontSize: AppTextSizes.size13,
+      color: Colors.white,
+      fontWeight: FontWeight.normal);
   static TextStyle style12BlackBold = TextStyle(
       fontSize: AppTextSizes.size12,
       color: AppColors.black,
@@ -514,3 +537,29 @@ class AppSizeWebConfig {
   static const maxHeightWeb =  926.0;
 }
 
+
+extension MoneyFormat on double {
+  String getMoneyFormat() {
+    if (this == null) {
+      return "0 VND";
+    } else {
+      return AppFormat.moneyFormat.format(this) + " VND";
+    }
+  }
+
+  String getMoneyFormatWithoutVND() {
+    if (this == null) {
+      return "0";
+    } else {
+      return AppFormat.moneyFormat.format(this);
+    }
+  }
+
+  String getNumberFormat() {
+    if (this == null) {
+      return "0";
+    } else {
+      return AppFormat.moneyFormat.format(this) + "";
+    }
+  }
+}

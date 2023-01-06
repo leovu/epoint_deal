@@ -23,9 +23,9 @@ class WorkListCommentResponseModel {
 }
 
 class WorkListCommentModel {
-  int manageCommentId;
-  int manageWorkId;
-  int manageParentCommentId;
+  int dealCommentId;
+  int dealId;
+  int dealParentCommentId;
   int staffId;
   String staffName;
   String staffAvatar;
@@ -36,9 +36,9 @@ class WorkListCommentModel {
   bool isSubComment;
 
   WorkListCommentModel(
-      {this.manageCommentId,
-        this.manageWorkId,
-        this.manageParentCommentId,
+      {this.dealCommentId,
+        this.dealId,
+        this.dealParentCommentId,
         this.staffId,
         this.staffName,
         this.staffAvatar,
@@ -48,9 +48,9 @@ class WorkListCommentModel {
         this.listObject});
 
   WorkListCommentModel.fromJson(Map<String, dynamic> json) {
-    manageCommentId = json['manage_comment_id'];
-    manageWorkId = json['manage_work_id'];
-    manageParentCommentId = json['manage_parent_comment_id'];
+    dealCommentId = json['deal_comment_id'];
+    dealId = json['deal_id'];
+    dealParentCommentId = json['deal_parent_comment_id'];
     staffId = json['staff_id'];
     staffName = json['staff_name'];
     staffAvatar = json['staff_avatar'];
@@ -70,9 +70,9 @@ class WorkListCommentModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['manage_comment_id'] = this.manageCommentId;
-    data['manage_work_id'] = this.manageWorkId;
-    data['manage_parent_comment_id'] = this.manageParentCommentId;
+    data['deal_comment_id'] = this.dealCommentId;
+    data['deal_id'] = this.dealId;
+    data['deal_parent_comment_id'] = this.dealParentCommentId;
     data['staff_id'] = this.staffId;
     data['staff_name'] = this.staffName;
     data['staff_avatar'] = this.staffAvatar;

@@ -19,7 +19,7 @@ class HTTPConnection {
     request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'qc': DealConnection.locale.languageCode});
     request.files.add(
       http.MultipartFile(
-        'file_name',
+        model.name,
         model.file.readAsBytes().asStream(),
         model.file.lengthSync(),
         filename: model.file.path.split("/").last,

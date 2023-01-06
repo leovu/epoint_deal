@@ -14,6 +14,9 @@ import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.da
 import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_project_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/product_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/service_detail_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/service_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/work_create_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model.dart';
@@ -35,10 +38,14 @@ import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/list_project_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_detail_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -393,6 +400,55 @@ class DealConnection {
     return null;
   }
 
+    static Future<ListServiceResponseModel> getService(
+      BuildContext context, ServiceRequestModel model) async {
+    ResponseData responseData =
+        await connection.post('/service/get-services', model.toJson());
+    if (responseData.isSuccess) {
+      ListServiceResponseModel data =
+          ListServiceResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+      static Future<ListProductResponseModel> getProduct(
+      BuildContext context, ProductRequestModel model) async {
+    // showLoading(context);
+    ResponseData responseData =
+        await connection.post('/product/get-products', model.toJson());
+    if (responseData.isSuccess) {
+      ListProductResponseModel data =
+          ListProductResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+        static Future<ServiceDetailModel> serviceDetail(
+      BuildContext context, ServiceDetailRequestModel model) async {
+    ResponseData responseData =
+        await connection.post('/service/detail', model.toJson());
+    if (responseData.isSuccess) {
+      ServiceDetailModel data =
+          ServiceDetailModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+   static Future<WorkUploadFileResponseModel> workUploadFile(
+      BuildContext context, MultipartFileModel model) async {
+    ResponseData response =
+        await connection.upload('/manage-work/upload-file', model);
+    if (response.isSuccess) {
+      WorkUploadFileResponseModel responseModel = WorkUploadFileResponseModel.fromJson(response.data);
+
+      return responseModel;
+    }
+    return null;
+  }
+
   
 
   static Future showLoading(BuildContext context) async {
@@ -418,7 +474,7 @@ class DealConnection {
       BuildContext context, WorkListCommentRequestModel model) async {
     // showLoading(context);
     ResponseData responseData = await connection
-        .post('/manage-work/list-comment', model.toJson());
+        .post('/customer-deals/list-comment', model.toJson());
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
           WorkListCommentResponseModel.fromJson(responseData.data);
@@ -431,7 +487,7 @@ class DealConnection {
       BuildContext context, WorkCreateCommentRequestModel model) async {
     showLoading(context);
     ResponseData responseData =
-        await connection.post('/manage-work/created-comment', model.toJson());
+        await connection.post('/customer-deals/created-comment', model.toJson());
         Navigator.of(context).pop();
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =

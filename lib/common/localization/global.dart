@@ -12,4 +12,6 @@ class Global {
 
   static Function createJob;
 
+  static String branch_code;
+
 }

@@ -246,4 +246,18 @@ class LangKey {
   static const String allow = "allow";
   static const String message_permission = "message_permission";
 
+  static const String search_for_services = "search_for_services";
+  static const String search_for_products_and_services = "search_for_products_and_services";
+  static const String done = "done";
+  static const String total_money = "total_money";
+  static const String service = "service";
+
+  static const String minutes = "minutes";
+  static const String view_detail = "view_detail";
+  static const String service_description = "service_description";
+  static const String add_to_cart = "add_to_cart";
+  static const String quantity = "quantity";
+  static const String buy_now = "buy_now";
+  static const String detail_description = "detail_description";
 }
+
