@@ -1,4 +1,3 @@
-
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -17,59 +16,63 @@ class EpointDealPlugin {
     return EpointDealPluginPlatform.instance.getPlatformVersion();
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String deal_code , Function getListProduct, Function createJob}) async {
-    if(domain != null) {
+  static Future<dynamic> open(
+      BuildContext context, Locale locale, String token, int create,
+      {String domain,
+      String brandCode,
+      String deal_code,
+      Function getListProduct,
+      Function createJob,
+      Function editJob}) async {
+    if (domain != null) {
       HTTPConnection.domain = domain;
     }
-    if(brandCode != null) {
+    if (brandCode != null) {
       HTTPConnection.brandCode = brandCode;
     }
-    if(token != null) {
+    if (token != null) {
       HTTPConnection.asscessToken = token;
     }
 
     if (getListProduct != null) {
       Global.getListProduct = getListProduct;
-
     }
 
     if (createJob != null) {
       Global.createJob = createJob;
-
+    }
+    if (editJob != null) {
+      Global.editJob = editJob;
     }
 
     Global.branch_code = brandCode;
     GlobalCart.shared.init();
 
-
     DealConnection.locale = locale;
     DealConnection.buildContext = context;
     AppSizes.init(context);
     await AppLocalizations(DealConnection.locale).load();
-    bool result = await DealConnection.init(token,domain: domain);
-    if(result) {
-      if (create == 0 ) {
-        Map<String, dynamic> event =  await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => CreateDealScreen()));
+    bool result = await DealConnection.init(token, domain: domain);
+    if (result) {
+      if (create == 0) {
+        Map<String, dynamic> event = await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => CreateDealScreen()));
         return event;
       } else if (create == 1) {
-        await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => DetailDealScreen(deal_code: deal_code,)));
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => DetailDealScreen(
+                  deal_code: deal_code,
+                )));
         return null;
       } else {
-        await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => ListDealScreen()));
+        await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ListDealScreen()));
       }
-    }else {
+    } else {
       loginError(DealConnection.buildContext, 'Fail');
       return null;
     }
   }
-
-
 
   static void loginError(BuildContext context, String title) async {
     return showDialog<void>(
@@ -83,10 +86,10 @@ class EpointDealPlugin {
               children: <Widget>[
                 Center(
                     child: Text(
-                      'Cảnh báo\n',
-                      style:
+                  'Cảnh báo\n',
+                  style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                    )),
+                )),
                 Center(child: Text(title)),
               ],
             ),
@@ -104,4 +107,3 @@ class EpointDealPlugin {
     );
   }
 }
-
