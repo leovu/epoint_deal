@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -18,6 +16,7 @@ import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_type_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/list_project_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
 import 'package:epoint_deal_plugin/model/type_card_model.dart';
 import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
@@ -30,6 +29,8 @@ import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_on
 import 'package:epoint_deal_plugin/utils/custom_document_picker.dart';
 import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/widget/custom_chip.dart';
+import 'package:epoint_deal_plugin/widget/custom_column_infomation.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
@@ -41,10 +42,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomerCareDeal extends StatefulWidget {
+  DetailDealData detail;
 
-DetailDealData detail;
-
-   CustomerCareDeal({Key key,this.detail}) : super(key: key);
+  CustomerCareDeal({Key key, this.detail}) : super(key: key);
 
   @override
   _CustomerCareDealState createState() => _CustomerCareDealState();
@@ -178,37 +178,31 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     super.didChangeMetrics();
   }
 
-    _uploadFile() async {
-    File file = await CustomDocumentPicker.openDocument(
-        context,
-        params: [
-          "txt",
-          "pdf",
-          "doc",
-          "docx",
-          "xls",
-          "xlsx",
-          "xlsm",
-          "pptx",
-          "ppt",
-          "jpeg",
-          "jpg",
-          "png"
-        ]
-    );
+  _uploadFile() async {
+    File file = await CustomDocumentPicker.openDocument(context, params: [
+      "txt",
+      "pdf",
+      "doc",
+      "docx",
+      "xls",
+      "xlsx",
+      "xlsm",
+      "pptx",
+      "ppt",
+      "jpeg",
+      "jpg",
+      "png"
+    ]);
 
-    if(file != null){
-      _bloc.workUploadFile(MultipartFileModel(
-          name: "link",
-          file: file
-      ));
+    if (file != null) {
+      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
     }
   }
 
-    static Future<List<File>> openMultiDocument(
-      BuildContext context, {
-        List<String> params,
-      }) async {
+  static Future<List<File>> openMultiDocument(
+    BuildContext context, {
+    List<String> params,
+  }) async {
     try {
       bool permission = true;
       permission = await CustomPermissionRequest.request(
@@ -220,7 +214,10 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     }
   }
 
-
+  String getNameFromPath(String path) {
+    String event = path ?? "";
+    return event.contains("/") ? event.split("/").last : event;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -274,7 +271,6 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           SizedBox(height: 9.0),
           _buildTextField(
               AppLocalizations.text(LangKey.enterWorkTitle),
-              // customerTypeSelected?.customerTypeName ?? "",
               "",
               Assets.iconWorkTitle,
               true,
@@ -436,36 +432,78 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               focusNode: _enterWorkDescFocusNode,
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: InkWell(
-              onTap: () {
-                // selectFile();
-              // _showDocumentPicker();
-                
-              },
-              child: DottedBorder(
-                color: AppColors.borderColor,
-                borderType: BorderType.RRect,
-                radius: Radius.circular(10),
-                padding: EdgeInsets.all(6),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  child: Container(
-                    height: 40.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Text(
-                          AppLocalizations.text(
-                              LangKey.pressUploadPhotosAndVideos),
-                          style: TextStyle(
-                              color: Color(0xFF9E9E9E),
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400)),
+          CustomColumnInformation(
+            title: "File",
+            child: Column(
+              children: [
+                StreamBuilder(
+                    stream: _bloc.outputFiles,
+                    initialData: null,
+                    builder: (_, snapshot) {
+                      List<WorkUploadFileResponseModel> models =
+                          snapshot.data ?? [];
+                      return models.isEmpty
+                          ? Container()
+                          : Container(
+                              padding:
+                                  EdgeInsets.only(bottom: AppSizes.minPadding),
+                              alignment: Alignment.centerLeft,
+                              child: Wrap(
+                                spacing: AppSizes.minPadding,
+                                runSpacing: AppSizes.minPadding,
+                                children: models
+                                    .map((e) => Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CustomChip(
+                                              radius: 5.0,
+                                              backgroundColor:
+                                                  Color(0xFFC4C4C4),
+                                              text: getNameFromPath(e.path),
+                                              style: AppTextStyles
+                                                  .style13WhiteNormal,
+                                              onClose: () =>
+                                                  _bloc.removeFile(e),
+                                            )
+                                          ],
+                                        ))
+                                    .toList(),
+                              ),
+                            );
+                    }),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: InkWell(
+                    onTap: () {
+                      // selectFile();
+                      // _showDocumentPicker();
+                      _uploadFile();
+                    },
+                    child: DottedBorder(
+                      color: AppColors.borderColor,
+                      borderType: BorderType.RRect,
+                      radius: Radius.circular(10),
+                      padding: EdgeInsets.all(6),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        child: Container(
+                          height: 40.0,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(
+                            child: Text(
+                                AppLocalizations.text(
+                                    LangKey.pressUploadPhotosAndVideos),
+                                style: TextStyle(
+                                    color: Color(0xFF9E9E9E),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
 
@@ -576,44 +614,46 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       )
                     ],
                   ),
-                  (widget.detail.typeCustomer == "business") ? Container(
-                    margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Flexible(
-                        //   fit: FlexFit.loose,
-                        //   child: Container(
-                        //     height: 36.0,
-                        //     // width: 70.0,
-                        //     decoration: BoxDecoration(
-                        //         color: Colors.white,
-                        //         boxShadow: [
-                        //           BoxShadow(
-                        //             offset: Offset(0, 1),
-                        //             blurRadius: 2,
-                        //             color: Colors.black.withOpacity(0.3),
-                        //           )
-                        //         ],
-                        //         borderRadius: BorderRadius.circular(5.0)),
-                        //     child: Image.asset(Assets.imgFeatureDeveloping),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   width: 11.0,
-                        // ),
-                        Text(
-                          widget.detail.dealName,
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              color: const Color(0xFF121212),
-                              fontWeight: FontWeight.w600),
+                  (widget.detail.typeCustomer == "business")
+                      ? Container(
+                          margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Flexible(
+                              //   fit: FlexFit.loose,
+                              //   child: Container(
+                              //     height: 36.0,
+                              //     // width: 70.0,
+                              //     decoration: BoxDecoration(
+                              //         color: Colors.white,
+                              //         boxShadow: [
+                              //           BoxShadow(
+                              //             offset: Offset(0, 1),
+                              //             blurRadius: 2,
+                              //             color: Colors.black.withOpacity(0.3),
+                              //           )
+                              //         ],
+                              //         borderRadius: BorderRadius.circular(5.0)),
+                              //     child: Image.asset(Assets.imgFeatureDeveloping),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   width: 11.0,
+                              // ),
+                              Text(
+                                widget.detail.dealName,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: const Color(0xFF121212),
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  ) : Container(
-                    height: 15.0,
-                  ),
+                      : Container(
+                          height: 15.0,
+                        ),
 
                   _buildTextField(
                       AppLocalizations.text(LangKey.chooseSupporter),
@@ -689,13 +729,13 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
                         if (listTagsSelected != null) {
                           List<ListTag> listTag = [];
-                          // widget.detailDeal.tag = [];
                           tagsString = "";
                           tagsData = listTagsSelected;
 
                           for (int i = 0; i < tagsData.length; i++) {
                             if (tagsData[i].selected) {
-                              listTag.add(ListTag(manageTagId: tagsData[i].tagId));
+                              listTag
+                                  .add(ListTag(manageTagId: tagsData[i].tagId));
                               if (tagsString == "") {
                                 tagsString = tagsData[i].name;
                               } else {
@@ -714,14 +754,14 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               builder: (context) =>
                                   TagsModal(tagsData: tagsData)));
                       if (listTagsSelected != null) {
-                        // widget.detailDeal.tag = [];
+                        List<ListTag> listTag = [];
                         tagsString = "";
                         tagsData = listTagsSelected;
 
                         for (int i = 0; i < listTagsSelected.length; i++) {
                           if (listTagsSelected[i].selected) {
-                            // widget.detailDeal.tag.add(tagsSelected[i].tagId);
-
+                            listTag
+                                  .add(ListTag(manageTagId: tagsData[i].tagId));
                             if (tagsString == "") {
                               tagsString = listTagsSelected[i].name;
                             } else {
@@ -729,96 +769,13 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                             }
                           }
                         }
+                        addWorkModel.listTag = listTag;
                         setState(() {});
                       }
                     }
                   }),
-
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       AppLocalizations.text(LangKey.tagType),
-                  //       style: TextStyle(
-                  //           fontSize: 14.0,
-                  //           color: const Color(0xFF121212),
-                  //           fontWeight: FontWeight.w600),
-                  //     ),
-                  //     SizedBox(
-                  //       width: 20.0,
-                  //     ),
-                  //     InkWell(
-                  //       onTap: () {
-                  //         typeCardData[0].selected = true;
-                  //         typeCardData[1].selected = false;
-                  //         typeCardSelected = typeCardData[0];
-
-                  //         setState(() {});
-                  //       },
-                  //       child: Row(
-                  //         children: [
-                  //           typeCardData[0].selected
-                  //               ? Icon(
-                  //                   Icons.radio_button_on,
-                  //                   color: AppColors.primaryColor,
-                  //                 )
-                  //               : Icon(Icons.radio_button_off),
-                  //           SizedBox(
-                  //             width: 5.0,
-                  //           ),
-                  //           Text(
-                  //             typeCardData[0].name,
-                  //             style: TextStyle(
-                  //                 fontSize: 15.0,
-                  //                 color: typeCardData[0].selected
-                  //                     ? AppColors.primaryColor
-                  //                     : Color(0xFF121212),
-                  //                 fontWeight: FontWeight.normal),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     SizedBox(width: 20),
-                  //     InkWell(
-                  //       onTap: () {
-                  //         typeCardData[0].selected = false;
-                  //         typeCardData[1].selected = true;
-                  //         typeCardSelected = typeCardData[1];
-
-                  //         setState(() {});
-                  //       },
-                  //       child: Row(
-                  //         children: [
-                  //           typeCardData[1].selected
-                  //               ? Icon(
-                  //                   Icons.radio_button_on,
-                  //                   color: AppColors.primaryColor,
-                  //                 )
-                  //               : Icon(Icons.radio_button_off),
-                  //           SizedBox(
-                  //             width: 5.0,
-                  //           ),
-                  //           Text(
-                  //             typeCardData[1].name,
-                  //             style: TextStyle(
-                  //                 fontSize: 15.0,
-                  //                 color: typeCardData[1].selected
-                  //                     ? AppColors.primaryColor
-                  //                     : Color.fromARGB(255, 56, 48, 48),
-                  //                 fontWeight: FontWeight.normal),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-
-                  // SizedBox(
-                  //   height: 15.0,
-                  // ),
-
                   // chon du an
                   _buildTextField(
-                      // ListProjectItems projectSelected
                       AppLocalizations.text(LangKey.chooseProject),
                       projectSelected?.manageProjectName ?? "",
                       Assets.iconProject,
@@ -839,7 +796,6 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
                       addWorkModel.manageProjectId =
                           projectSelected.manageProjectId;
-                      // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
                       setState(() {});
                     }
                   }),
@@ -946,7 +902,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             child: CustomMenuBottomSheet(
               title: AppLocalizations.text(LangKey.toDate),
               widget: CustomDatePicker(
-                initTime: selectedDate ,
+                initTime: selectedDate,
                 maximumTime: DateTime(2050, 12, 31),
                 minimumTime: _fromDate ?? _now,
                 dateOrder: DatePickerDateOrder.dmy,
@@ -1034,50 +990,49 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-
-          if ( (_titleText.text == "") || (_toDateText.text == "") || (addWorkModel.manageStatusId == 0) || (addWorkModel.processorId == 0)) {
-
-            DealConnection.showMyDialog(context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
-
+          if ((_titleText.text == "") ||
+              (_toDateText.text == "") ||
+              (addWorkModel.manageStatusId == 0) ||
+              (addWorkModel.processorId == 0)) {
+            DealConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DealConnection.showLoading(context);
             DescriptionModelResponse result = await DealConnection.addWork(
-              context,
-              AddWorkRequestModel(
-                  manageWorkTitle: _titleText.text ?? "",
-                  manageWorkCustomerType: "lead",
-                  manageTypeWorkId: addWorkModel.manageTypeWorkId,
-                  from_date:  _fromDateText.text ?? "",
-                  to_date:_toDateText.text ?? "" ,
-                  // date_start: _fromDateText.text ?? "",
-                  // date_finish: _toDateText.text ?? "",
-                  time: null,
-                  timeType: null,
-                  processorId: addWorkModel.processorId,
-                  approveId: null,
-                  remindWork: _switchValue ? RemindWork(
-                    dateRemind: _toDateText.text ?? "",
-                    timeType: "m",
-                    time: 15,
-                    description: "Nhắc nhở " + _enterWorkDescText.text  
-
-                  ) : null,
-                  progress: null,
-                  staffSupport: addWorkModel.staffSupport,
-                  parentId: null,
-                  description: _enterWorkDescText.text ?? "",
-                  manageProjectId: addWorkModel.manageProjectId,
-                  // customerId: widget.item.dealCode,
-                  listTag: addWorkModel.listTag,
-                  typeCardWork: null,
-                  priority: 0,
-                  manageStatusId: addWorkModel.manageStatusId,
-                  isApproveId: has_approved ? 1 : 0,
-                  repeatWork: null,
-                  createObjectType: "",
-                  createObjectId: null));
-          Navigator.of(context).pop();
-      if (result != null) {
+                context,
+                AddWorkRequestModel(
+                    manageWorkTitle: _titleText.text ?? "",
+                    manageWorkCustomerType: "lead",
+                    manageTypeWorkId: addWorkModel.manageTypeWorkId,
+                    from_date: _fromDateText.text ?? "",
+                    to_date: _toDateText.text ?? "",
+                    time: null,
+                    timeType: null,
+                    processorId: addWorkModel.processorId,
+                    approveId: null,
+                    remindWork: _switchValue
+                        ? RemindWork(
+                            dateRemind: _toDateText.text ?? "",
+                            timeType: "m",
+                            time: 15,
+                            description: "Nhắc nhở " + _enterWorkDescText.text)
+                        : null,
+                    progress: null,
+                    staffSupport: addWorkModel.staffSupport,
+                    parentId: null,
+                    description: _enterWorkDescText.text ?? "",
+                    manageProjectId: addWorkModel.manageProjectId,
+                    customerId: widget.detail.dealId,
+                    listTag: addWorkModel.listTag,
+                    typeCardWork: null,
+                    priority: 0,
+                    manageStatusId: addWorkModel.manageStatusId,
+                    isApproveId: has_approved ? 1 : 0,
+                    repeatWork: null,
+                    createObjectType: "",
+                    createObjectId: null));
+            Navigator.of(context).pop();
+            if (result != null) {
               if (result.errorCode == 0) {
                 print(result.errorDescription);
 
@@ -1085,7 +1040,6 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     context, result.errorDescription);
 
                 Navigator.of(context).pop(true);
-
               } else {
                 DealConnection.showMyDialog(context, result.errorDescription);
               }

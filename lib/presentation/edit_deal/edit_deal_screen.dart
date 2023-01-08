@@ -1,4 +1,3 @@
-
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -89,18 +88,17 @@ class _EditDealScreenState extends State<EditDealScreen>
   List<BranchData> branchData;
   BranchData branchSelected;
 
-   bool selectedCustomer = false;
+  bool selectedCustomer = false;
 
   List<WorkListStaffModel> _modelStaff = [];
   List<WorkListStaffModel> _modelStaffSelected = [
     WorkListStaffModel(
-      staffId:  0,
-           staffName: "",
-           staffAvatar:  "",
-           branchId:  0,
-           departmentId: 0,
-           isSelected: false
-    )
+        staffId: 0,
+        staffName: "",
+        staffAvatar: "",
+        branchId: 0,
+        departmentId: 0,
+        isSelected: false)
   ];
 
   List<CustomerTypeModel> customerTypeData = [
@@ -138,7 +136,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       journeyCode: "",
       closingDate: "",
       branchCode: "",
-      tag: <int>[],
+      tag: [],
       orderSourceId: 0,
       probability: 0,
       dealDescription: "",
@@ -185,14 +183,13 @@ class _EditDealScreenState extends State<EditDealScreen>
         tagsData = tags.data;
       }
 
-       var response = await DealConnection.workListStaff(
-        context, WorkListStaffRequestModel(manageProjectId: null));
-    if (response != null) {
-      _modelStaff = response.data ?? [];
-    } else {
-      _modelStaff = [];
-    }
-    
+      var response = await DealConnection.workListStaff(
+          context, WorkListStaffRequestModel(manageProjectId: null));
+      if (response != null) {
+        _modelStaff = response.data ?? [];
+      } else {
+        _modelStaff = [];
+      }
 
       bindingData();
     });
@@ -200,45 +197,26 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   void bindingData() async {
     _dealNameText.text = widget.detail?.dealName ?? "";
+    detailDeal.dealName = widget.detail?.dealName ?? "";
 
-    // allocatorSelected = AllocatorData(
-    //     fullName: widget.detail?.staffName,
-    //     staffId: widget.detail?.saleId,
-    //     selected: true);
-
-    // for (int i = 0; i < allocatorData.length; i++) {
-    //   if ((widget.detail?.saleId ?? 0) == allocatorData[i].staffId) {
-    //     allocatorData[i].selected = true;
-    //     allocatorSelected = allocatorData[i];
-    //      _modelSelected = [WorkListStaffModel(
-    //        staffId: allocatorSelected.staffId,
-    //        staffName: allocatorSelected.fullName,
-    //        isSelected: true
-    //      )]; 
-
-    //   } else {
-    //     allocatorData[i].selected = false;
-    //   }
-    // }
-
-    for (int i = 0; i < _modelStaff.length; i++) {
+      for (int i = 0; i < _modelStaff.length; i++) {
       if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
         // allocatorSelected = allocatorData[i];
-         _modelStaffSelected = [WorkListStaffModel(
-           staffId:  _modelStaff[i].staffId,
-           staffName:  _modelStaff[i].staffName,
-           staffAvatar:  _modelStaff[i].staffAvatar,
-           branchId:  _modelStaff[i].branchId,
-           departmentId:  _modelStaff[i].departmentId,
-           isSelected:  _modelStaff[i].isSelected
-         )]; 
-
+        _modelStaffSelected = [
+          WorkListStaffModel(
+              staffId: _modelStaff[i].staffId,
+              staffName: _modelStaff[i].staffName,
+              staffAvatar: _modelStaff[i].staffAvatar,
+              branchId: _modelStaff[i].branchId,
+              departmentId: _modelStaff[i].departmentId,
+              isSelected: _modelStaff[i].isSelected)
+        ];
+         detailDeal.saleId = _modelStaffSelected[0].staffId;
       } else {
         _modelStaff[i].isSelected = false;
       }
     }
-
 
     for (int i = 0; i < customerTypeData.length; i++) {
       if ((widget.detail?.typeCustomer ?? 0) ==
@@ -246,17 +224,20 @@ class _EditDealScreenState extends State<EditDealScreen>
         customerTypeData[i].selected = true;
 
         customerTypeSelected = customerTypeData[i];
+        detailDeal.typeCustomer = customerTypeSelected.customerTypeNameEn;
       } else {
         customerTypeData[i].selected = false;
       }
     }
 
     if (customerTypeSelected.customerTypeNameEn == "customer") {
+      selectedCustomer = true;
       customerSelected = DealItems(
           customerCode: widget.detail?.customerCode,
           customerName: widget.detail?.customerName);
       leadItem = ListCustomLeadItems(customerLeadCode: "");
     } else {
+      selectedCustomer = false;
       customerSelected = DealItems(
           customerCode: widget.detail?.customerCode,
           customerName: widget.detail?.customerName);
@@ -282,15 +263,14 @@ class _EditDealScreenState extends State<EditDealScreen>
           pipeLineData[i].pipelineCode.toLowerCase()) {
         pipeLineData[i].selected = true;
         pipelineSelected = pipeLineData[i];
+        detailDeal.pipelineCode = pipelineSelected.pipelineCode;
       } else {
         pipeLineData[i].selected = false;
       }
     }
 
-    var journeys =
-        await DealConnection.getJourney(context, GetJourneyModelRequest(
-            pipelineCode: [pipelineSelected.pipelineCode]
-          ));
+    var journeys = await DealConnection.getJourney(context,
+        GetJourneyModelRequest(pipelineCode: [pipelineSelected.pipelineCode]));
     if (journeys != null) {
       journeysData = journeys.data;
     }
@@ -300,6 +280,7 @@ class _EditDealScreenState extends State<EditDealScreen>
           journeysData[i].journeyCode.toLowerCase()) {
         journeysData[i].selected = true;
         journeySelected = journeysData[i];
+        detailDeal.journeyCode = journeySelected.journeyCode;
       } else {
         journeysData[i].selected = false;
       }
@@ -311,13 +292,16 @@ class _EditDealScreenState extends State<EditDealScreen>
       if (result != null) {
         result.selected = true;
         branchSelected = result;
+        detailDeal.branchCode = branchSelected.branchCode;
       }
     }
 
     if (widget.detail.tag.length > 0 && tagsData != null) {
+      List<int> tagInt = [];
       for (var tag in tagsData) {
         for (int tagID in widget.detail.tag) {
           if (tag.tagId == tagID) {
+            tagInt.add(tag.tagId);
             tag.selected = true;
             tagsSelected?.add(tag);
           }
@@ -330,12 +314,14 @@ class _EditDealScreenState extends State<EditDealScreen>
           tagsString += ", ${tagsSelected[i].name}";
         }
       }
+
+      detailDeal.tag = tagInt;
     }
 
     orderSourceSelected = OrderSourceData(
         orderSourceName: widget.detail?.orderSourceName ?? "", selected: true);
 
-    detailDeal.orderSourceId = orderSourceSelected.orderSourceId;
+    detailDeal.orderSourceId = orderSourceSelected.orderSourceId; // tra them order ID
 
     _closingDueDateText.text = DateFormat("dd/MM/yyyy")
         .format(DateTime.parse(widget.detail.closingDate));
@@ -459,16 +445,16 @@ class _EditDealScreenState extends State<EditDealScreen>
           //   // print("loại khách hàng");
           // }),
 
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               InkWell(
                 onTap: () {
                   // detailPotential.customerType = "business";
                   customerTypeSelected = customerTypeData[1];
-                  customerSelected = DealItems(customerCode: "", customerName: "");
-              leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  customerSelected =
+                      DealItems(customerCode: "", customerName: "");
+                  leadItem = ListCustomLeadItems(customerLeadCode: "");
                   selectedCustomer = false;
                   setState(() {});
                 },
@@ -501,13 +487,13 @@ class _EditDealScreenState extends State<EditDealScreen>
                   ),
                 ),
               ),
-
               InkWell(
                 onTap: () {
                   // detailPotential.customerType = "personal";
                   customerTypeSelected = customerTypeData[0];
-              customerSelected = DealItems(customerCode: "", customerName: "");
-              leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  customerSelected =
+                      DealItems(customerCode: "", customerName: "");
+                  leadItem = ListCustomLeadItems(customerLeadCode: "");
                   selectedCustomer = true;
                   setState(() {});
                 },
@@ -597,72 +583,76 @@ class _EditDealScreenState extends State<EditDealScreen>
           }),
 
           !selectedCustomer
-              ? (customerSelected.customerCode != "") ? Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 15.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Loại khách hàng: ",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400),
+              ? (customerSelected.customerCode != "")
+                  ? Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 15.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Loại khách hàng: ",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              Text(
+                                "Doanh nghiệp",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            width: 20.0,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 15.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Số điện thoại: ",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              Text(
+                                "0347621673",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Doanh nghiệp",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 15.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Số điện thoại: ",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          Text(
-                            "0347621673",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ) : Container()
+                        ),
+                      ],
+                    )
+                  : Container()
               : Container(),
 
           // phone
-         selectedCustomer ? _buildTextField(
-            AppLocalizations.text(LangKey.inputPhonenumber),
-            "",
-            Assets.iconCall,
-            false,
-            false,
-            true,
-            fillText: _phoneNumberText,
-            focusNode: _phoneNumberFocusNode,
-            inputType: TextInputType.number,
-          ) : Container(),
+          selectedCustomer
+              ? _buildTextField(
+                  AppLocalizations.text(LangKey.inputPhonenumber),
+                  "",
+                  Assets.iconCall,
+                  false,
+                  false,
+                  true,
+                  fillText: _phoneNumberText,
+                  focusNode: _phoneNumberFocusNode,
+                  inputType: TextInputType.number,
+                )
+              : Container(),
 
 // nhập tên deal
           _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
@@ -742,9 +732,10 @@ class _EditDealScreenState extends State<EditDealScreen>
                               pipelineSelected = pipeline;
                               DealConnection.showLoading(context);
                               var journeys = await DealConnection.getJourney(
-                                  context, GetJourneyModelRequest(
-            pipelineCode: [pipelineSelected.pipelineCode]
-          ));
+                                  context,
+                                  GetJourneyModelRequest(pipelineCode: [
+                                    pipelineSelected.pipelineCode
+                                  ]));
                               Navigator.of(context).pop();
                               if (journeys != null) {
                                 journeysData = journeys.data;
@@ -772,9 +763,10 @@ class _EditDealScreenState extends State<EditDealScreen>
                             pipelineSelected = pipeline;
                             DealConnection.showLoading(context);
                             var journeys = await DealConnection.getJourney(
-                                context, GetJourneyModelRequest(
-            pipelineCode: [pipelineSelected.pipelineCode]
-          ));
+                                context,
+                                GetJourneyModelRequest(pipelineCode: [
+                                  pipelineSelected.pipelineCode
+                                ]));
                             Navigator.of(context).pop();
                             if (journeys != null) {
                               journeysData = journeys.data;
@@ -788,7 +780,9 @@ class _EditDealScreenState extends State<EditDealScreen>
                 // chọn người được phân bổ
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
-                   (_modelStaffSelected != null) ? _modelStaffSelected[0]?.staffName ?? "" : "",
+                    (_modelStaffSelected != null)
+                        ? _modelStaffSelected[0]?.staffName ?? ""
+                        : "",
                     Assets.iconName,
                     true,
                     true,
@@ -796,70 +790,69 @@ class _EditDealScreenState extends State<EditDealScreen>
                   FocusScope.of(context).unfocus();
                   print("Chọn người được phân bổ");
 
-                   _modelStaffSelected = await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        MultipleStaffScreenDeal(
-                                          models: _modelStaffSelected,
-                                        )));
+                  _modelStaffSelected =
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MultipleStaffScreenDeal(
+                                models: _modelStaffSelected,
+                              )));
 
-                            if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
-                              print(_modelStaffSelected);
-                              
-                                  setState(() {});
-                              }
-                    }
+                  if (_modelStaffSelected != null &&
+                      _modelStaffSelected.length > 0) {
+                    print(_modelStaffSelected);
 
+                    setState(() {});
+                  }
+                }
 
-                  // if (allocatorData == null || allocatorData.length == 0) {
-                  //   DealConnection.showLoading(context);
-                  //   var allocators = await DealConnection.getAllocator(context);
-                  //   Navigator.of(context).pop();
+                    // if (allocatorData == null || allocatorData.length == 0) {
+                    //   DealConnection.showLoading(context);
+                    //   var allocators = await DealConnection.getAllocator(context);
+                    //   Navigator.of(context).pop();
 
-                  //   if (allocators != null) {
-                  //     allocatorData = allocators.data;
+                    //   if (allocators != null) {
+                    //     allocatorData = allocators.data;
 
-                  //     AllocatorData allocator = await showModalBottomSheet(
-                  //         context: context,
-                  //         useRootNavigator: true,
-                  //         isScrollControlled: true,
-                  //         backgroundColor: Colors.transparent,
-                  //         builder: (context) {
-                  //           return AllocatorModal(
-                  //               allocatorData: allocatorData,
-                  //               allocatorSelected: allocatorSelected);
-                  //         });
-                  //     if (allocator != null) {
-                  //       allocatorSelected = allocator;
-                  //       // widget.detailPotential?.saleId = allocatorSelected.staffId;
-                  //       setState(() {});
-                  //     }
-                  //   }
-                  // } else {
-                  //   AllocatorData allocator = await showModalBottomSheet(
-                  //       context: context,
-                  //       useRootNavigator: true,
-                  //       isScrollControlled: true,
-                  //       backgroundColor: Colors.transparent,
-                  //       builder: (context) {
-                  //         return GestureDetector(
-                  //           child: AllocatorModal(
-                  //             allocatorData: allocatorData,
-                  //           ),
-                  //           onTap: () {
-                  //             Navigator.of(context).pop();
-                  //           },
-                  //           behavior: HitTestBehavior.opaque,
-                  //         );
-                  //       });
-                  //   if (allocator != null) {
-                  //     allocatorSelected = allocator;
-                  //     // widget.detailPotential?.saleId = allocatorSelected.staffId;
-                  //     setState(() {});
-                  //   }
-                  // }
-                // }
-                ),
+                    //     AllocatorData allocator = await showModalBottomSheet(
+                    //         context: context,
+                    //         useRootNavigator: true,
+                    //         isScrollControlled: true,
+                    //         backgroundColor: Colors.transparent,
+                    //         builder: (context) {
+                    //           return AllocatorModal(
+                    //               allocatorData: allocatorData,
+                    //               allocatorSelected: allocatorSelected);
+                    //         });
+                    //     if (allocator != null) {
+                    //       allocatorSelected = allocator;
+                    //       // widget.detailPotential?.saleId = allocatorSelected.staffId;
+                    //       setState(() {});
+                    //     }
+                    //   }
+                    // } else {
+                    //   AllocatorData allocator = await showModalBottomSheet(
+                    //       context: context,
+                    //       useRootNavigator: true,
+                    //       isScrollControlled: true,
+                    //       backgroundColor: Colors.transparent,
+                    //       builder: (context) {
+                    //         return GestureDetector(
+                    //           child: AllocatorModal(
+                    //             allocatorData: allocatorData,
+                    //           ),
+                    //           onTap: () {
+                    //             Navigator.of(context).pop();
+                    //           },
+                    //           behavior: HitTestBehavior.opaque,
+                    //         );
+                    //       });
+                    //   if (allocator != null) {
+                    //     allocatorSelected = allocator;
+                    //     // widget.detailPotential?.saleId = allocatorSelected.staffId;
+                    //     setState(() {});
+                    //   }
+                    // }
+                    // }
+                    ),
 
                 // chọn hành trình
                 _buildTextField(
@@ -891,67 +884,73 @@ class _EditDealScreenState extends State<EditDealScreen>
                   }
                 }),
 
-                     _buildTextField(AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
-              tagsString, Assets.iconTag, false, true, false, ontap: () async {
-            print("Tag");
-            FocusScope.of(context).unfocus();
-            List<int> tagsSeletecd = [];
+                _buildTextField(
+                    AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
+                    tagsString,
+                    Assets.iconTag,
+                    false,
+                    true,
+                    false, ontap: () async {
+                  print("Tag");
+                  FocusScope.of(context).unfocus();
+                  if (tagsData == null || tagsData.length == 0) {
+                    DealConnection.showLoading(context);
+                    var tags = await DealConnection.getTag(context);
+                    Navigator.of(context).pop();
+                    if (tags != null) {
+                      List<int> tagsSeletecd = [];
+                      tagsData = tags.data;
 
-            if (tagsData == null || tagsData.length == 0) {
-              DealConnection.showLoading(context);
-              var tags = await DealConnection.getTag(context);
-              Navigator.of(context).pop();
-              if (tags != null) {
-                tagsData = tags.data;
+                      var listTagsSelected = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  TagsModal(tagsData: tagsData)));
 
-                var listTagsSelected = await Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => TagsModal(tagsData: tagsData)));
+                      if (listTagsSelected != null) {
+                        // widget.detailDeal.tag = [];
+                        tagsString = "";
+                        tagsData = listTagsSelected;
 
-                if (listTagsSelected != null) {
-                  // widget.detailDeal.tag = [];
-                  tagsString = "";
-                  tagsData = listTagsSelected;
-
-                  for (int i = 0; i < tagsData.length; i++) {
-                    if (tagsData[i].selected) {
-                      tagsSeletecd.add(tagsData[i].tagId);
-                      if (tagsString == "") {
-                        tagsString = tagsData[i].name;
-                      } else {
-                        tagsString += ", ${tagsData[i].name}";
+                        for (int i = 0; i < tagsData.length; i++) {
+                          if (tagsData[i].selected) {
+                            tagsSeletecd.add(tagsData[i].tagId);
+                            if (tagsString == "") {
+                              tagsString = tagsData[i].name;
+                            } else {
+                              tagsString += ", ${tagsData[i].name}";
+                            }
+                          }
+                        }
+                        detailDeal.tag = tagsSeletecd;
+                        setState(() {});
                       }
                     }
-                  }
-                  // detailPotential.tagId = tagsSeletecd;
-                  setState(() {});
-                }
-              }
-            } else {
-              var listTagsSelected = await Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => TagsModal(tagsData: tagsData)));
-              if (listTagsSelected != null) {
-                // widget.detailDeal.tag = [];
-                tagsString = "";
-                tagsData = listTagsSelected;
+                  } else {
+                    var listTagsSelected = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                TagsModal(tagsData: tagsData)));
+                    if (listTagsSelected != null) {
+                      List<int> tagsSeletecd = [];
+                      tagsString = "";
+                      tagsData = listTagsSelected;
 
-                for (int i = 0; i < tagsData.length; i++) {
-                  if (tagsData[i].selected) {
-                    tagsSeletecd.add(tagsData[i].tagId);
-                    if (tagsString == "") {
-                      tagsString = tagsData[i].name;
-                    } else {
-                      tagsString += ", ${tagsData[i].name}";
+                      for (int i = 0; i < tagsData.length; i++) {
+                        if (tagsData[i].selected) {
+                          tagsSeletecd.add(tagsData[i].tagId);
+                          if (tagsString == "") {
+                            tagsString = tagsData[i].name;
+                          } else {
+                            tagsString += ", ${tagsData[i].name}";
+                          }
+                        }
+                      }
+                      detailDeal.tag = tagsSeletecd;
+                      setState(() {});
                     }
                   }
-                }
-                // detailPotential.tagId = tagsSeletecd;
-                setState(() {});
-              }
-            }
-          }),
-          
+                }),
+
 // // chọn ngày kết thúc thực tế
 //                 Container(
 //                     margin: const EdgeInsets.only(bottom: 10.0),
@@ -1060,7 +1059,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 : Text(
                     content,
                     style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),
@@ -1151,76 +1150,12 @@ class _EditDealScreenState extends State<EditDealScreen>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-          if (_phoneNumberText.text.isNotEmpty) {}
-          if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
-              (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-            print("so dien thoai sai oy");
-            DealConnection.showMyDialog(context,
-                AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat));
-            return;
-          }
-
-          if (_dealNameText.text == "" ||
-              // _phoneNumberText.text == "" ||
-              customerTypeSelected == null ||
-              pipelineSelected == null ||
-              journeySelected == null ||
-              customerSelected == null ||
-              selectedClosingDueDate == null) {
-            DealConnection.showMyDialog(context,
-                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
-                warning: true);
+                    if (selectedCustomer) {
+            await updateDealCustomer();
           } else {
-            DealConnection.showLoading(context);
-
-            double amount = 0;
-            if (widget.detail.productBuy.length > 0) {
-              for (int i = 0; i < widget.detail.productBuy.length; i++) {
-                productUpdate.add(Product(
-                    objectType: widget.detail.productBuy[i].objectType,
-                    objectName: widget.detail.productBuy[i].objectName,
-                    objectCode: "",
-                    objectId: widget.detail.productBuy[i].objectId,
-                    quantity: widget.detail.productBuy[i].quantity,
-                    price: widget.detail.productBuy[i].price,
-                    amount: widget.detail.productBuy[i].amount));
-
-                amount += widget.detail.productBuy[i].amount *
-                    widget.detail.productBuy[i].quantity;
-              }
-            }
-            UpdateDealModelResponse result = await DealConnection.updateDeal(
-                context,
-                UpdateDealModelRequest(
-                    dealCode: widget.detail.dealCode,
-                    dealName: _dealNameText.text,
-                    saleId: _modelStaffSelected[0].staffId,
-                    typeCustomer: customerTypeSelected.customerTypeNameEn,
-                    customerCode: customerSelected.customerCode,
-                    phone: _phoneNumberText.text,
-                    pipelineCode: pipelineSelected.pipelineCode,
-                    journeyCode: journeySelected.journeyCode,
-                    closingDate:
-                        "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
-                    branchCode: detailDeal.branchCode,
-                    tag: widget.detail.tag,
-                    orderSourceId: detailDeal.orderSourceId,
-                    probability: num.parse(widget.detail?.probability) ?? "0",
-                    dealDescription: widget.detail.dealDescription,
-                    amount: amount,
-                    product: productUpdate));
-            Navigator.of(context).pop();
-            if (result != null) {
-              if (result.errorCode == 0) {
-                print(result.errorDescription);
-                await DealConnection.showMyDialog(
-                    context, result.errorDescription);
-                Navigator.of(context).pop(true);
-              } else {
-                DealConnection.showMyDialog(context, result.errorDescription);
-              }
-            }
+            await updateDealLead();
           }
+          print("Okie call api add");
           print("Okie call api add");
         },
         child: Center(
@@ -1237,4 +1172,132 @@ class _EditDealScreenState extends State<EditDealScreen>
       ),
     );
   }
+
+    Future<void> updateDealCustomer() async {
+    if (_phoneNumberText.text.isNotEmpty) {
+      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) ||
+          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+        print("so dien thoai sai oy");
+        DealConnection.showMyDialog(
+            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
+            warning: true);
+        return;
+      }
+    }
+
+    if (_dealNameText.text == "" ||
+        detailDeal.typeCustomer == "" ||
+        detailDeal.pipelineCode == "" ||
+        detailDeal.journeyCode == "" ||
+        detailDeal.customerCode == "" ||
+        detailDeal.saleId == 0) {
+      DealConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+          warning: true);
+    } else {
+      DealConnection.showLoading(context);
+
+      double amount = 0;
+      if (detailDeal.product.length > 0) {
+        for (int i = 0; i < detailDeal.product.length; i++) {
+          amount +=
+              detailDeal.product[i].amount * detailDeal.product[i].quantity;
+        }
+      }
+      UpdateDealModelResponse result = await DealConnection.updateDeal(
+          context,
+          UpdateDealModelRequest(
+              dealName: _dealNameText.text,
+              saleId: detailDeal.saleId,
+              typeCustomer: "customer",
+              customerCode: detailDeal.customerCode,
+              phone: _phoneNumberText.text,
+              pipelineCode: detailDeal.pipelineCode,
+              journeyCode: detailDeal.journeyCode,
+              // closingDate:
+              //     "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+              closingDate: "",
+              branchCode: detailDeal.branchCode,
+              tag: detailDeal.tag,
+              orderSourceId: detailDeal.orderSourceId,
+              probability: detailDeal.probability,
+              dealDescription: detailDeal.dealDescription,
+              amount: amount,
+              product: detailDeal.product));
+      Navigator.of(context).pop();
+      if (result != null) {
+        if (result.errorCode == 0) {
+          print(result.errorDescription);
+          await DealConnection.showMyDialog(context, result.errorDescription);
+          Navigator.of(context).pop(true);
+          if (result.data != null) {
+            // modelResponse = ObjectPopCreateDealModel(
+            //     deal_id: result.data.dealId, status: true);
+          }
+          // Navigator.of(context).pop(modelResponse.toJson());
+        } else {
+          DealConnection.showMyDialog(context, result.errorDescription);
+        }
+      }
+    }
+  }
+
+    Future<void> updateDealLead() async {
+
+    if (_dealNameText.text == "" ||
+        detailDeal.typeCustomer == "" ||
+        detailDeal.pipelineCode == "" ||
+        detailDeal.journeyCode == "" ||
+        detailDeal.customerCode == "" ||
+        detailDeal.saleId == 0) {
+      DealConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+          warning: true);
+    } else {
+      DealConnection.showLoading(context);
+
+      double amount = 0;
+      if (detailDeal.product.length > 0) {
+        for (int i = 0; i < detailDeal.product.length; i++) {
+          amount +=
+              detailDeal.product[i].amount * detailDeal.product[i].quantity;
+        }
+      }
+      UpdateDealModelResponse result = await DealConnection.updateDeal(
+          context,
+          UpdateDealModelRequest(
+              dealName: _dealNameText.text,
+              saleId: detailDeal.saleId,
+              typeCustomer: "lead",
+              customerCode: detailDeal.customerCode,
+              phone: _phoneNumberText.text,
+              pipelineCode: detailDeal.pipelineCode,
+              journeyCode: detailDeal.journeyCode,
+              // closingDate:
+              //     "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+              closingDate: "",
+              branchCode: detailDeal.branchCode,
+              tag: detailDeal.tag,
+              orderSourceId: detailDeal.orderSourceId,
+              probability: detailDeal.probability,
+              dealDescription: detailDeal.dealDescription,
+              amount: amount,
+              product: detailDeal.product));
+      Navigator.of(context).pop();
+      if (result != null) {
+        if (result.errorCode == 0) {
+          print(result.errorDescription);
+          await DealConnection.showMyDialog(context, result.errorDescription);
+          // if (result.data != null) {
+          //   modelResponse = ObjectPopCreateDealModel(
+          //       deal_id: result.data.dealId, status: true);
+          // }
+          Navigator.of(context).pop(true);
+        } else {
+          DealConnection.showMyDialog(context, result.errorDescription);
+        }
+      }
+    }
+  }
+
 }

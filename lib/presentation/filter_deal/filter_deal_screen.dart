@@ -10,6 +10,7 @@ import 'package:epoint_deal_plugin/model/create_date_model.dart';
 import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
 import 'package:epoint_deal_plugin/model/history_customer_care_date.dart';
 import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
@@ -27,7 +28,6 @@ import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_order_sour
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_pipeline.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_work_status.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_history_care_date.dart';
-import 'package:epoint_deal_plugin/presentation/modal/branch_modal.dart';
 import 'package:epoint_deal_plugin/presentation/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:flutter/material.dart';
 
@@ -220,6 +220,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
   JourneyData journeySelected = JourneyData();
   List<WorkListStaffModel> _modelStaffSSupportSelected = [];
   List<GetStatusWorkData> statusWorkData;
+  List<WorkListStaffModel> _modelStaff = [];
 
   List<BranchData> branchData;
   BranchData branchSelected;
@@ -265,8 +266,6 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       toDate_work_schedule_date: null,
       id_history_care_date: "",
       id_work_schedule_date: "",
-      
-      
       )
       
       ;
@@ -298,10 +297,6 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             widget.filterScreenModel.toDate_work_schedule_date,
         id_history_care_date: widget.filterScreenModel.id_history_care_date,
         id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
-        
-        
-        
-        
         );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -329,6 +324,18 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       pipeLineData = pipelines.data;
     }
 
+    var response = await DealConnection.workListStaff(
+        context, WorkListStaffRequestModel(manageProjectId: null));
+    if (response != null) {
+      _modelStaff = response.data ?? [];
+
+    }
+
+     var statusWorkModel = await DealConnection.getStatusWork(context);
+              if (statusWorkModel != null) {
+                statusWorkData = statusWorkModel.data;
+              }
+
     bindingModel();
   }
 
@@ -343,38 +350,140 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         }
       }
     }
+     if (filterScreenModel.filterModel.branchId.length > 0) {
+      for (int i = 0;
+          i < filterScreenModel.filterModel.branchId.length;
+          i++) {
+        try {
+          branchData
+              .firstWhere((element) =>
+                  element.branchId ==
+                  filterScreenModel.filterModel.branchId[i])
+              .selected = true;
+        } catch (e) {}
+      }
 
-    // if (filterScreenModel.filterModel.branchName != "") {
-    //   BranchData data = branchData.firstWhere((element) =>
-    //       element.branchName ==
-    //       widget.filterScreenModel.filterModel.branchName);
-    //   branchSelected = data;
-    //   branchSelected.selected = true;
-    // }
+      for (int i = 0; i < branchData.length; i++) {
+        if (branchData[i].selected) {
+          if (branchString == "") {
+            branchString = branchData[i].branchName;
+          } else {
+            branchString += ", ${branchData[i].branchName}";
+          }
+        }
+      }
+     }
 
-    // if (filterScreenModel.filterModel.pipelineName != "") {
-    //   PipelineData data = pipeLineData.firstWhere((element) =>
-    //       element.pipelineName ==
-    //       widget.filterScreenModel.filterModel.pipelineName);
-    //   pipelineSelected = data;
-    //   pipelineSelected.selected = true;
+     if (filterScreenModel.filterModel.manageStatusId.length > 0) {
+      for (int i = 0;
+          i < filterScreenModel.filterModel.manageStatusId.length;
+          i++) {
+        try {
+          statusWorkData
+              .firstWhere((element) =>
+                  element.manageStatusId ==
+                  filterScreenModel.filterModel.manageStatusId[i])
+              .selected = true;
+        } catch (e) {}
+      }
 
-    //   var journeys = await DealConnection.getJourney(
-    //       context, GetJourneyModelRequest(
-    //         pipelineCode: [pipelineSelected.pipelineCode]
-    //       ));
-    //   if (journeys != null) {
-    //     journeysData = journeys.data;
+      for (int i = 0; i < statusWorkData.length; i++) {
+        if (statusWorkData[i].selected) {
+          if (statusWorkString == "") {
+            statusWorkString = statusWorkData[i].manageStatusName;
+          } else {
+            statusWorkString += ", ${statusWorkData[i].manageStatusName}";
+          }
+        }
+      }
+     }
 
-    //     if (filterScreenModel.filterModel.journeyName != "") {
-    //       JourneyData data = journeysData.firstWhere((element) =>
-    //           element.journeyName ==
-    //           widget.filterScreenModel.filterModel.journeyName);
-    //       journeySelected = data;
-    //       journeySelected.selected = true;
-    //     }
-    //   }
-    // }
+   
+
+
+     if (filterScreenModel.filterModel.staffId.length > 0) {
+      _modelStaffSSupportSelected = [];
+      for (int i = 0;
+          i < filterScreenModel.filterModel.staffId.length;
+          i++) {
+        try {
+          _modelStaff
+              .firstWhere((element) =>
+                  element.staffId ==
+                  filterScreenModel.filterModel.staffId[i])
+              .isSelected = true;
+        } catch (e) {}
+      }
+
+      for (int i = 0; i < _modelStaff.length; i++) {
+        if (_modelStaff[i].isSelected) {
+          _modelStaffSSupportSelected.add(_modelStaff[i]);
+          if (staffs == "") {
+            staffs = _modelStaff[i].staffName;
+          } else {
+            staffs += ", ${_modelStaff[i].staffName}";
+          }
+        }
+      }
+    }
+
+    if (filterScreenModel.filterModel.pipelineId.length > 0) {
+      for (int i = 0;
+          i < filterScreenModel.filterModel.pipelineId.length;
+          i++) {
+        try {
+          pipeLineData
+              .firstWhere((element) =>
+                  element.pipelineId ==
+                  filterScreenModel.filterModel.pipelineId[i])
+              .selected = true;
+        } catch (e) {}
+      }
+
+      List<String> listPipeline = [];
+
+      for (int i = 0; i < pipeLineData.length; i++) {
+        if (pipeLineData[i].selected) {
+          listPipeline.add(pipeLineData[i].pipelineCode);
+          if (pipelineString == "") {
+            pipelineString = pipeLineData[i].pipelineName;
+          } else {
+            pipelineString += ", ${pipeLineData[i].pipelineName}";
+          }
+        }
+      }
+
+      var journeys = await DealConnection.getJourney(
+        context, GetJourneyModelRequest(pipelineCode: listPipeline));
+    if (journeys != null) {
+      journeysData = journeys.data;
+
+      if (filterScreenModel.filterModel.journeyName.length > 0) {
+        for (int i = 0;
+            i < filterScreenModel.filterModel.journeyName.length;
+            i++) {
+          try {
+            journeysData
+                .firstWhere((element) =>
+                    element.journeyId ==
+                    filterScreenModel.filterModel.journeyName[i])
+                .selected = true;
+          } catch (e) {}
+        }
+
+        for (int i = 0; i < journeysData.length; i++) {
+          if (journeysData[i].selected) {
+            if (journeyString == "") {
+              journeyString = journeysData[i].journeyName;
+            } else {
+              journeyString += ", ${journeysData[i].journeyName}";
+            }
+          }
+        }
+      }
+    }
+
+    }
     if (filterScreenModel.id_created_at != "") {
       int index = int.parse(widget.filterScreenModel.id_created_at);
       createDateSeleted = createDateOptions[index];
@@ -779,6 +888,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                       }
                     }
                   }
+
+                  filterScreenModel.filterModel.manageStatusId = statusWorkID;
                   setState(() {});
                 }
       }),

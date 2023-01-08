@@ -19,6 +19,7 @@ import 'package:epoint_deal_plugin/utils/custom_image_picker.dart';
 import 'package:epoint_deal_plugin/widget/container_data_builder.dart';
 import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
+import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_empty.dart';
 import 'package:epoint_deal_plugin/widget/custom_file_view.dart';
 import 'package:epoint_deal_plugin/widget/custom_html.dart';
@@ -238,14 +239,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       //   await Global.createJob();
                       // }
 
-                      bool result = await Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CustomerCareDeal(
-                                  detail: detail,
-                                )));
-                                if (result) {
-                                  getData();
-                                  selectedTab(1);
-                                }
+                      bool result =
+                          await Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => CustomerCareDeal(
+                                    detail: detail,
+                                  )));
+                      if (result) {
+                        getData();
+                        selectedTab(1);
+                      }
 
                       print("iconTask");
                     },
@@ -360,7 +362,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               Expanded(
                   child: ListView(
                 padding: EdgeInsets.zero,
-                physics: (index == 2) ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+                physics: (index == 2)
+                    ? NeverScrollableScrollPhysics()
+                    : AlwaysScrollableScrollPhysics(),
                 controller: _controller,
                 children: buildInfomation(),
               )),
@@ -499,8 +503,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   Widget _buildContainer(List<WorkListCommentModel> models) {
     return Container(
-        padding: EdgeInsets.only(
-            bottom: 60),
+        padding: EdgeInsets.only(bottom: 60),
         child: CustomListView(
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(
@@ -784,18 +787,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8),
-          //   child: Text(
-          //     AppLocalizations.text(LangKey.picture),
-          //     style: TextStyle(
-          //         fontSize: AppTextSizes.size15,
-          //         color: const Color(0xFF858080),
-          //         fontWeight: FontWeight.normal),
-          //   ),
-          // ),
           Divider(),
-
           _infoDetailItem(
             AppLocalizations.text(LangKey.allottedPerson),
             detail?.staffName ?? "N/A",
@@ -906,219 +898,214 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                border: (index != 2) ? Border.all(width: 1, color: Color(0xFFC3C8D3)) : null),
+                border: (index != 2)
+                    ? Border.all(width: 1, color: Color(0xFFC3C8D3))
+                    : null),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ( index != 2) ? Center(
-                  child: Container(
-                    padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(top: 25.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 24,
-                              width: 55,
-                              margin: EdgeInsets.only(right: 12.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xFF3AEDB6),
-                                  borderRadius: BorderRadius.circular(4.0)),
-                              child: Center(
-                                child: Text("Mới",
-                                    style: TextStyle(
-                                        color: Color(0xFF11B482),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal)),
-                              ),
-                            ),
-                            Text("80%",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.w700))
-                          ],
-                        ),
-                        SizedBox(
-                          height: 4.0,
-                        ),
-                        Text(detail?.dealName ?? "",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w700)),
-                        SizedBox(
-                          height: 4.0,
-                        ),
-                        RichText(
-                            text: TextSpan(
-                                text: "Zalo",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
-                                children: [
-                              TextSpan(
-                                  text: " - " + "Tinh Gia",
-                                  style: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold))
-                            ])),
-                        SizedBox(height: 5),
-                        Text(detail?.phone ?? "",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal)),
-                        SizedBox(height: 5),
-                        Text(
-                          "DN- CTY TNHH MỘT THÀNH VIÊN",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              overflow: TextOverflow.visible,
-                              fontSize: 16.0,
-                              color: Color(0xFF8E8E8E),
-                              fontWeight: FontWeight.normal),
-                        )
-                      ],
-                    ),
-                  ),
-                ) : Container(),
-                (index != 2) ? Container(
-                  padding: EdgeInsets.only(right: 8.0),
-                  margin: EdgeInsets.only(right: 8.0, top: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
+                (index != 2)
+                    ? Center(
                         child: Container(
-                          // width: MediaQuery.of(context).size.width / 2 - 50,
+                          padding: EdgeInsets.only(right: 8.0, top: 8.0),
+                          margin: EdgeInsets.only(top: 25.0),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-                              // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
-
-                              infoItem(Assets.iconDeal, detail?.dealCode),
-                              infoItem(
-                                  Assets.iconName, detail?.staffName ?? ""),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(detail?.dealName ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.w700)),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(detail?.dealName ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal)),
+                              SizedBox(height: 10),
                               Container(
-                                padding: const EdgeInsets.only(
-                                    left: 3.0, bottom: 8.0),
-                                margin: EdgeInsets.only(bottom: 8.0, left: 5.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin:
-                                          const EdgeInsets.only(right: 10.0),
-                                      height: 15.0,
-                                      width: 15.0,
-                                      child:
-                                          Image.asset(Assets.iconInteraction),
-                                    ),
-                                    Expanded(
-                                      child: RichText(
-                                          text: TextSpan(
-                                              text: "27/08/2022" + " ",
-                                              style: TextStyle(
-                                                  fontSize: 14.0,
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                              children: [
-                                            TextSpan(
-                                                text: "(1 ngày)",
-                                                style: TextStyle(
-                                                    color:
-                                                        AppColors.primaryColor,
-                                                    fontSize: 14.0,
-                                                    fontWeight:
-                                                        FontWeight.normal))
-                                          ])),
-                                    ),
-                                  ],
+                                // margin: EdgeInsets.only(right: 12.0),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF3AEDB6),
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(detail.journeyName ?? "",
+                                      style: TextStyle(
+                                          color: Color(0xFF11B482),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal)),
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 3.0, bottom: 6.0),
-                                margin: EdgeInsets.only(left: 5.0),
-                                child: Row(
+                              SizedBox(height: 10),
+                              Text(detail?.phone ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal)),
+                              SizedBox(height: 5),
+                              (detail.typeCustomer == "business")
+                                  ? Text(
+                                      detail.customerName,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          overflow: TextOverflow.visible,
+                                          fontSize: 16.0,
+                                          color: Color(0xFF8E8E8E),
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  : Container()
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(),
+                (index != 2)
+                    ? Container(
+                        padding: EdgeInsets.only(right: 8.0),
+                        margin: EdgeInsets.only(right: 8.0, top: 16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                // width: MediaQuery.of(context).size.width / 2 - 50,
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    infoItem(Assets.iconDeal, detail?.dealCode),
+                                    infoItem(Assets.iconName,
+                                        detail?.staffName ?? ""),
                                     Container(
-                                      margin:
-                                          const EdgeInsets.only(right: 10.0),
-                                      height: 15.0,
-                                      width: 15.0,
-                                      child: Image.asset(Assets.iconTag),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "35.000 VND",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: AppColors.primaryColor,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.bold),
-                                        // maxLines: 1,
+                                      padding: const EdgeInsets.only(
+                                          left: 3.0, bottom: 8.0),
+                                      margin: EdgeInsets.only(
+                                          bottom: 8.0, left: 5.0),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 10.0),
+                                            height: 15.0,
+                                            width: 15.0,
+                                            child: Image.asset(
+                                                Assets.iconInteraction),
+                                          ),
+                                          Expanded(
+                                            child: RichText(
+                                                text: TextSpan(
+                                                    text: detail.dateLastCare +
+                                                        " ",
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                    children: [
+                                                  TextSpan(
+                                                      text: "${detail.diffDay ?? 0} ngày",
+                                                      style: TextStyle(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          fontSize: 14.0,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ])),
+                                          ),
+                                        ],
                                       ),
                                     ),
+                                    Container(
+                                      padding: const EdgeInsets.only(
+                                          left: 3.0, bottom: 6.0),
+                                      margin: EdgeInsets.only(left: 5.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 10.0),
+                                            height: 15.0,
+                                            width: 15.0,
+                                            child: Image.asset(Assets.iconTag),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              AppFormat.moneyFormatDot
+                                                      .format(detail.amount) +
+                                                  " VND",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: AppColors.primaryColor,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.bold),
+                                              // maxLines: 1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              print(detail.phone);
-                              await callPhone(detail?.phone ?? "");
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(20.0 / 2),
-                              height: 45,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF06A605),
-                                borderRadius: BorderRadius.circular(50),
-                                // border:  Border.all(color: AppColors.white,)
                               ),
-                              child: Center(
-                                  child: Image.asset(
-                                Assets.iconCall,
-                                color: AppColors.white,
-                              )),
                             ),
-                          ),
-                          SizedBox(height: 15.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              _actionItem(
-                                  Assets.iconCalendar, Color(0xFF26A7AD),
-                                  show: true, number: 30, ontap: () {
-                                print("1");
-                              }),
-                              _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                                  show: true, number: 30, ontap: () {
-                                print("2");
-                              }),
-                            ],
-                          ),
-                        ],
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    print(detail.phone);
+                                    await callPhone(detail?.phone ?? "");
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(20.0 / 2),
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF06A605),
+                                      borderRadius: BorderRadius.circular(50),
+                                      // border:  Border.all(color: AppColors.white,)
+                                    ),
+                                    child: Center(
+                                        child: Image.asset(
+                                      Assets.iconCall,
+                                      color: AppColors.white,
+                                    )),
+                                  ),
+                                ),
+                                SizedBox(height: 15.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    _actionItem(
+                                        Assets.iconCalendar, Color(0xFF26A7AD),
+                                        show: true,
+                                        number: detail.relatedWork ?? 0,
+                                        ontap: () {
+                                      print("1");
+                                    }),
+                                    _actionItem(
+                                        Assets.iconOutdate, Color(0xFFDD2C00),
+                                        show: true,
+                                        number: detail.appointment ?? 0,
+                                        ontap: () {
+                                      print("2");
+                                    }),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       )
-                    ],
-                  ),
-                ) : Container(),
+                    : Container(),
               ],
             ),
           ),
@@ -1165,14 +1152,17 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   Widget customerCare() {
     return Container(
-      margin: EdgeInsets.only(bottom: 20.0),
-      child: Column(
-        children: [customerCareItem(), customerCareItem(), customerCareItem()],
-      ),
+      margin: EdgeInsets.only(bottom: 20),
+      child: (detail.customerCare != null && detail.customerCare.length > 0)
+          ? Column(
+              children:
+                  detail.customerCare.map((e) => customerCareItem(e)).toList())
+          : Center(child: CustomDataNotFound()),
     );
   }
 
-  Widget customerCareItem() {
+  Widget customerCareItem(CustomerCare item) {
+    final createTime = DateTime.parse(item.createdAt ?? "");
     return InkWell(
       onTap: () async {},
       child: Container(
@@ -1193,13 +1183,13 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        '09:45',
+                        "${createTime.hour}:${createTime.minute}",
                         style: TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        '22,\ntháng 12,\nnăm 2022',
+                        '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
@@ -1224,14 +1214,14 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     children: [
                       //Cái này là dòng tiêu đề
                       Container(
-                        padding: const EdgeInsets.only(right: 10.0),
+                        padding: EdgeInsets.only(right: 10.0),
                         child: Row(
-                          children: const [
+                          children: [
                             Expanded(
                               child: Text.rich(
                                 TextSpan(
                                   text:
-                                      '[012345678] Tên công việc này dài quá trời dài',
+                                      "[${item.manageWorkCode}] ${item.manageWorkTitle}",
                                   style: TextStyle(
                                     color: Color(0xFF0067AC),
                                     fontWeight: FontWeight.bold,
@@ -1298,7 +1288,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "15",
+                                  "${item.countFile}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1320,7 +1310,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "12",
+                                  "${item.countComment}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1342,7 +1332,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "12",
+                                  "${item.daysLate}",
                                   style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 14.0,
@@ -1367,7 +1357,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         child: Row(
                           children: [
                             CustomAvatarWithURL(
-                              name: "NV.Trixie Miami",
+                              name: item.staffFullName ?? "N/A",
+                              url: item.staffAvatar ?? "",
                               size: 50.0,
                             ),
                             Container(
@@ -1378,7 +1369,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "NV.Trixie Miami",
+                                  item.staffFullName ?? "N/A",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: AppColors.primaryColor,
@@ -1390,13 +1381,16 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         ),
                       ),
 
-                      Container(
-                        child: Wrap(
-                          children: List.generate(5, (index) => _tagItem()),
-                          spacing: 10,
-                          runSpacing: 10,
-                        ),
-                      )
+                      (item.listTag != null && item.listTag.length > 0)
+                          ? Container(
+                              child: Wrap(
+                                children: List.generate(item.listTag.length,
+                                    (index) => _tagItem(item.listTag[index])),
+                                spacing: 10,
+                                runSpacing: 10,
+                              ),
+                            )
+                          : Container()
 
                       //cái này là button gọi điện
                     ],
@@ -1410,7 +1404,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _tagItem() {
+  Widget _tagItem(ListTagDetail item) {
     return Container(
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
@@ -1433,7 +1427,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             width: 5.0,
           ),
           Text(
-            "Tag1",
+            item.tagName,
             textAlign: TextAlign.start,
             style: TextStyle(
                 color: AppColors.primaryColor,

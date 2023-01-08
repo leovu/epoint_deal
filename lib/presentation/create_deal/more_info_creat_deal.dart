@@ -49,8 +49,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   List<OrderSourceData> orderSourceData;
   OrderSourceData orderSourceSelected;
 
-  List<TagData> tagsData;
-  List<TagData> tagsSelected;
+  // List<TagData> tagsData;
+  // List<TagData> tagsSelected;
 
   List<Map<String, dynamic>> productSelected = [];
 
@@ -389,80 +389,6 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                 ],
               )
             : Container(),
-        // Container(
-        //   height: 15,
-        // ),
-        // _buildTextField("Tag", tagsString, Assets.iconTag, false, true, false,
-        //     ontap: () async {
-        //   print("Tag");
-        //   FocusScope.of(context).unfocus();
-
-        //   if (tagsData == null || tagsData.length == 0) {
-        //     DealConnection.showLoading(context);
-        //     var tags = await DealConnection.getTag(context);
-        //     Navigator.of(context).pop();
-        //     if (tags != null) {
-        //       tagsData = tags.data;
-
-        //       var listTagsSelected = await showModalBottomSheet(
-        //           context: context,
-        //           useRootNavigator: true,
-        //           isScrollControlled: true,
-        //           backgroundColor: Colors.transparent,
-        //           builder: (context) {
-        //             return TagsModal(
-        //               tagsData: tagsData,
-        //             );
-        //           });
-        //       if (listTagsSelected != null) {
-        //         widget.detailDeal.tag = [];
-        //         tagsString = "";
-        //         tagsSelected = listTagsSelected;
-
-        //         for (int i = 0; i < tagsSelected.length; i++) {
-        //           if (tagsSelected[i].selected) {
-        //             widget.detailDeal.tag.add(tagsSelected[i].tagId);
-        //             if (tagsString == "") {
-        //               tagsString = tagsSelected[i].name;
-        //             } else {
-        //               tagsString += ", ${tagsSelected[i].name}";
-        //             }
-        //           }
-        //         }
-        //         setState(() {});
-        //       }
-        //     }
-        //   } else {
-        //     var listTagsSelected = await showModalBottomSheet(
-        //         context: context,
-        //         useRootNavigator: true,
-        //         isScrollControlled: true,
-        //         backgroundColor: Colors.transparent,
-        //         builder: (context) {
-        //           return TagsModal(
-        //             tagsData: tagsData,
-        //           );
-        //         });
-        //     if (listTagsSelected != null) {
-        //       widget.detailDeal.tag = [];
-        //       tagsString = "";
-        //       tagsSelected = listTagsSelected;
-
-        //       for (int i = 0; i < tagsSelected.length; i++) {
-        //         if (tagsSelected[i].selected) {
-        //           widget.detailDeal.tag.add(tagsSelected[i].tagId);
-
-        //           if (tagsString == "") {
-        //             tagsString = tagsSelected[i].name;
-        //           } else {
-        //             tagsString += ", ${tagsSelected[i].name}";
-        //           }
-        //         }
-        //       }
-        //       setState(() {});
-        //     }
-        //   }
-        // }),
         _buildTextField(
             "Nguồn cơ hội bán hàng",
             orderSourceSelected?.orderSourceName ?? "",

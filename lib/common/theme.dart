@@ -150,26 +150,30 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
-  static TextStyle style14HintNormal = TextStyle(
+  static TextStyle style14BlackNormal = TextStyle(
       fontSize: AppTextSizes.size14,
-      color: AppColors.hintColor,
-      fontWeight: FontWeight.normal);
-  static TextStyle style12HintNormal = TextStyle(
-      fontSize: AppTextSizes.size12,
-      color: AppColors.hintColor,
-      fontWeight: FontWeight.normal);
-  static TextStyle style17BlackBold = TextStyle(
-      fontSize: AppTextSizes.size17,
-      color: Colors.black,
-      fontWeight: FontWeight.bold);
-  static TextStyle style13HintNormal = TextStyle(
-      fontSize: AppTextSizes.size13,
-      color: AppColors.hintColor,
+      color: AppColors.black,
       fontWeight: FontWeight.normal);
   static TextStyle style13WhiteNormal = TextStyle(
       fontSize: AppTextSizes.size13,
       color: Colors.white,
       fontWeight: FontWeight.normal);
+  static TextStyle style14HintNormal = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal);
+   static TextStyle style14PrimaryRegular = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.primaryColor,
+      fontWeight: FontWeight.normal);
+  static TextStyle style14WhiteNormal = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: Colors.white,
+      fontWeight: FontWeight.normal);
+    static TextStyle style20WhiteBold = TextStyle(
+      fontSize: AppTextSizes.size20,
+      color: Colors.white,
+      fontWeight: FontWeight.bold);
   static TextStyle style12BlackBold = TextStyle(
       fontSize: AppTextSizes.size12,
       color: AppColors.black,
@@ -230,6 +234,19 @@ class AppTextStyles {
     color: AppColors.white,
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.italic,);
+
+  static TextStyle style12HintNormal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal);
+  static TextStyle style17BlackBold = TextStyle(
+      fontSize: AppTextSizes.size17,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
+  static TextStyle style13HintNormal = TextStyle(
+      fontSize: AppTextSizes.size13,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal);
 
   static TextStyle style25BlackWeight700 = TextStyle(
     fontSize: AppTextSizes.size25,

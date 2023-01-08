@@ -57,6 +57,11 @@ class DetailDealData {
   String address;
   String backgroundColorJourney;
   String productNameBuy;
+  String dateLastCare;
+  int diffDay;
+  int relatedWork;
+  int appointment;
+  List<CustomerCare> customerCare;
   List<JourneyTracking> journeyTracking;
   List<ProductBuy> productBuy;
 
@@ -94,7 +99,12 @@ class DetailDealData {
       this.backgroundColorJourney,
       this.productNameBuy,
       this.journeyTracking,
-      this.productBuy});
+      this.productBuy,
+      this.dateLastCare,
+      this.diffDay,
+      this.relatedWork,
+      this.appointment,
+      this.customerCare});
 
   DetailDealData.fromJson(Map<String, dynamic> json) {
     dealId = json['deal_id'] ?? 0;
@@ -129,6 +139,10 @@ class DetailDealData {
     backgroundColorJourney = json['background_color_journey'] ?? "";
     district = json['district'] ?? "";
     productNameBuy = json['product_name_buy'] ?? "";
+    dateLastCare = json['date_last_care'];
+    diffDay = json['diff_day'];
+    relatedWork = json['related_work'];
+    appointment = json['appointment'];
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
       json['journey_tracking'].forEach((v) {
@@ -139,6 +153,13 @@ class DetailDealData {
       productBuy = <ProductBuy>[];
       json['product_buy'].forEach((v) {
         productBuy.add(ProductBuy.fromJson(v));
+      });
+    }
+
+    if (json['customer_care'] != null) {
+      customerCare = <CustomerCare>[];
+      json['customer_care'].forEach((v) {
+        customerCare.add(new CustomerCare.fromJson(v));
       });
     }
   }
@@ -183,6 +204,14 @@ class DetailDealData {
     }
     if (this.productBuy != null) {
       data['product_buy'] = this.productBuy.map((v) => v.toJson()).toList();
+    }
+
+    data['date_last_care'] = this.dateLastCare;
+    data['diff_day'] = this.diffDay;
+    data['related_work'] = this.relatedWork;
+    data['appointment '] = this.appointment;
+    if (this.customerCare != null) {
+      data['customer_care'] = this.customerCare.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -266,6 +295,151 @@ class ProductBuy {
     data['quantity'] = this.quantity;
     data['discount'] = this.discount;
     data['amount'] = this.amount;
+    return data;
+  }
+}
+
+class CustomerCare {
+  int manageWorkId;
+  String manageWorkCode;
+  String manageWorkCustomerType;
+  int manageProjectId;
+  String manageProjectName;
+  int manageTypeWorkId;
+  String manageTypeWorkKey;
+  String manageTypeWorkName;
+  String manageTypeWorkIcon;
+  String createdAt;
+  String manageWorkTitle;
+  String dateStart;
+  String dateEnd;
+  String dateFinish;
+  int processorId;
+  String staffFullName;
+  String staffAvatar;
+  int manageStatusId;
+  String manageStatusName;
+  String manageStatusColor;
+  int countFile;
+  int countComment;
+  int daysLate;
+  List<ListTagDetail> listTag;
+
+  CustomerCare(
+      {this.manageWorkId,
+      this.manageWorkCode,
+      this.manageWorkCustomerType,
+      this.manageProjectId,
+      this.manageProjectName,
+      this.manageTypeWorkId,
+      this.manageTypeWorkKey,
+      this.manageTypeWorkName,
+      this.manageTypeWorkIcon,
+      this.createdAt,
+      this.manageWorkTitle,
+      this.dateStart,
+      this.dateEnd,
+      this.dateFinish,
+      this.processorId,
+      this.staffFullName,
+      this.staffAvatar,
+      this.manageStatusId,
+      this.manageStatusName,
+      this.manageStatusColor,
+      this.listTag,
+      this.countFile,
+      this.countComment,
+      this.daysLate});
+
+  CustomerCare.fromJson(Map<String, dynamic> json) {
+    manageWorkId = json['manage_work_id'];
+    manageWorkCode = json['manage_work_code'];
+    manageWorkCustomerType = json['manage_work_customer_type'];
+    manageProjectId = json['manage_project_id'];
+    manageProjectName = json['manage_project_name'];
+    manageTypeWorkId = json['manage_type_work_id'];
+    manageTypeWorkKey = json['manage_type_work_key'];
+    manageTypeWorkName = json['manage_type_work_name'];
+    manageTypeWorkIcon = json['manage_type_work_icon'];
+    createdAt = json['created_at'];
+    manageWorkTitle = json['manage_work_title'];
+    dateStart = json['date_start'];
+    dateEnd = json['date_end'];
+    dateFinish = json['date_finish'];
+    processorId = json['processor_id'];
+    staffFullName = json['staff_full_name'];
+    staffAvatar = json['staff_avatar'];
+    manageStatusId = json['manage_status_id'];
+    manageStatusName = json['manage_status_name'];
+    manageStatusColor = json['manage_status_color'];
+    countFile = json['count_file'];
+    countComment = json['count_comment'];
+    daysLate = json['days_late'];
+    if (json['list_tag'] != null) {
+      listTag = <ListTagDetail>[];
+      json['list_tag'].forEach((v) {
+        listTag.add(new ListTagDetail.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['manage_work_id'] = this.manageWorkId;
+    data['manage_work_code'] = this.manageWorkCode;
+    data['manage_work_customer_type'] = this.manageWorkCustomerType;
+    data['manage_project_id'] = this.manageProjectId;
+    data['manage_project_name'] = this.manageProjectName;
+    data['manage_type_work_id'] = this.manageTypeWorkId;
+    data['manage_type_work_key'] = this.manageTypeWorkKey;
+    data['manage_type_work_name'] = this.manageTypeWorkName;
+    data['manage_type_work_icon'] = this.manageTypeWorkIcon;
+    data['created_at'] = this.createdAt;
+    data['manage_work_title'] = this.manageWorkTitle;
+    data['date_start'] = this.dateStart;
+    data['date_end'] = this.dateEnd;
+    data['date_finish'] = this.dateFinish;
+    data['processor_id'] = this.processorId;
+    data['staff_full_name'] = this.staffFullName;
+    data['staff_avatar'] = this.staffAvatar;
+    data['manage_status_id'] = this.manageStatusId;
+    data['manage_status_name'] = this.manageStatusName;
+    data['manage_status_color'] = this.manageStatusColor;
+    data['count_file'] = this.countFile;
+    data['count_comment'] = this.countComment;
+    data['days_late'] = this.daysLate;
+    if (this.listTag != null) {
+      data['list_tag'] = this.listTag.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class ListTagDetail {
+  int manageWorkTagId;
+  int manageWorkId;
+  int manageTagId;
+  String tagName;
+
+  ListTagDetail(
+      {this.manageWorkTagId,
+      this.manageWorkId,
+      this.manageTagId,
+      this.tagName});
+
+  ListTagDetail.fromJson(Map<String, dynamic> json) {
+    manageWorkTagId = json['manage_work_tag_id'];
+    manageWorkId = json['manage_work_id'];
+    manageTagId = json['manage_tag_id'];
+    tagName = json['tag_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['manage_work_tag_id'] = this.manageWorkTagId;
+    data['manage_work_id'] = this.manageWorkId;
+    data['manage_tag_id'] = this.manageTagId;
+    data['tag_name'] = this.tagName;
     return data;
   }
 }

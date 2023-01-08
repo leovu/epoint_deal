@@ -11,7 +11,6 @@ import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.dart';
-import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_deal.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_deal_screen.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
@@ -180,8 +179,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
         onPressed: () async {
-          //  ObjectPopDetailModel result = await LeadNavigator.push(context, CreatePotentialCustomer());
-
           var result = await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CreateDealScreen()));
 
