@@ -116,7 +116,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
-        setState(() {});
+        selectedTab(1);
+        // setState(() {});
       } else {
         await DealConnection.showMyDialog(context, dataDetail.errorDescription);
         Navigator.of(context).pop();
@@ -1164,7 +1165,14 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget customerCareItem(CustomerCare item) {
     final createTime = DateTime.parse(item.createdAt ?? "");
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+        if (Global.editJob != null) {
+          var result = await Global.editJob(item.manageWorkId);
+          if (result != null && result) {
+            getData();
+          } 
+        }
+      },
       child: Container(
         child: Container(
           margin: EdgeInsets.all(10),
