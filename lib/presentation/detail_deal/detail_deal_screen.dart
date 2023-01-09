@@ -11,6 +11,7 @@ import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_deal.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/comment_bloc.dart';
@@ -87,6 +88,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         selected: false)
   ];
 
+  List<OrderHistoryData> orderHistorys = <OrderHistoryData>[];
+
   final formatter = NumberFormat.currency(
     locale: 'vi_VN',
     decimalDigits: 0,
@@ -116,21 +119,33 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
-        selectedTab(1);
-        // setState(() {});
+        setState(() {});
       } else {
         await DealConnection.showMyDialog(context, dataDetail.errorDescription);
         Navigator.of(context).pop();
       }
     }
-
     _bloc.workListComment(WorkListCommentRequestModel(dealId: detail.dealId));
+
+    var orderHistory =
+        await DealConnection.getOrderHistory(context, widget.deal_code);
+    if (orderHistory != null) {
+      if (orderHistory.errorCode == 0) {
+        orderHistorys = orderHistory.data;
+        setState(() {});
+      }
+    }
   }
 
   openFile(BuildContext context, String name, String path) {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => CustomFileView(path, name)));
     // CustomNavigator.push(context, CustomFileView(path, name));
+  }
+
+  Future _onRefresh() {
+    return _bloc
+        .workListComment(WorkListCommentRequestModel(dealId: detail.dealId));
   }
 
   _send() {
@@ -233,7 +248,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             Column(
               children: [
                 FloatingActionButton(
-                    backgroundColor: Color(0xFFCD6000),
+                    backgroundColor: Color(0xFF41AC8D),
                     heroTag: "btn2",
                     onPressed: () async {
                       // if (Global.createJob != null) {
@@ -253,7 +268,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       print("iconTask");
                     },
                     child: Image.asset(
-                      Assets.iconTask,
+                      Assets.iconCustomerCare,
                       scale: 2.5,
                     )),
                 SizedBox(
@@ -484,7 +499,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               children: [
                                 Container(
                                     width: AppSizes.maxWidth,
-                                    height: AppSizes.maxHeight - 310,
+                                    height: AppSizes.maxHeight - 400,
                                     child: _buildComments()),
                               ],
                             )
@@ -775,7 +790,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             emptyBuilder: _buildEmpty(),
             skeletonBuilder: _buildContainer(null),
             bodyBuilder: () => _buildContainer(models),
-            // onRefresh: () => _onRefresh(),
+            onRefresh: () => _onRefresh(),
           );
         });
   }
@@ -826,14 +841,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.probability),
-            detail?.probability != ""
-                ? NumberFormat.currency(
-                      locale: 'en_US',
-                      decimalDigits: 1,
-                      symbol: '',
-                    ).format(num.parse(detail?.probability ?? "0")) +
-                    "%"
-                : "",
+            "${detail?.probability ?? 0 } %"
+            ,
           ),
           Divider(),
           _infoDetailItem(
@@ -920,15 +929,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                       fontSize: 16.0,
                                       color: AppColors.primaryColor,
                                       fontWeight: FontWeight.w700)),
-                              SizedBox(
-                                height: 4.0,
-                              ),
-                              Text(detail?.dealName ?? "",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: AppColors.primaryColor,
-                                      fontWeight: FontWeight.normal)),
-                              SizedBox(height: 10),
+                              // SizedBox(
+                              //   height: 4.0,
+                              // ),
+                              // Text(detail?.dealName ?? "",
+                              //     style: TextStyle(
+                              //         fontSize: 16.0,
+                              //         color: AppColors.primaryColor,
+                              //         fontWeight: FontWeight.normal)),
+                              SizedBox(height: 5.0),
                               Container(
                                 // margin: EdgeInsets.only(right: 12.0),
                                 decoration: BoxDecoration(
@@ -950,9 +959,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                       color: Colors.black,
                                       fontWeight: FontWeight.normal)),
                               SizedBox(height: 5),
-                              (detail.typeCustomer == "business")
+                              (detail.branchName != "")
                                   ? Text(
-                                      detail.customerName,
+                                      detail.branchName,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           overflow: TextOverflow.visible,
@@ -1000,8 +1009,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                           Expanded(
                                             child: RichText(
                                                 text: TextSpan(
-                                                    text: detail.dateLastCare +
-                                                        " ",
+                                                    text: detail.dateLastCare ??
+                                                        "" + " ",
                                                     style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Colors.black,
@@ -1009,7 +1018,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                                             FontWeight.normal),
                                                     children: [
                                                   TextSpan(
-                                                      text: "${detail.diffDay ?? 0} ngày",
+                                                      text:
+                                                          "(${detail.diffDay ?? 0} ngày)",
                                                       style: TextStyle(
                                                           color: AppColors
                                                               .primaryColor,
@@ -1087,14 +1097,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                   children: [
                                     _actionItem(
                                         Assets.iconCalendar, Color(0xFF26A7AD),
-                                        show: true,
                                         number: detail.relatedWork ?? 0,
                                         ontap: () {
                                       print("1");
                                     }),
                                     _actionItem(
                                         Assets.iconOutdate, Color(0xFFDD2C00),
-                                        show: true,
                                         number: detail.appointment ?? 0,
                                         ontap: () {
                                       print("2");
@@ -1169,8 +1177,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         if (Global.editJob != null) {
           var result = await Global.editJob(item.manageWorkId);
           if (result != null && result) {
-            getData();
-          } 
+            await getData();
+            selectedTab(1);
+          }
         }
       },
       child: Container(
@@ -1255,10 +1264,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
                       InkWell(
                         child: Container(
-                          height: 30,
-                          width: 100,
+                          // height: 30,
+                          // width: 100,
                           margin: EdgeInsets.only(top: 10.0),
-                          padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                          // padding: EdgeInsets.only(left: 5.0, right: 5.0),
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
                               offset: Offset(0, 1),
@@ -1266,25 +1275,17 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               color: Colors.black.withOpacity(0.3),
                             )
                           ], color: Colors.white),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                Assets.iconCall,
-                                scale: 3.0,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                AppLocalizations.text(LangKey.call),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500),
-                                // maxLines: 1,
-                              )
-                            ],
+                          child: Padding(
+                            padding: EdgeInsets.all(6.0),
+                            child: Text(
+                              item.manageTypeWorkName,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500),
+                              // maxLines: 1,
+                            ),
                           ),
                         ),
                       ),
@@ -1448,8 +1449,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color,
-      {num number, bool show = false, Function ontap}) {
+  Widget _actionItem(String icon, Color color, {num number, Function ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -1469,7 +1469,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   ),
                 ),
               ),
-              show
+              (number > 0)
                   ? Positioned(
                       left: 30,
                       bottom: 30,
@@ -1484,7 +1484,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFF45E38)),
                         child: Center(
-                            child: Text("${number ?? 0}",
+                            child: Text((number > 9) ? "9+" : "${number ?? 0}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14.0,
@@ -1498,18 +1498,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   Widget orderHistory() {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          orderHistoryItem(),
-          orderHistoryItem(),
-          orderHistoryItem(),
-        ],
-      ),
+      margin: EdgeInsets.only(bottom: 20),
+      child: (orderHistorys != null && orderHistorys.length > 0)
+          ? Column(
+              children: orderHistorys.map((e) => orderHistoryItem(e)).toList())
+          : Center(child: CustomDataNotFound()),
     );
   }
 
-  Widget orderHistoryItem() {
+  Widget orderHistoryItem(OrderHistoryData item) {
     return Container(
       padding: EdgeInsets.all(8.0),
       margin: EdgeInsets.only(bottom: 10.0),
@@ -1531,7 +1528,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             children: [
               Expanded(
                   child: CustomInfoItem(
-                      icon: Assets.iconDeal, title: "DH_140720222900")),
+                      icon: Assets.iconDeal, title: item.orderCode ?? "N/A")),
               Container(
                 height: 24,
                 // width: 55,
@@ -1541,7 +1538,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     color: Color(0xFF11B482),
                     borderRadius: BorderRadius.circular(50.0)),
                 child: Center(
-                  child: Text("Đã thanh toán",
+                  child: Text(item.processStatusName ??"N/A",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -1550,17 +1547,17 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               )
             ],
           ),
-          CustomInfoItem(icon: Assets.iconTime, title: "15:00 14 tháng 7,2022"),
-          CustomInfoItem(icon: Assets.iconBranch, title: "Chi nhánh 1"),
+          CustomInfoItem(icon: Assets.iconTime, title: item.createdAt ?? "N/A"),
+          CustomInfoItem(icon: Assets.iconBranch, title: item.branchName ?? "N/A"),
           CustomInfoItem(
-              icon: Assets.iconShipper, title: "Giao hàng - 2022-12-24 13:30"),
+              icon: Assets.iconShipper, title: "Giao hàng - ${item.deliveryRequestDate}"),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
                   child: CustomInfoItem(
-                      icon: Assets.iconDeal, title: "1 sản phẩm")),
+                      icon: Assets.iconDeal, title: "${item.countProd ?? 0} sản phẩm")),
               Row(
                 children: [
                   Image.asset(
@@ -1571,7 +1568,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     width: 10.0,
                   ),
                   Text(
-                    "35.000 VND",
+                    AppFormat.moneyFormatDot.format(item.amount) + " VND",
                     style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 14,

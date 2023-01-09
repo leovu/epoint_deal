@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -21,8 +23,7 @@ import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
-import 'package:epoint_deal_plugin/presentation/edit_deal/more_info_eidt_deal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/customer_type_modal.dart';
+import 'package:epoint_deal_plugin/presentation/edit_deal/more_info_edit_deal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_potential_customer_modal.dart';
@@ -117,7 +118,8 @@ class _EditDealScreenState extends State<EditDealScreen>
   DateTime selectedClosingDueDate;
 
   List<CustomerData> listCustomer = <CustomerData>[];
-  DealItems customerSelected = DealItems();
+  DealItems customerSelected = DealItems(
+      customerCode: "", customerName: "", typeCustomer: "", phone: "");
 
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
   ListCustomLeadItems leadItem = ListCustomLeadItems();
@@ -126,7 +128,8 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   List<Product> productUpdate = <Product>[];
 
-  AddDealModelRequest detailDeal = AddDealModelRequest(
+  UpdateDealModelRequest detailDeal = UpdateDealModelRequest(
+      dealCode: "",
       dealName: "",
       saleId: 0,
       typeCustomer: "",
@@ -198,8 +201,30 @@ class _EditDealScreenState extends State<EditDealScreen>
   void bindingData() async {
     _dealNameText.text = widget.detail?.dealName ?? "";
     detailDeal.dealName = widget.detail?.dealName ?? "";
+    detailDeal.phone = widget.detail.phone ?? "";
+    detailDeal.dealDescription = widget.detail.dealDescription ?? "";
+    detailDeal.amount = widget.detail.amount;
+    detailDeal.probability = widget.detail.probability ?? 0;
+    detailDeal.dealCode = widget.detail.dealCode ?? "";
 
-      for (int i = 0; i < _modelStaff.length; i++) {
+    // detailDeal.product = widget.detail.productBuy;
+
+    if (widget.detail.productBuy != null &&
+        widget.detail.productBuy.length > 0) {
+      widget.detail.productBuy.forEach((element) {
+        detailDeal.product.add(Product(
+          objectCode: "",
+          objectType: element.objectType,
+          objectId: element.objectId,
+          objectName: element.objectName,
+          price: element.price,
+          quantity: element.quantity,
+          amount: element.amount,
+        ));
+      });
+    }
+
+    for (int i = 0; i < _modelStaff.length; i++) {
       if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
         // allocatorSelected = allocatorData[i];
@@ -212,11 +237,21 @@ class _EditDealScreenState extends State<EditDealScreen>
               departmentId: _modelStaff[i].departmentId,
               isSelected: _modelStaff[i].isSelected)
         ];
-         detailDeal.saleId = _modelStaffSelected[0].staffId;
       } else {
         _modelStaff[i].isSelected = false;
       }
     }
+
+    try {
+      var item = _modelStaff.firstWhere(
+          (element) => element.staffId == (widget.detail?.saleId ?? 0));
+      if (item != null) {
+        item.isSelected = true;
+        detailDeal.saleId = _modelStaffSelected[0].staffId;
+      }
+    } catch (e) {}
+
+    detailDeal.saleId = _modelStaffSelected[0].staffId;
 
     for (int i = 0; i < customerTypeData.length; i++) {
       if ((widget.detail?.typeCustomer ?? 0) ==
@@ -224,11 +259,14 @@ class _EditDealScreenState extends State<EditDealScreen>
         customerTypeData[i].selected = true;
 
         customerTypeSelected = customerTypeData[i];
-        detailDeal.typeCustomer = customerTypeSelected.customerTypeNameEn;
       } else {
         customerTypeData[i].selected = false;
       }
     }
+    selectedCustomer =
+        customerTypeSelected.customerTypeNameEn == "lead" ? false : true;
+    detailDeal.typeCustomer =
+        customerTypeSelected.customerTypeNameEn.toLowerCase();
 
     if (customerTypeSelected.customerTypeNameEn == "customer") {
       selectedCustomer = true;
@@ -236,38 +274,32 @@ class _EditDealScreenState extends State<EditDealScreen>
           customerCode: widget.detail?.customerCode,
           customerName: widget.detail?.customerName);
       leadItem = ListCustomLeadItems(customerLeadCode: "");
+      detailDeal.customerCode = customerSelected.customerCode;
     } else {
       selectedCustomer = false;
       customerSelected = DealItems(
           customerCode: widget.detail?.customerCode,
-          customerName: widget.detail?.customerName);
+          customerName: widget.detail?.customerName,
+          typeCustomer: widget.detail?.typeCustomer,
+          phone: widget.detail?.phone);
+      detailDeal.customerCode = customerSelected.customerCode;
       leadItem =
           ListCustomLeadItems(customerLeadCode: widget.detail?.customerCode);
     }
 
     _phoneNumberText.text = widget.detail?.phone;
 
-    for (int i = 0; i < customerTypeData.length; i++) {
-      if ((widget.detail?.typeCustomer ?? 0) ==
-          customerTypeData[i].customerTypeNameEn) {
-        customerTypeData[i].selected = true;
-
-        customerTypeSelected = customerTypeData[i];
-      } else {
-        customerTypeData[i].selected = false;
-      }
-    }
-
     for (int i = 0; i < pipeLineData.length; i++) {
       if ((widget.detail?.pipelineCode ?? "").toLowerCase() ==
           pipeLineData[i].pipelineCode.toLowerCase()) {
         pipeLineData[i].selected = true;
         pipelineSelected = pipeLineData[i];
-        detailDeal.pipelineCode = pipelineSelected.pipelineCode;
       } else {
         pipeLineData[i].selected = false;
       }
     }
+
+    detailDeal.pipelineCode = pipelineSelected.pipelineCode;
 
     var journeys = await DealConnection.getJourney(context,
         GetJourneyModelRequest(pipelineCode: [pipelineSelected.pipelineCode]));
@@ -280,11 +312,11 @@ class _EditDealScreenState extends State<EditDealScreen>
           journeysData[i].journeyCode.toLowerCase()) {
         journeysData[i].selected = true;
         journeySelected = journeysData[i];
-        detailDeal.journeyCode = journeySelected.journeyCode;
       } else {
         journeysData[i].selected = false;
       }
     }
+    detailDeal.journeyCode = journeySelected.journeyCode;
 
     if (branchData != null && branchData.length > 0) {
       BranchData result = branchData.firstWhereOrNull(
@@ -319,15 +351,11 @@ class _EditDealScreenState extends State<EditDealScreen>
     }
 
     orderSourceSelected = OrderSourceData(
-        orderSourceName: widget.detail?.orderSourceName ?? "", selected: true);
+        orderSourceName: widget.detail?.orderSourceName ?? "",
+        orderSourceId: widget.detail.orderSourceId ?? 0,
+        selected: true);
 
-    detailDeal.orderSourceId = orderSourceSelected.orderSourceId; // tra them order ID
-
-    _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-        .format(DateTime.parse(widget.detail.closingDate));
-
-    selectedClosingDueDate =
-        DateTime.parse(widget.detail.closingDate + ' 00:00:00.000');
+    detailDeal.orderSourceId = orderSourceSelected.orderSourceId;
 
     Navigator.of(context).pop();
     setState(() {});
@@ -409,42 +437,9 @@ class _EditDealScreenState extends State<EditDealScreen>
                   : Container()
             ],
           ),
-
           Container(
             height: 10,
           ),
-          // Loại khách hàng
-          // _buildTextField(
-          //     AppLocalizations.text(LangKey.customerStyle),
-          //     customerTypeSelected?.customerTypeName ?? "",
-          //     Assets.iconStyleCustomer,
-          //     true,
-          //     true,
-          //     false, ontap: () async {
-          //   print("loại khách hàng");
-          //   FocusScope.of(context).unfocus();
-
-          //   CustomerTypeModel customerType = await showModalBottomSheet(
-          //       context: context,
-          //       useRootNavigator: true,
-          //       isScrollControlled: true,
-          //       backgroundColor: Colors.transparent,
-          //       builder: (context) {
-          //         return CustomerTypeModal(
-          //           customerTypeData: customerTypeData,
-          //         );
-          //       });
-          //   if (customerType != null) {
-          //     customerTypeSelected = customerType;
-          //     customerSelected = DealItems(customerCode: "", customerName: "");
-          //     leadItem = ListCustomLeadItems(customerLeadCode: "");
-          //     _phoneNumberText.text = "";
-          //     setState(() {});
-          //   }
-
-          //   // print("loại khách hàng");
-          // }),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -455,6 +450,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                   customerSelected =
                       DealItems(customerCode: "", customerName: "");
                   leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  _dealNameText.text = "";
                   selectedCustomer = false;
                   setState(() {});
                 },
@@ -494,6 +490,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                   customerSelected =
                       DealItems(customerCode: "", customerName: "");
                   leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  _dealNameText.text = "";
                   selectedCustomer = true;
                   setState(() {});
                 },
@@ -555,8 +552,8 @@ class _EditDealScreenState extends State<EditDealScreen>
               if (customer != null) {
                 customerSelected.customerCode = customer.customerCode;
                 customerSelected.customerName = customer.fullName;
+                detailDeal.customerCode = customer.customerCode;
                 // _phoneNumberText.text = "";
-
                 setState(() {});
               }
             } else if (customerTypeSelected.customerTypeNameEn == "lead") {
@@ -570,8 +567,11 @@ class _EditDealScreenState extends State<EditDealScreen>
               if (result != null) {
                 customerSelected.customerCode = result.customerLeadCode;
                 customerSelected.customerName = result.leadFullName;
+                customerSelected.typeCustomer = result.customerType;
+                customerSelected.phone = result.phone;
                 leadItem.customerLeadCode = result.customerLeadCode;
-                // _phoneNumberText.text = result.phone;
+
+                detailDeal.customerCode = result.customerLeadCode;
 
                 setState(() {});
               }
@@ -581,7 +581,6 @@ class _EditDealScreenState extends State<EditDealScreen>
                   warning: true);
             }
           }),
-
           !selectedCustomer
               ? (customerSelected.customerCode != "")
                   ? Column(
@@ -591,7 +590,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                "Loại khách hàng: ",
+                                AppLocalizations.text(LangKey.customerStyle) +
+                                    ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -601,7 +601,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                                "Doanh nghiệp",
+                                (customerSelected.typeCustomer.toLowerCase() ==
+                                        AppLocalizations.text(LangKey.personal)
+                                            .toLowerCase())
+                                    ? AppLocalizations.text(LangKey.personal)
+                                    : AppLocalizations.text(LangKey.business),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -615,7 +619,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                "Số điện thoại: ",
+                                AppLocalizations.text(LangKey.phoneNumber) +
+                                    ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -625,7 +630,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                                "0347621673",
+                                detailDeal.phone ?? "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -640,19 +645,19 @@ class _EditDealScreenState extends State<EditDealScreen>
               : Container(),
 
           // phone
-          selectedCustomer
-              ? _buildTextField(
-                  AppLocalizations.text(LangKey.inputPhonenumber),
-                  "",
-                  Assets.iconCall,
-                  false,
-                  false,
-                  true,
-                  fillText: _phoneNumberText,
-                  focusNode: _phoneNumberFocusNode,
-                  inputType: TextInputType.number,
-                )
-              : Container(),
+          // selectedCustomer
+          //     ? _buildTextField(
+          //         AppLocalizations.text(LangKey.inputPhonenumber),
+          //         "",
+          //         Assets.iconCall,
+          //         false,
+          //         false,
+          //         true,
+          //         fillText: _phoneNumberText,
+          //         focusNode: _phoneNumberFocusNode,
+          //         inputType: TextInputType.number,
+          //       )
+          //     : Container(),
 
 // nhập tên deal
           _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
@@ -730,6 +735,9 @@ class _EditDealScreenState extends State<EditDealScreen>
                               }
 
                               pipelineSelected = pipeline;
+                              detailDeal.pipelineCode =
+                                  pipelineSelected.pipelineCode;
+                              detailDeal.journeyCode = "";
                               DealConnection.showLoading(context);
                               var journeys = await DealConnection.getJourney(
                                   context,
@@ -761,6 +769,9 @@ class _EditDealScreenState extends State<EditDealScreen>
                             }
 
                             pipelineSelected = pipeline;
+                            detailDeal.pipelineCode =
+                                pipelineSelected.pipelineCode;
+                            detailDeal.journeyCode = "";
                             DealConnection.showLoading(context);
                             var journeys = await DealConnection.getJourney(
                                 context,
@@ -776,84 +787,6 @@ class _EditDealScreenState extends State<EditDealScreen>
                         }
                       })
                     : Container(),
-
-                // chọn người được phân bổ
-                _buildTextField(
-                    AppLocalizations.text(LangKey.chooseAllottedPerson),
-                    (_modelStaffSelected != null)
-                        ? _modelStaffSelected[0]?.staffName ?? ""
-                        : "",
-                    Assets.iconName,
-                    true,
-                    true,
-                    false, ontap: () async {
-                  FocusScope.of(context).unfocus();
-                  print("Chọn người được phân bổ");
-
-                  _modelStaffSelected =
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MultipleStaffScreenDeal(
-                                models: _modelStaffSelected,
-                              )));
-
-                  if (_modelStaffSelected != null &&
-                      _modelStaffSelected.length > 0) {
-                    print(_modelStaffSelected);
-
-                    setState(() {});
-                  }
-                }
-
-                    // if (allocatorData == null || allocatorData.length == 0) {
-                    //   DealConnection.showLoading(context);
-                    //   var allocators = await DealConnection.getAllocator(context);
-                    //   Navigator.of(context).pop();
-
-                    //   if (allocators != null) {
-                    //     allocatorData = allocators.data;
-
-                    //     AllocatorData allocator = await showModalBottomSheet(
-                    //         context: context,
-                    //         useRootNavigator: true,
-                    //         isScrollControlled: true,
-                    //         backgroundColor: Colors.transparent,
-                    //         builder: (context) {
-                    //           return AllocatorModal(
-                    //               allocatorData: allocatorData,
-                    //               allocatorSelected: allocatorSelected);
-                    //         });
-                    //     if (allocator != null) {
-                    //       allocatorSelected = allocator;
-                    //       // widget.detailPotential?.saleId = allocatorSelected.staffId;
-                    //       setState(() {});
-                    //     }
-                    //   }
-                    // } else {
-                    //   AllocatorData allocator = await showModalBottomSheet(
-                    //       context: context,
-                    //       useRootNavigator: true,
-                    //       isScrollControlled: true,
-                    //       backgroundColor: Colors.transparent,
-                    //       builder: (context) {
-                    //         return GestureDetector(
-                    //           child: AllocatorModal(
-                    //             allocatorData: allocatorData,
-                    //           ),
-                    //           onTap: () {
-                    //             Navigator.of(context).pop();
-                    //           },
-                    //           behavior: HitTestBehavior.opaque,
-                    //         );
-                    //       });
-                    //   if (allocator != null) {
-                    //     allocatorSelected = allocator;
-                    //     // widget.detailPotential?.saleId = allocatorSelected.staffId;
-                    //     setState(() {});
-                    //   }
-                    // }
-                    // }
-                    ),
-
                 // chọn hành trình
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseItinerary),
@@ -878,9 +811,39 @@ class _EditDealScreenState extends State<EditDealScreen>
                       });
                   if (journey != null) {
                     journeySelected = journey;
+                    detailDeal.journeyCode = journeySelected.journeyCode;
                     setState(() {
                       // await LeadConnection.getDistrict(context, province.provinceid);
                     });
+                  }
+                }),
+
+                // chọn người được phân bổ
+                _buildTextField(
+                    AppLocalizations.text(LangKey.chooseAllottedPerson),
+                    (_modelStaffSelected != null)
+                        ? _modelStaffSelected[0]?.staffName ?? ""
+                        : "",
+                    Assets.iconName,
+                    true,
+                    true,
+                    false, ontap: () async {
+                  FocusScope.of(context).unfocus();
+                  print("Chọn người được phân bổ");
+
+                  _modelStaffSelected =
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MultipleStaffScreenDeal(
+                                models: _modelStaffSelected,
+                              )));
+
+                  if (_modelStaffSelected != null &&
+                      _modelStaffSelected.length > 0) {
+                    print(_modelStaffSelected);
+
+                    detailDeal.saleId = _modelStaffSelected[0].staffId;
+
+                    setState(() {});
                   }
                 }),
 
@@ -1150,13 +1113,11 @@ class _EditDealScreenState extends State<EditDealScreen>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-                    if (selectedCustomer) {
+          if (selectedCustomer) {
             await updateDealCustomer();
           } else {
             await updateDealLead();
           }
-          print("Okie call api add");
-          print("Okie call api add");
         },
         child: Center(
           child: Text(
@@ -1173,7 +1134,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     );
   }
 
-    Future<void> updateDealCustomer() async {
+  Future<void> updateDealCustomer() async {
     if (_phoneNumberText.text.isNotEmpty) {
       if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) ||
           (!Validators().isNumber(_phoneNumberText.text.trim()))) {
@@ -1207,6 +1168,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       UpdateDealModelResponse result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
+              dealCode: detailDeal.dealCode,
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "customer",
@@ -1242,8 +1204,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     }
   }
 
-    Future<void> updateDealLead() async {
-
+  Future<void> updateDealLead() async {
     if (_dealNameText.text == "" ||
         detailDeal.typeCustomer == "" ||
         detailDeal.pipelineCode == "" ||
@@ -1266,6 +1227,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       UpdateDealModelResponse result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
+              dealCode: detailDeal.dealCode,
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "lead",
@@ -1299,5 +1261,4 @@ class _EditDealScreenState extends State<EditDealScreen>
       }
     }
   }
-
 }

@@ -1,15 +1,19 @@
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
-import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
+import 'package:epoint_deal_plugin/presentation/order_category/ui/order_category_screen.dart';
+import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
@@ -23,7 +27,7 @@ class MoreInfoEditDeal extends StatefulWidget {
   DetailDealData detail;
   List<BranchData> branchData;
   OrderSourceData orderSourceSelected;
-  AddDealModelRequest detailDeal;
+  UpdateDealModelRequest detailDeal;
   MoreInfoEditDeal(
       {Key key,
       this.branchData,
@@ -51,23 +55,17 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   // List<TagData> tagsData;
   List<TagData> tagsSelected;
   String tagsString = "";
+  List<Map<String, dynamic>> productSelected = [];
 
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.detail?.probability != "" ) {
-        _probabilityText.text = NumberFormat.currency(
-              locale: 'en_US',
-              decimalDigits: 1,
-              symbol: '',
-            ).format(num.parse(widget.detail?.probability ?? ""));
-      } else {
-         _probabilityText.text = "";
-      }
 
-      _detailDealText.text = widget.detail?.dealDescription ?? "";
+         _probabilityText.text = "${widget.detail?.probability ?? 0}";
+         
+      _detailDealText.text = widget.detailDeal?.dealDescription ?? "";
       setState(() {});
     });
   }
@@ -84,27 +82,36 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // + thêm sản phẩm
-              (widget.detail.productBuy.length == 0)
+              (widget.detailDeal.product.length == 0)
                   ? InkWell(
                       onTap: () async {
-                        if (Global.getListProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.getListProduct();
-                              if (result != null) {
-                                if (result.length > 0) {
-                                  widget.detail.productBuy.clear();
-                                  for (int i = 0 ; i < result.length ; i ++) {
-                                    widget.detail.productBuy.add(ProductBuy(
-                                objectType: result[i]["object_type"] ?? "",
-                                objectName: result[i]["object_name"] ?? "",
-                                // objectCode: result[i]["objectCode"] ?? "",
-                                objectId: result[i]["object_id"] ?? "",
-                                quantity: result[i]["quantity"] ?? "",
-                                price: result[i]["price"] ?? "",
-                                amount: result[i]["amount"] ?? ""));
-                                  };
-                                }
-                              }
+                        final result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => OrderCategoryScreen()));
+                        GlobalCart.shared.clearCart();
+
+                        if (result != null) {
+                          if (result.length > 0) {
+                            productSelected.clear();
+                            for (int i = 0; i < result.length; i++) {
+                              widget.detailDeal.product.add(Product(
+                                  objectType: result[i]["object_type"] ?? "",
+                                  objectName: result[i]["object_name"] ?? "",
+                                  objectCode: result[i]["objectCode"] ?? "",
+                                  objectId: result[i]["object_id"] ?? 0,
+                                  quantity: result[i]["quantity"] ?? 0,
+                                  price: result[i]["price"] ?? 0,
+                                  amount: (result[i]["quantity"] ?? 0) *
+                                      (result[i]["price"] ?? 0)));
+                              productSelected
+                                  .add(widget.detailDeal.product[i].toJson());
                             }
+                            ;
+                          }
+                        }
+
+
+                        
                             setState(() {});
                       },
                       child: Container(
@@ -166,7 +173,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           ),
           Column(
             children: [
-              (widget.detail.productBuy.length > 0)
+              (widget.detailDeal.product.length > 0)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -179,23 +186,54 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                         ),
                         InkWell(
                           onTap: () async {
-                            if (Global.getListProduct != null)  {
-                              List<Map<String,dynamic>> result = await Global.getListProduct();
+                           
+                             if (widget.detailDeal.product.length > 0) {
+                              widget.detailDeal.product.forEach((v) {
+                                if (v.objectType == 'product') {
+                                  ProductModel item =
+                                      ProductModel.fromJsonOrderDetail(v.toJson());
+                                  GlobalCart.shared.addProduct(item, item.qty);
+                                } else {
+                                  ServiceModel item =
+                                      ServiceModel.fromJsonOrderDetail(v.toJson());
+                                  GlobalCart.shared.addService(item, item.qty);
+                                }
+                              });
+                            }
+
+                            final result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        OrderCategoryScreen()));
+                            GlobalCart.shared.clearCart();
+                            print(result);
+     
                               if (result != null) {
+                                widget.detailDeal.product.clear();
                                 if (result.length > 0) {
-                                  for (int i = 0 ; i < result.length ; i ++) {
-                                    widget.detail.productBuy.add(ProductBuy(
-                                objectType: result[i]["object_type"] ?? "",
-                                objectName: result[i]["object_name"] ?? "",
-                                // objectCode: result[i]["objectCode"] ?? "",
-                                objectId: result[i]["object_id"] ?? "",
-                                quantity: result[i]["quantity"] ?? "",
-                                price: result[i]["price"] ?? "",
-                                amount: result[i]["amount"] ?? ""));
-                                  };
+                                  productSelected.clear();
+                                  for (int i = 0; i < result.length; i++) {
+                                    widget.detailDeal.product.add(Product(
+                                        objectType:
+                                            result[i]["object_type"] ?? "",
+                                        objectName:
+                                            result[i]["object_name"] ?? "",
+                                        objectCode:
+                                            result[i]["objectCode"] ?? "",
+                                        objectId: result[i]["object_id"] ?? 0,
+                                        quantity: result[i]["quantity"] ?? 0,
+                                        price: result[i]["price"] ?? 0,
+                                        amount: (result[i]["quantity"] ?? 0) *
+                                            (result[i]["price"] ?? 0)));
+
+                                    productSelected.add(
+                                        widget.detailDeal.product[i].toJson());
+                                  }
+                                  ;
                                 }
                               }
-                            }
+
+                            
                             setState(() {});
                           },
                           child: Text(
@@ -337,39 +375,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           Container(
             height: 15,
           ),
-          // _buildTextField("Tag", (widget.tagsString != "") ? widget.tagsString : tagsString, Assets.iconTag, false, true, false,
-          //     ontap: () async {
-          //   print("Tag");
-          //   FocusScope.of(context).unfocus();
-          //   var listTagsSelected = await showModalBottomSheet(
-          //       context: context,
-          //       useRootNavigator: true,
-          //       isScrollControlled: true,
-          //       backgroundColor: Colors.transparent,
-          //       builder: (context) {
-          //         return TagsModal(
-          //           tagsData: widget.tagsData,
-          //         );
-          //       });
-          //   if (listTagsSelected != null) {
-          //     widget.detail.tag = <int>[];
-          //     tagsString = "";
-          //     tagsSelected = listTagsSelected;
 
-          //     for (int i = 0; i < tagsSelected.length; i++) {
-          //       if (tagsSelected[i].selected) {
-          //         widget.detail.tag.add(tagsSelected[i].tagId);
-
-          //         if (tagsString == "") {
-          //           tagsString = tagsSelected[i].name;
-          //         } else {
-          //           tagsString += ", ${tagsSelected[i].name}";
-          //         }
-          //       }
-          //     }
-          //     setState(() {});
-          //   }
-          // }),
           _buildTextField(
                "Nguồn cơ hội bán hàng",
               widget.detail?.orderSourceName ?? "",
@@ -442,7 +448,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               Assets.iconProbability, false, false, true,
               fillText: _probabilityText,
               focusNode: _probabilityFocusNode,
-              inputType: TextInputType.number),
+              inputType: TextInputType.numberWithOptions(
+                      signed: false, decimal: false)),
          Container(
             margin: EdgeInsets.only(bottom: 10),
             child: CustomTextField(
@@ -471,25 +478,25 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
   List<Widget> listProduct() {
     return List.generate(
-      widget.detail.productBuy.length,
-      (index) => product(widget.detail.productBuy[index], ()
+      widget.detailDeal.product.length,
+      (index) => product(widget.detailDeal.product[index], ()
           // xoa item
           {
-        widget.detail.productBuy.removeAt(index);
+        widget.detailDeal.product.removeAt(index);
         setState(() {});
       },
           // - so luong
           () {
-        minusItem(widget.detail.productBuy[index]);
+        minusItem(widget.detailDeal.product[index]);
       },
           // + so luong
           () {
-        plusItem(widget.detail.productBuy[index]);
+        plusItem(widget.detailDeal.product[index]);
       }),
     );
   }
 
-  void minusItem(ProductBuy item) {
+  void minusItem(Product item) {
     if (item.quantity == 1) {
       return;
     } else {
@@ -499,7 +506,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
     setState(() {});
   }
 
-  void plusItem(ProductBuy item) {
+  void plusItem(Product item) {
     item.quantity += 1;
     setState(() {});
   }
@@ -653,10 +660,10 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               if (fillText == _probabilityText) {
                 widget.detailDeal.probability =
                     double.tryParse(fillText.text) ?? 0;
-                    widget.detail?.probability = fillText.text;
+                    widget.detailDeal?.probability = num.tryParse(fillText.text ?? "0");
                 if (widget.detailDeal.probability > 100) {
                   _probabilityText.text = "100";
-                  widget.detail?.probability = "100";
+                  widget.detailDeal?.probability = 100;
                   _probabilityText.selection = TextSelection.fromPosition(
                       TextPosition(offset: _probabilityText.text.length));
                 }
@@ -671,7 +678,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
     );
   }
 
-  Widget product(ProductBuy item, Function ontapDelete, Function OntapMinus,
+  Widget product(Product item, Function ontapDelete, Function OntapMinus,
       Function ontapPlus) {
     return Container(
       child: Column(

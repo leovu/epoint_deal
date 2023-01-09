@@ -443,7 +443,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             Assets.iconProbability, false, false, true,
             fillText: _probabilityText,
             focusNode: _probabilityFocusNode,
-            inputType: TextInputType.number,
+            inputType:  TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
             maxLenght: 3),
         // _buildTextField(AppLocalizations.text(LangKey.dealDetail), "",
         //     Assets.iconDealDetail, false, false, true,

@@ -123,10 +123,10 @@ class DealItems {
   String orderSourceName;
   String pipelineName;
   int amount;
-  String probability;
+  int probability;
   String dateLastCare;
   String customerName;
-  Null diffDay;
+  int diffDay;
   int relatedWork;
   int appointment;
   bool selected;

@@ -10,9 +10,9 @@ class AddDealModelRequest {
   String branchCode;
   List<int> tag;
   int orderSourceId;
-  double probability;
+  num probability;
   String dealDescription;
-  double amount;
+  num amount;
   List<Product> product;
 
   AddDealModelRequest(

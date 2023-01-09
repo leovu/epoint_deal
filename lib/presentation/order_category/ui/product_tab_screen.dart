@@ -179,6 +179,8 @@ class _ProductTabScreenState extends State<ProductTabScreen>
                         ),
                         if(!widget.isViewOnly && !widget.isSelected)
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
@@ -214,7 +216,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(color: Colors.grey)),
-                                width: 60.0,
+                                width: 40.0,
                                 height: 25.0,
                                 child: _inputField(value),
                               ),

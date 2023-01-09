@@ -1,5 +1,3 @@
-import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
-
 class DetailDealModelResponse {
   int errorCode;
   String errorDescription;
@@ -40,8 +38,9 @@ class DetailDealData {
   String reasonLoseCode;
   String branchName;
   String orderSourceName;
+  int orderSourceId;
   List<int> tag;
-  String probability;
+  int probability;
   String dealDescription;
   int saleId;
   String staffName;
@@ -81,6 +80,7 @@ class DetailDealData {
       this.reasonLoseCode,
       this.branchName,
       this.orderSourceName,
+      this.orderSourceId,
       this.tag,
       this.probability,
       this.dealDescription,
@@ -143,6 +143,8 @@ class DetailDealData {
     diffDay = json['diff_day'];
     relatedWork = json['related_work'];
     appointment = json['appointment'];
+    orderSourceId = json['order_source_id'];
+
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
       json['journey_tracking'].forEach((v) {
@@ -198,6 +200,7 @@ class DetailDealData {
     data['address'] = this.address;
     data['background_color_journey'] = this.backgroundColorJourney;
     data['product_name_buy'] = this.productNameBuy;
+    data['order_source_id'] = this.orderSourceId;
     if (this.journeyTracking != null) {
       data['journey_tracking'] =
           this.journeyTracking.map((v) => v.toJson()).toList();

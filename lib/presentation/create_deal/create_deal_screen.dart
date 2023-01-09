@@ -130,6 +130,24 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       // product: <Product>[],
       product: <Product>[]);
 
+      // AddDealModelRequest detailDealCustomer = AddDealModelRequest(
+      // dealName: "",
+      // saleId: 0,
+      // typeCustomer: "",
+      // customerCode: "",
+      // phone: "",
+      // pipelineCode: "",
+      // journeyCode: "",
+      // closingDate: "",
+      // branchCode: "",
+      // tag: [],
+      // orderSourceId: 0,
+      // probability: 0,
+      // dealDescription: "",
+      // amount: 0,
+      // // product: <Product>[],
+      // product: <Product>[]);
+
   bool selectedCustomer = true;
   List<TagData> tagsData;
 
@@ -263,42 +281,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           Container(
             height: 10,
           ),
-// loại khách hàng
-          // _buildTextField(
-          //     AppLocalizations.text(LangKey.customerStyle),
-          //     customerTypeSelected?.customerTypeName ?? "",
-          //     Assets.iconStyleCustomer,
-          //     true,
-          //     true,
-          //     false, ontap: () async {
-          //   print("loại khách hàng");
-          //   FocusScope.of(context).unfocus();
-
-          //   CustomerTypeModel customerType = await showModalBottomSheet(
-          //       context: context,
-          //       useRootNavigator: true,
-          //       isScrollControlled: true,
-          //       backgroundColor: Colors.transparent,
-          //       builder: (context) {
-          //         return CustomerTypeModal(
-          //           customerTypeData: customerTypeData,
-          //         );
-          //       });
-          //   if (customerType != null) {
-          //     if (customerType.customerTypeID ==
-          //             customerTypeSelected?.customerTypeID ??
-          //         0) {
-          //       return;
-          //     }
-          //     customerTypeSelected = customerType;
-          //     customerSelected = DealItems(customerCode: "", customerName: "");
-          //     leadItem = ListCustomLeadItems(customerLeadCode: "");
-
-          //     setState(() {});
-          //   }
-
-          //   // print("loại khách hàng");
-          // }),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -349,6 +331,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                   customerSelected =
                       DealItems(customerCode: "", customerName: "");
                   leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  _dealNameText.text = "";
                   selectedCustomer = false;
                   setState(() {});
                 },
@@ -428,8 +411,13 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               if (result != null) {
                 customerSelected.customerCode = result.customerLeadCode;
                 customerSelected.customerName = result.leadFullName;
+                customerSelected.phone = result.phone;
+                customerSelected.typeCustomer = result.customerType;
+
                 leadItem.customerLeadCode = result.customerLeadCode;
-                // _phoneNumberText.text = result.phone;
+
+                detailDeal.phone = result.phone;
+                detailDeal.typeCustomer = result.customerType;
                 detailDeal.customerCode = customerSelected.customerCode;
 
                 setState(() {});
@@ -450,7 +438,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                "Loại khách hàng: ",
+                                AppLocalizations.text(LangKey.customerStyle) + ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -460,7 +448,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                               (customerSelected.typeCustomer == "personal") ? "Cá nhân" : "Doanh nghiệp",
+                               (customerSelected.typeCustomer.toLowerCase() == AppLocalizations.text(LangKey.personal).toLowerCase() ) ? AppLocalizations.text(LangKey.personal) : AppLocalizations.text(LangKey.business),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -474,7 +462,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                "Số điện thoại: ",
+                                AppLocalizations.text(LangKey.phoneNumber) +": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -575,6 +563,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     }
 
                     pipelineSelected = pipeline;
+                    detailDeal.pipelineCode = pipelineSelected.pipelineCode;
                     DealConnection.showLoading(context);
                     var journeys = await DealConnection.getJourney(
                         context,
@@ -949,7 +938,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     }
 
     if (_dealNameText.text == "" ||
-        detailDeal.typeCustomer == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
         detailDeal.customerCode == "" ||
@@ -1007,7 +995,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     Future<void> addDealLead() async {
 
     if (_dealNameText.text == "" ||
-        detailDeal.typeCustomer == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
         detailDeal.customerCode == "" ||
@@ -1032,7 +1019,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               saleId: detailDeal.saleId,
               typeCustomer: "lead",
               customerCode: detailDeal.customerCode,
-              phone: _phoneNumberText.text,
+              phone: detailDeal.phone ?? "",
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               // closingDate:

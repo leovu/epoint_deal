@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,18 @@ class CustomFileViewState extends State<CustomFileView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      title: widget.title,
+    return Scaffold(
+      appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          // actionsIconTheme: Navigator.of(context).pop(true),
+          backgroundColor: AppColors.primaryColor,
+          title: Text(
+            widget.title,
+            style: TextStyle(color: Colors.white, fontSize: 18.0),
+          ),
+        ),
       body: ["jpeg", "jpg", "png"].contains(widget.url.split(".").last)?CustomNetworkImage(
         width: double.infinity,
         height: double.infinity,

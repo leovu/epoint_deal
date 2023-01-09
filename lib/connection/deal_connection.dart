@@ -36,6 +36,7 @@ import 'package:epoint_deal_plugin/model/response/list_business_areas_model_resp
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/list_project_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
@@ -87,10 +88,8 @@ class DealConnection {
 
     static Future<ListCustomLeadModelReponse> getListPotentialCustomer(
       BuildContext context, ListCustomLeadModelRequest model) async {
-    showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/list-customer-lead', model.toJson());
-    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       if (responseData.data != null) {
         ListCustomLeadModelReponse data =
@@ -128,6 +127,22 @@ class DealConnection {
     }
     return null;
   }
+
+    static Future<OrderHistoryResponseModel> getOrderHistory(
+      BuildContext context, String deal_code) async {
+    showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/order-history',
+        {"deal_code": deal_code});
+    Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      OrderHistoryResponseModel data =
+          OrderHistoryResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
 
   static Future<BranchModelResponse> getBranch(
       BuildContext context) async {
@@ -480,6 +495,7 @@ class DealConnection {
           WorkListCommentResponseModel.fromJson(responseData.data);
       return data;
     }
+
     return null;
   }
 

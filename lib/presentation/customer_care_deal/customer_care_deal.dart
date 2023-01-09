@@ -844,11 +844,6 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
   _showFromDate() {
     DateTime selectedDate = _fromDate ?? _toDate ?? _now;
-    //   DateTime maximumTime = _now;
-    // if (_toDate?.year == _now.year &&
-    //     _toDate?.month == _now.month &&
-    //     _toDate?.day > _now.day) maximumTime = _toDate;
-
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -861,7 +856,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             child: CustomMenuBottomSheet(
               title: AppLocalizations.text(LangKey.fromDate),
               widget: CustomDatePicker(
-                minimumTime: _now,
+                minimumTime: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day, 0, 0, 0),
                 initTime: selectedDate,
                 maximumTime: _toDate ?? DateTime(2050, 12, 31),
                 dateOrder: DatePickerDateOrder.dmy,
@@ -1002,7 +998,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                 context,
                 AddWorkRequestModel(
                     manageWorkTitle: _titleText.text ?? "",
-                    manageWorkCustomerType: "lead",
+                    manageWorkCustomerType: "deal",
                     manageTypeWorkId: addWorkModel.manageTypeWorkId,
                     from_date: _fromDateText.text ?? "",
                     to_date: _toDateText.text ?? "",
@@ -1025,7 +1021,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     customerId: widget.detail.dealId,
                     listTag: addWorkModel.listTag,
                     typeCardWork: null,
-                    priority: 0,
+                    priority: 1,
                     manageStatusId: addWorkModel.manageStatusId,
                     isApproveId: has_approved ? 1 : 0,
                     repeatWork: null,

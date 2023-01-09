@@ -434,8 +434,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
-                          show: true, number: item?.relatedWork ?? 0, ontap: () async {
+                      _actionItem(Assets.iconCalendar, Color(0xFF26A7AD), number: item?.relatedWork ?? 0, ontap: () async {
                         bool result =
                             await Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => DetailDealScreen(
@@ -449,8 +448,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         }
                         print("1");
                       }),
-                      _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                          show: true, number: item.appointment ?? 0, ontap: () async {
+                      _actionItem(Assets.iconOutdate, Color(0xFFDD2C00), number: item.appointment ?? 0, ontap: () async {
                         bool result =
                             await Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => DetailDealScreen(
@@ -594,7 +592,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
   }
 
   Widget _actionItem(String icon, Color color,
-      {num number, bool show = false, Function ontap}) {
+      {num number,Function ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -614,8 +612,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                   ),
                 ),
               ),
-              show
-                  ? Positioned(
+             (number > 0) ? Positioned(
                       left: 30,
                       bottom: 30,
                       child: Container(
@@ -629,13 +626,13 @@ class _ListDealScreenState extends State<ListDealScreen> {
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFF45E38)),
                         child: Center(
-                            child: Text("${number ?? 0}",
+                            child: Text(
+                             (number > 10) ? "9+": "${number ?? 0}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w600))),
-                      ))
-                  : Container()
+                      )) : Container()
             ],
           )),
     );
