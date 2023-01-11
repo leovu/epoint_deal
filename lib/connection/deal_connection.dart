@@ -22,6 +22,7 @@ import 'package:epoint_deal_plugin/model/request/work_create_comment_request_mod
 import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/add_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
@@ -463,6 +464,21 @@ class DealConnection {
     }
     return null;
   }
+
+      static Future<CareDealResponseModel> getCareDeal(
+      BuildContext context, int deal_id) async {
+        showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/care-deal',{"deal_id" : deal_id});
+        Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      CareDealResponseModel data =
+          CareDealResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
 
   
 

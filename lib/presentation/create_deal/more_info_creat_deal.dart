@@ -446,11 +446,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             inputType:  TextInputType.numberWithOptions(
                       signed: false, decimal: false),
             maxLenght: 3),
-        // _buildTextField(AppLocalizations.text(LangKey.dealDetail), "",
-        //     Assets.iconDealDetail, false, false, true,
-        //     fillText: _detailDealText,
-        //     focusNode: _detailDealFocusNode,
-        //     inputType: TextInputType.text),
+            
+            
 
         Container(
           margin: EdgeInsets.only(bottom: 10),
@@ -461,6 +458,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
             controller: _detailDealText,
             focusNode: _detailDealFocusNode,
+            onChanged: (event) {
+              widget.detailDeal.dealDescription = _detailDealText.text;
+            },
           ),
         ),
       ],
@@ -669,8 +669,6 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                   _probabilityText.selection = TextSelection.fromPosition(
                       TextPosition(offset: _probabilityText.text.length));
                 }
-              } else {
-                widget.detailDeal.dealDescription = fillText.text;
               }
             }
           },

@@ -186,6 +186,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       if (pipelines != null) {
         pipeLineData = pipelines.data;
         pipelineSelected = pipeLineData[0];
+        detailDeal.pipelineCode = pipelineSelected.pipelineCode;
       }
       var journeys = await DealConnection.getJourney(
           context,
@@ -195,6 +196,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         journeysData = journeys.data;
 
         journeySelected = journeysData[0];
+        detailDeal.journeyCode = journeySelected.journeyCode;
       }
       Navigator.of(context).pop();
       setState(() {});
@@ -639,16 +641,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 }),
 
 // chọn ngày kết thúc thực tế
-                // showMoreInfoDeal ?
-                // Container(
-                //     margin: const EdgeInsets.only(bottom: 10.0),
-                //     child: _buildDatePicker(
-                //         AppLocalizations.text(LangKey.expectedEndingDate),
-                //         _closingDueDateText, () {
-                //       _showClosingDueDate();
-                //     }))
-                // : Container(),
-                // ,
+                showMoreInfoDeal ?
+                Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    child: _buildDatePicker(
+                        AppLocalizations.text(LangKey.expectedEndingDate),
+                        _closingDueDateText, () {
+                      _showClosingDueDate();
+                    }))
+                : Container(),
+                
 
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
@@ -941,7 +943,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
         detailDeal.customerCode == "" ||
-        detailDeal.saleId == 0) {
+        detailDeal.saleId == 0 ||
+        selectedClosingDueDate == null) {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -965,9 +968,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               phone: _phoneNumberText.text,
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
-              // closingDate:
-              //     "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
-              closingDate: "",
+              closingDate:
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+              // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,
               orderSourceId: detailDeal.orderSourceId,
@@ -998,7 +1001,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
         detailDeal.customerCode == "" ||
-        detailDeal.saleId == 0) {
+        detailDeal.saleId == 0 ||
+        selectedClosingDueDate == null) {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1022,9 +1026,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               phone: detailDeal.phone ?? "",
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
-              // closingDate:
-              //     "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
-              closingDate: "",
+              closingDate:
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+              // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,
               orderSourceId: detailDeal.orderSourceId,

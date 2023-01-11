@@ -236,68 +236,63 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
   String journeyString = "";
 
   FilterScreenModel filterScreenModel = FilterScreenModel(
-      filterModel: ListDealModelRequest(
-          search: "",
-          page: 1,
-          orderSourceName: "",
-          createdAt: "",
-          closingDate: "",
-          closingDueDate: "",
-          branchId: [],
-          staffId: [],
-          pipelineId: [],
-          journeyName: [],
-          manageStatusId: [],
-          careHistory: ""
-
-          ),
-      fromDate_closing_date: null,
-      fromDate_closing_due_date: null,
-      fromDate_created_at: null,
-      toDate_created_at: null,
-      id_created_at: "",
-      id_closing_date: "",
-      toDate_closing_date: null,
-      toDate_closing_due_date: null,
-      id_closing_due_date: "",
-      fromDate_history_care_date: null,
-      toDate_history_care_date: null,
-      fromDate_work_schedule_date: null,
-      toDate_work_schedule_date: null,
-      id_history_care_date: "",
-      id_work_schedule_date: "",
-      )
-      
-      ;
+    filterModel: ListDealModelRequest(
+        search: "",
+        page: 1,
+        orderSourceName: "",
+        createdAt: "",
+        closingDate: "",
+        closingDueDate: "",
+        branchId: [],
+        staffId: [],
+        pipelineId: [],
+        journeyName: [],
+        manageStatusId: [],
+        careHistory: ""),
+    fromDate_closing_date: null,
+    fromDate_closing_due_date: null,
+    fromDate_created_at: null,
+    toDate_created_at: null,
+    id_created_at: "",
+    id_closing_date: "",
+    toDate_closing_date: null,
+    toDate_closing_due_date: null,
+    id_closing_due_date: "",
+    fromDate_history_care_date: null,
+    toDate_history_care_date: null,
+    fromDate_work_schedule_date: null,
+    toDate_work_schedule_date: null,
+    id_history_care_date: "",
+    id_work_schedule_date: "",
+  );
 
   @override
   void initState() {
     super.initState();
     filterScreenModel = FilterScreenModel(
-        filterModel: ListDealModelRequest.fromJson(
-            widget.filterScreenModel.filterModel.toJson()),
-        fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
-        toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
-        id_closing_date: widget.filterScreenModel.id_closing_date,
-        fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-        toDate_created_at: widget.filterScreenModel.toDate_created_at,
-        id_created_at: widget.filterScreenModel.id_created_at,
-        fromDate_closing_due_date:
-            widget.filterScreenModel.fromDate_closing_due_date,
-        toDate_closing_due_date:
-            widget.filterScreenModel.toDate_closing_due_date,
-        id_closing_due_date: widget.filterScreenModel.id_closing_due_date,
-        fromDate_history_care_date:
-            widget.filterScreenModel.fromDate_history_care_date,
-        toDate_history_care_date:
-            widget.filterScreenModel.toDate_history_care_date,
-        fromDate_work_schedule_date:
-            widget.filterScreenModel.fromDate_work_schedule_date,
-        toDate_work_schedule_date:
-            widget.filterScreenModel.toDate_work_schedule_date,
-        id_history_care_date: widget.filterScreenModel.id_history_care_date,
-        id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
-        );
+      filterModel: ListDealModelRequest.fromJson(
+          widget.filterScreenModel.filterModel.toJson()),
+      fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
+      toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
+      id_closing_date: widget.filterScreenModel.id_closing_date,
+      fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+      toDate_created_at: widget.filterScreenModel.toDate_created_at,
+      id_created_at: widget.filterScreenModel.id_created_at,
+      fromDate_closing_due_date:
+          widget.filterScreenModel.fromDate_closing_due_date,
+      toDate_closing_due_date: widget.filterScreenModel.toDate_closing_due_date,
+      id_closing_due_date: widget.filterScreenModel.id_closing_due_date,
+      fromDate_history_care_date:
+          widget.filterScreenModel.fromDate_history_care_date,
+      toDate_history_care_date:
+          widget.filterScreenModel.toDate_history_care_date,
+      fromDate_work_schedule_date:
+          widget.filterScreenModel.fromDate_work_schedule_date,
+      toDate_work_schedule_date:
+          widget.filterScreenModel.toDate_work_schedule_date,
+      id_history_care_date: widget.filterScreenModel.id_history_care_date,
+      id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
@@ -328,13 +323,12 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         context, WorkListStaffRequestModel(manageProjectId: null));
     if (response != null) {
       _modelStaff = response.data ?? [];
-
     }
 
-     var statusWorkModel = await DealConnection.getStatusWork(context);
-              if (statusWorkModel != null) {
-                statusWorkData = statusWorkModel.data;
-              }
+    var statusWorkModel = await DealConnection.getStatusWork(context);
+    if (statusWorkModel != null) {
+      statusWorkData = statusWorkModel.data;
+    }
 
     bindingModel();
   }
@@ -350,15 +344,12 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         }
       }
     }
-     if (filterScreenModel.filterModel.branchId.length > 0) {
-      for (int i = 0;
-          i < filterScreenModel.filterModel.branchId.length;
-          i++) {
+    if (filterScreenModel.filterModel.branchId.length > 0) {
+      for (int i = 0; i < filterScreenModel.filterModel.branchId.length; i++) {
         try {
           branchData
               .firstWhere((element) =>
-                  element.branchId ==
-                  filterScreenModel.filterModel.branchId[i])
+                  element.branchId == filterScreenModel.filterModel.branchId[i])
               .selected = true;
         } catch (e) {}
       }
@@ -372,9 +363,9 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           }
         }
       }
-     }
+    }
 
-     if (filterScreenModel.filterModel.manageStatusId.length > 0) {
+    if (filterScreenModel.filterModel.manageStatusId.length > 0) {
       for (int i = 0;
           i < filterScreenModel.filterModel.manageStatusId.length;
           i++) {
@@ -396,21 +387,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           }
         }
       }
-     }
+    }
 
-   
-
-
-     if (filterScreenModel.filterModel.staffId.length > 0) {
+    if (filterScreenModel.filterModel.staffId.length > 0) {
       _modelStaffSSupportSelected = [];
-      for (int i = 0;
-          i < filterScreenModel.filterModel.staffId.length;
-          i++) {
+      for (int i = 0; i < filterScreenModel.filterModel.staffId.length; i++) {
         try {
           _modelStaff
               .firstWhere((element) =>
-                  element.staffId ==
-                  filterScreenModel.filterModel.staffId[i])
+                  element.staffId == filterScreenModel.filterModel.staffId[i])
               .isSelected = true;
         } catch (e) {}
       }
@@ -454,35 +439,34 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
 
       var journeys = await DealConnection.getJourney(
-        context, GetJourneyModelRequest(pipelineCode: listPipeline));
-    if (journeys != null) {
-      journeysData = journeys.data;
+          context, GetJourneyModelRequest(pipelineCode: listPipeline));
+      if (journeys != null) {
+        journeysData = journeys.data;
 
-      if (filterScreenModel.filterModel.journeyName.length > 0) {
-        for (int i = 0;
-            i < filterScreenModel.filterModel.journeyName.length;
-            i++) {
-          try {
-            journeysData
-                .firstWhere((element) =>
-                    element.journeyId ==
-                    filterScreenModel.filterModel.journeyName[i])
-                .selected = true;
-          } catch (e) {}
-        }
+        if (filterScreenModel.filterModel.journeyName.length > 0) {
+          for (int i = 0;
+              i < filterScreenModel.filterModel.journeyName.length;
+              i++) {
+            try {
+              journeysData
+                  .firstWhere((element) =>
+                      element.journeyId ==
+                      filterScreenModel.filterModel.journeyName[i])
+                  .selected = true;
+            } catch (e) {}
+          }
 
-        for (int i = 0; i < journeysData.length; i++) {
-          if (journeysData[i].selected) {
-            if (journeyString == "") {
-              journeyString = journeysData[i].journeyName;
-            } else {
-              journeyString += ", ${journeysData[i].journeyName}";
+          for (int i = 0; i < journeysData.length; i++) {
+            if (journeysData[i].selected) {
+              if (journeyString == "") {
+                journeyString = journeysData[i].journeyName;
+              } else {
+                journeyString += ", ${journeysData[i].journeyName}";
+              }
             }
           }
         }
       }
-    }
-
     }
     if (filterScreenModel.id_created_at != "") {
       int index = int.parse(widget.filterScreenModel.id_created_at);
@@ -523,15 +507,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                   search: "",
                   page: 1,
                   orderSourceName: "",
-          createdAt: "",
-          closingDate: "",
-          closingDueDate: "",
-          branchId: [],
-          staffId: [],
-          pipelineId: [],
-          journeyName: [],
-          manageStatusId: [],
-          careHistory: ""),
+                  createdAt: "",
+                  closingDate: "",
+                  closingDueDate: "",
+                  branchId: [],
+                  staffId: [],
+                  pipelineId: [],
+                  journeyName: [],
+                  manageStatusId: [],
+                  careHistory: ""),
               fromDate_closing_date: null,
               fromDate_closing_due_date: null,
               fromDate_created_at: null,
@@ -610,40 +594,33 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             fontWeight: FontWeight.bold),
       ),
       Container(height: 10.0),
-      _buildTextField(
-          AppLocalizations.text(LangKey.chooseBranch),
-          branchString,
-          Assets.iconItinerary,
-          false,
-          true,
-          false, ontap: () async {
+      _buildTextField(AppLocalizations.text(LangKey.chooseBranch), branchString,
+          Assets.iconItinerary, false, true, false, ontap: () async {
         print("Chon chi nhanh");
         List<int> branchID = [];
         var branchDataSelected = await Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => FilterByBranch(branchData: branchData)));
+            MaterialPageRoute(
+                builder: (context) => FilterByBranch(branchData: branchData)));
 
-                if (branchDataSelected != null) {
-                  // widget.detailDeal.tag = [];
-                  branchString = "";
-                  branchData = branchDataSelected;
+        if (branchDataSelected != null) {
+          // widget.detailDeal.tag = [];
+          branchString = "";
+          branchData = branchDataSelected;
 
-                  for (int i = 0; i < branchData.length; i++) {
-                    if (branchData[i].selected) {
-                      branchID.add(branchData[i].branchId);
-                      if (branchString == "") {
-                        branchString = branchData[i].branchName;
-                      } else {
-                        branchString += ", ${branchData[i].branchName}";
-                      }
-                    }
-                  }
+          for (int i = 0; i < branchData.length; i++) {
+            if (branchData[i].selected) {
+              branchID.add(branchData[i].branchId);
+              if (branchString == "") {
+                branchString = branchData[i].branchName;
+              } else {
+                branchString += ", ${branchData[i].branchName}";
+              }
+            }
+          }
 
-                  filterScreenModel.filterModel.branchId = branchID;
-                  setState(() {});
-                }
-
-
+          filterScreenModel.filterModel.branchId = branchID;
+          setState(() {});
+        }
       }),
       Container(height: 10.0),
 
@@ -701,7 +678,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         height: 10.0,
       ),
 
-       _buildTextField(AppLocalizations.text(LangKey.chooseAllottedPerson),
+      _buildTextField(AppLocalizations.text(LangKey.chooseAllottedPerson),
           staffs, Assets.iconName, false, true, false, ontap: () async {
         print("Chọn người được phân bổ");
         List<int> listStaff = [];
@@ -729,8 +706,6 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         }
       }),
       Container(height: 10.0),
-
-      
 
       Text(
         AppLocalizations.text(LangKey.byPipeline),
@@ -852,7 +827,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
       Container(height: 10.0),
 
-         Text(
+      Text(
         AppLocalizations.text(LangKey.byWorkStatus),
         style: TextStyle(
             fontSize: 16.0,
@@ -867,31 +842,31 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           Assets.iconName,
           false,
           true,
-          false , ontap: () async {
-            var statuswork = await Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => FilterByWorkStatus(statusWorkData: statusWorkData)));
+          false, ontap: () async {
+        var statuswork = await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                FilterByWorkStatus(statusWorkData: statusWorkData)));
 
-                if (statuswork != null) {
-                  statusWorkID = [];
-                  
-                  statusWorkString = "";
-                  statusWorkData = statuswork;
+        if (statuswork != null) {
+          statusWorkID = [];
 
-                  for (int i = 0; i < statusWorkData.length; i++) {
-                    if (statusWorkData[i].selected) {
-                      statusWorkID.add(statusWorkData[i].manageStatusId);
-                      if (statusWorkString == "") {
-                        statusWorkString = statusWorkData[i].manageStatusName;
-                      } else {
-                        statusWorkString += ", ${statusWorkData[i].manageStatusName}";
-                      }
-                    }
-                  }
+          statusWorkString = "";
+          statusWorkData = statuswork;
 
-                  filterScreenModel.filterModel.manageStatusId = statusWorkID;
-                  setState(() {});
-                }
+          for (int i = 0; i < statusWorkData.length; i++) {
+            if (statusWorkData[i].selected) {
+              statusWorkID.add(statusWorkData[i].manageStatusId);
+              if (statusWorkString == "") {
+                statusWorkString = statusWorkData[i].manageStatusName;
+              } else {
+                statusWorkString += ", ${statusWorkData[i].manageStatusName}";
+              }
+            }
+          }
+
+          filterScreenModel.filterModel.manageStatusId = statusWorkID;
+          setState(() {});
+        }
       }),
     ];
   }
@@ -986,15 +961,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             search: "",
             page: 1,
             orderSourceName: "",
-          createdAt: "",
-          closingDate: "",
-          closingDueDate: "",
-          branchId: [],
-          staffId: [],
-          pipelineId: [],
-          journeyName: [],
-          manageStatusId: [],
-          careHistory: ""),
+            createdAt: "",
+            closingDate: "",
+            closingDueDate: "",
+            branchId: [],
+            staffId: [],
+            pipelineId: [],
+            journeyName: [],
+            manageStatusId: [],
+            careHistory: ""),
         fromDate_closing_date: null,
         fromDate_closing_due_date: null,
         fromDate_created_at: null,
@@ -1079,10 +1054,17 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     journeysData = [];
     journeySelected = null;
 
+    branchString = "";
+    statusWorkString = "";
+    tagsString = "";
+    staffs = "";
+    customerSourceString = "";
+    pipelineString = "";
+    journeyString = "";
+
     Global.validateCreateDate = true;
     Global.validateClosingDate = true;
     Global.validateClosingDueDate = true;
-
     Global.validateHistoryCareDate = true;
     Global.validateWorkScheduleDate = true;
 
@@ -1136,7 +1118,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                 : Text(
                     content,
                     style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),
