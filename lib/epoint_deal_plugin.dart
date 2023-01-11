@@ -63,7 +63,7 @@ class EpointDealPlugin {
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailDealScreen(
                   deal_code: deal_code,
-                  indexTab: indexTabDetail,
+                  indexTab: indexTabDetail ?? 0,
                 )));
         return null;
       } else {

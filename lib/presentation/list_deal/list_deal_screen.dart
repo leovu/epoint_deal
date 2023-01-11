@@ -417,7 +417,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          AppFormat.moneyFormatDot.format(item.amount) + " VND",
+                          AppFormat.moneyFormatDot.format(item.amount ?? 0) + " VND",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               color: AppColors.primaryColor,

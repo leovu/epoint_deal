@@ -719,7 +719,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${NumberFormat("#,###", "vi-VN").format(item.amount)} VNĐ",
+                "${NumberFormat("#,###", "vi-VN").format(item.amount ?? 0)} VNĐ",
                 style: TextStyle(
                     fontSize: 16.0,
                     color: Colors.black,

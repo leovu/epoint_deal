@@ -111,7 +111,7 @@ class DetailDealData {
     dealCode = json['deal_code'] ?? "";
     dealName = json['deal_name'] ?? "";
     phone = json['phone'] ?? "";
-    amount = json['amount'] ?? "";
+    amount = json['amount'] ?? 0;
     typeCustomer = json['type_customer'] ?? "";
     customerCode = json['customer_code'] ?? "";
     journeyName = json['journey_name'] ?? "";
@@ -123,7 +123,7 @@ class DetailDealData {
     branchName = json['branch_name'] ?? "";
     orderSourceName = json['order_source_name'] ?? "";
     tag = json['tag']?.cast<int>() ?? [];
-    probability = json['probability'] ?? "";
+    probability = json['probability'] ?? 0;
     dealDescription = json['deal_description'] ?? "";
     saleId = json['sale_id'] ?? 0;
     staffName = json['staff_name'] ?? "";
@@ -143,7 +143,7 @@ class DetailDealData {
     diffDay = json['diff_day'];
     relatedWork = json['related_work'];
     appointment = json['appointment'];
-    orderSourceId = json['order_source_id'];
+    orderSourceId = json['order_source_id'] ?? 0;
 
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];

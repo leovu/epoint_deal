@@ -103,7 +103,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   void initState() {
     super.initState();
     _bloc = CommentBloc(context);
-    index = widget.indexTab;
+    index = widget.indexTab ?? 0;
     for (int i = 0; i < tabDeal.length; i++) {
       if (index == tabDeal[i].typeID) {
         tabDeal[i].selected = true;
@@ -254,6 +254,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                   )));
                       if (result) {
                         getData();
+                        allowPop = true;
                         selectedTab(1);
                       }
 
@@ -332,6 +333,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     if (result != null) {
                       if (result) {
                         allowPop = true;
+                        selectedTab(index);
                         getData();
                         ;
                       }
@@ -403,41 +405,19 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         option(AppLocalizations.text(LangKey.customerCare), tabDeal[1].selected,
             120, () async {
           index = 1;
-          if (customerCareDeal == null) {
-            var careList =
-                await DealConnection.getCareDeal(context, detail.dealId);
-            if (careList != null) {
-              if (careList.errorCode == 0) {
-                customerCareDeal = careList.data;
-                setState(() {});
-              }
-            } else {
-              DealConnection.showMyDialog(context, careList.errorDescription);
-            }
-          }
 
           selectedTab(1);
         }),
         option(AppLocalizations.text(LangKey.discuss), tabDeal[2].selected, 80,
             () {
           index = 2;
-          _bloc.workListComment(WorkListCommentRequestModel(dealId: detail.dealId));
+
           selectedTab(2);
         }),
         option(AppLocalizations.text(LangKey.order_history),
             tabDeal[3].selected, 120, () async {
           index = 3;
 
-          if (orderHistorys != null) {
-            var orderHistory =
-                await DealConnection.getOrderHistory(context, widget.deal_code);
-            if (orderHistory != null) {
-              if (orderHistory.errorCode == 0) {
-                orderHistorys = orderHistory.data;
-                setState(() {});
-              }
-            }
-          }
           selectedTab(3);
         })
       ],
@@ -451,7 +431,50 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     }
     models[index].selected = true;
 
-    setState(() {});
+    switch (index) {
+      case 0:
+        setState(() {});
+        break;
+
+      case 1:
+        if (customerCareDeal == null || allowPop) {
+          var careList =
+              await DealConnection.getCareDeal(context, detail.dealId);
+          if (careList != null) {
+            if (careList.errorCode == 0) {
+              customerCareDeal = careList.data;
+              setState(() {});
+            }
+          } else {
+            DealConnection.showMyDialog(context, careList.errorDescription);
+          }
+        }
+
+        setState(() {});
+        break;
+
+      case 2:
+        _bloc.workListComment(
+            WorkListCommentRequestModel(dealId: detail.dealId));
+
+        setState(() {});
+        break;
+
+      case 3:
+        if (orderHistorys != null || allowPop) {
+          var orderHistory =
+              await DealConnection.getOrderHistory(context, widget.deal_code);
+          if (orderHistory != null) {
+            if (orderHistory.errorCode == 0) {
+              orderHistorys = orderHistory.data;
+              setState(() {});
+            }
+          }
+        }
+        setState(() {});
+        break;
+      default:
+    }
   }
 
   Widget option(String title, bool show, double width, Function ontap) {
@@ -969,12 +992,13 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 10.0),
-                                  Text("${detail?.probability ?? 0}%",
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.bold
-                                  ),)
+                                  Text(
+                                    "${detail?.probability ?? 0}%",
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
                                 ],
                               ),
                               SizedBox(height: 10),
@@ -986,7 +1010,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               SizedBox(height: 5),
                               (detail.branchName != "")
                                   ? Text(
-                                      detail.typeCustomer == "customer" ? AppLocalizations.text(LangKey.customerVi) :AppLocalizations.text(LangKey.potentialCustomer),
+                                      detail.typeCustomer == "customer"
+                                          ? AppLocalizations.text(
+                                              LangKey.customerVi)
+                                          : AppLocalizations.text(
+                                              LangKey.potentialCustomer),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           overflow: TextOverflow.visible,
@@ -1195,7 +1223,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   ])),
             ),
             Text(
-              AppFormat.moneyFormatDot.format(item.amount) + " VND",
+              AppFormat.moneyFormatDot.format(item.amount ?? 0) + " VND",
               textAlign: TextAlign.start,
               style: TextStyle(
                   color: AppColors.primaryColor,
@@ -1657,7 +1685,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     width: 10.0,
                   ),
                   Text(
-                    AppFormat.moneyFormatDot.format(item.amount) + " VND",
+                    AppFormat.moneyFormatDot.format(item.amount ?? 0) + " VND",
                     style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 14,
