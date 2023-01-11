@@ -1152,10 +1152,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           ),
         ),
         Positioned(
-          left: MediaQuery.of(context).size.width / 2 - 44.5,
-          top: -55,
-          child: _buildAvatar(detail?.dealName ?? ""),
-        ),
+          left: 0,
+          // left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
+          right: 0,
+          top: -60,
+          child: Center(child: _buildAvatar(detail?.dealName ?? "")),
+        )
       ],
     );
   }

@@ -21,6 +21,7 @@ class EpointDealPlugin {
       {String domain,
       String brandCode,
       String deal_code,
+      int indexTabDetail,
       Function getListProduct,
       Function createJob,
       Function editJob}) async {
@@ -62,6 +63,7 @@ class EpointDealPlugin {
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailDealScreen(
                   deal_code: deal_code,
+                  indexTab: indexTabDetail,
                 )));
         return null;
       } else {
