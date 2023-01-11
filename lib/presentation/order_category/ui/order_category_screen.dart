@@ -9,22 +9,23 @@ import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class OrderCategoryScreen extends StatefulWidget {
-
   final bool isViewOnly;
   final bool isProduct;
   final bool isBooking;
   final bool isSelected;
 
-  OrderCategoryScreen({this.isViewOnly = false, this.isProduct = true, this.isBooking = false, this.isSelected = false});
+  OrderCategoryScreen(
+      {this.isViewOnly = false,
+      this.isProduct = true,
+      this.isBooking = false,
+      this.isSelected = false});
   @override
   _OrderCategoryScreenState createState() => _OrderCategoryScreenState();
 }
 
 class _OrderCategoryScreenState extends State<OrderCategoryScreen>
     with SingleTickerProviderStateMixin {
-
   TabController _tabController;
 
   @override
@@ -33,7 +34,8 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
     super.initState();
     _controllerSearch = TextEditingController();
 
-    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.isProduct ? 0 : 1);
+    _tabController = TabController(
+        length: 2, vsync: this, initialIndex: widget.isProduct ? 0 : 1);
   }
 
   @override
@@ -45,49 +47,58 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
           children: [
             Expanded(
                 child: widget.isBooking
-                    ? ServiceTabScreen(searchController, _controllerSearch, isViewOnly: widget.isViewOnly, isBooking: true,)
-                    : DefaultTabController(
-              length: 2,
-              child: Scaffold(
-                appBar: AppBar(
-                  leading: Container(),
-                  backgroundColor:
-                      CupertinoTheme.of(context).barBackgroundColor,
-                  flexibleSpace: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TabBar(
-                        controller: _tabController,
-                        labelColor: AppColors.primaryColor,
-                        unselectedLabelColor:
-                            AppColors.black.withAlpha(40),
-                        tabs: [
-                          Tab(text: AppLocalizations.text(LangKey.product)),
-                          Tab(text: AppLocalizations.text(LangKey.service)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                body: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    ProductTabScreen(
-                      searchController,
-                      _controllerSearch,
-                      isViewOnly: widget.isViewOnly,
-                      isSelected: widget.isSelected,
-                    ),
-                    ServiceTabScreen(
+                    ? ServiceTabScreen(
                         searchController,
                         _controllerSearch,
                         isViewOnly: widget.isViewOnly,
-                        isSelected: widget.isSelected,
-                    ),
-                  ],
-                ),
-              ),
-            )),
+                        isBooking: true,
+                      )
+                    : DefaultTabController(
+                        length: 2,
+                        child: Scaffold(
+                          appBar: AppBar(
+                            leading: Container(),
+                            backgroundColor:
+                                CupertinoTheme.of(context).barBackgroundColor,
+                            flexibleSpace: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TabBar(
+                                  controller: _tabController,
+                                  labelColor: AppColors.primaryColor,
+                                  unselectedLabelColor:
+                                      AppColors.black.withAlpha(40),
+                                  tabs: [
+                                    Tab(
+                                        text: AppLocalizations.text(
+                                            LangKey.product)),
+                                    Tab(
+                                        text: AppLocalizations.text(
+                                            LangKey.service)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          body: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              ProductTabScreen(
+                                searchController,
+                                _controllerSearch,
+                                isViewOnly: widget.isViewOnly,
+                                isSelected: widget.isSelected,
+                              ),
+                              ServiceTabScreen(
+                                searchController,
+                                _controllerSearch,
+                                isViewOnly: widget.isViewOnly,
+                                isSelected: widget.isSelected,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
             Container(
               decoration: BoxDecoration(
                   color: Color.fromARGB(255, 145, 143, 192).withAlpha(20),
@@ -126,7 +137,7 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
                         )),
                         InkWell(
                           onTap: () {
-                            List<Map<String,dynamic>> arr = [];
+                            List<Map<String, dynamic>> arr = [];
                             GlobalCart.shared.products.forEach((e) {
                               arr.add(e.toJsonOrderDetail());
                             });
@@ -141,13 +152,13 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
                             decoration: BoxDecoration(
                                 color: AppColors.primaryColor,
                                 gradient: RadialGradient(
-      center: Alignment.centerRight,
-      radius: 0.75,
-      colors: <Color>[
-        AppColors.primaryColor,
-        Color(0xFF5faee3),
-      ],
-      tileMode: TileMode.clamp),
+                                    center: Alignment.centerRight,
+                                    radius: 0.75,
+                                    colors: <Color>[
+                                      AppColors.primaryColor,
+                                      Color(0xFF5faee3),
+                                    ],
+                                    tileMode: TileMode.clamp),
                                 borderRadius: BorderRadius.circular(20.0)),
                             child: Center(
                               child: AutoSizeText(
@@ -183,8 +194,7 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
       middle: CupertinoSearchTextField(
         placeholder: AppLocalizations.text(widget.isBooking
             ? LangKey.search_for_services
-            : LangKey.search_for_products_and_services
-        ),
+            : LangKey.search_for_products_and_services),
         style: TextStyle(fontSize: 12.0),
         controller: _controllerSearch,
         onChanged: (value) {

@@ -60,6 +60,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   List<WorkListStaffModel> models = [];
   DetailDealData detail;
   bool allowPop = false;
+  bool reloadCSKH = false;
+
   CommentBloc _bloc;
   FocusNode _focusComment = FocusNode();
   TextEditingController _controllerComment = TextEditingController();
@@ -102,6 +104,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   @override
   void initState() {
     super.initState();
+    // widget.deal_code = "DEALS_11012023223";
     _bloc = CommentBloc(context);
     index = widget.indexTab ?? 0;
     for (int i = 0; i < tabDeal.length; i++) {
@@ -254,7 +257,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                   )));
                       if (result) {
                         getData();
-                        allowPop = true;
+                        reloadCSKH = true;
                         selectedTab(1);
                       }
 
@@ -267,7 +270,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(AppLocalizations.text(LangKey.createJobs),
+                Text("Chăm sóc KH",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -372,9 +375,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               Expanded(
                   child: ListView(
                 padding: EdgeInsets.zero,
-                physics: (index == 2)
-                    ? NeverScrollableScrollPhysics()
-                    : AlwaysScrollableScrollPhysics(),
+                physics: 
+                  // (index == 2) ? NeverScrollableScrollPhysics(): 
+                  AlwaysScrollableScrollPhysics(),
                 controller: _controller,
                 children: buildInfomation(),
               )),
@@ -437,7 +440,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 1:
-        if (customerCareDeal == null || allowPop) {
+        if (customerCareDeal == null || reloadCSKH) {
+          reloadCSKH = false;
           var careList =
               await DealConnection.getCareDeal(context, detail.dealId);
           if (careList != null) {
@@ -461,7 +465,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 3:
-        if (orderHistorys != null || allowPop) {
+        if (orderHistorys == null) {
           var orderHistory =
               await DealConnection.getOrderHistory(context, widget.deal_code);
           if (orderHistory != null) {
@@ -519,7 +523,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              margin: EdgeInsets.only(top: 70), child: _dealInformationV2()),
+              margin: EdgeInsets.only(top: 70), child: _dealInformationV3()),
           (detail.productBuy != null && detail.productBuy.length > 0)
               ? Container(
                   margin: EdgeInsets.only(top: 20), child: infoProductBuy())
@@ -564,7 +568,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   Widget _buildContainer(List<WorkListCommentModel> models) {
     return Container(
-        padding: EdgeInsets.only(bottom: 60),
+        // padding: EdgeInsets.only(bottom: 60),
         child: CustomListView(
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(
@@ -940,7 +944,250 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _dealInformationV2() {
+  Widget _dealInformationV3() {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          margin: EdgeInsets.all(11.0),
+          child: Container(
+            padding: EdgeInsets.only(bottom: 10.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [Center(
+                        child: Container(
+                          padding: EdgeInsets.only(right: 8.0, top: 8.0),
+                          margin: EdgeInsets.only(top: 25.0),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(detail?.dealName ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.w700)),
+                              SizedBox(height: 5.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    // margin: EdgeInsets.only(right: 12.0),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF3AEDB6),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(detail.journeyName ?? "",
+                                          style: TextStyle(
+                                              color: Color(0xFF11B482),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    "${detail?.probability ?? 0}%",
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Text(detail?.phone ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal)),
+                              SizedBox(height: 5),
+                              (detail.branchName != "")
+                                  ? Text(
+                                      detail.typeCustomer == "customer"
+                                          ? AppLocalizations.text(
+                                              LangKey.customerVi)
+                                          : AppLocalizations.text(
+                                              LangKey.potentialCustomer),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          overflow: TextOverflow.visible,
+                                          fontSize: 16.0,
+                                          color: Color(0xFF8E8E8E),
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  : Container()
+                            ],
+                          ),
+                        ),
+                      ),
+                       Container(
+                        padding: EdgeInsets.only(right: 8.0),
+                        margin: EdgeInsets.only(right: 8.0, top: 16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                // width: MediaQuery.of(context).size.width / 2 - 50,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    infoItem(Assets.iconDeal, detail?.dealCode),
+                                    infoItem(Assets.iconName,
+                                        detail?.staffName ?? ""),
+                                    Container(
+                                      padding: const EdgeInsets.only(
+                                          left: 3.0, bottom: 8.0),
+                                      margin: EdgeInsets.only(
+                                          bottom: 8.0, left: 5.0),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 10.0),
+                                            height: 15.0,
+                                            width: 15.0,
+                                            child: Image.asset(
+                                                Assets.iconInteraction),
+                                          ),
+                                          Expanded(
+                                            child: RichText(
+                                                text: TextSpan(
+                                                    text: detail.dateLastCare ??
+                                                        detail.updatedAt ??
+                                                        detail.createdAt ??
+                                                        "",
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                    children: [
+                                                  (detail.diffDay != null)
+                                                      ? TextSpan(
+                                                          text:
+                                                              " (${detail.diffDay ?? 0} ngày)",
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .primaryColor,
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal))
+                                                      : TextSpan(
+                                                          text: "",
+                                                        )
+                                                ])),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(
+                                          left: 3.0, bottom: 6.0),
+                                      margin: EdgeInsets.only(left: 5.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 10.0),
+                                            height: 15.0,
+                                            width: 15.0,
+                                            child: Image.asset(Assets.iconTag),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              AppFormat.moneyFormatDot
+                                                      .format(detail.amount) +
+                                                  " VND",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: AppColors.primaryColor,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.bold),
+                                              // maxLines: 1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    print(detail.phone);
+                                    await callPhone(detail?.phone ?? "");
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(20.0 / 2),
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF06A605),
+                                      borderRadius: BorderRadius.circular(50),
+                                      // border:  Border.all(color: AppColors.white,)
+                                    ),
+                                    child: Center(
+                                        child: Image.asset(
+                                      Assets.iconCall,
+                                      color: AppColors.white,
+                                    )),
+                                  ),
+                                ),
+                                SizedBox(height: 15.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    _actionItem(
+                                        Assets.iconCalendar, Color(0xFF26A7AD),
+                                        number: detail.relatedWork ?? 0,
+                                        ontap: () {
+                                      print("1");
+                                    }),
+                                    _actionItem(
+                                        Assets.iconOutdate, Color(0xFFDD2C00),
+                                        number: detail.appointment ?? 0,
+                                        ontap: () {
+                                      print("2");
+                                    }),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          // left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
+          right: 0,
+          top: -60,
+          child: Center(child: _buildAvatar(detail?.dealName ?? "")),
+        )
+      ],
+    );
+  }
+
+    Widget _dealInformationV2() {
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -1612,7 +1859,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   Widget orderHistory() {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 20, left: 8.0,right: 8.0),
       child: (orderHistorys != null && orderHistorys.length > 0)
           ? Column(
               children: orderHistorys.map((e) => orderHistoryItem(e)).toList())
@@ -1666,7 +1913,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               icon: Assets.iconBranch, title: item.branchName ?? "N/A"),
           CustomInfoItem(
               icon: Assets.iconShipper,
-              title: "Giao hàng - ${item.deliveryRequestDate}"),
+              title: "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? "N/A"}"),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
