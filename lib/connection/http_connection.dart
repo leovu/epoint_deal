@@ -13,10 +13,10 @@ class HTTPConnection {
   static String brandCode = '';
   static String asscessToken = '';
 
-  Future<ResponseData> upload(String path, MultipartFileModel model) async {
+    Future<ResponseData> upload(String path, MultipartFileModel model) async {
     final uri = Uri.parse('$domain$path');
     var request = http.MultipartRequest('POST', uri);
-    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'qc': DealConnection.locale.languageCode});
+    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': DealConnection.locale.languageCode, 'branch-id':'1'});
     request.files.add(
       http.MultipartFile(
         model.name,
@@ -25,11 +25,6 @@ class HTTPConnection {
         filename: model.file.path.split("/").last,
       ),
     );
-    // if(body != null) {
-    //   for (var key in body.keys) {
-    //     request.fields[key] = body[key];
-    //   }
-    // }
     if (kDebugMode) {
       print('***** Upload *****');
       print(uri);
@@ -39,6 +34,7 @@ class HTTPConnection {
     var streamResponse = await request.send();
     var response = await http.Response.fromStream(streamResponse);
     if(response.statusCode == 200) {
+      print(response.body);
       ResponseData data = ResponseData();
       data.isSuccess = true;
       try {

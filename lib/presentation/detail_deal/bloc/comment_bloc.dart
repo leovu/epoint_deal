@@ -53,18 +53,17 @@ class CommentBloc extends BaseBloc {
     setModels(_models);
   }
 
-  workUploadFile(MultipartFileModel model) async {
-    print("upload");
+ workUploadFile(MultipartFileModel model) async {
     DealConnection.showLoading(context);
-    ResponseData response = await connection.upload(
-        '/manage-work/upload-file',model);
+    ResponseData response =
+        await connection.upload('/manage-work/upload-file', model);
     Navigator.of(context).pop();
-    if(response.isSuccess){
-      var responseModel = WorkUploadFileResponseModel.fromJson(response.data);
-
-      setFile(responseModel.path);
-
-      Navigator.of(context).pop();
+    if (response.isSuccess) {
+      WorkUploadFileResponseModel responseModel =
+          WorkUploadFileResponseModel.fromJson(response.data);
+        setFile(responseModel.data.path);
+    } else {
+      DealConnection.showMyDialog(context, "Lỗi máy chủ");
     }
   }
 

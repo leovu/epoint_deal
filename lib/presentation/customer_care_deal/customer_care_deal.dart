@@ -178,7 +178,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     super.didChangeMetrics();
   }
 
-  _uploadFile() async {
+   _uploadFile() async {
     File file = await CustomDocumentPicker.openDocument(context, params: [
       "txt",
       "pdf",
@@ -440,7 +440,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<WorkUploadFileResponseModel> models =
+                      List<WorkUploadFileResponse> models =
                           snapshot.data ?? [];
                       return models.isEmpty
                           ? Container()

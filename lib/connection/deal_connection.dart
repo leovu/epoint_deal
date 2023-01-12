@@ -453,14 +453,16 @@ class DealConnection {
     return null;
   }
 
-   static Future<WorkUploadFileResponseModel> workUploadFile(
+  static Future<WorkUploadFileResponseModel> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
-    ResponseData response =
-        await connection.upload('/manage-work/upload-file', model);
+    ResponseData response =  await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
-      WorkUploadFileResponseModel responseModel = WorkUploadFileResponseModel.fromJson(response.data);
+      WorkUploadFileResponseModel responseModel =
+          WorkUploadFileResponseModel.fromJson(response.data);
 
       return responseModel;
+    } else {
+      showMyDialog(context, "Lỗi máy chủ");
     }
     return null;
   }

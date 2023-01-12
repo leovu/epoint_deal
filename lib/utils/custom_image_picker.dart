@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
-import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom_option.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom_sheet.dart';
@@ -94,9 +93,9 @@ class CustomImagePicker {
       return null;
 
     if(source == ImageSource.camera){
-      DealConnection.showLoading(context);
+      // CustomNavigator.showProgressDialog(context);
       File file = await _orientationImage(context, pickedFile);
-      Navigator.of(context).pop();
+      // CustomNavigator.hideProgressDialog();
       return file;
     }
 
@@ -108,7 +107,7 @@ class CustomImagePicker {
     img.Image originalImage = img.decodeImage(imageBytes);
     img.Image fixedImage;
     // if(originalImage.exif?.orientation == 8){
-    //   fixedImage = img.flipVertical(originalImage);
+      fixedImage = img.flipVertical(originalImage);
     // }
 
     if(fixedImage != null){
@@ -137,3 +136,4 @@ class CustomImagePicker {
     return pickedFile.map((e) => File(e.path)).toList();
   }
 }
+

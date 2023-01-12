@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       child: InkWell(
         child: Text("Open deal"),
         onTap: () async {
-           var result = await EpointDealPlugin.open(context,const Locale(LangKey.langVi, 'VN')  , 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY3MzQyMDM4MSwiZXhwIjoxNjczNDQxOTgxLCJuYmYiOjE2NzM0MjAzODEsImp0aSI6IlhvRmNXeEw4bzhPOHk1YmIiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.LBlvQDpA2pSRfx0mXEXPatMU8TWR5EYeMO0ju3M2iK4',
+           var result = await EpointDealPlugin.open(context,const Locale(LangKey.langVi, 'VN')  , 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY3MzQ4Nzk5MCwiZXhwIjoxNjczNTA5NTkwLCJuYmYiOjE2NzM0ODc5OTAsImp0aSI6IkI2blZjbkZ3b0ZEcTdHM0ciLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.ku8Iclrut2jTtYJ5JlrzLCiZE7xJO8ex2qxljQVBvto',
      2,domain: 'https://staff-api.stag.epoints.vn', brandCode: 'qc');
 
      if (result != null) {

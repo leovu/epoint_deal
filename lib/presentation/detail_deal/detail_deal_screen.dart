@@ -164,6 +164,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     });
   }
 
+
   @override
   void dispose() {
     _controller.removeListener(() {});
