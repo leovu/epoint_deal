@@ -121,7 +121,7 @@ class DealConnection {
         '/customer-lead/customer-lead/detail-deal',
         {"deal_code": deal_code});
     Navigator.of(context).pop();
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData.data != null) {
       DetailDealModelResponse data =
           DetailDealModelResponse.fromJson(responseData.data);
       return data;
@@ -136,7 +136,7 @@ class DealConnection {
         '/customer-lead/customer-lead/order-history',
         {"deal_code": deal_code});
     Navigator.of(context).pop();
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData.data != null) {
       OrderHistoryResponseModel data =
           OrderHistoryResponseModel.fromJson(responseData.data);
       return data;
