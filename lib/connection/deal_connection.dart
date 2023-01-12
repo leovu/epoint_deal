@@ -473,7 +473,7 @@ class DealConnection {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/care-deal',{"deal_id" : deal_id});
         Navigator.of(context).pop();
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData != null) {
       CareDealResponseModel data =
           CareDealResponseModel.fromJson(responseData.data);
       return data;
