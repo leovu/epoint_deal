@@ -259,6 +259,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       if (result) {
                         getData();
                         reloadCSKH = true;
+                        index = 1;
                         selectedTab(1);
                       }
 
@@ -1640,7 +1641,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           child: Padding(
                             padding: EdgeInsets.all(6.0),
                             child: Text(
-                              item.manageTypeWorkName,
+                              item.manageTypeWorkName ?? "NA",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: AppColors.primaryColor,
@@ -1659,7 +1660,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "${item.countFile}",
+                                  "${item.countFile ?? 0}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1681,7 +1682,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "${item.countComment}",
+                                  "${item.countComment ?? 0}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1703,7 +1704,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "${item.daysLate}",
+                                  "${item.daysLate ?? 0}",
                                   style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 14.0,

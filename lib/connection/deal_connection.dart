@@ -517,12 +517,26 @@ class DealConnection {
     return null;
   }
 
+  //  static Future<WorkListCommentResponseModel> workCreatedComment(
+  //     BuildContext context, WorkCreateCommentRequestModel model) async {
+  //   showLoading(context);
+  //   ResponseData responseData =
+  //       await connection.post('/customer-deals/created-comment', model.toJson());
+  //       Navigator.of(context).pop();
+  //   if (responseData.isSuccess) {
+  //     WorkListCommentResponseModel data =
+  //         WorkListCommentResponseModel.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
+
    static Future<WorkListCommentResponseModel> workCreatedComment(
       BuildContext context, WorkCreateCommentRequestModel model) async {
     showLoading(context);
     ResponseData responseData =
         await connection.post('/customer-deals/created-comment', model.toJson());
-        Navigator.of(context).pop();
+    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
           WorkListCommentResponseModel.fromJson(responseData.data);

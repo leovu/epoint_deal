@@ -287,6 +287,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               false,
               fillText: _customerCareContentText,
               focusNode: _customerCareContentFocusNode, ontap: () async {
+
+                FocusScope.of(context).unfocus();
             if (typeOfWorkData.length == 0) {
               DealConnection.showLoading(context);
               var types = await DealConnection.getTypeWork(context);
@@ -328,6 +330,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               false,
               true,
               false, ontap: () async {
+                FocusScope.of(context).unfocus();
             _showFromDate();
           }),
 
@@ -338,6 +341,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               true,
               true,
               false, ontap: () async {
+                FocusScope.of(context).unfocus();
             _showToDate();
           }),
 
@@ -986,6 +990,14 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
+
+          List<String> list_document = []; 
+          List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
+          if (models.length > 0) {
+            models.forEach((element) {
+              list_document.add(element.path);
+            });
+          }
           if ((_titleText.text == "") ||
               (_toDateText.text == "") ||
               (addWorkModel.manageStatusId == 0) ||
@@ -1026,7 +1038,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     isApproveId: has_approved ? 1 : 0,
                     repeatWork: null,
                     createObjectType: "",
-                    createObjectId: null));
+                    createObjectId: null,
+                    listDocument: list_document));
             Navigator.of(context).pop();
             if (result != null) {
               if (result.errorCode == 0) {

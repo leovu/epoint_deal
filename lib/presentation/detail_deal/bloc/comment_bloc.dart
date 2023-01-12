@@ -71,12 +71,15 @@ class CommentBloc extends BaseBloc {
 
   workCreatedComment(WorkCreateCommentRequestModel model, TextEditingController controller, Function(int) onCallback) async {
     DealConnection.showLoading(context);
-    var response = await DealConnection.workCreatedComment(context, model);
+    WorkListCommentResponseModel response = await DealConnection.workCreatedComment(context, model);
     Navigator.of(context).pop();
-    if(response != null){
-
+    if(response.errorCode == 0){
       _models = response.data ?? [];
-      setModels(_models);
+    } else {
+      DealConnection.showMyDialog(context, response.errorDescription);
+    }
+
+    setModels(_models);
       setFile(null);
       setCallback(null);
       controller.text = "";
@@ -89,7 +92,6 @@ class CommentBloc extends BaseBloc {
 
         onCallback(total);
       }
-    }
   }
 
   int _getTotalComment(WorkListCommentModel model){
