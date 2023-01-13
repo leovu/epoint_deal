@@ -14,6 +14,7 @@ import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.da
 import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_project_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/product_detail_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/product_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/service_detail_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/service_request_model.dart';
@@ -40,6 +41,7 @@ import 'package:epoint_deal_plugin/model/response/list_project_model_response.da
 import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/product_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/service_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
@@ -453,6 +455,18 @@ class DealConnection {
     return null;
   }
 
+         static Future<ProductDetailModel> productDetail(
+      BuildContext context, ProductDetailRequestModel model) async {
+    ResponseData responseData =
+        await connection.post('/product/product-detail', model.toJson());
+    if (responseData.isSuccess) {
+      ProductDetailModel data =
+          ProductDetailModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
   static Future<WorkUploadFileResponseModel> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
     ResponseData response =  await connection.upload('/manage-work/upload-file', model);
@@ -480,9 +494,6 @@ class DealConnection {
     }
     return null;
   }
-
-
-  
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(

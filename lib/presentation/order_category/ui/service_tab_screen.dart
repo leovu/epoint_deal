@@ -4,7 +4,6 @@ import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/request/service_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
-import 'package:epoint_deal_plugin/presentation/list_deal/list_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/order_category/bloc/order_item_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/order_category/ui/order_category_screen.dart';
 import 'package:epoint_deal_plugin/presentation/order_category/ui/service_detail_screen.dart';
@@ -67,6 +66,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
               body: NotificationListener(
                 onNotification: _onScrollNotification,
                 child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
                   children: _getProducts(_data.items),
                 ),
               ),
@@ -120,10 +120,10 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
       }
       else{
         _arr.add(_productView(element));
-        _arr.add(Container(
-          height: 2.0,
-          color: HexColor('EEEEEE'),
-        ));
+        // _arr.add(Container(
+        //   height: 2.0,
+        //   color: HexColor('EEEEEE'),
+        // ));
       }
     });
     return _arr;
@@ -143,7 +143,18 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+        margin: EdgeInsets.symmetric(vertical: 4.0),
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: [
             Padding(
@@ -208,13 +219,14 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
                                     height: 20.0,
                                     width: 20.0,
                                     decoration: BoxDecoration(
+                                        color: Color(0xFFCCCCCC),
                                         borderRadius:
                                         BorderRadius.circular(10.0)),
                                     child: Center(
                                       child: Text('-',
                                           style: TextStyle(
-                                              color: AppColors.primaryColor,
-                                              fontSize: 20.0,
+                                              color: AppColors.white,
+                                              // fontSize: 1,
                                               fontWeight: FontWeight.bold)),
                                     ),
                                   ),
@@ -246,12 +258,13 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
                                     height: 20.0,
                                     width: 20.0,
                                     decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
                                         borderRadius:
                                         BorderRadius.circular(10.0)),
                                     child: Icon(
                                       Icons.add,
                                       size: 20.0,
-                                      color: AppColors.primaryColor,
+                                      color: AppColors.white,
                                     ),
                                   ),
                                 ),

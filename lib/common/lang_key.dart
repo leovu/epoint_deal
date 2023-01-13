@@ -260,5 +260,11 @@ class LangKey {
   static const String buy_now = "buy_now";
   static const String detail_description = "detail_description";
   static const String ship = "ship";
+
+  static const String category = "category";
+  static const String supplier = "supplier";
+  static const String trademark = "trademark";
+  static const String origin = "origin";
+  static const String product_description = "product_description";
 }
 

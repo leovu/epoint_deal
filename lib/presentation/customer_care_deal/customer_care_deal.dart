@@ -460,6 +460,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             CustomChip(
+                                              isExpand: true,
                                               radius: 5.0,
                                               backgroundColor:
                                                   Color(0xFFC4C4C4),

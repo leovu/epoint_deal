@@ -121,11 +121,12 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
                     child: Row(
                       children: [
                         AutoSizeText(
-                          '${AppLocalizations.text(LangKey.total_money)}',
+                          '${AppLocalizations.text(LangKey.total_money)}:',
                           style: TextStyle(
                               color: AppColors.primaryColor,
                               fontWeight: FontWeight.w600),
                         ),
+                        SizedBox(width: 5.0,),
                         Expanded(
                             child: AutoSizeText(
                           value.getMoneyFormat(),

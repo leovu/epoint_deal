@@ -6,9 +6,12 @@ import 'package:epoint_deal_plugin/model/request/product_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/list_deal/list_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/order_category/bloc/order_item_bloc.dart';
+import 'package:epoint_deal_plugin/presentation/order_category/ui/product_detail_screen.dart';
 import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_container_loadmore.dart';
+import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -61,6 +64,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
               body: NotificationListener(
                 onNotification: _onScrollNotification,
                 child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
                   children: _getProducts(_data.items),
                 ),
               ),
@@ -114,10 +118,10 @@ class _ProductTabScreenState extends State<ProductTabScreen>
       }
       else{
         _arr.add(_productView(element));
-        _arr.add(Container(
-          height: 2.0,
-          color: HexColor('EEEEEE'),
-        ));
+        // _arr.add(Container(
+        //   height: 2.0,
+        //   color: HexColor('EEEEEE'),
+        // ));
       }
     });
     return _arr;
@@ -131,12 +135,25 @@ class _ProductTabScreenState extends State<ProductTabScreen>
           Navigator.of(context).pop(value);
         }
         else{
-          // await CustomNavigator.push(context, ProductDetailScreen(value, widget.isViewOnly));
+         await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => ProductDetailScreen(value, widget.isViewOnly)));
           setState(() {});
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+        margin: EdgeInsets.symmetric(vertical: 4.0),
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: [
             Padding(
@@ -171,7 +188,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
                                   ' / ${value.unitName ?? ''}',
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  color: Colors.grey),
+                                  color: AppColors.primaryColor),
                               textScaleFactor: 1.085,
                               maxLines: 1,
                             ),
@@ -200,13 +217,14 @@ class _ProductTabScreenState extends State<ProductTabScreen>
                                     height: 20.0,
                                     width: 20.0,
                                     decoration: BoxDecoration(
+                                      color: Color(0xFFCCCCCC),
                                         borderRadius:
                                         BorderRadius.circular(10.0)),
                                     child: Center(
                                       child: Text('-',
                                           style: TextStyle(
-                                              color: AppColors.primaryColor,
-                                              fontSize: 20.0,
+                                              color: AppColors.white,
+                                              // fontSize: 20.0,
                                               fontWeight: FontWeight.bold)),
                                     ),
                                   ),
@@ -238,12 +256,13 @@ class _ProductTabScreenState extends State<ProductTabScreen>
                                     height: 20.0,
                                     width: 20.0,
                                     decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
                                         borderRadius:
                                         BorderRadius.circular(10.0)),
                                     child: Icon(
                                       Icons.add,
                                       size: 20.0,
-                                      color: AppColors.primaryColor,
+                                      color: AppColors.white,
                                     ),
                                   ),
                                 ),

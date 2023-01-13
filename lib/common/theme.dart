@@ -150,6 +150,14 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+  static TextStyle style13BlackBold = TextStyle(
+      fontSize: AppTextSizes.size13,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12BlackNormal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.black,
+      fontWeight: FontWeight.normal);
   static TextStyle style14BlackNormal = TextStyle(
       fontSize: AppTextSizes.size14,
       color: AppColors.black,
