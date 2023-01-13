@@ -385,13 +385,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 children: buildInfomation(),
               )),
               (index == 2)
-                  ? Positioned(
-                      bottom: 0,
-                      // left: 10,
-                      child: Container(
-                          decoration: BoxDecoration(color: Colors.white),
-                          width: AppSizes.maxWidth,
-                          child: _buildChatBox()))
+                  ? Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      width: AppSizes.maxWidth,
+                      child: _buildChatBox())
                   : Container(),
               Container(
                 height: 20.0,
@@ -409,7 +406,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           selectedTab(0);
         }),
         option(AppLocalizations.text(LangKey.customerCare), tabDeal[1].selected,
-            120, () async {
+            120, () {
           index = 1;
 
           selectedTab(1);
@@ -421,7 +418,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           selectedTab(2);
         }),
         option(AppLocalizations.text(LangKey.order_history),
-            tabDeal[3].selected, 120, () async {
+            tabDeal[3].selected, 120, () {
           index = 3;
 
           selectedTab(3);
@@ -443,7 +440,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 1:
-        if (customerCareDeal == null || reloadCSKH) {
+        if (customerCareDeal == null || reloadCSKH)  {
           reloadCSKH = false;
           var careList =
               await DealConnection.getCareDeal(context, detail.dealId);
@@ -461,7 +458,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 2:
-        _bloc.workListComment(
+        await _bloc.workListComment(
             WorkListCommentRequestModel(dealId: detail.dealId));
 
         setState(() {});
@@ -550,6 +547,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           ? Column(
                               children: [
                                 Container(
+                                  padding: EdgeInsets.all(4.0),
                                     width: AppSizes.maxWidth,
                                     height: AppSizes.maxHeight - 400,
                                     child: _buildComments()),
@@ -838,6 +836,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         builder: (_, snapshot) {
           List<WorkListCommentModel> models = snapshot.data;
           return ContainerDataBuilder(
+            
             data: models,
             emptyBuilder: _buildEmpty(),
             skeletonBuilder: _buildContainer(null),
@@ -1760,6 +1759,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       (item.listTag != null && item.listTag.length > 0)
                           ? Container(
                               child: Wrap(
+                                alignment: WrapAlignment.spaceAround,
                                 children: List.generate(item.listTag.length,
                                     (index) => _tagItem(item.listTag[index])),
                                 spacing: 10,

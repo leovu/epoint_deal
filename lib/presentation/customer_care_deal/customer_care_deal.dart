@@ -993,12 +993,15 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
         onTap: () async {
 
           List<String> list_document = []; 
-          List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
+          if (_bloc.outputFiles.hasValue) {
+            List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
           if (models.length > 0) {
             models.forEach((element) {
               list_document.add(element.path);
             });
           }
+          }
+          
           if ((_titleText.text == "") ||
               (_toDateText.text == "") ||
               (addWorkModel.manageStatusId == 0) ||

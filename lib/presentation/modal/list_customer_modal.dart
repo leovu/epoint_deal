@@ -125,7 +125,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
             (index) => _buildItemStaff(_model.data[index], () {
                   selectedCustomer(index);
                 }))
-        : [dataNotFound()];
+        : [CustomDataNotFound()];
   }
 
   selectedCustomer(int index) async {
@@ -170,23 +170,25 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
   }
 
   Widget dataNotFound() {
-    return CustomListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                      physics: NeverScrollableScrollPhysics(),
-                      separator: Divider(),
-                      children: List.generate(
-                        5,
-                        (index) => Container(
-                  margin: EdgeInsets.only(top: 15.0),
-                  child: CustomShimmer(
-                    child: CustomSkeleton(
-          height: 50,
-          radius: 5.0),
+    return Expanded(
+      child: CustomListView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(
+                            top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                        physics: NeverScrollableScrollPhysics(),
+                        separator: Divider(),
+                        children: List.generate(
+                          12,
+                          (index) => Container(
+                    margin: EdgeInsets.only(top: 15.0),
+                    child: CustomShimmer(
+                      child: CustomSkeleton(
+            height: 35,
+            radius: 5.0),
+                    ),
                   ),
-                ),
-            ));
+              )),
+    );
   }
 
   Widget _buildSearch() {

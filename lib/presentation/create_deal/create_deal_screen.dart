@@ -289,10 +289,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             children: [
               InkWell(
                 onTap: () {
+                  if (selectedCustomer) {
+                    return;
+                  }
                   // detailPotential.customerType = "personal";
                   customerTypeSelected = customerTypeData[0];
-                  customerSelected =
-                      DealItems(customerCode: "", customerName: "");
+                  customerSelected = DealItems(customerCode: "", customerName: "");
                   leadItem = ListCustomLeadItems(customerLeadCode: "");
                   selectedCustomer = true;
                   setState(() {});
@@ -328,6 +330,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               ),
               InkWell(
                 onTap: () {
+                  if (!selectedCustomer) {
+                    return;
+                  }
                   // detailPotential.customerType = "business";
                   customerTypeSelected = customerTypeData[1];
                   customerSelected =
@@ -395,8 +400,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               if (customer != null) {
                 customerSelected.customerCode = customer.customerCode;
                 customerSelected.customerName = customer.fullName;
-                // _phoneNumberText.text = "";
+                _phoneNumberText.text = customer.phone1;
                 detailDeal.customerCode = customerSelected.customerCode;
+                detailDeal.phone = _phoneNumberText.text;
                 // _dealNameText.text =
                 //     "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
 
@@ -411,6 +417,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           )));
 
               if (result != null) {
+                _phoneNumberText.text = "";
                 customerSelected.customerCode = result.customerLeadCode;
                 customerSelected.customerName = result.leadFullName;
                 customerSelected.phone = result.phone;

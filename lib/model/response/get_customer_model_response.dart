@@ -31,14 +31,16 @@ class CustomerData {
   int customerId;
   String fullName;
   String customerCode;
+  String phone1;
   bool selected;
 
-  CustomerData({this.customerId, this.fullName, this.customerCode});
+  CustomerData({this.customerId, this.phone1, this.fullName, this.customerCode});
 
   CustomerData.fromJson(Map<String, dynamic> json) {
     customerId = json['customer_id'];
     fullName = json['full_name'];
     customerCode = json['customer_code'];
+    phone1 = json['phone1'];
     selected = json['selected'] ?? false;
   }
 
@@ -47,6 +49,7 @@ class CustomerData {
     data['customer_id'] = this.customerId;
     data['full_name'] = this.fullName;
     data['customer_code'] = this.customerCode;
+    data['phone1'] = this.phone1;
     data['selected'] = this.selected;
     return data;
   }

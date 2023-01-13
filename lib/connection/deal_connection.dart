@@ -111,7 +111,9 @@ class DealConnection {
     if (responseData.isSuccess) {
       GetCustomerModelResponse data =
           GetCustomerModelResponse.fromJson(responseData.data);
+          print(data.toJson());
       return data;
+      
     }
     return null;
   }
