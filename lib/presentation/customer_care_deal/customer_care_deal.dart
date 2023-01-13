@@ -874,7 +874,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                 _fromDate = selectedDate;
 
                 _fromDateText.text =
-                    DateFormat("dd/MM/yyyy").format(selectedDate).toString();
+                    DateFormat("yyyy-MM-dd").format(selectedDate).toString();
                 Navigator.of(context).pop();
 
                 setState(() {});
@@ -914,7 +914,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               onTapConfirm: () {
                 _toDate = selectedDate;
                 _toDateText.text =
-                    DateFormat("dd/MM/yyyy").format(selectedDate).toString();
+                    DateFormat("yyyy-MM-dd").format(selectedDate).toString();
                 Navigator.of(context).pop();
                 setState(() {});
               },
