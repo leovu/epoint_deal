@@ -65,7 +65,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
          _probabilityText.text = "${widget.detail?.probability ?? 0}";
          
-      _detailDealText.text = widget.detailDeal?.dealDescription ?? "";
+      _detailDealText.text = widget.detail?.dealDescription ?? "";
       setState(() {});
     });
   }
@@ -459,6 +459,9 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
               controller: _detailDealText,
               focusNode: _detailDealFocusNode,
+               onChanged: (event) {
+              widget.detailDeal.dealDescription = _detailDealText.text;
+            },
             ),
           ),
         ],
@@ -661,14 +664,12 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 widget.detailDeal.probability =
                     double.tryParse(fillText.text) ?? 0;
                     widget.detailDeal?.probability = num.tryParse(fillText.text ?? "0");
-                if (widget.detailDeal.probability > 100) {
+                if ((widget.detailDeal.probability ?? 0) > 100) {
                   _probabilityText.text = "100";
                   widget.detailDeal?.probability = 100;
                   _probabilityText.selection = TextSelection.fromPosition(
                       TextPosition(offset: _probabilityText.text.length));
                 }
-              } else {
-                widget.detailDeal.dealDescription = fillText.text;
               }
             }
             }

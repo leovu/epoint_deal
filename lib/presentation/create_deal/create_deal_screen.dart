@@ -85,12 +85,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         customerTypeName: AppLocalizations.text(LangKey.customerVi),
         customerTypeNameEn: AppLocalizations.text(LangKey.customer),
         customerTypeID: 1,
-        selected: true),
+        selected: false),
     CustomerTypeModel(
         customerTypeName: AppLocalizations.text(LangKey.potentialCustomer),
         customerTypeNameEn: "lead",
         customerTypeID: 2,
-        selected: false),
+        selected: true),
   ];
 
   List<WorkListStaffModel> _modelStaffSelected = [];
@@ -98,16 +98,15 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   DateTime selectedClosingDueDate;
 
   List<CustomerData> listCustomer = <CustomerData>[];
-  DealItems customerSelected = DealItems();
+  DealItems customerSelected = DealItems(customerCode: "", customerName: "", phone: "");
 
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
-  ListCustomLeadItems leadItem = ListCustomLeadItems();
+  ListCustomLeadItems leadItem = ListCustomLeadItems(customerLeadCode: "",phone: "", customerType: "");
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel(
-      // customerTypeName: AppLocalizations.text(LangKey.personal),
-      customerTypeName: AppLocalizations.text(LangKey.customerVi),
-      customerTypeNameEn: AppLocalizations.text(LangKey.customer),
-      customerTypeID: 1,
+      customerTypeName: AppLocalizations.text(LangKey.potentialCustomer),
+      customerTypeNameEn: "lead",
+      customerTypeID: 2,
       selected: true);
 
   ObjectPopCreateDealModel modelResponse = ObjectPopCreateDealModel();
@@ -127,28 +126,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       probability: 0,
       dealDescription: "",
       amount: 0,
-      // product: <Product>[],
       product: <Product>[]);
 
-      // AddDealModelRequest detailDealCustomer = AddDealModelRequest(
-      // dealName: "",
-      // saleId: 0,
-      // typeCustomer: "",
-      // customerCode: "",
-      // phone: "",
-      // pipelineCode: "",
-      // journeyCode: "",
-      // closingDate: "",
-      // branchCode: "",
-      // tag: [],
-      // orderSourceId: 0,
-      // probability: 0,
-      // dealDescription: "",
-      // amount: 0,
-      // // product: <Product>[],
-      // product: <Product>[]);
-
-  bool selectedCustomer = true;
+  bool selectedCustomer = false;
   List<TagData> tagsData;
 
   String tagsString = "";
@@ -289,55 +269,15 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             children: [
               InkWell(
                 onTap: () {
-                  if (selectedCustomer) {
-                    return;
-                  }
-                  // detailPotential.customerType = "personal";
-                  customerTypeSelected = customerTypeData[0];
-                  customerSelected = DealItems(customerCode: "", customerName: "");
-                  leadItem = ListCustomLeadItems(customerLeadCode: "");
-                  selectedCustomer = true;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 42.0,
-                  width: AppSizes.maxWidth / 2 - 19,
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: selectedCustomer
-                          ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                      ]),
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.text(LangKey.customerVi),
-                      style: TextStyle(
-                          color: selectedCustomer
-                              ? Colors.white
-                              : Color(0xFF8E8E8E),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
+                  FocusScope.of(context).unfocus();
                   if (!selectedCustomer) {
                     return;
                   }
                   // detailPotential.customerType = "business";
                   customerTypeSelected = customerTypeData[1];
-                  customerSelected =
-                      DealItems(customerCode: "", customerName: "");
-                  leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  // customerSelected =
+                  //     DealItems(customerCode: "", customerName: "");
+                  // leadItem = ListCustomLeadItems(customerLeadCode: "");
                   _dealNameText.text = "";
                   selectedCustomer = false;
                   setState(() {});
@@ -370,6 +310,49 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     ),
                   ),
                 ),
+              ),
+              InkWell(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                  if (selectedCustomer) {
+                    return;
+                  }
+                  // detailPotential.customerType = "personal";
+                  customerTypeSelected = customerTypeData[0];
+                  _dealNameText.text = "";
+                  // customerSelected = DealItems(customerCode: "", customerName: "");
+                  // leadItem = ListCustomLeadItems(customerLeadCode: "");
+                  selectedCustomer = true;
+                  setState(() {});
+                },
+                child: Container(
+                  height: 42.0,
+                  width: AppSizes.maxWidth / 2 - 19,
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: selectedCustomer
+                          ? AppColors.primaryColor
+                          : Color(0xFFF2F2F2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.text(LangKey.customerVi),
+                      style: TextStyle(
+                          color: selectedCustomer
+                              ? Colors.white
+                              : Color(0xFF8E8E8E),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
               )
             ],
           ),
@@ -381,7 +364,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 // chọn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
-              customerSelected?.customerName ?? "",
+              selectedCustomer ? (customerSelected?.customerName ?? "") : (leadItem?.leadFullName ?? ""),
               Assets.iconPerson,
               true,
               true,
@@ -400,9 +383,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               if (customer != null) {
                 customerSelected.customerCode = customer.customerCode;
                 customerSelected.customerName = customer.fullName;
+                customerSelected.phone = customer.phone1;
                 _phoneNumberText.text = customer.phone1;
-                detailDeal.customerCode = customerSelected.customerCode;
-                detailDeal.phone = _phoneNumberText.text;
+
+
+                // detailDeal.customerCode = customerSelected.customerCode;
+                // detailDeal.phone = _phoneNumberText.text;
                 // _dealNameText.text =
                 //     "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
 
@@ -417,17 +403,20 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           )));
 
               if (result != null) {
-                _phoneNumberText.text = "";
-                customerSelected.customerCode = result.customerLeadCode;
-                customerSelected.customerName = result.leadFullName;
-                customerSelected.phone = result.phone;
-                customerSelected.typeCustomer = result.customerType;
+                // _phoneNumberText.text = "";
+                // customerSelected.customerCode = result.customerLeadCode;
+                // customerSelected.customerName = result.leadFullName;
+                // customerSelected.phone = result.phone;
+                // customerSelected.typeCustomer = result.customerType;
 
                 leadItem.customerLeadCode = result.customerLeadCode;
+                leadItem.customerType = result.customerType;
+                leadItem.phone = result.phone;
+                leadItem.leadFullName = result.leadFullName;
 
-                detailDeal.phone = result.phone;
-                detailDeal.typeCustomer = result.customerType;
-                detailDeal.customerCode = customerSelected.customerCode;
+                // detailDeal.phone = result.phone;
+                // detailDeal.typeCustomer = result.customerType;
+                // detailDeal.customerCode = customerSelected.customerCode;
 
                 setState(() {});
               }
@@ -438,8 +427,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             }
           }),
 
-          (!selectedCustomer && customerSelected != null)
-              ? (customerSelected.customerCode != "")
+          (!selectedCustomer && leadItem != null)
+              ? (leadItem.customerLeadCode != "")
                   ? Column(
                       children: [
                         Container(
@@ -457,7 +446,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                               (customerSelected.typeCustomer.toLowerCase() == AppLocalizations.text(LangKey.personal).toLowerCase() ) ? AppLocalizations.text(LangKey.personal) : AppLocalizations.text(LangKey.business),
+                             (leadItem.customerType != "") ? (leadItem.customerType.toLowerCase() == AppLocalizations.text(LangKey.personal).toLowerCase() ) ?
+                                AppLocalizations.text(LangKey.personal) : AppLocalizations.text(LangKey.business) : "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -481,7 +471,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                                customerSelected.phone ?? "N/A",
+                                leadItem.phone ?? "N/A",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -654,13 +644,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     child: _buildDatePicker(
                         AppLocalizations.text(LangKey.expectedEndingDate),
                         _closingDueDateText, () {
+                          FocusScope.of(context).unfocus();
                       _showClosingDueDate();
                     }))
                 : Container(),
                 
 
                 _buildTextField(
-                    AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
+                    AppLocalizations.text(LangKey.chooseCards),
                     tagsString,
                     Assets.iconTag,
                     false,
@@ -949,7 +940,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     if (_dealNameText.text == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
-        detailDeal.customerCode == "" ||
+        customerSelected.customerCode == "" ||
         detailDeal.saleId == 0 ||
         selectedClosingDueDate == null) {
       DealConnection.showMyDialog(
@@ -971,7 +962,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "customer",
-              customerCode: detailDeal.customerCode,
+              customerCode: customerSelected.customerCode,
               phone: _phoneNumberText.text,
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
@@ -1007,7 +998,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     if (_dealNameText.text == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
-        detailDeal.customerCode == "" ||
+        leadItem.customerLeadCode == "" ||
         detailDeal.saleId == 0 ||
         selectedClosingDueDate == null) {
       DealConnection.showMyDialog(
@@ -1029,8 +1020,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "lead",
-              customerCode: detailDeal.customerCode,
-              phone: detailDeal.phone ?? "",
+              customerCode: leadItem.customerLeadCode,
+              phone: leadItem.phone ?? "",
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:

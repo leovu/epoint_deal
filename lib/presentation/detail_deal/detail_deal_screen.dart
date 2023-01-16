@@ -59,6 +59,7 @@ class DetailDealScreen extends StatefulWidget {
 
 class _DetailDealScreenState extends State<DetailDealScreen> {
   final ScrollController _controller = ScrollController();
+  ScrollController _controllerListFunction = ScrollController();
   List<WorkListStaffModel> models = [];
   DetailDealData detail;
   bool allowPop = false;
@@ -428,6 +429,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   }
 
   selectedTab(int index) async {
+
     List<DetailPotentialTabModel> models = tabDeal;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
@@ -436,11 +438,17 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
     switch (index) {
       case 0:
+        _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+
         setState(() {});
         break;
 
       case 1:
-        if (customerCareDeal == null || reloadCSKH)  {
+
+      _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        if (customerCareDeal == null || reloadCSKH) {
           reloadCSKH = false;
           var careList =
               await DealConnection.getCareDeal(context, detail.dealId);
@@ -458,6 +466,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 2:
+
+      _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+
         await _bloc.workListComment(
             WorkListCommentRequestModel(dealId: detail.dealId));
 
@@ -465,6 +477,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 3:
+      _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         if (orderHistorys == null) {
           var orderHistory =
               await DealConnection.getOrderHistory(context, widget.deal_code);
@@ -534,6 +548,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
+                controller: _controllerListFunction,
                 child: buildListOption(),
               ),
               Container(
@@ -547,7 +562,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           ? Column(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(4.0),
+                                    padding: EdgeInsets.all(4.0),
                                     width: AppSizes.maxWidth,
                                     height: AppSizes.maxHeight - 400,
                                     child: _buildComments()),
@@ -836,7 +851,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         builder: (_, snapshot) {
           List<WorkListCommentModel> models = snapshot.data;
           return ContainerDataBuilder(
-            
             data: models,
             emptyBuilder: _buildEmpty(),
             skeletonBuilder: _buildContainer(null),
@@ -854,6 +868,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Divider(),
+          _infoDetailItem(
+            AppLocalizations.text(LangKey.customerVi),
+            detail?.customerName ?? "N/A",
+          ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.allottedPerson),
@@ -874,11 +893,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             AppLocalizations.text(LangKey.actualEndDate),
             detail?.closingDueDate ?? "N/A",
           ),
-          Divider(),
-          _infoDetailItem(
-            AppLocalizations.text(LangKey.reasonForFailure),
-            detail?.reasonLoseCode ?? "N/A",
-          ),
+          // Divider(),
+          // _infoDetailItem(
+          //   AppLocalizations.text(LangKey.reasonForFailure),
+          //   detail?.reasonLoseCode ?? "N/A",
+          // ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.agency),
@@ -1010,7 +1029,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal)),
                         SizedBox(height: 5),
-                        (detail.branchName != "")
+                        (detail.typeCustomer != "")
                             ? Text(
                                 detail.typeCustomer == "customer"
                                     ? AppLocalizations.text(LangKey.customerVi)
@@ -1641,7 +1660,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 fit: BoxFit.fill,
                                 backgroundColor: Colors.transparent,
                               ),
-                              SizedBox(width: 5.0,),
+                              SizedBox(
+                                width: 5.0,
+                              ),
                               Text(
                                 item.manageTypeWorkName ?? "N/A",
                                 textAlign: TextAlign.center,
