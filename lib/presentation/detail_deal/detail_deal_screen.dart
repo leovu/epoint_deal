@@ -128,6 +128,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
+        selectedTab(index);
         setState(() {});
       } else {
         await DealConnection.showMyDialog(context, dataDetail.errorDescription);
@@ -446,8 +447,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
       case 1:
 
-      _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
+      if (_controllerListFunction.positions.isNotEmpty) {
+        _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
           duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      }
         if (customerCareDeal == null || reloadCSKH) {
           reloadCSKH = false;
           var careList =
@@ -467,8 +470,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
       case 2:
 
-      _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
+      if (_controllerListFunction.positions.isNotEmpty) {
+        _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
           duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      }
 
         await _bloc.workListComment(
             WorkListCommentRequestModel(dealId: detail.dealId));
