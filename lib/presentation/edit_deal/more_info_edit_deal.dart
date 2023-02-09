@@ -33,7 +33,9 @@ class MoreInfoEditDeal extends StatefulWidget {
       this.branchData,
       this.orderSourceSelected,
       this.detail,
-      this.tagsData, this.tagsString,this.detailDeal});
+      this.tagsData,
+      this.tagsString,
+      this.detailDeal});
 
   @override
   _MoreInfoEditDealState createState() => _MoreInfoEditDealState();
@@ -57,15 +59,32 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   String tagsString = "";
   List<Map<String, dynamic>> productSelected = [];
 
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _probabilityText.text = "${widget.detail?.probability ?? 0}";
 
-         _probabilityText.text = "${widget.detail?.probability ?? 0}";
-         
       _detailDealText.text = widget.detail?.dealDescription ?? "";
+
+      if (widget.detail.productBuy.length > 0) {
+        for (int i = 0; i < widget.detail.productBuy.length; i++) {
+
+          widget.detailDeal.product.add(Product(
+                                  objectType: widget.detail.productBuy[i].objectType ?? "",
+                                  objectName: widget.detail.productBuy[i].objectName ?? "",
+                                  objectCode: "",
+                                  objectId: widget.detail.productBuy[i].objectId ?? 0,
+                                  quantity: widget.detail.productBuy[i].quantity ?? 0,
+                                  price: widget.detail.productBuy[i].price ?? 0,
+                                  amount: (widget.detail.productBuy[i].quantity ?? 0) *
+                                      (widget.detail.productBuy[i].price ?? 0)));
+          productSelected.add(widget.detail.productBuy[i].toJson());
+        }
+      } else {
+        productSelected = [];
+      }
+
       setState(() {});
     });
   }
@@ -110,9 +129,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                           }
                         }
 
-
-                        
-                            setState(() {});
+                        setState(() {});
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -186,16 +203,17 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                         ),
                         InkWell(
                           onTap: () async {
-                           
-                             if (widget.detailDeal.product.length > 0) {
+                            if (widget.detailDeal.product.length > 0) {
                               widget.detailDeal.product.forEach((v) {
                                 if (v.objectType == 'product') {
                                   ProductModel item =
-                                      ProductModel.fromJsonOrderDetail(v.toJson());
+                                      ProductModel.fromJsonOrderDetail(
+                                          v.toJson());
                                   GlobalCart.shared.addProduct(item, item.qty);
                                 } else {
                                   ServiceModel item =
-                                      ServiceModel.fromJsonOrderDetail(v.toJson());
+                                      ServiceModel.fromJsonOrderDetail(
+                                          v.toJson());
                                   GlobalCart.shared.addService(item, item.qty);
                                 }
                               });
@@ -207,33 +225,31 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                                         OrderCategoryScreen()));
                             GlobalCart.shared.clearCart();
                             print(result);
-     
-                              if (result != null) {
-                                widget.detailDeal.product.clear();
-                                if (result.length > 0) {
-                                  productSelected.clear();
-                                  for (int i = 0; i < result.length; i++) {
-                                    widget.detailDeal.product.add(Product(
-                                        objectType:
-                                            result[i]["object_type"] ?? "",
-                                        objectName:
-                                            result[i]["object_name"] ?? "",
-                                        objectCode:
-                                            result[i]["objectCode"] ?? "",
-                                        objectId: result[i]["object_id"] ?? 0,
-                                        quantity: result[i]["quantity"] ?? 0,
-                                        price: result[i]["price"] ?? 0,
-                                        amount: (result[i]["quantity"] ?? 0) *
-                                            (result[i]["price"] ?? 0)));
 
-                                    productSelected.add(
-                                        widget.detailDeal.product[i].toJson());
-                                  }
-                                  ;
+                            if (result != null) {
+                              widget.detailDeal.product.clear();
+                              if (result.length > 0) {
+                                productSelected.clear();
+                                for (int i = 0; i < result.length; i++) {
+                                  widget.detailDeal.product.add(Product(
+                                      objectType:
+                                          result[i]["object_type"] ?? "",
+                                      objectName:
+                                          result[i]["object_name"] ?? "",
+                                      objectCode: result[i]["objectCode"] ?? "",
+                                      objectId: result[i]["object_id"] ?? 0,
+                                      quantity: result[i]["quantity"] ?? 0,
+                                      price: result[i]["price"] ?? 0,
+                                      amount: (result[i]["quantity"] ?? 0) *
+                                          (result[i]["price"] ?? 0)));
+
+                                  productSelected.add(
+                                      widget.detailDeal.product[i].toJson());
                                 }
+                                ;
                               }
+                            }
 
-                            
                             setState(() {});
                           },
                           child: Text(
@@ -294,7 +310,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               : Container(),
 
           // showAdditionDeal ? moreInfo() : Container()
-           CustomSizeTransaction(
+          CustomSizeTransaction(
             open: showAdditionDeal,
             child: moreInfo(),
           )
@@ -343,19 +359,19 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               : Container(),
           (widget.branchData != null)
               ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              AppLocalizations.text(LangKey.branch),
-              style: TextStyle(
-                  fontSize: 15.0,
-                  color: const Color(0xFF858080),
-                  fontWeight: FontWeight.normal),
-            ),
-          ),
-                  Container(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        AppLocalizations.text(LangKey.branch),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            color: const Color(0xFF858080),
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         //  color: Colors.black,
@@ -369,22 +385,22 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                         ),
                       ),
                     ),
-                ],
-              )
+                  ],
+                )
               : Container(),
           Container(
             height: 15,
           ),
 
           _buildTextField(
-               "Nguồn cơ hội bán hàng",
+              "Nguồn cơ hội bán hàng",
               widget.detail?.orderSourceName ?? "",
               Assets.iconTag,
               false,
               true,
               false, ontap: () async {
             print("nguon don hang");
-            
+
             FocusScope.of(context).unfocus();
             if (orderSourceData == null || orderSourceData.length == 0) {
               DealConnection.showLoading(context);
@@ -439,7 +455,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 // widget.orderSourceSelected = orderSource;
                 widget.detail?.orderSourceName = orderSource.orderSourceName;
                 widget.detailDeal.orderSourceId =
-                      widget.orderSourceSelected.orderSourceId;
+                    widget.orderSourceSelected.orderSourceId;
                 setState(() {});
               }
             }
@@ -449,8 +465,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               fillText: _probabilityText,
               focusNode: _probabilityFocusNode,
               inputType: TextInputType.numberWithOptions(
-                      signed: false, decimal: false)),
-         Container(
+                  signed: false, decimal: false)),
+          Container(
             margin: EdgeInsets.only(bottom: 10),
             child: CustomTextField(
               maxLines: 4,
@@ -459,9 +475,9 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
               controller: _detailDealText,
               focusNode: _detailDealFocusNode,
-               onChanged: (event) {
-              widget.detailDeal.dealDescription = _detailDealText.text;
-            },
+              onChanged: (event) {
+                widget.detailDeal.dealDescription = _detailDealText.text;
+              },
             ),
           ),
         ],
@@ -490,26 +506,30 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       },
           // - so luong
           () {
-        minusItem(widget.detailDeal.product[index]);
+        minusItem(widget.detailDeal.product[index], productSelected[index]);
       },
           // + so luong
           () {
-        plusItem(widget.detailDeal.product[index]);
+        plusItem(widget.detailDeal.product[index], productSelected[index]);
       }),
     );
   }
 
-  void minusItem(Product item) {
+  void minusItem(Product item, Map<String, dynamic> json) {
     if (item.quantity == 1) {
+      json['quantity'] = 1;
       return;
     } else {
+      json['quantity'] -= 1;
       item.quantity -= 1;
+      item.amount = item.quantity * item.price;
     }
 
     setState(() {});
   }
 
-  void plusItem(Product item) {
+  void plusItem(Product item, Map<String, dynamic> json) {
+    json['quantity'] += 1;
     item.quantity += 1;
     setState(() {});
   }
@@ -588,7 +608,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       {Function ontap,
       TextEditingController fillText,
       FocusNode focusNode,
-      TextInputType inputType, int maxLenght}) {
+      TextInputType inputType,
+      int maxLenght}) {
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: InkWell(
@@ -629,7 +650,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 : Text(
                     content,
                     style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),
@@ -659,19 +680,20 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             if (fillText != null) {
               print(fillText.text);
               if (fillText != null) {
-              print(fillText.text);
-              if (fillText == _probabilityText) {
-                widget.detailDeal.probability =
-                    double.tryParse(fillText.text) ?? 0;
-                    widget.detailDeal?.probability = num.tryParse(fillText.text ?? "0");
-                if ((widget.detailDeal.probability ?? 0) > 100) {
-                  _probabilityText.text = "100";
-                  widget.detailDeal?.probability = 100;
-                  _probabilityText.selection = TextSelection.fromPosition(
-                      TextPosition(offset: _probabilityText.text.length));
+                print(fillText.text);
+                if (fillText == _probabilityText) {
+                  widget.detailDeal.probability =
+                      double.tryParse(fillText.text) ?? 0;
+                  widget.detailDeal?.probability =
+                      num.tryParse(fillText.text ?? "0");
+                  if ((widget.detailDeal.probability ?? 0) > 100) {
+                    _probabilityText.text = "100";
+                    widget.detailDeal?.probability = 100;
+                    _probabilityText.selection = TextSelection.fromPosition(
+                        TextPosition(offset: _probabilityText.text.length));
+                  }
                 }
               }
-            }
             }
           },
         ),

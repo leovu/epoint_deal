@@ -14,7 +14,6 @@ import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart'
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
-import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_deal.dart';
@@ -37,6 +36,7 @@ import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui;
 
 class DetailDealScreen extends StatefulWidget {
   String deal_code;
@@ -207,7 +207,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           initialOpen: false,
           curveAnimation: Curves.easeOutSine,
           childrenBoxDecoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.45),
+              color: Colors.black.withOpacity(0.35),
               borderRadius: BorderRadius.circular(10.0)),
           childrenCount: 3,
           distance: 10,
@@ -275,7 +275,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text("Chăm sóc KH",
+                Text("CSKH",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -419,18 +419,19 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
           selectedTab(2);
         }),
-        option(AppLocalizations.text(LangKey.order_history),
-            tabDeal[3].selected, 120, () {
-          index = 3;
+        detail.typeCustomer == "customer"
+            ? option(AppLocalizations.text(LangKey.order_history),
+                tabDeal[3].selected, 120, () {
+                index = 3;
 
-          selectedTab(3);
-        })
+                selectedTab(3);
+              })
+            : Container()
       ],
     );
   }
 
   selectedTab(int index) async {
-
     List<DetailPotentialTabModel> models = tabDeal;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
@@ -439,18 +440,22 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
     switch (index) {
       case 0:
-        _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.minScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
         setState(() {});
         break;
 
       case 1:
-
-      if (_controllerListFunction.positions.isNotEmpty) {
-        _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-      }
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.minScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
         if (customerCareDeal == null || reloadCSKH) {
           reloadCSKH = false;
           var careList =
@@ -469,11 +474,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 2:
-
-      if (_controllerListFunction.positions.isNotEmpty) {
-        _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-      }
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.maxScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
 
         await _bloc.workListComment(
             WorkListCommentRequestModel(dealId: detail.dealId));
@@ -482,8 +488,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         break;
 
       case 3:
-      _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.maxScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
         if (orderHistorys == null) {
           var orderHistory =
               await DealConnection.getOrderHistory(context, widget.deal_code);
@@ -542,7 +552,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              margin: EdgeInsets.only(top: 70), child: _dealInformationV3()),
+              margin: EdgeInsets.only(top: 65), child: _dealInformationV3()),
           (detail.productBuy != null && detail.productBuy.length > 0)
               ? Container(
                   margin: EdgeInsets.only(top: 20), child: infoProductBuy())
@@ -873,31 +883,31 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(),
+          // Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.customerVi),
-            detail?.customerName ?? "N/A",
+            (detail?.customerName == null || detail?.customerName == "") ? "N/A" : detail?.customerName,
           ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.allottedPerson),
-            detail?.staffName ?? "N/A",
+            (detail?.staffName == null || detail?.staffName == "") ? "N/A" : detail?.staffName,
           ),
-          Divider(),
-          _infoDetailItem(
-            AppLocalizations.text(LangKey.product),
-            detail?.productNameBuy ?? "N/A",
-          ),
+          // Divider(),
+          // _infoDetailItem(
+          //   AppLocalizations.text(LangKey.product),
+          //   detail?.productNameBuy ?? "N/A",
+          // ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.expectedEndingDate),
-            detail?.closingDate ?? "N/A",
+            (detail?.closingDate == null || detail?.closingDate == "") ? "N/A" : detail?.closingDate,
           ),
-          Divider(),
-          _infoDetailItem(
-            AppLocalizations.text(LangKey.actualEndDate),
-            detail?.closingDueDate ?? "N/A",
-          ),
+          // Divider(),
+          // _infoDetailItem(
+          //   AppLocalizations.text(LangKey.actualEndDate),
+          //   detail?.closingDueDate ?? "N/A",
+          // ),
           // Divider(),
           // _infoDetailItem(
           //   AppLocalizations.text(LangKey.reasonForFailure),
@@ -906,12 +916,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.agency),
-            detail?.branchName ?? "N/A",
+            (detail?.branchName == null || detail?.branchName == "") ? "N/A" : detail?.branchName,
           ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.orderSource),
-            detail?.orderSourceName ?? "N/A",
+            (detail?.orderSourceName == null || detail?.orderSourceName == "") ? "N/A" : detail?.orderSourceName,
           ),
           Divider(),
           _infoDetailItem(
@@ -921,17 +931,17 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.dealDetail),
-            detail?.dealDescription ?? "N/A",
+            (detail?.dealDescription == null || detail?.dealDescription == "") ? "N/A" : detail?.dealDescription ,
           ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.dateCreated),
-            detail?.createdAt ?? "N/A",
+             (detail?.createdAt == null || detail?.createdAt == "") ? "N/A" : detail?.createdAt,
           ),
           Divider(),
           _infoDetailItem(
             AppLocalizations.text(LangKey.lastModifiedDate),
-            detail?.updatedAt ?? "N/A",
+            (detail?.updatedAt == null || detail?.updatedAt == "") ? "N/A" : detail?.updatedAt,
           ),
           Divider(),
         ],
@@ -975,9 +985,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       clipBehavior: Clip.none,
       children: [
         Container(
-          margin: EdgeInsets.all(11.0),
+          margin: EdgeInsets.all(8.0),
           child: Container(
-            padding: EdgeInsets.only(bottom: 10.0),
+            // padding: EdgeInsets.only(bottom: 10.0),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
@@ -988,45 +998,87 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 Center(
                   child: Container(
                     padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(top: 25.0),
+                    margin: EdgeInsets.only(top: 16.0),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 4.0,
-                        ),
-                        Text(detail?.dealName ?? "",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w700)),
-                        SizedBox(height: 5.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              // margin: EdgeInsets.only(right: 12.0),
-                              decoration: BoxDecoration(
-                                  color: Color(0xFF3AEDB6),
-                                  borderRadius: BorderRadius.circular(4.0)),
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(detail.journeyName ?? "",
-                                    style: TextStyle(
-                                        color: Color(0xFF11B482),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal)),
-                              ),
-                            ),
-                            SizedBox(width: 10.0),
-                            Text(
-                              "${detail?.probability ?? 0}%",
-                              style: TextStyle(
+                        RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text: detail?.dealName ?? "",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: AppColors.primaryColor,
+                                    fontWeight: FontWeight.w700),
+                                children: [
+                                  
+                                  WidgetSpan(
+                                      child: SizedBox(
+                                    width: 5.0,
+                                  )),
+                                  WidgetSpan(
+                                      alignment: ui.PlaceholderAlignment.middle,
+                                      child: Container(
+                                        // margin: EdgeInsets.only(right: 12.0),
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFF3AEDB6),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(4.0),
+                                          child: Text(
+                                              detail.journeyName ?? "",
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(255, 8, 88, 64),
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.normal)),
+                                        ),
+                                      )),
+                                       WidgetSpan(
+                                      child: SizedBox(
+                                    width: 5.0,
+                                  )),
+                                    TextSpan(
+                                          text: "${detail?.probability ?? 0}%",
+                                          style: TextStyle(
                                   fontSize: 15.0,
                                   color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                                  fontWeight: FontWeight.bold)),
+                                ])),
+
+                        // Text(detail?.dealName ?? "",
+                        //     style: TextStyle(
+                        //         fontSize: 16.0,
+                        //         color: AppColors.primaryColor,
+                        //         fontWeight: FontWeight.w700)),
+                        // SizedBox(height: 5.0),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Container(
+                        //       // margin: EdgeInsets.only(right: 12.0),
+                        //       decoration: BoxDecoration(
+                        //           color: Color(0xFF3AEDB6),
+                        //           borderRadius: BorderRadius.circular(4.0)),
+                        //       child: Padding(
+                        //         padding: EdgeInsets.all(8.0),
+                        //         child: Text(detail.journeyName ?? "",
+                        //             style: TextStyle(
+                        //                 color: Color(0xFF11B482),
+                        //                 fontSize: 14,
+                        //                 fontWeight: FontWeight.normal)),
+                        //       ),
+                        //     ),
+                        //     SizedBox(width: 10.0),
+                        //     Text(
+                        //       "${detail?.probability ?? 0}%",
+                        //       style: TextStyle(
+                        //           fontSize: 15.0,
+                        //           color: AppColors.primaryColor,
+                        //           fontWeight: FontWeight.bold),
+                        //     )
+                        //   ],
+                        // ),
                         SizedBox(height: 10),
                         Text(detail?.phone ?? "",
                             style: TextStyle(
@@ -1066,7 +1118,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             children: [
                               infoItem(Assets.iconDeal, detail?.dealCode),
                               infoItem(
-                                  Assets.iconName, detail?.staffName ?? ""),
+                                  Assets.iconName, (detail?.staffName == null || detail?.staffName == "") ? "N/A" : detail?.staffName),
                               Container(
                                 padding: const EdgeInsets.only(
                                     left: 3.0, bottom: 8.0),
@@ -1459,7 +1511,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget infoProductBuy() {
     return Container(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 8.0),
       child: (detail.productBuy != null && detail.productBuy.length > 0)
           ? Column(
               children:

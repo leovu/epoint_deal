@@ -10,8 +10,9 @@ import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/response/add_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/detail_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_option_model_response.dart';
@@ -22,15 +23,11 @@ import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_respo
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
-import 'package:epoint_deal_plugin/presentation/edit_deal/more_info_edit_deal.dart';
+import 'package:epoint_deal_plugin/presentation/create_deal_from_lead/more_info_create_deal_from_lead.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/list_potential_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
 import 'package:epoint_deal_plugin/presentation/multi_staff_screen_potentail/ui/multi_staff_screen.dart';
-import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -40,15 +37,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class EditDealScreen extends StatefulWidget {
-  DetailDealData detail;
-  EditDealScreen({Key key, this.detail}) : super(key: key);
+class CreateDealFromLeadScreen extends StatefulWidget {
+  Map<String, dynamic> jsonDetailLead;
+  CreateDealFromLeadScreen({Key key, this.jsonDetailLead}) : super(key: key);
 
   @override
-  _EditDealScreenState createState() => _EditDealScreenState();
+  _CreateDealFromLeadScreenState createState() =>
+      _CreateDealFromLeadScreenState();
 }
 
-class _EditDealScreenState extends State<EditDealScreen>
+class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
     with WidgetsBindingObserver {
   var _isKeyboardVisible = false;
 
@@ -118,12 +116,15 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   DateTime selectedClosingDueDate;
 
+  DetailPotentialData detailLead;
+
   List<CustomerData> listCustomer = <CustomerData>[];
   DealItems customerItem = DealItems(
       customerCode: "", customerName: "", typeCustomer: "", phone: "");
 
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
-  ListCustomLeadItems leadItem = ListCustomLeadItems(customerLeadCode: "",phone: "", customerType: "");
+  ListCustomLeadItems leadItem =
+      ListCustomLeadItems(customerLeadCode: "", phone: "", customerType: "");
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel();
 
@@ -173,6 +174,10 @@ class _EditDealScreenState extends State<EditDealScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
 
+      // DetailPotentialModelResponse dataDetail =
+      //         await LeadConnection.getdetailPotential(
+      //             context, widget.customer_lead_code);
+
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
@@ -200,39 +205,13 @@ class _EditDealScreenState extends State<EditDealScreen>
   }
 
   void bindingData() async {
-    _dealNameText.text = widget.detail?.dealName ?? "";
-    // detailDeal.dealName = widget.detail?.dealName ?? "";
-    detailDeal.phone = widget.detail.phone ?? "";
-    detailDeal.dealDescription = widget.detail.dealDescription ?? "";
-    detailDeal.amount = widget.detail.amount;
-    detailDeal.probability = widget.detail.probability ?? 0;
-    detailDeal.dealCode = widget.detail.dealCode ?? "";
+    detailLead = DetailPotentialData.fromJson(widget.jsonDetailLead);
 
-    // detailDeal.product = widget.detail.productBuy;
-
-    if (widget.detail.productBuy != null &&
-        widget.detail.productBuy.length > 0) {
-           GlobalCart.shared.clearCart();
-           detailDeal.product.clear();
-      widget.detail.productBuy.forEach((element) {
-        detailDeal.product.add(Product(
-          objectCode: "",
-          objectType: element.objectType,
-          objectId: element.objectId,
-          objectName: element.objectName,
-          price: element.price,
-          quantity: element.quantity,
-          amount: element.amount,
-        ));
-
-
-      });
-    }
+    detailDeal.phone = detailLead.phone ?? "";
 
     for (int i = 0; i < _modelStaff.length; i++) {
-      if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
+      if ((detailLead?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
-        // allocatorSelected = allocatorData[i];
         _modelStaffSelected = [
           WorkListStaffModel(
               staffId: _modelStaff[i].staffId,
@@ -249,7 +228,7 @@ class _EditDealScreenState extends State<EditDealScreen>
 
     try {
       var item = _modelStaff.firstWhere(
-          (element) => element.staffId == (widget.detail?.saleId ?? 0));
+          (element) => element.staffId == (detailLead?.saleId ?? 0));
       if (item != null) {
         item.isSelected = true;
         detailDeal.saleId = _modelStaffSelected[0].staffId;
@@ -258,84 +237,11 @@ class _EditDealScreenState extends State<EditDealScreen>
 
     detailDeal.saleId = _modelStaffSelected[0].staffId;
 
-    for (int i = 0; i < customerTypeData.length; i++) {
-      if ((widget.detail?.typeCustomer ?? 0) ==
-          customerTypeData[i].customerTypeNameEn) {
-        customerTypeData[i].selected = true;
-
-        customerTypeSelected = customerTypeData[i];
-      } else {
-        customerTypeData[i].selected = false;
-      }
-    }
-    selectedCustomer =
-        customerTypeSelected.customerTypeNameEn == "lead" ? false : true;
-    detailDeal.typeCustomer =
-        customerTypeSelected.customerTypeNameEn.toLowerCase();
-
-    if (customerTypeSelected.customerTypeNameEn == "customer") {
-      selectedCustomer = true;
-      customerItem = DealItems(
-          customerCode: widget.detail?.customerCode,
-          customerName: widget.detail?.customerName ?? "",
-          phone: widget.detail?.phone ?? "");
-      // leadItem = ListCustomLeadItems(customerLeadCode: "");
-      _phoneNumberText.text = widget.detail?.phone;
-      detailDeal.customerCode = customerItem.customerCode;
-    } else {
-      selectedCustomer = false;
-      leadItem = ListCustomLeadItems(
-          customerLeadCode: widget.detail?.customerCode,
-          leadFullName: widget.detail?.customerName,
-          customerType: widget.detail?.typeCustomer,
-          phone: widget.detail?.phone);
-      detailDeal.customerCode = leadItem.customerLeadCode;
-    }
-
-    for (int i = 0; i < pipeLineData.length; i++) {
-      if ((widget.detail?.pipelineCode ?? "").toLowerCase() ==
-          pipeLineData[i].pipelineCode.toLowerCase()) {
-        pipeLineData[i].selected = true;
-        pipelineSelected = pipeLineData[i];
-      } else {
-        pipeLineData[i].selected = false;
-      }
-    }
-
-    detailDeal.pipelineCode = pipelineSelected.pipelineCode;
-
-    var journeys = await DealConnection.getJourney(context,
-        GetJourneyModelRequest(pipelineCode: [pipelineSelected.pipelineCode]));
-    if (journeys != null) {
-      journeysData = journeys.data;
-    }
-
-    for (int i = 0; i < journeysData.length; i++) {
-      if ((widget.detail.journeyCode ?? "").toLowerCase() ==
-          journeysData[i].journeyCode.toLowerCase()) {
-        journeysData[i].selected = true;
-        journeySelected = journeysData[i];
-      } else {
-        journeysData[i].selected = false;
-      }
-    }
-    detailDeal.journeyCode = journeySelected.journeyCode;
-
-    if (branchData != null && branchData.length > 0) {
-      BranchData result = branchData.firstWhereOrNull(
-          (element) => element.branchName == widget.detail?.branchName ?? "");
-      if (result != null) {
-        result.selected = true;
-        branchSelected = result;
-        detailDeal.branchCode = branchSelected.branchCode;
-      }
-    }
-
-    if (widget.detail.tag.length > 0 && tagsData != null) {
+    if (detailLead.tag.length > 0 && tagsData != null) {
       List<int> tagInt = [];
       for (var tag in tagsData) {
-        for (int tagID in widget.detail.tag) {
-          if (tag.tagId == tagID) {
+        for (TagData tagLead in detailLead.tag) {
+          if (tag.tagId == tagLead.tagId) {
             tagInt.add(tag.tagId);
             tag.selected = true;
             tagsSelected?.add(tag);
@@ -352,20 +258,6 @@ class _EditDealScreenState extends State<EditDealScreen>
 
       detailDeal.tag = tagInt;
     }
-
-    orderSourceSelected = OrderSourceData(
-        orderSourceName: widget.detail?.orderSourceName ?? "",
-        orderSourceId: widget.detail.orderSourceId ?? 0,
-        selected: true);
-
-    detailDeal.orderSourceId = orderSourceSelected.orderSourceId;
-
-    if (widget.detail.closingDate != "") {
-      selectedClosingDueDate = DateTime.parse(widget.detail.closingDate  + ' 00:00:00.000');
-      _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-        .format(DateTime.parse(widget.detail.closingDate));
-      }
-
     Navigator.of(context).pop();
     setState(() {});
   }
@@ -383,7 +275,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.edit_deal),
+              AppLocalizations.text(LangKey.creatDeal),
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
             leadingWidth: 20.0,
@@ -452,83 +344,58 @@ class _EditDealScreenState extends State<EditDealScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                onTap: () {
-                  // detailPotential.customerType = "business";
-                  customerTypeSelected = customerTypeData[1];
-                  // customerSelected =
-                  //     DealItems(customerCode: "", customerName: "");
-                  // leadItem = ListCustomLeadItems(customerLeadCode: "");
-                  // _dealNameText.text = "";
-                  selectedCustomer = false;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 42.0,
-                  width: MediaQuery.of(context).size.width / 2 - 19,
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: !selectedCustomer
-                          ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                      ]),
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.text(LangKey.potentialCustomer),
-                      style: TextStyle(
-                          color: !selectedCustomer
-                              ? Colors.white
-                              : Color(0xFF8E8E8E),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
+              Container(
+                height: 42.0,
+                width: MediaQuery.of(context).size.width / 2 - 19,
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                    color: !selectedCustomer
+                        ? AppColors.primaryColor
+                        : Color(0xFFF2F2F2),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 1),
+                        blurRadius: 2,
+                        color: Colors.black.withOpacity(0.3),
+                      )
+                    ]),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.text(LangKey.potentialCustomer),
+                    style: TextStyle(
+                        color: !selectedCustomer
+                            ? Colors.white
+                            : Color(0xFF8E8E8E),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  // detailPotential.customerType = "personal";
-                  customerTypeSelected = customerTypeData[0];
-                  // customerItem =
-                  //     DealItems(customerCode: "", customerName: "");
-                  // leadItem = ListCustomLeadItems(customerLeadCode: "");
-                  // _dealNameText.text = "";
-                  selectedCustomer = true;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 42.0,
-                  width: AppSizes.maxWidth / 2 - 19,
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: selectedCustomer
-                          ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                      ]),
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.text(LangKey.customerVi),
-                      style: TextStyle(
-                          color: selectedCustomer
-                              ? Colors.white
-                              : Color(0xFF8E8E8E),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
+              Container(
+                height: 42.0,
+                width: AppSizes.maxWidth / 2 - 19,
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                    color: selectedCustomer
+                        ? AppColors.primaryColor
+                        : Color(0xFFF2F2F2),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 1),
+                        blurRadius: 2,
+                        color: Colors.black.withOpacity(0.3),
+                      )
+                    ]),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.text(LangKey.customerVi),
+                    style: TextStyle(
+                        color:
+                            selectedCustomer ? Colors.white : Color(0xFF8E8E8E),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
               ),
@@ -542,116 +409,69 @@ class _EditDealScreenState extends State<EditDealScreen>
           // chọn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
-               selectedCustomer ? (customerItem?.customerName ?? "") : (leadItem?.leadFullName ?? ""),
+              detailLead?.fullName ?? "N/A",
               Assets.iconPerson,
-              true,
-              true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-
-            if (customerTypeSelected.customerTypeNameEn ==
-                AppLocalizations.text(LangKey.customer)) {
-              CustomerData customer =
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ListCustomerModal(
-                            listCustomer: listCustomer,
-                            dealItem: customerItem,
-                          )));
-
-              if (customer != null) {
-                customerItem.customerCode = customer.customerCode;
-                customerItem.customerName = customer.fullName;
-                customerItem.phone = customer.phone1;
-                _phoneNumberText.text = customer.phone1;
-                detailDeal.customerCode = customer.customerCode;
-                // _phoneNumberText.text = "";
-                setState(() {});
-              }
-            } else if (customerTypeSelected.customerTypeNameEn == "lead") {
-              ListCustomLeadItems result =
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ListCustomerPotentialModal(
-                            items: items,
-                            leadItem: leadItem,
-                          )));
-
-              if (result != null) {
-                leadItem.customerLeadCode = result.customerLeadCode;
-                leadItem.leadFullName = result.leadFullName;
-                leadItem.customerType = result.customerType;
-                leadItem.phone = result.phone;
-                detailDeal.customerCode = result.customerLeadCode;
-
-                setState(() {});
-              }
-            } else {
-              DealConnection.showMyDialog(context,
-                  AppLocalizations.text(LangKey.warningChooseCustomerType),
-                  warning: true);
-            }
-          }),
-          !selectedCustomer
-              ? (leadItem.customerLeadCode != "")
-                  ? Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 15.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.text(LangKey.customerStyle) +
-                                    ": ",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                width: 20.0,
-                              ),
-                              Text(
-                              (leadItem.leadFullName != "") ? (leadItem.customerType.toLowerCase() ==
-                                        AppLocalizations.text(LangKey.personal)
-                                            .toLowerCase())
-                                    ? AppLocalizations.text(LangKey.personal)
-                                    : AppLocalizations.text(LangKey.business) : "",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 15.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.text(LangKey.phoneNumber) +
-                                    ": ",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                width: 20.0,
-                              ),
-                              Text(
-                                leadItem.phone ?? "",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container()
-              : Container(),
+              false,
+              false,
+              false),
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 15.0),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.text(LangKey.customerStyle) + ": ",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    Text(
+                      (leadItem.leadFullName != "")
+                          ? (leadItem.customerType.toLowerCase() ==
+                                  AppLocalizations.text(LangKey.personal)
+                                      .toLowerCase())
+                              ? AppLocalizations.text(LangKey.personal)
+                              : AppLocalizations.text(LangKey.business)
+                          : "",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 15.0),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.text(LangKey.phoneNumber) + ": ",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    Text(
+                      detailDeal.phone ?? "N/A",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
 
           // phone
           selectedCustomer
@@ -840,16 +660,15 @@ class _EditDealScreenState extends State<EditDealScreen>
                   FocusScope.of(context).unfocus();
                   print("Chọn người được phân bổ");
 
-                  _modelStaffSelected =
+                  List<WorkListStaffModel> result =
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => MultipleStaffScreenDeal(
                                 models: _modelStaffSelected,
                               )));
 
-                  if (_modelStaffSelected != null &&
-                      _modelStaffSelected.length > 0) {
+                  if (result != null && result.length > 0) {
                     print(_modelStaffSelected);
-
+                    _modelStaffSelected = result;
                     detailDeal.saleId = _modelStaffSelected[0].staffId;
 
                     setState(() {});
@@ -931,13 +750,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                     }
                   }
                 }),
-
               ],
             ),
           ),
 
-          MoreInfoEditDeal(
-            detail: widget.detail,
+          MoreInfoCreateDealFromLead(
             branchData: branchData,
             detailDeal: detailDeal,
             orderSourceSelected: orderSourceSelected,
@@ -1122,16 +939,12 @@ class _EditDealScreenState extends State<EditDealScreen>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-          if (selectedCustomer) {
-            await updateDealCustomer();
-          } else {
-            await updateDealLead();
-          }
+            await addDealLead();
         },
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
-            AppLocalizations.text(LangKey.editDealTolowcase),
+            AppLocalizations.text(LangKey.creatDeal),
             style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.white,
@@ -1143,81 +956,10 @@ class _EditDealScreenState extends State<EditDealScreen>
     );
   }
 
-  Future<void> updateDealCustomer() async {
-    if (_phoneNumberText.text.isNotEmpty) {
-      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) ||
-          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-        print("so dien thoai sai oy");
-        DealConnection.showMyDialog(
-            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
-            warning: true);
-        return;
-      }
-    }
-
+  Future<void> addDealLead() async {
     if (_dealNameText.text == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
-        customerItem.customerCode == "" ||
-        detailDeal.saleId == 0 ||
-         selectedClosingDueDate == null) {
-      DealConnection.showMyDialog(
-          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
-          warning: true);
-    } else {
-      DealConnection.showLoading(context);
-
-      double amount = 0;
-      if (detailDeal.product.length > 0) {
-        for (int i = 0; i < detailDeal.product.length; i++) {
-          amount +=
-              detailDeal.product[i].amount * detailDeal.product[i].quantity;
-        }
-      }
-      UpdateDealModelResponse result = await DealConnection.updateDeal(
-          context,
-          UpdateDealModelRequest(
-              dealCode: detailDeal.dealCode,
-              dealName: _dealNameText.text,
-              saleId: detailDeal.saleId,
-              typeCustomer: "customer",
-              customerCode: customerItem.customerCode,
-              phone: _phoneNumberText.text,
-              pipelineCode: detailDeal.pipelineCode,
-              journeyCode: detailDeal.journeyCode,
-              closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
-              // closingDate: "",
-              branchCode: detailDeal.branchCode,
-              tag: detailDeal.tag,
-              orderSourceId: detailDeal.orderSourceId,
-              probability: detailDeal.probability,
-              dealDescription: detailDeal.dealDescription,
-              amount: amount,
-              product: detailDeal.product));
-      Navigator.of(context).pop();
-      if (result != null) {
-        if (result.errorCode == 0) {
-          print(result.errorDescription);
-          await DealConnection.showMyDialog(context, result.errorDescription);
-          Navigator.of(context).pop(true);
-          if (result.data != null) {
-            // modelResponse = ObjectPopCreateDealModel(
-            //     deal_id: result.data.dealId, status: true);
-          }
-          // Navigator.of(context).pop(modelResponse.toJson());
-        } else {
-          DealConnection.showMyDialog(context, result.errorDescription);
-        }
-      }
-    }
-  }
-
-  Future<void> updateDealLead() async {
-    if (_dealNameText.text == "" ||
-        detailDeal.pipelineCode == "" ||
-        detailDeal.journeyCode == "" ||
-        leadItem.customerLeadCode == "" ||
         detailDeal.saleId == 0 ||
         selectedClosingDueDate == null) {
       DealConnection.showMyDialog(
@@ -1233,15 +975,14 @@ class _EditDealScreenState extends State<EditDealScreen>
               detailDeal.product[i].amount * detailDeal.product[i].quantity;
         }
       }
-      UpdateDealModelResponse result = await DealConnection.updateDeal(
+      AddDealModelResponse result = await DealConnection.addDeal(
           context,
-          UpdateDealModelRequest(
-              dealCode: detailDeal.dealCode,
+          AddDealModelRequest(
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "lead",
-              customerCode: leadItem.customerLeadCode,
-              phone: leadItem.phone,
+              customerCode: detailLead.customerLeadCode,
+              phone: detailDeal.phone,
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:
@@ -1259,10 +1000,6 @@ class _EditDealScreenState extends State<EditDealScreen>
         if (result.errorCode == 0) {
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
-          // if (result.data != null) {
-          //   modelResponse = ObjectPopCreateDealModel(
-          //       deal_id: result.data.dealId, status: true);
-          // }
           Navigator.of(context).pop(true);
         } else {
           DealConnection.showMyDialog(context, result.errorDescription);
