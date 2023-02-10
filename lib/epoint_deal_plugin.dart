@@ -66,12 +66,12 @@ class EpointDealPlugin {
             .push(MaterialPageRoute(builder: (context) => CreateDealScreen()));
         return event;
       } else if (create == 1) {
-        await Navigator.of(context).push(MaterialPageRoute(
+       bool result = await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailDealScreen(
                   deal_code: deal_code,
                   indexTab: indexTabDetail ?? 0,
                 )));
-        return null;
+        return result;
       } else if (create == 2) {
         await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => ListDealScreen()));
