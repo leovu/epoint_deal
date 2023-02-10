@@ -31,8 +31,6 @@ class EpointDealPlugin {
       Map<String,dynamic> jsonDetail
       
       }) async {
-
-
     if (domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -78,8 +76,10 @@ class EpointDealPlugin {
         await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => ListDealScreen()));
       } else {
-        await Navigator.of(context)
+        bool result = await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => CreateDealFromLeadScreen(jsonDetailLead: jsonDetail,)));
+
+          return result;
       }
     } else {
       loginError(DealConnection.buildContext, 'Fail');
