@@ -964,7 +964,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             child: CustomMenuBottomSheet(
               title: AppLocalizations.text(LangKey.expectedEndingDate),
               widget: CustomDatePicker(
-                minimumTime: DateTime(DateTime.now().year, DateTime.now().month,
+                minimumTime: selectedDate ?? DateTime(DateTime.now().year, DateTime.now().month,
                     DateTime.now().day, 0, 0, 0),
                 initTime: selectedDate,
                 maximumTime: DateTime(2025, 12, 31),
