@@ -209,6 +209,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
     detailDeal.phone = detailLead.phone ?? "";
 
+   _dealNameText.text = "Deal của ${detailLead?.fullName ?? ""}";
+
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((detailLead?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
@@ -278,7 +280,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               AppLocalizations.text(LangKey.creatDeal),
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
-            leadingWidth: 20.0,
+            // leadingWidth: 20.0,
           ),
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),
@@ -431,10 +433,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       width: 20.0,
                     ),
                     Text(
-                      (leadItem.leadFullName != "")
-                          ? (leadItem.customerType.toLowerCase() ==
-                                  AppLocalizations.text(LangKey.personal)
-                                      .toLowerCase())
+                      (detailLead?.customerType != null && detailLead?.customerType != "")
+                          ? (detailLead.customerType.toLowerCase() == "personal")
                               ? AppLocalizations.text(LangKey.personal)
                               : AppLocalizations.text(LangKey.business)
                           : "",
@@ -868,7 +868,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       Assets.iconDropDown,
                     ),
                   )
-                : Container(),
+                : null,
             suffixIconConstraints:
                 BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
             isDense: true,

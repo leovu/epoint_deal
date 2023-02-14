@@ -831,7 +831,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                       Assets.iconDropDown,
                     ),
                   )
-                : Container(),
+                : null,
             suffixIconConstraints:
                 BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
             isDense: true,

@@ -1,3 +1,5 @@
+import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
+
 class ListDealModelResponse {
   int errorCode;
   String errorDescription;
@@ -130,6 +132,7 @@ class DealItems {
   int relatedWork;
   int appointment;
   bool selected;
+  List<TagData> tag;
 
   DealItems(
       {this.dealId,
@@ -155,6 +158,7 @@ class DealItems {
       this.diffDay,
       this.relatedWork,
       this.appointment,
+      this.tag,
       this.selected});
 
   DealItems.fromJson(Map<String, dynamic> json) {
@@ -181,6 +185,12 @@ class DealItems {
     diffDay = json['diff_day'];
     relatedWork = json['related_work'];
     appointment = json['appointment '];
+    if (json['tag'] != null) {
+      tag = <TagData>[];
+      json['tag'].forEach((v) {
+        tag.add(new TagData.fromJson(v));
+      });
+    }
     selected = json['selected'] ?? false;
   }
 
@@ -209,6 +219,9 @@ class DealItems {
     data['diff_day'] = this.diffDay;
     data['related_work'] = this.relatedWork;
     data['appointment '] = this.appointment;
+    if (this.tag != null) {
+      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+    }
     data['selected'] = this.selected;
     return data;
   }

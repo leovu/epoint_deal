@@ -1,3 +1,5 @@
+import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
+
 class DetailDealModelResponse {
   int errorCode;
   String errorDescription;
@@ -39,7 +41,7 @@ class DetailDealData {
   String branchName;
   String orderSourceName;
   int orderSourceId;
-  List<int> tag;
+  List<TagData> tag;
   int probability;
   String dealDescription;
   int saleId;
@@ -122,7 +124,12 @@ class DetailDealData {
     reasonLoseCode = json['reason_lose_code'] ?? "";
     branchName = json['branch_name'] ?? "";
     orderSourceName = json['order_source_name'] ?? "";
-    tag = json['tag']?.cast<int>() ?? [];
+    if (json['tag'] != null) {
+      tag = <TagData>[];
+      json['tag'].forEach((v) {
+        tag.add(new TagData.fromJson(v));
+      });
+    }
     probability = json['probability'] ?? 0;
     dealDescription = json['deal_description'] ?? "";
     saleId = json['sale_id'] ?? 0;
@@ -183,7 +190,9 @@ class DetailDealData {
     data['reason_lose_code'] = this.reasonLoseCode;
     data['branch_name'] = this.branchName;
     data['order_source_name'] = this.orderSourceName;
-    data['tag'] = this.tag;
+    if (this.tag != null) {
+      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+    }
     data['probability'] = this.probability;
     data['deal_description'] = this.dealDescription;
     data['sale_id'] = this.saleId;

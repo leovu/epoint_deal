@@ -7,6 +7,7 @@ import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
@@ -556,6 +557,20 @@ class _ListDealScreenState extends State<ListDealScreen> {
                 )
                   ],
                 ),
+
+                item.tag.length > 0
+                      ? Container(
+                          // width: AppSizes.maxWidth * 0.55,
+                          padding: EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
+                          child: Wrap(
+                            children: List.generate(item.tag.length,
+                                (index) => _optionItem(item.tag[index])),
+                            spacing: 10,
+                            runSpacing: 10,
+                          ),
+                        )
+                      : Container()
+
               ],
             ),
           ),
@@ -586,6 +601,33 @@ class _ListDealScreenState extends State<ListDealScreen> {
         //   ),
         // ),
       ],
+    );
+  }
+
+  Widget _optionItem(TagData item) {
+    return Container(
+      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+      height: 24,
+      decoration: BoxDecoration(
+          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              height: 8.0,
+              width: 8.0,
+              margin: EdgeInsets.only(right: 5.0),
+              decoration: BoxDecoration(
+                  color: Color(0x790067AC),
+                  borderRadius: BorderRadius.circular(1000.0))),
+          Text(item.name,
+              style: TextStyle(
+                  color: Color(0xFF0067AC),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600))
+        ],
+      ),
     );
   }
 

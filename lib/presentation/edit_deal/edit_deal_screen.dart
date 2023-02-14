@@ -334,8 +334,8 @@ class _EditDealScreenState extends State<EditDealScreen>
     if (widget.detail.tag.length > 0 && tagsData != null) {
       List<int> tagInt = [];
       for (var tag in tagsData) {
-        for (int tagID in widget.detail.tag) {
-          if (tag.tagId == tagID) {
+        for (TagData tagSelected in widget.detail.tag) {
+          if (tag.tagId == tagSelected.tagId) {
             tagInt.add(tag.tagId);
             tag.selected = true;
             tagsSelected?.add(tag);
@@ -386,7 +386,7 @@ class _EditDealScreenState extends State<EditDealScreen>
               AppLocalizations.text(LangKey.edit_deal),
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
-            leadingWidth: 20.0,
+            // leadingWidth: 20.0,
           ),
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),
@@ -1051,7 +1051,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       Assets.iconDropDown,
                     ),
                   )
-                : Container(),
+                : null,
             suffixIconConstraints:
                 BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
             isDense: true,

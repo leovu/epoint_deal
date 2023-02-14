@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:draggable_expandable_fab/draggable_expandable_fab.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -14,6 +12,7 @@ import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart'
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
+import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_deal.dart';
@@ -260,6 +259,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                     detail: detail,
                                   )));
                       if (result) {
+                        allowPop = true;
                         getData();
                         reloadCSKH = true;
                         index = 1;
@@ -1243,6 +1243,21 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     ],
                   ),
                 ),
+
+                (detail.tag != null && detail.tag.length > 0)
+                              ? Container(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  margin: EdgeInsets.only(left: 8.0, top: 10.0),
+                                  child: Wrap(
+                                    children: List.generate(
+                                        detail.tag.length,
+                                        (index) =>
+                                            _optionItem(detail.tag[index])),
+                                    spacing: 10,
+                                    runSpacing: 10,
+                                  ),
+                                )
+                              : Container(),
               ],
             ),
           ),
@@ -1255,6 +1270,33 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           child: Center(child: _buildAvatar(detail?.dealName ?? "")),
         )
       ],
+    );
+  }
+
+   Widget _optionItem(TagData item) {
+    return Container(
+      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+      height: 24,
+      decoration: BoxDecoration(
+          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              height: 8.0,
+              width: 8.0,
+              margin: EdgeInsets.only(right: 5.0),
+              decoration: BoxDecoration(
+                  color: Color(0x790067AC),
+                  borderRadius: BorderRadius.circular(1000.0))),
+          Text(item.name,
+              style: TextStyle(
+                  color: Color(0xFF0067AC),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600))
+        ],
+      ),
     );
   }
 
