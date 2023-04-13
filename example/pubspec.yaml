@@ -21,7 +21,8 @@ dependencies:
   draggable_fab: ^0.1.4
   http: ^0.13.5
   file_picker: ^5.2.4
-  flutter_html: ^3.0.0-alpha.6
+  webview_flutter: ^4.0.7
+  flutter_widget_from_html: ^0.10.0
 
 dependency_overrides:
   permission:
