@@ -94,8 +94,10 @@ class DealConnection {
 
     static Future<ListCustomLeadModelReponse> getListPotentialCustomer(
       BuildContext context, ListCustomLeadModelRequest model) async {
+        showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/list-customer-lead', model.toJson());
+        Navigator.of(context).pop();
     if (responseData.isSuccess) {
       if (responseData.data != null) {
         ListCustomLeadModelReponse data =
@@ -109,8 +111,10 @@ class DealConnection {
 
    static Future<GetCustomerModelResponse> getCustomer(
       BuildContext context) async {
+        showLoading(context);
     ResponseData responseData = await connection
         .post('/customer-lead/customer-lead/get-customer', {});
+        Navigator.of(context).pop();
     if (responseData.isSuccess) {
       GetCustomerModelResponse data =
           GetCustomerModelResponse.fromJson(responseData.data);

@@ -108,7 +108,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
                       separator: Divider(),
                       children: _listWidget(),
                     ))
-                  : dataNotFound()
+                  : Container()
               : Container(),
           Container(
             height: 20.0,

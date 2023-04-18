@@ -169,7 +169,7 @@ ListCustomLeadData _model ;
                   separator: Divider(),
                   children: _listWidget(),
                 ))
-              : dataNotFound(),
+              : Container(),
           Container(
             height: 20.0,
           )
@@ -183,7 +183,7 @@ ListCustomLeadData _model ;
         _model.items.length,
         (index) => _buildItemStaff(_model.items[index], () {
               selectedStaff(index);
-            })) : [dataNotFound()];
+            })) : [Container()];
   }
 
    Widget dataNotFound() {
