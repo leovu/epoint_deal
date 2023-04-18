@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
+import 'package:epoint_deal_plugin/connection/network_connectivity.dart';
 import 'package:epoint_deal_plugin/model/acount.dart';
 import 'package:epoint_deal_plugin/model/request/add_business_areas_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
@@ -53,6 +55,7 @@ import 'package:epoint_deal_plugin/model/response/work_upload_file_model_respons
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:mime/mime.dart';
 
 class DealConnection {
   
@@ -530,20 +533,6 @@ class DealConnection {
     return null;
   }
 
-  //  static Future<WorkListCommentResponseModel> workCreatedComment(
-  //     BuildContext context, WorkCreateCommentRequestModel model) async {
-  //   showLoading(context);
-  //   ResponseData responseData =
-  //       await connection.post('/customer-deals/created-comment', model.toJson());
-  //       Navigator.of(context).pop();
-  //   if (responseData.isSuccess) {
-  //     WorkListCommentResponseModel data =
-  //         WorkListCommentResponseModel.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
    static Future<WorkListCommentResponseModel> workCreatedComment(
       BuildContext context, WorkCreateCommentRequestModel model) async {
     showLoading(context);
@@ -556,6 +545,45 @@ class DealConnection {
       return data;
     }
     return null;
+  }
+
+  static Future<String> uploadFileAWS(
+      BuildContext context, File file) async {
+    // showLoading(context);
+    var data = await _checkConnectivity(context);
+    if (data != null) {
+      handleError(context,AppLocalizations.text(LangKey.server_error));
+    }
+
+    final mimeType = lookupMimeType(file.path);
+
+    final url = await AwsS3.uploadFile(
+        accessKey: "AKIAUO66DKWUKVBVJCJK",
+        secretKey: "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",
+        file: file,
+        bucket: "epoint-bucket",
+        region: "ap-southeast-1",
+        contentType: mimeType
+    );
+
+    if((url ?? "").isEmpty){
+      handleError(context,AppLocalizations.text(LangKey.server_error));
+      return null;
+    } else {
+      return url;
+    }
+  }
+
+   static Future _checkConnectivity(BuildContext context) async {
+    if (!(await NetworkConnectivity.isConnected())) {
+      handleError(context,AppLocalizations.text(LangKey.server_error));
+    }
+    return null;
+  }
+
+
+  static Future handleError(BuildContext context, String title) async {
+    await showMyDialog(context, AppLocalizations.text(LangKey.server_error));
   }
 
  static Future showMyDialog(BuildContext context, String title, {bool warning = false}) async {

@@ -195,7 +195,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     ]);
 
     if (file != null) {
-      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
+      _bloc.workUploadFile(file);
     }
   }
 
@@ -444,7 +444,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<WorkUploadFileResponse> models =
+                      List<String> models =
                           snapshot.data ?? [];
                       return models.isEmpty
                           ? Container()
@@ -464,7 +464,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                               radius: 5.0,
                                               backgroundColor:
                                                   Color(0xFFC4C4C4),
-                                              text: getNameFromPath(e.path),
+                                              text: getNameFromPath(e),
                                               style: AppTextStyles
                                                   .style13WhiteNormal,
                                               onClose: () =>
@@ -994,10 +994,10 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
           List<String> list_document = []; 
           if (_bloc.outputFiles.hasValue) {
-            List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
+            List<String> models = _bloc.outputFiles.value;
           if (models.length > 0) {
             models.forEach((element) {
-              list_document.add(element.path);
+              list_document.add(element);
             });
           }
           }

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:epoint_deal_plugin/common/lang_key.dart';
+import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
@@ -17,27 +21,45 @@ class CustomerCareBloc extends BaseBloc {
     super.dispose();
   }
 
-   List<WorkUploadFileResponse> _files = [];
+   List<String> _files = [];
 
 
-  final _streamFiles = BehaviorSubject<List<WorkUploadFileResponse>>();
-  ValueStream<List<WorkUploadFileResponse>> get outputFiles => _streamFiles.stream;
-  setFiles(List<WorkUploadFileResponse> event) => set(_streamFiles, event);
+  final _streamFiles = BehaviorSubject<List<String>>();
+  ValueStream<List<String>> get outputFiles => _streamFiles.stream;
+  setFiles(List<String> event) => set(_streamFiles, event);
 
 
-  workUploadFile(MultipartFileModel model) async {
+  // workUploadFile(MultipartFileModel model) async {
+  //   DealConnection.showLoading(context);
+  //   WorkUploadFileResponseModel result = await DealConnection.workUploadFile(context, model);
+  //   Navigator.of(context).pop();
+  //   if(result != null){
+  //     WorkUploadFileResponse response = result.data;
+
+  //     _files.add(response);
+  //     setFiles(_files);
+  //   }
+  // }
+
+    workUploadFile(File model) async {
     DealConnection.showLoading(context);
-    WorkUploadFileResponseModel result = await DealConnection.workUploadFile(context, model);
+
+    
+    String result = await DealConnection.uploadFileAWS(context, model);
+
+
     Navigator.of(context).pop();
     if(result != null){
-      WorkUploadFileResponse response = result.data;
+      // WorkUploadFileResponse response = result.url;
 
-      _files.add(response);
+      _files.add(result);
       setFiles(_files);
+    } else {
+      DealConnection.handleError(context, AppLocalizations.text(LangKey.server_error));
     }
   }
 
-  removeFile(WorkUploadFileResponse model){
+  removeFile(String model){
     _files.remove(model);
     setFiles(_files);
   }

@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "amazon_cognito_identity_dart_2",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/amazon_cognito_identity_dart_2-1.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.13"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/archive-3.3.5",
       "packageUri": "lib/",
@@ -36,6 +42,12 @@
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/auto_size_text_field-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "aws_s3_upload",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/aws_s3_upload-1.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "boolean_selector",
@@ -86,6 +98,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "connectivity_plus",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/connectivity_plus-3.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "connectivity_plus_platform_interface",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/connectivity_plus_platform_interface-1.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "convert",
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/convert-3.1.1",
       "packageUri": "lib/",
@@ -114,6 +138,12 @@
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "dbus",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/dbus-0.7.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "dotted_border",
@@ -356,8 +386,20 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "mime",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/mime-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "nested",
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "nm",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/nm-0.5.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -466,6 +508,12 @@
     {
       "name": "provider",
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/provider-6.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "recase",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/recase-4.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -740,7 +788,7 @@
       "languageVersion": "2.10"
     }
   ],
-  "generated": "2023-04-13T06:58:03.414818Z",
+  "generated": "2023-04-18T04:14:45.951040Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

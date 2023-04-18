@@ -266,5 +266,6 @@ class LangKey {
   static const String trademark = "trademark";
   static const String origin = "origin";
   static const String product_description = "product_description";
+  static const String server_error = "server_error";
 }
 
