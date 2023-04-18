@@ -444,13 +444,13 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<String> models =
-                          snapshot.data ?? [];
+                      List<String> models = snapshot.data ?? [];
                       return models.isEmpty
                           ? Container()
                           : Container(
                               padding:
                                   EdgeInsets.only(bottom: AppSizes.minPadding),
+                              margin: EdgeInsets.only(right: 5.0),
                               alignment: Alignment.centerLeft,
                               child: Wrap(
                                 spacing: AppSizes.minPadding,
@@ -459,16 +459,18 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                     .map((e) => Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            CustomChip(
-                                              isExpand: true,
-                                              radius: 5.0,
-                                              backgroundColor:
-                                                  Color(0xFFC4C4C4),
-                                              text: getNameFromPath(e),
-                                              style: AppTextStyles
-                                                  .style13WhiteNormal,
-                                              onClose: () =>
-                                                  _bloc.removeFile(e),
+                                            Flexible(
+                                              child: CustomChip(
+                                                isExpand: true,
+                                                radius: 5.0,
+                                                backgroundColor:
+                                                    Color(0xFFC4C4C4),
+                                                text: getNameFromPath(e),
+                                                style: AppTextStyles
+                                                    .style13WhiteNormal,
+                                                onClose: () =>
+                                                    _bloc.removeFile(e),
+                                              ),
                                             )
                                           ],
                                         ))
@@ -480,8 +482,6 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                   margin: EdgeInsets.only(bottom: 10),
                   child: InkWell(
                     onTap: () {
-                      // selectFile();
-                      // _showDocumentPicker();
                       _uploadFile();
                     },
                     child: DottedBorder(

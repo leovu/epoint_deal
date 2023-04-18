@@ -29,18 +29,6 @@ class CustomerCareBloc extends BaseBloc {
   setFiles(List<String> event) => set(_streamFiles, event);
 
 
-  // workUploadFile(MultipartFileModel model) async {
-  //   DealConnection.showLoading(context);
-  //   WorkUploadFileResponseModel result = await DealConnection.workUploadFile(context, model);
-  //   Navigator.of(context).pop();
-  //   if(result != null){
-  //     WorkUploadFileResponse response = result.data;
-
-  //     _files.add(response);
-  //     setFiles(_files);
-  //   }
-  // }
-
     workUploadFile(File model) async {
     DealConnection.showLoading(context);
 
