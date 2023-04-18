@@ -37,8 +37,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
               fit: FlexFit.loose,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 12.0 * 1.5,
-                    vertical:  15.0 * 1.5),
+                    horizontal: 12.0 * 1.5, vertical: 15.0 * 1.5),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -55,13 +54,17 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         if (allowBack)
                           Opacity(
                             child: InkWell(
-                              onTap: funcPop?? () => Navigator.of(context).pop(),
+                              onTap:
+                                  funcPop ?? () => Navigator.of(context).pop(),
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,
-                                padding:
-                                EdgeInsets.only(left: 20.0),
-                                child: Icon(Icons.clear,color: Colors.black,size: 20.0,),
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: Icon(
+                                  Icons.clear,
+                                  color: Colors.black,
+                                  size: 20.0,
+                                ),
                               ),
                             ),
                             opacity: 1.0,
@@ -70,9 +73,9 @@ class CustomMenuBottomSheet extends StatelessWidget {
                           child: Text(
                             title ?? "",
                             style: TextStyle(
-      fontSize: 16.0,
-      color: Colors.black,
-      fontWeight: FontWeight.w500),
+                                fontSize: 16.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -82,21 +85,21 @@ class CustomMenuBottomSheet extends StatelessWidget {
                       ],
                     ),
                     // CustomLine(),
-                    if((title??"")!="") Divider(),
-                    if (haveBnConfirm)
-                      Expanded(
-                          child: Column(
-                            children: [
-                              Expanded(child: widget),
-                              CustomButton(
-                                text: textConfirm??AppLocalizations.text(LangKey.confirm),
-                                enable: enableButton,
-                                onTap: onTapConfirm,
-                              )
-                            ],
-                          ))
-                    else
-                      widget,
+                    if ((title ?? "") != "") Divider(),
+                    Flexible(
+                        child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(child: widget),
+                        if (haveBnConfirm)
+                          CustomButton(
+                            text: textConfirm ??
+                                AppLocalizations.text(LangKey.confirm),
+                            enable: enableButton,
+                            onTap: onTapConfirm,
+                          )
+                      ],
+                    )),
                     Container(
                       height: 15.0,
                     )
