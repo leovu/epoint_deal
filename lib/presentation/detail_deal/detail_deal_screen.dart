@@ -1651,6 +1651,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         if (Global.editJob != null) {
           var result = await Global.editJob(item.manageWorkId);
           if (result != null && result) {
+            allowPop = true;
+            reloadCSKH = true;
             await getData();
             selectedTab(1);
           }
