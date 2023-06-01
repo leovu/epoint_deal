@@ -16,6 +16,7 @@ class UpdateDealModelRequest {
   String customerCode;
   String branchCode;
   num amount;
+  num discount;
 
 
   List<Product> product;
@@ -36,7 +37,8 @@ class UpdateDealModelRequest {
       this.amount,
       this.customerCode,
       this.branchCode,
-      this.product});
+      this.product,
+      this.discount});
 
   UpdateDealModelRequest.fromJson(Map<String, dynamic> json) {
     dealCode = json['deal_code'];
@@ -60,6 +62,7 @@ class UpdateDealModelRequest {
         product.add(new Product.fromJson(v));
       });
     }
+    discount = json['discount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +84,7 @@ class UpdateDealModelRequest {
     if (this.product != null) {
       data['product'] = this.product.map((v) => v.toJson()).toList();
     }
+    data["discount"] = discount;
     return data;
   }
 }

@@ -89,7 +89,6 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
     List<KeyboardActionsItem> models = [];
     for(var e in item){
       if(e != null){
-        models.add(buildKeyboardAction(e.node));
       }
     }
     return models;
@@ -196,81 +195,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
                             ),
                           ),
                         ),
-                        if(!widget.isViewOnly && !widget.isSelected)
-                          widget.isBooking
-                              ? _buildCheckBox(value)
-                              : Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    int qty = (int.tryParse(
-                                        value.controller.text) -
-                                        1) <=
-                                        0
-                                        ? 0
-                                        : int.tryParse(value.controller.text) -
-                                        1;
-                                    value.controller.text = '$qty';
-                                    GlobalCart.shared.addService(value, qty);
-                                  },
-                                  child: Container(
-                                    height: 20.0,
-                                    width: 20.0,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xFFCCCCCC),
-                                        borderRadius:
-                                        BorderRadius.circular(10.0)),
-                                    child: Center(
-                                      child: Text('-',
-                                          style: TextStyle(
-                                              color: AppColors.white,
-                                              // fontSize: 1,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(color: Colors.grey)),
-                                width: 60.0,
-                                height: 25.0,
-                                child: _inputField(value),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    int qty = (int.tryParse(
-                                        value.controller.text) +
-                                        1) >
-                                        999
-                                        ? 999
-                                        : int.tryParse(value.controller.text) +
-                                        1;
-                                    value.controller.text = '$qty';
-                                    GlobalCart.shared.addService(value, qty);
-                                  },
-                                  child: Container(
-                                    height: 20.0,
-                                    width: 20.0,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryColor,
-                                        borderRadius:
-                                        BorderRadius.circular(10.0)),
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 20.0,
-                                      color: AppColors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
+                       
                       ],
                     )
                   ],
@@ -283,69 +208,24 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
     );
   }
 
-  Widget _buildCheckBox(ServiceModel model){
-    return CustomCheckbox(
-        model.qty > 0,
-        (event){
-          if(event){
-            GlobalCart.shared.addService(model, 1);
-            model.qty = 1;
-          }
-          else{
-            GlobalCart.shared.addService(model, 0);
-            model.qty = 0;
-          }
+  // Widget _buildCheckBox(ServiceModel model){
+  //   return CustomCheckbox(
+  //       model.qty > 0,
+  //       (event){
+  //         if(event){
+  //           GlobalCart.shared.addService(model, 1);
+  //           model.qty = 1;
+  //         }
+  //         else{
+  //           GlobalCart.shared.addService(model, 0);
+  //           model.qty = 0;
+  //         }
 
-          setState(() {});
-        }
-    );
-  }
+  //         setState(() {});
+  //       }
+  //   );
+  // }
 
-  Widget _inputField(ServiceModel value) {
-    return Center(
-      child: AutoSizeTextField(
-        keyboardType: TextInputType.number,
-        focusNode: value.node,
-        controller: value.controller,
-        maxLength: 3,
-        onChanged: (text) {
-          try {
-            if (text[0] == '0' && text.length > 1) {
-              String val = text.substring(1, text.length);
-              value.controller.text = '$val';
-              GlobalCart.shared.addService(value, int.tryParse(val));
-              value.controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: value.controller.text.length));
-            } else {
-              if (text == '' || text == null) {
-                GlobalCart.shared.addService(value, 0);
-              } else {
-                GlobalCart.shared.addService(value, int.tryParse(text));
-                value.controller.selection = TextSelection.fromPosition(
-                    TextPosition(offset: value.controller.text.length));
-              }
-            }
-          } catch (e) {
-            if (text == '' || text == null) {
-              value.controller.text = '0';
-              GlobalCart.shared.addService(value, 0);
-              value.controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: value.controller.text.length));
-            }
-          }
-        },
-        buildCounter: (BuildContext context,
-                {int currentLength, int maxLength, bool isFocused}) =>
-            null,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   getProduct() {

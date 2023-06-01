@@ -1,7 +1,3 @@
-
-import 'package:epoint_deal_plugin/utils/global_cart.dart';
-import 'package:flutter/cupertino.dart';
-
 class ListServiceResponseModel {
   int errorCode;
   String errorDescription;
@@ -124,9 +120,9 @@ class ServiceModel {
   int time;
   String categoryName;
   int isNew;
-  FocusNode node;
-  TextEditingController controller;
-  int qty;
+  num qty;
+  num price;
+  String note;
   Promotion promotion;
 
   ServiceModel(
@@ -143,7 +139,7 @@ class ServiceModel {
       this.categoryName,
       this.isNew,
       this.promotion,
-      this.qty});
+      this.qty, this.price, this.note});
 
   ServiceModel.fromJson(Map<String, dynamic> json) {
     branchName = json['branch_name'];
@@ -151,34 +147,30 @@ class ServiceModel {
     serviceName = json['service_name'];
     serviceCode = json['service_code'];
     serviceAvatar = json['service_avatar'];
-    oldPrice = double.tryParse(json['old_price'].toString());
-    newPrice = double.tryParse(json['new_price'].toString());
+    oldPrice = double.tryParse((json['old_price'] ?? 0.0).toString());
+    newPrice = double.tryParse((json['new_price'] ?? 0.0).toString());
     detailDescription = json['detail_description'];
     description = json['description'];
     time = json['time'];
     categoryName = json['category_name'];
     isNew = json['is_new'];
-    qty = GlobalCart.shared.getQuantityService(serviceId);
-    node = FocusNode();
-    controller = TextEditingController();
-    controller.text = '$qty';
     if (json['promotion'] is Map<String, dynamic>) {
       promotion = json['promotion'] != null
           ? new Promotion.fromJson(json['promotion'])
           : null;
     }
+    qty = json["quantity"];
+    note = json["note"];
   }
 
   ServiceModel.fromJsonOrderDetail(Map<String, dynamic> json) {
     serviceId = json['object_id'];
     serviceName = json['object_name'];
     serviceCode = json['object_code'];
-    newPrice = double.tryParse(json['price'].toString());
     qty = json['quantity'];
-    node = FocusNode();
-    controller = TextEditingController();
-    controller.text = '$qty';
+    price = json['price'];
     serviceAvatar = json['object_image'];
+    note = json['note'];
   }
 
   Map<String, dynamic> toJsonOrderDetail() {
@@ -188,7 +180,8 @@ class ServiceModel {
     data['object_name'] = serviceName;
     data['object_code'] = serviceCode;
     data['quantity'] = qty;
-    data['price'] = newPrice;
+    data['price'] = price;
+    data['note'] = note;
     return data;
   }
 
@@ -209,6 +202,9 @@ class ServiceModel {
     if (this.promotion != null) {
       data['promotion'] = this.promotion.toJson();
     }
+    data["quantity"] = this.qty;
+    data["note"] = this.note;
+    
     return data;
   }
 }

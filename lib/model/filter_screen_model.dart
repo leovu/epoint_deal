@@ -25,8 +25,23 @@ class FilterScreenModel {
   DateTime toDate_work_schedule_date;
   String id_work_schedule_date;
 
-  FilterScreenModel({this.filterModel, this.fromDate_created_at, this.toDate_created_at, this.id_created_at, this.id_closing_date,this.toDate_closing_date,this.fromDate_closing_date, 
-  this.fromDate_closing_due_date,this.id_closing_due_date,this.toDate_closing_due_date,this.fromDate_history_care_date,this.toDate_history_care_date,this.id_history_care_date,this.fromDate_work_schedule_date,this.toDate_work_schedule_date,this.id_work_schedule_date});
+  FilterScreenModel({
+  this.filterModel, 
+  this.fromDate_created_at,
+  this.toDate_created_at, 
+  this.id_created_at, 
+  this.id_closing_date,
+  this.toDate_closing_date,
+  this.fromDate_closing_date, 
+  this.fromDate_closing_due_date,
+  this.id_closing_due_date,
+  this.toDate_closing_due_date,
+  this.fromDate_history_care_date,
+  this.toDate_history_care_date,
+  this.id_history_care_date,
+  this.fromDate_work_schedule_date,
+  this.toDate_work_schedule_date,
+  this.id_work_schedule_date});
 
   factory FilterScreenModel.fromJson(Map<String, dynamic> parsedJson) {
     return FilterScreenModel(

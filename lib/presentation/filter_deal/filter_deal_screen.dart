@@ -171,6 +171,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         selected: false)
   ];
 
+  HistoryCareDateModel historyCareDateSeleted;
+
   List<WorkScheduleModel> workScheduleDateOptions = [
     WorkScheduleModel(
         workscheduleDateName: AppLocalizations.text(LangKey.today),
@@ -246,7 +248,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         branchId: [],
         staffId: [],
         pipelineId: [],
-        journeyName: [],
+        journey_id: [],
         manageStatusId: [],
         careHistory: ""),
     fromDate_closing_date: null,
@@ -317,6 +319,18 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     var pipelines = await DealConnection.getPipeline(context);
     if (pipelines != null) {
       pipeLineData = pipelines.data;
+
+      List<String> listPipeline = [];
+
+      for (int i = 0; i < pipeLineData.length; i++) {
+        listPipeline.add(pipeLineData[i].pipelineCode);
+      }
+
+      var journeys = await DealConnection.getJourney(
+          context, GetJourneyModelRequest(pipelineCode: listPipeline));
+      if (journeys != null) {
+        journeysData = journeys.data;
+      }
     }
 
     var response = await DealConnection.workListStaff(
@@ -412,6 +426,30 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
     }
 
+    if (filterScreenModel.filterModel.journey_id.length > 0) {
+      for (int i = 0;
+          i < filterScreenModel.filterModel.journey_id.length;
+          i++) {
+        try {
+          journeysData
+              .firstWhere((element) =>
+                  element.journeyId ==
+                  filterScreenModel.filterModel.journey_id[i])
+              .selected = true;
+        } catch (e) {}
+      }
+
+      for (int i = 0; i < journeysData.length; i++) {
+        if (journeysData[i].selected) {
+          if (journeyString == "") {
+            journeyString = journeysData[i].journeyName;
+          } else {
+            journeyString += ", ${journeysData[i].journeyName}";
+          }
+        }
+      }
+    }
+
     if (filterScreenModel.filterModel.pipelineId.length > 0) {
       for (int i = 0;
           i < filterScreenModel.filterModel.pipelineId.length;
@@ -443,15 +481,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       if (journeys != null) {
         journeysData = journeys.data;
 
-        if (filterScreenModel.filterModel.journeyName.length > 0) {
+        if (filterScreenModel.filterModel.journey_id.length > 0) {
           for (int i = 0;
-              i < filterScreenModel.filterModel.journeyName.length;
+              i < filterScreenModel.filterModel.journey_id.length;
               i++) {
             try {
               journeysData
                   .firstWhere((element) =>
                       element.journeyId ==
-                      filterScreenModel.filterModel.journeyName[i])
+                      filterScreenModel.filterModel.journey_id[i])
                   .selected = true;
             } catch (e) {}
           }
@@ -488,6 +526,13 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     } else {
       closingDueDateSeleted = null;
     }
+
+    if (filterScreenModel.id_history_care_date != "") {
+      int index = int.parse(widget.filterScreenModel.id_history_care_date);
+      historyCareDateSeleted = historyCareDateOptions[index];
+    } else {
+      historyCareDateSeleted = null;
+    }
     setState(() {});
   }
 
@@ -503,28 +548,35 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       onWillPop: () {
         if (allowPop) {
           widget.filterScreenModel = FilterScreenModel(
-              filterModel: ListDealModelRequest(
-                  search: "",
-                  page: 1,
-                  orderSourceName: "",
-                  createdAt: "",
-                  closingDate: "",
-                  closingDueDate: "",
-                  branchId: [],
-                  staffId: [],
-                  pipelineId: [],
-                  journeyName: [],
-                  manageStatusId: [],
-                  careHistory: ""),
-              fromDate_closing_date: null,
-              fromDate_closing_due_date: null,
-              fromDate_created_at: null,
-              toDate_created_at: null,
-              id_created_at: "",
-              id_closing_date: "",
-              toDate_closing_date: null,
-              toDate_closing_due_date: null,
-              id_closing_due_date: "");
+            filterModel: ListDealModelRequest(
+                search: "",
+                page: 1,
+                orderSourceName: "",
+                createdAt: "",
+                closingDate: "",
+                closingDueDate: "",
+                branchId: [],
+                staffId: [],
+                pipelineId: [],
+                journey_id: [],
+                manageStatusId: [],
+                careHistory: ""),
+            fromDate_closing_date: null,
+            fromDate_closing_due_date: null,
+            fromDate_created_at: null,
+            toDate_created_at: null,
+            id_created_at: "",
+            id_closing_date: "",
+            toDate_closing_date: null,
+            toDate_closing_due_date: null,
+            id_closing_due_date: "",
+            fromDate_history_care_date: null,
+            toDate_history_care_date: null,
+            fromDate_work_schedule_date: null,
+            toDate_work_schedule_date: null,
+            id_history_care_date: "",
+            id_work_schedule_date: "",
+          );
 
           Navigator.of(context).pop(widget.filterScreenModel);
         } else {
@@ -788,6 +840,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                     )));
 
         if (journeys != null) {
+          DealConnection.showLoading(context);
           journeyString = "";
           journeysData = journeys;
 
@@ -801,7 +854,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
               }
             }
           }
-          filterScreenModel.filterModel.journeyName = journeySelected;
+          filterScreenModel.filterModel.journey_id = journeySelected;
+          Navigator.of(context).pop();
           setState(() {});
         }
       }),
@@ -935,7 +989,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                   width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
           child: InkWell(
             onTap: () async {
-              allowPop = true;
+              allowPop = false;
               print("xoa");
               await clearData();
             },
@@ -967,7 +1021,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             branchId: [],
             staffId: [],
             pipelineId: [],
-            journeyName: [],
+            journey_id: [],
             manageStatusId: [],
             careHistory: ""),
         fromDate_closing_date: null,
@@ -990,7 +1044,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         filterModel: ListDealModelRequest.fromJson(
             widget.filterScreenModel.filterModel.toJson()),
         fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
-        toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
+        toDate_closing_date: widget.filterScreenModel.toDate_closing_date,
         id_closing_date: widget.filterScreenModel.id_closing_date,
         fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
         toDate_created_at: widget.filterScreenModel.toDate_created_at,
@@ -1031,9 +1085,14 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     }
     branchSelected = null;
 
+    for (int i = 0; i < statusWorkData.length; i++) {
+      statusWorkData[i].selected = false;
+    }
+
     for (int i = 0; i < historyCareDateOptions.length; i++) {
       historyCareDateOptions[i].selected = false;
     }
+    historyCareDateSeleted = null;
 
     for (int i = 0; i < workScheduleDateOptions.length; i++) {
       workScheduleDateOptions[i].selected = false;
@@ -1047,12 +1106,18 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
     }
 
+
     for (int i = 0; i < pipeLineData.length; i++) {
       pipeLineData[i].selected = false;
     }
     pipelineSelected = null;
-    journeysData = [];
+
+     for (int i = 0; i < journeysData.length; i++) {
+      journeysData[i].selected = false;
+    }
     journeySelected = null;
+    // journeysData = [];
+    // journeySelected = null;
 
     branchString = "";
     statusWorkString = "";

@@ -8,7 +8,7 @@ class ListDealModelRequest {
   List<int> staffId;
   String closingDueDate;
   List<int> pipelineId;
-  List<int> journeyName;
+  List<int> journey_id;
   List<int> manageStatusId;
   String careHistory;
 
@@ -22,7 +22,7 @@ class ListDealModelRequest {
       this.staffId,
       this.closingDueDate,
       this.pipelineId,
-      this.journeyName,
+      this.journey_id,
       this.manageStatusId,
       this.careHistory});
 
@@ -36,7 +36,7 @@ class ListDealModelRequest {
     staffId = json['staff_id'].cast<int>();
     closingDueDate = json['closing_due_date'];
     pipelineId = json['pipeline_id'].cast<int>();
-    journeyName = json['journey_name'].cast<int>();
+    journey_id = json['journey_id'].cast<int>();
     manageStatusId = json['manage_status_id'].cast<int>();
     careHistory = json['care_history'];
   }
@@ -52,7 +52,7 @@ class ListDealModelRequest {
     data['staff_id'] = this.staffId;
     data['closing_due_date'] = this.closingDueDate;
     data['pipeline_id'] = this.pipelineId;
-    data['journey_name'] = this.journeyName;
+    data['journey_id'] = this.journey_id;
     data['manage_status_id'] = this.manageStatusId;
     data['care_history'] = this.careHistory;
     return data;

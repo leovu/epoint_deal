@@ -1,8 +1,3 @@
-
-import 'package:epoint_deal_plugin/utils/global_cart.dart';
-import 'package:flutter/material.dart';
-
-
 class ListProductResponseModel {
   int errorCode;
   String errorDescription;
@@ -129,10 +124,10 @@ class ProductModel {
   int productCategoryId;
   String categoryName;
   String unitName;
-  FocusNode node;
-  TextEditingController controller;
   Promotion promotion;
-  int qty;
+  num qty;
+  num price;
+  String note;
 
   ProductModel(
       {this.productId,
@@ -149,16 +144,15 @@ class ProductModel {
       this.productCategoryId,
       this.categoryName,
       this.unitName,
-      this.promotion,
-      this.qty});
+      this.promotion, this.price, this.note, this.qty});
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
     productCode = json['product_code'];
     productName = json['product_name'];
     avatar = json['avatar'];
-    oldPrice = double.tryParse(json['old_price'].toString());
-    newPrice = double.tryParse(json['new_price'].toString());
+    oldPrice = double.tryParse((json['old_price'] ?? 0.0).toString());
+    newPrice = double.tryParse((json['new_price'] ?? 0.0).toString());
     description = json['description'];
     descriptionDetail = json['description_detail'];
     typeApp = json['type_app'];
@@ -167,28 +161,25 @@ class ProductModel {
     productCategoryId = json['product_category_id'];
     categoryName = json['category_name'];
     unitName = json['unit_name'];
-    qty = GlobalCart.shared.getQuantityProduct(productId);
-    node = FocusNode();
-    controller = TextEditingController();
-    controller.text = '$qty';
     if (json['promotion'] is Map<String, dynamic>) {
       promotion = json['promotion'] != null
           ? new Promotion.fromJson(json['promotion'])
           : null;
     }
+    qty = json["quantity"];
+    note = json["note"];
   }
 
   ProductModel.fromJsonOrderDetail(Map<String, dynamic> json) {
     productId = json['object_id'];
     productName = json['object_name'];
     productCode = json['object_code'];
-    newPrice = double.tryParse(json['price'].toString());
     qty = json['quantity'];
-    node = FocusNode();
-    controller = TextEditingController();
-    controller.text = '$qty';
+    price = json['price'];
+    note = json['note'];
     avatar = json['object_image'];
     unitName = json['unit_name'];
+    note = json['note'];
   }
 
   Map<String, dynamic> toJsonOrderDetail() {
@@ -198,7 +189,8 @@ class ProductModel {
     data['object_name'] = productName;
     data['object_code'] = productCode;
     data['quantity'] = qty;
-    data['price'] = newPrice;
+    data['price'] = price;
+    data['note'] = note;
     return data;
   }
 
@@ -218,13 +210,16 @@ class ProductModel {
     data['product_category_id'] = this.productCategoryId;
     data['category_name'] = this.categoryName;
     data['unit_name'] = this.unitName;
-    data['qty'] = this.qty;
     if (this.promotion != null) {
       data['promotion'] = this.promotion.toJson();
     }
+
+    data["quantity"] = this.qty;
+    data["note"] = this.note;
     return data;
   }
 }
+
 
 class Promotion {
   String price;

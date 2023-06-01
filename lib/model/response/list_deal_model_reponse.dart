@@ -124,7 +124,7 @@ class DealItems {
   String branchName;
   String orderSourceName;
   String pipelineName;
-  int amount;
+  num amount;
   int probability;
   String dateLastCare;
   String customerName;
@@ -178,7 +178,7 @@ class DealItems {
     branchName = json['branch_name'];
     orderSourceName = json['order_source_name'];
     pipelineName = json['pipeline_name'];
-    amount = json['amount'];
+    amount = json['amount'] ?? 0;
     probability = json['probability'];
     dateLastCare = json['date_last_care'];
     customerName = json['customer_name'];

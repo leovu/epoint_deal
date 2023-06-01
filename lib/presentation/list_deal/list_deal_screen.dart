@@ -50,7 +50,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
       branchId: [],
       staffId: [],
       pipelineId: [],
-      journeyName: [],
+      journey_id: [],
       manageStatusId: [],
       careHistory: "");
 
@@ -97,7 +97,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
             branchId: filterModel.branchId,
             staffId: filterModel.staffId,
             pipelineId: filterModel.pipelineId,
-            journeyName: filterModel.journeyName,
+            journey_id: filterModel.journey_id,
             manageStatusId: filterModel.manageStatusId,
             careHistory: filterModel.careHistory));
     if (model != null) {
@@ -269,7 +269,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
             // print(event.toLowerCase());
             if (_searchtext != null) {
               // print(_searchext.text);
-
             }
           },
           onSubmitted: (event) async {
@@ -336,35 +335,21 @@ class _ListDealScreenState extends State<ListDealScreen> {
                           // maxLines: 1,
                         ),
                       ),
-                      // Container(
-                      //   padding: EdgeInsets.all(15.0 / 1.5),
-                      //   margin: EdgeInsets.only(right: 5),
-                      //   height: 40,
-                      //   decoration: BoxDecoration(
-                      //       color: (item?.backgroundColorJourney != null) ? HexColor(item?.backgroundColorJourney ) : Color(0xFF11B482),
-                      //       borderRadius: BorderRadius.circular(50)),
-                      //   child: Center(
-                      //     child: Text(
-                      //       item.journeyName,
-                      //       style: AppTextStyles.style14WhiteWeight400,
-                      //     ),
-                      //   ),
-                      // )
                       Container(
                         padding: EdgeInsets.only(left: 4.0, right: 4.0),
                         decoration: BoxDecoration(
                             color: HexColor(
                                 item.backgroundColorJourney ?? "#0067AC"),
                             borderRadius: BorderRadius.circular(10.0)),
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Text(item.journeyName,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600)),
-                          ),
+                        constraints:
+                            BoxConstraints(maxWidth: AppSizes.maxWidth / 2.5),
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(item.journeyName,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600)),
                         ),
                       )
                     ],
@@ -486,91 +471,93 @@ class _ListDealScreenState extends State<ListDealScreen> {
                     //     ],
                     //   ),
                     // )
-                     Container(
-                  margin: EdgeInsets.only(right: 10.0),
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 12.0),
-                        child: InkWell(
-                          onTap: () async {
-                            print(item.phone);
-                            await callPhone(item?.phone ?? "");
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(20.0 / 2),
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(6, 166, 5, 1),
-                              borderRadius: BorderRadius.circular(50),
-                              // border:  Border.all(color: AppColors.white,)
-                            ),
-                            child: Center(
-                                child: Image.asset(
-                              Assets.iconCall,
-                              color: AppColors.white,
-                            )),
-                          ),
-                        ),
-                      ),
-                      Row(
+                    Container(
+                      margin: EdgeInsets.only(right: 10.0),
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
-                              number: item?.relatedWork ?? 0, ontap: () async {
-                            bool result = await Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                    builder: (context) => DetailDealScreen(
-                                          deal_code: item.dealCode,
-                                          indexTab: 1,
-                                          id: 667,
-                                        )));
+                          Container(
+                            margin: EdgeInsets.only(bottom: 12.0),
+                            child: InkWell(
+                              onTap: () async {
+                                print(item.phone);
+                                await callPhone(item?.phone ?? "");
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(20.0 / 2),
+                                height: 45,
+                                width: 45,
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(6, 166, 5, 1),
+                                  borderRadius: BorderRadius.circular(50),
+                                  // border:  Border.all(color: AppColors.white,)
+                                ),
+                                child: Center(
+                                    child: Image.asset(
+                                  Assets.iconCall,
+                                  color: AppColors.white,
+                                )),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              _actionItem(
+                                  Assets.iconCalendar, Color(0xFF26A7AD),
+                                  number: item?.relatedWork ?? 0,
+                                  ontap: () async {
+                                bool result = await Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) => DetailDealScreen(
+                                              deal_code: item.dealCode,
+                                              indexTab: 1,
+                                              id: 667,
+                                            )));
 
-                            if (result != null && result) {
-                              getData(false);
-                            }
-                            print("1");
-                          }),
-                          _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                              number: item.appointment ?? 0, ontap: () async {
-                            bool result = await Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                    builder: (context) => DetailDealScreen(
-                                          deal_code: item.dealCode,
-                                          indexTab: 1,
-                                          id: 667,
-                                        )));
+                                if (result != null && result) {
+                                  getData(false);
+                                }
+                                print("1");
+                              }),
+                              _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
+                                  number: item.appointment ?? 0,
+                                  ontap: () async {
+                                bool result = await Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) => DetailDealScreen(
+                                              deal_code: item.dealCode,
+                                              indexTab: 1,
+                                              id: 667,
+                                            )));
 
-                            if (result != null && result) {
-                              getData(false);
-                            }
-                            print("2");
-                          }),
+                                if (result != null && result) {
+                                  getData(false);
+                                }
+                                print("2");
+                              }),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                )
+                    )
                   ],
                 ),
-
                 item.tag.length > 0
-                      ? Container(
-                          // width: AppSizes.maxWidth * 0.55,
-                          padding: EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
-                          child: Wrap(
-                            children: List.generate(item.tag.length,
-                                (index) => _optionItem(item.tag[index])),
-                            spacing: 10,
-                            runSpacing: 10,
-                          ),
-                        )
-                      : Container()
-
+                    ? Container(
+                        // width: AppSizes.maxWidth * 0.55,
+                        padding:
+                            EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                        child: Wrap(
+                          children: List.generate(item.tag.length,
+                              (index) => _optionItem(item.tag[index])),
+                          spacing: 10,
+                          runSpacing: 10,
+                        ),
+                      )
+                    : Container()
               ],
             ),
           ),

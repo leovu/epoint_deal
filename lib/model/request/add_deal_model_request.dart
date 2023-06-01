@@ -14,6 +14,7 @@ class AddDealModelRequest {
   String dealDescription;
   num amount;
   List<Product> product;
+  num discount;
 
   AddDealModelRequest(
       {this.dealName,
@@ -30,7 +31,8 @@ class AddDealModelRequest {
       this.probability,
       this.dealDescription,
       this.amount,
-      this.product});
+      this.product,
+      this.discount});
 
   AddDealModelRequest.fromJson(Map<String, dynamic> json) {
     dealName = json['deal_name'];
@@ -53,6 +55,7 @@ class AddDealModelRequest {
         product.add(new Product.fromJson(v));
       });
     }
+    discount = json['discount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +77,7 @@ class AddDealModelRequest {
     if (this.product != null) {
       data['product'] = this.product.map((v) => v.toJson()).toList();
     }
+    data["discount"] = discount;
     return data;
   }
 }
@@ -83,9 +87,10 @@ class Product {
   String objectName;
   String objectCode;
   int objectId;
-  int quantity;
+  num quantity;
   num price;
   num amount;
+  String note;
 
   Product(
       {this.objectType,
@@ -94,7 +99,7 @@ class Product {
       this.objectId,
       this.quantity,
       this.price,
-      this.amount});
+      this.amount, this.note});
 
   Product.fromJson(Map<String, dynamic> json) {
     objectType = json['object_type'];
@@ -104,6 +109,7 @@ class Product {
     quantity = json['quantity'];
     price = json['price'];
     amount = json['amount'];
+    amount = json['note'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +121,7 @@ class Product {
     data['quantity'] = this.quantity;
     data['price'] = this.price;
     data['amount'] = this.amount;
+    data['note'] = this.note;
     return data;
   }
 }

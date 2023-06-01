@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -12,18 +11,26 @@ import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
 import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
+import 'package:epoint_deal_plugin/widget/custom_column_infomation.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
+import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
+import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/format_number_input_formatter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:keyboard_actions/keyboard_actions_item.dart';
 
 class ServiceDetailScreen extends StatefulWidget {
 
   final ServiceModel model;
   final bool isViewOnly;
+  final bool isUpdate;
 
-  ServiceDetailScreen(this.model, this.isViewOnly);
+  ServiceDetailScreen(this.model, this.isViewOnly, {this.isUpdate = false});
 
   @override
   ServiceDetailScreenState createState() => ServiceDetailScreenState();
@@ -31,26 +38,52 @@ class ServiceDetailScreen extends StatefulWidget {
 
 class ServiceDetailScreenState extends State<ServiceDetailScreen> {
 
+  final FocusNode _focusPrice = FocusNode();
+  final TextEditingController _controllerPrice = TextEditingController();
+
+  final FocusNode _focusQuantity = FocusNode();
+  final TextEditingController _controllerQuantity = TextEditingController();
+
+  final FocusNode _focusNote = FocusNode();
+  final TextEditingController _controllerNote = TextEditingController();
+
+
   double _heightHeader = AppSizes.maxWidth * 0.9;
   double _heightHeaderImage = (AppSizes.maxWidth - AppSizes.maxPadding * 2) / 5;
 
   double _widthImageDescription = AppSizes.maxWidth - AppSizes.maxPadding * 2;
   double _heightImageDescription = 100;
 
+
+
   ServiceDetailBloc _bloc;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bloc = ServiceDetailBloc(context);
+
+    if(widget.isUpdate){
+      _controllerPrice.text = AppFormat.moneyFormat.format(widget.model.newPrice);
+      _controllerQuantity.text = widget.model.qty.toString();
+      _controllerNote.text = widget.model.note ?? "";
+    }
+    else{
+      _controllerPrice.text = AppFormat.moneyFormat.format(widget.model.newPrice);
+      _controllerQuantity.text = 1.0.toString();
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _onRefresh(isRefresh: false));
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _focusPrice.dispose();
+    _controllerPrice.dispose();
+    _focusQuantity.dispose();
+    _controllerQuantity.dispose();
+    _focusNote.dispose();
+    _controllerNote.dispose();
     _bloc.dispose();
     super.dispose();
   }
@@ -60,6 +93,29 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
         serviceId: widget.model.serviceId,
     ), isRefresh);
   }
+
+  _update() {
+    widget.model.newPrice = AppFormat.moneyFormat.parse(_controllerPrice.text);
+    widget.model.qty = double.tryParse(_controllerQuantity.text);
+    widget.model.note = _controllerNote.text;
+    Navigator.of(context).pop(widget.model.toJson());
+    
+  }
+
+  _addToCart(){
+    if (_controllerPrice.text == "" ||  _controllerQuantity.text == "") {
+      return;
+    }
+
+    GlobalCart.shared.addService(
+        widget.model,
+        AppFormat.moneyFormat.parse(_controllerPrice.text),
+        double.tryParse(_controllerQuantity.text),
+        _controllerNote.text
+    );
+    Navigator.of(context).pop();
+  }
+
 
   Widget _buildSkeletonHeader(){
     return CustomShimmer(
@@ -311,163 +367,122 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     );
   }
 
-  Widget _inputField(ServiceModel value) {
-    return Center(
-      child: AutoSizeTextField(
-        keyboardType: TextInputType.number,
-        focusNode: value.node,
-        controller: value.controller,
-        maxLength: 3,
-        onChanged: (text) {
-          try {
-            if (text[0] == '0' && text.length > 1) {
-              String val = text.substring(1, text.length);
-              value.controller.text = '$val';
-              GlobalCart.shared.addService(value, int.tryParse(val));
-              value.controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: value.controller.text.length));
-            } else {
-              if (text == '' || text == null) {
-                GlobalCart.shared.addService(value, 0);
-              } else {
-                GlobalCart.shared.addService(value, int.tryParse(text));
-                value.controller.selection = TextSelection.fromPosition(
-                    TextPosition(offset: value.controller.text.length));
-              }
-            }
-          } catch (e) {
-            if (text == '' || text == null) {
-              value.controller.text = '0';
-              GlobalCart.shared.addService(value, 0);
-              value.controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: value.controller.text.length));
-            }
-          }
-        },
-        buildCounter: (BuildContext context,
-            {int currentLength, int maxLength, bool isFocused}) =>
-        null,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-    );
+
+   List<KeyboardActionsItem> _listKeyboardAction() {
+    List<KeyboardActionsItem> models = [];
+
+    models.add(buildKeyboardAction(_focusPrice));
+    models.add(buildKeyboardAction(_focusQuantity));
+    models.add(buildKeyboardAction(_focusNote));
+
+    return models;
   }
 
-  Widget _buildAddToCart(){
-    return StreamBuilder(
-        stream: _bloc.outputQuantity,
-        initialData: widget.model.qty,
-        builder: (_, snapshot){
-          return widget.model.qty == 0?CustomButton(
-            text: AppLocalizations.text(LangKey.add_to_cart),
-            backgroundColor: AppColors.subColor,
-            onTap: (){
-              int qty = (widget.model.qty + 1) > 999
-                  ? 999
-                  : widget.model.qty + 1;
-              GlobalCart.shared.addService(widget.model, qty);
-              _bloc.setQuantity(widget.model.qty);
-            },
-          ):Row(
+  KeyboardActionsItem buildKeyboardAction(FocusNode node,
+      {String text = "Done", Function onTap}) {
+    return KeyboardActionsItem(focusNode: node, toolbarButtons: [
+      (node) => InkWell(
+            onTap: onTap ?? () => node.unfocus(),
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                text,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+    ]);
+  }
+
+
+  Widget _buildBottom() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.borderColor))),
+      child: CustomListView(
+        padding: EdgeInsets.symmetric(
+            horizontal: AppSizes.maxPadding, vertical: AppSizes.minPadding),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: Text(
-                AppLocalizations.text(LangKey.quantity),
-                style: AppTextStyles.style15BlackNormal,
-              )),
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: InkWell(
-                  onTap: () {
-                    int qty = (widget.model.qty - 1) <= 0
-                        ? 0
-                        : widget.model.qty - 1;
-                    GlobalCart.shared.addService(widget.model, qty);
-                    _bloc.setQuantity(widget.model.qty);
-                  },
-                  child: Container(
-                    height: 20.0,
-                    width: 20.0,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.circular(10.0)),
-                    child: Center(
-                      child: Text('-',
-                          style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold)),
-                    ),
+              Expanded(
+                child: CustomColumnInformation(
+                  title: AppLocalizations.text(LangKey.unit_price),
+                  child: CustomTextField(
+                    focusNode: _focusPrice,
+                    controller: _controllerPrice,
+                    keyboardType:  TextInputType.number,
+                    backgroundColor: Colors.transparent,
+                    borderColor: AppColors.borderColor,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      FormatNumberInputFormatter(AppFormat.moneyFormat),
+                    ],
                   ),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(color: Colors.grey)),
-                width: 60.0,
-                height: 25.0,
-                child: _inputField(widget.model),
+              SizedBox(
+                width: AppSizes.minPadding,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: InkWell(
-                  onTap: () {
-                    int qty = (widget.model.qty + 1) > 999
-                        ? 999
-                        : widget.model.qty + 1;
-                    GlobalCart.shared.addService(widget.model, qty);
-                  },
-                  child: Container(
-                    height: 20.0,
-                    width: 20.0,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.circular(10.0)),
-                    child: Icon(
-                      Icons.add,
-                      size: 20.0,
-                      color: AppColors.primaryColor,
-                    ),
+              Expanded(
+                child: CustomColumnInformation(
+                  title: AppLocalizations.text(LangKey.quantity),
+                  child: CustomTextField(
+                    focusNode: _focusQuantity,
+                    controller: _controllerQuantity,
+                    hintText: AppLocalizations.text(LangKey.quantity),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)'))
+                    ],
+                    backgroundColor: Colors.transparent,
+                    borderColor: AppColors.borderColor,
+                    onChanged: (event ) {
+                      if (event.startsWith(".")) {
+                        _controllerQuantity.text = "0.";
+                        _controllerQuantity.selection = TextSelection.fromPosition(TextPosition(offset: _controllerQuantity.text.length));
+                        
+                      }
+
+                    },
                   ),
                 ),
               )
             ],
-          );
-        }
-    );
-  }
-
-  Widget _buildBottom(){
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(color: AppColors.borderColor)
-          )
-      ),
-      child: CustomListView(
-          padding: EdgeInsets.symmetric(
-              horizontal: AppSizes.maxPadding,
-              vertical: AppSizes.minPadding
           ),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            _buildAddToCart(),
+          CustomTextField(
+            focusNode: _focusNote,
+            controller: _controllerNote,
+            maxLines: 3,
+            hintText: AppLocalizations.text(LangKey.note_information),
+            backgroundColor: Colors.transparent,
+            borderColor: AppColors.borderColor,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+          ),
+          if(widget.isUpdate)
             CustomButton(
-              text: AppLocalizations.text(LangKey.buy_now),
-              onTap: (){
-                if(widget.model.qty == 0){
-                  GlobalCart.shared.addService(widget.model, 1);
-                }
-                // CustomNavigator.pushReplacement(context, CartScreen());
-              },
+              text: AppLocalizations.text(LangKey.update),
+              onTap: _update,
             )
-          ],
-    ),
+          else
+            ...[
+              CustomButton(
+                text: AppLocalizations.text(LangKey.add_to_cart),
+                backgroundColor: AppColors.subColor,
+                onTap: _addToCart,
+              ),
+              // CustomButton(
+              //   text: AppLocalizations.text(LangKey.buy_now),
+              //   onTap: _buyNow,
+              // )
+            ]
+        ],
+      ),
     );
   }
 
@@ -492,7 +507,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                     onRefresh: _onRefresh,
                   )
               ),
-              if(widget.isViewOnly)
+              if(!widget.isViewOnly)
                 _buildBottom(),
             ],
           );
@@ -500,14 +515,23 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     );
   }
 
+Widget _navigationBar() {
+    return CupertinoNavigationBar(
+      middle: Text(AppLocalizations.text(LangKey.service),
+          style: TextStyle(
+              fontSize: AppTextSizes.size16,
+              fontWeight: FontWeight.w600)),
+      // backgroundColor: AppColors.primaryColor,
+    );
+  }
+  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title: Text(AppLocalizations.text(LangKey.service),),
-      ),
-      body: _buildBody(),
+    return CustomScaffold(
+      actions: _listKeyboardAction(),
+      body: CupertinoPageScaffold(
+          navigationBar: _navigationBar(), child: _buildBody()),
     );
   }
 }

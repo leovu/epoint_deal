@@ -267,5 +267,24 @@ class LangKey {
   static const String origin = "origin";
   static const String product_description = "product_description";
   static const String server_error = "server_error";
+  static const String note_information = "note_information";
+  static const String unit_price = "unit_price";
+  static const String update = "update";
+  static const String deal_source = "deal_source";
+  static const String total_quantity = "total_quantity";
+  static const String apply_promotion = "apply_promotion";
+  static const String discount = "discount";
+  static const String direct_discount = "direct_discount";
+  static const String enter_value = "enter_value";
+  static const String cash = "cash";
+  static const String percent = "percent";
+  static const String temporary_price = "temporary_price";
+  static const String discount_by_code = "discount_by_code";
+  static const String i_get_it = "i_get_it";
+  static const String enter_discount_amount = "enter_discount_amount";
+  static const String enter_discount_percentage = "enter_discount_percentage";
+
+
+
 }
 

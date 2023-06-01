@@ -65,6 +65,7 @@ class DetailDealData {
   List<CustomerCare> customerCare;
   List<JourneyTracking> journeyTracking;
   List<ProductBuy> productBuy;
+  num discount;
 
   DetailDealData(
       {this.dealId,
@@ -272,7 +273,7 @@ class ProductBuy {
   String objectName;
   String objectType;
   num price;
-  int quantity;
+  num quantity;
   int discount;
   num amount;
 

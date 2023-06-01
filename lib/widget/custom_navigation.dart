@@ -1,3 +1,5 @@
+import 'package:epoint_deal_plugin/widget/custom_alert_dialog.dart';
+import 'package:epoint_deal_plugin/widget/custom_dialog.dart';
 import 'package:epoint_deal_plugin/widget/custom_route.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +26,57 @@ class CustomNavigator {
             behavior: HitTestBehavior.opaque,
           );
         });
+  }
+
+   static push(BuildContext context, Widget screen,
+      {bool root = true, bool opaque = true}) {
+    return Navigator.of(context, rootNavigator: root).push(opaque?CustomRoute(
+      page: screen,
+    ):CustomRouteDialog(
+        page: screen
+    ));
+  }
+
+   static pop(BuildContext context, {dynamic object, bool root = true}) {
+    if (object == null)
+      Navigator.of(context, rootNavigator: root).pop();
+    else
+      Navigator.of(context, rootNavigator: root).pop(object);
+  }
+
+  
+  static showCustomAlertDialog(BuildContext context, String title, String content,
+      {
+        bool root = true,
+        Function onSubmitted,
+        String textSubmitted,
+        Color colorSubmitted,
+        String textSubSubmitted,
+        Function onSubSubmitted,
+        bool enableCancel = false,
+        bool cancelable = true,
+        bool isTicket = false,
+        Widget child
+}) {
+    return push(
+        context,
+        CustomDialog(
+          screen: CustomAlertDialog(
+              title: title,
+              content: content,
+              textSubmitted: textSubmitted,
+              colorSubmitted: colorSubmitted,
+              onSubmitted: onSubmitted,
+              textSubSubmitted: textSubSubmitted,
+              onSubSubmitted: onSubSubmitted,
+              enableCancel: enableCancel,
+              isTicket: isTicket,
+              child: child
+          ),
+          cancelable: cancelable,
+        ),
+        opaque: false,
+        root: root);
   }
 
    static pushReplacement(BuildContext context, Widget screen,

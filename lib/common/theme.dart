@@ -79,6 +79,7 @@ class AppColors {
   static const disableColor = Color(0xFFDADADA);
    static const hintColor = Color(0xFF8E8E8E);
    static const borderColor = Color(0xFFE5E5E5);
+   static const grey50Color = Color(0xFFF6F6F6);
 }
 
 class AppFonts {
@@ -150,6 +151,14 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+  static TextStyle style14BlackBold = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.black,
+      fontWeight: FontWeight.bold);
+  static TextStyle style20BlackBold = TextStyle(
+      fontSize: AppTextSizes.size20,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
   static TextStyle style13BlackBold = TextStyle(
       fontSize: AppTextSizes.size13,
       color: Colors.black,
@@ -406,10 +415,6 @@ class AppTextStyles {
       fontSize: AppTextSizes.size14,
       color: AppColors.black,
       fontWeight: FontWeight.w400);
-  static TextStyle style14BlackBold = TextStyle(
-      fontSize: AppTextSizes.size14,
-      color: AppColors.black,
-      fontWeight: FontWeight.bold);
   static TextStyle style13BlackWeight400 = TextStyle(
       fontSize: AppTextSizes.size13,
       color: AppColors.black,
@@ -557,6 +562,8 @@ class AppFormat {
       DateFormat("HH:mm - dd MMMM, yyyy", "vi_VN");
   static String formatNonSale = "d2d-nonsale/{instanceVer}";
 }
+
+
 class AppSizeWebConfig {
   static const maxWidthWeb = 500.0;
   static const maxHeightWeb =  926.0;

@@ -36,12 +36,12 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
 
     if (widget.filterScreenModel.fromDate_closing_date != null) {
       _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.fromDate_closing_date);
-      _fromDate = widget.filterScreenModel.fromDate_created_at;
+      _fromDate = widget.filterScreenModel.fromDate_closing_date;
     }
 
     if (widget.filterScreenModel.toDate_closing_date != null) {
       _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.toDate_closing_date);
-      _toDate = widget.filterScreenModel.toDate_created_at;
+      _toDate = widget.filterScreenModel.toDate_closing_date;
     }
 
     if (widget.filterScreenModel.id_closing_date != "") {
@@ -53,7 +53,9 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
             widget.closingDateOptions[i].selected = false;
           }
       }
-    }
+    } else {
+      widget.id_closing_date = "";
+    } 
 
     setState(() {
       
@@ -62,6 +64,13 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.id_closing_date == "" ) {
+      _fromDateText.text = "";
+      _toDateText.text = "";
+      _fromDate = null;
+      _toDate = null;
+
+    } ;
     return (widget.closingDateOptions != null)
         ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,

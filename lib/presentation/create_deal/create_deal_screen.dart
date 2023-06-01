@@ -1,6 +1,8 @@
+
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/customer_type.dart';
@@ -26,6 +28,7 @@ import 'package:epoint_deal_plugin/presentation/modal/list_potential_customer_mo
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
 import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
+import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -178,6 +181,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         journeySelected = journeysData[0];
         detailDeal.journeyCode = journeySelected.journeyCode;
       }
+
+      GlobalCart.shared.clearCart();
       Navigator.of(context).pop();
       setState(() {});
     });
@@ -720,7 +725,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             ),
           ),
 
-          MoreInfoCreatDeal(
+          MoreInfoCreatDeal( 
             branchData: branchData,
             detailDeal: detailDeal,
           )
@@ -949,13 +954,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     } else {
       DealConnection.showLoading(context);
 
-      double amount = 0;
-      if (detailDeal.product.length > 0) {
-        for (int i = 0; i < detailDeal.product.length; i++) {
-          amount +=
-              detailDeal.product[i].amount * detailDeal.product[i].quantity;
-        }
-      }
+      // double amount = 0;
+      // if (detailDeal.product.length > 0) {
+      //   for (int i = 0; i < detailDeal.product.length; i++) {
+      //     amount +=
+      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
+      //   }
+      // }
+
       AddDealModelResponse result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
@@ -974,11 +980,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: amount,
-              product: detailDeal.product));
+              amount: Global.amount,
+              product: detailDeal.product,
+              discount: Global.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
+          GlobalCart.shared.clearCart;
+          Global.amount = 0.0;
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
           if (result.data != null) {
@@ -1007,13 +1016,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     } else {
       DealConnection.showLoading(context);
 
-      double amount = 0;
-      if (detailDeal.product.length > 0) {
-        for (int i = 0; i < detailDeal.product.length; i++) {
-          amount +=
-              detailDeal.product[i].amount * detailDeal.product[i].quantity;
-        }
-      }
+      // double amount = 0;
+      // if (detailDeal.product.length > 0) {
+      //   for (int i = 0; i < detailDeal.product.length; i++) {
+      //     amount +=
+      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
+      //   }
+      // }
+
       AddDealModelResponse result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
@@ -1032,12 +1042,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: amount,
-              product: detailDeal.product));
+              amount: Global.amount,
+              product: detailDeal.product,
+              discount: Global.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
           print(result.errorDescription);
+
+          GlobalCart.shared.clearCart;
+          Global.amount = 0.0;
           await DealConnection.showMyDialog(context, result.errorDescription);
           if (result.data != null) {
             modelResponse = ObjectPopCreateDealModel(

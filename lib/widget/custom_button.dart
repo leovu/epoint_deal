@@ -109,3 +109,30 @@ class CustomButton extends StatelessWidget {
         onTap: enable ? onTap : null);
   }
 }
+
+
+class CustomQuantityButton extends StatelessWidget {
+  final bool isPlus;
+  final Function onTap;
+
+  CustomQuantityButton({this.isPlus = true, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final double iconSize = 20.0;
+    return InkWell(
+      child: Container(
+        width: iconSize,
+        height: iconSize,
+        decoration: BoxDecoration(
+            shape: BoxShape.circle, color: AppColors.primaryColor),
+        alignment: Alignment.center,
+        child: Text(
+          isPlus ? "+" : "-",
+          style: AppTextStyles.style14WhiteWeight600,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+}

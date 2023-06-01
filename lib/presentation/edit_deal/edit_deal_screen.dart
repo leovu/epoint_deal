@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/customer_type.dart';
@@ -173,6 +174,8 @@ class _EditDealScreenState extends State<EditDealScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
 
+      GlobalCart.shared.clearCart();
+
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
@@ -212,7 +215,6 @@ class _EditDealScreenState extends State<EditDealScreen>
 
     if (widget.detail.productBuy != null &&
         widget.detail.productBuy.length > 0) {
-           GlobalCart.shared.clearCart();
            detailDeal.product.clear();
       widget.detail.productBuy.forEach((element) {
         detailDeal.product.add(Product(
@@ -221,11 +223,9 @@ class _EditDealScreenState extends State<EditDealScreen>
           objectId: element.objectId,
           objectName: element.objectName,
           price: element.price,
-          quantity: element.quantity,
+          quantity: element.quantity.toDouble(),
           amount: element.amount,
         ));
-
-
       });
     }
 
@@ -1194,7 +1194,8 @@ class _EditDealScreenState extends State<EditDealScreen>
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
               amount: amount,
-              product: detailDeal.product));
+              product: detailDeal.product,
+              discount: Global.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
@@ -1253,7 +1254,8 @@ class _EditDealScreenState extends State<EditDealScreen>
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
               amount: amount,
-              product: detailDeal.product));
+              product: detailDeal.product,
+              discount: Global.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {

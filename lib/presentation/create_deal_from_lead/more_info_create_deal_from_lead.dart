@@ -186,12 +186,12 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                                   ProductModel item =
                                       ProductModel.fromJsonOrderDetail(
                                           v.toJson());
-                                  GlobalCart.shared.addProduct(item, item.qty);
+                                  GlobalCart.shared.addProduct(item, item.price,item.qty, item.note);
                                 } else {
                                   ServiceModel item =
                                       ServiceModel.fromJsonOrderDetail(
                                           v.toJson());
-                                  GlobalCart.shared.addService(item, item.qty);
+                                  GlobalCart.shared.addService(item, item.price,item.qty, item.note);
                                 }
                               });
                             }

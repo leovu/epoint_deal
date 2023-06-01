@@ -249,6 +249,22 @@
     "trademark": "Thương hiệu",
     "origin": "Xuất xứ",
     "product_description": "Mô tả sản phẩm",
-    "server_error": "Lỗi máy chủ"
+    "server_error": "Lỗi máy chủ",
+    "note_information":"Thông tin ghi chú",
+    "unit_price":"Đơn giá",
+    "update":"Cập nhật",
+    "deal_source":"Nguồn cơ hội bán hàng",
+    "total_quantity":"Tổng số lượng",
+    "apply_promotion":"Áp dụng khuyến mãi",
+    "discount":"Giảm giá",
+    "direct_discount": "Giảm giá trực tiếp",
+    "enter_value": "Nhập giá trị",
+    "cash": "Tiền mặt",
+    "percent": "Phần trăm",
+    "temporary_price": "Tạm tính",
+    "i_get_it": "Tôi đã hiểu",
+    "discount_by_code": "Giảm giá theo mã",
+    "enter_discount_percentage": "Nhập phần trăm giảm giá",
+    "enter_discount_amount": "Nhập số tiền giảm giá"
   }
   

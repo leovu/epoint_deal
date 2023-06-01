@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -12,25 +11,41 @@ import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
 import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
+import 'package:epoint_deal_plugin/widget/custom_column_infomation.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
+import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
+import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/format_number_input_formatter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_item.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-
   final ProductModel model;
   final bool isViewOnly;
+  final bool isUpdate;
 
-  ProductDetailScreen(this.model, this.isViewOnly);
+  ProductDetailScreen(this.model, this.isViewOnly, {this.isUpdate = false});
 
   @override
   ProductDetailScreenState createState() => ProductDetailScreenState();
 }
 
 class ProductDetailScreenState extends State<ProductDetailScreen> {
+  final FocusNode _focusPrice = FocusNode();
+  final TextEditingController _controllerPrice = TextEditingController();
+
+  final FocusNode _focusQuantity = FocusNode();
+  final TextEditingController _controllerQuantity = TextEditingController();
+
+  final FocusNode _focusNote = FocusNode();
+  final TextEditingController _controllerNote = TextEditingController();
 
   double _heightHeader = AppSizes.maxWidth * 0.9;
   double _heightHeaderImage = (AppSizes.maxWidth - AppSizes.maxPadding * 2) / 5;
@@ -46,12 +61,28 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _bloc = ProductDetailBloc(context);
 
+    if(widget.isUpdate){
+      _controllerPrice.text = AppFormat.moneyFormat.format(widget.model.newPrice);
+      _controllerQuantity.text = widget.model.qty.toString();
+      _controllerNote.text = widget.model.note ?? "";
+    }
+    else{
+      _controllerPrice.text = AppFormat.moneyFormat.format(widget.model.newPrice);
+      _controllerQuantity.text = 1.0.toString();
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _onRefresh(isRefresh: false));
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
+    _focusPrice.dispose();
+    _controllerPrice.dispose();
+    _focusQuantity.dispose();
+    _controllerQuantity.dispose();
+    _focusNote.dispose();
+    _controllerNote.dispose();
     _bloc.dispose();
     super.dispose();
   }
@@ -62,7 +93,29 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     ), isRefresh);
   }
 
-  Widget _buildSkeletonHeader(){
+  _update() {
+    widget.model.newPrice = AppFormat.moneyFormat.parse(_controllerPrice.text);
+    widget.model.qty = double.tryParse(_controllerQuantity.text);
+    widget.model.note = _controllerNote.text;
+    Navigator.of(context).pop(widget.model.toJson());
+    
+  }
+
+  _addToCart(){
+    if (_controllerPrice.text == "" ||  _controllerQuantity.text == "") {
+      return;
+    }
+
+    GlobalCart.shared.addProduct(
+        widget.model,
+        AppFormat.moneyFormat.parse(_controllerPrice.text),
+        double.tryParse(_controllerQuantity.text),
+        _controllerNote.text
+    );
+    Navigator.of(context).pop();
+  }
+
+  Widget _buildSkeletonHeader() {
     return CustomShimmer(
       child: Column(
         children: [
@@ -76,9 +129,16 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomSkeleton(height: 20.0,),
-                Container(height: AppSizes.minPadding,),
-                CustomSkeleton(height: 20.0, width: AppSizes.maxWidth / 2,),
+                CustomSkeleton(
+                  height: 20.0,
+                ),
+                Container(
+                  height: AppSizes.minPadding,
+                ),
+                CustomSkeleton(
+                  height: 20.0,
+                  width: AppSizes.maxWidth / 2,
+                ),
               ],
             ),
           )
@@ -87,7 +147,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildHeaderImage(String url){
+  Widget _buildHeaderImage(String url) {
     return InkWell(
       child: CustomNetworkImage(
         width: _heightHeaderImage,
@@ -100,12 +160,11 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildHeader(ProductDetailResponseModel model){
-    if(model == null)
-      return _buildSkeletonHeader();
+  Widget _buildHeader(ProductDetailResponseModel model) {
+    if (model == null) return _buildSkeletonHeader();
 
-    double rating = (model.rating?.avgRating)??0;
-    rating = rating > 5?5:rating;
+    double rating = (model.rating?.avgRating) ?? 0;
+    rating = rating > 5 ? 5 : rating;
     return Stack(
       children: [
         Positioned(
@@ -115,7 +174,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             child: StreamBuilder(
               stream: _bloc.outputImage,
               initialData: model.avatar,
-              builder: (_, snapshot){
+              builder: (_, snapshot) {
                 return CustomNetworkImage(
                   width: AppSizes.maxWidth,
                   height: _heightHeader,
@@ -124,107 +183,127 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                   backgroundColor: Colors.white,
                 );
               },
-            )
-        ),
+            )),
         Container(
           margin: EdgeInsets.only(
               top: _heightHeader - _heightHeaderImage / 2,
               right: AppSizes.maxPadding,
               left: AppSizes.maxPadding,
-              bottom: AppSizes.maxPadding
-          ),
+              bottom: AppSizes.maxPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              (model.listImage?.length ?? 0) == 0?Container(
-                height: _heightHeaderImage / 2,
-              ):Container(
-                height: _heightHeaderImage,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, index) => _buildHeaderImage(model.listImage[index].image),
-                    separatorBuilder: (_, index) => Container(width: AppSizes.minPadding,),
-                    itemCount: model.listImage.length > 5?5:model.listImage.length
-                ),
+              (model.listImage?.length ?? 0) == 0
+                  ? Container(
+                      height: _heightHeaderImage / 2,
+                    )
+                  : Container(
+                      height: _heightHeaderImage,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (_, index) =>
+                              _buildHeaderImage(model.listImage[index].image),
+                          separatorBuilder: (_, index) => Container(
+                                width: AppSizes.minPadding,
+                              ),
+                          itemCount: model.listImage.length > 5
+                              ? 5
+                              : model.listImage.length),
+                    ),
+              Container(
+                height: AppSizes.minPadding,
               ),
-              Container(height: AppSizes.minPadding,),
-              model.promotion == null?Container():Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                          fit: FlexFit.loose,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.horizontal(
-                                    right: Radius.circular(50.0)),
-                                color: Colors.red),
-                            padding: EdgeInsets.all(AppSizes.minPadding),
-                            child: AutoSizeText(
-                              model.promotion == null
-                                  ? ""
-                                  : model.promotion.gift != null
-                                  ? model.promotion.gift
-                                  : model.promotion.price != null
-                                  ? model.promotion.price
-                                  : "",
-                              style: AppTextStyles.style13WhiteNormal,
-                              minFontSize: 4.0,
-                            ),
-                          ))
-                    ],
-                  ),
-                  Container(height: AppSizes.maxPadding,),
-                ],
-              ),
+              model.promotion == null
+                  ? Container()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                                fit: FlexFit.loose,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.horizontal(
+                                          right: Radius.circular(50.0)),
+                                      color: Colors.red),
+                                  padding: EdgeInsets.all(AppSizes.minPadding),
+                                  child: AutoSizeText(
+                                    model.promotion == null
+                                        ? ""
+                                        : model.promotion.gift != null
+                                            ? model.promotion.gift
+                                            : model.promotion.price != null
+                                                ? model.promotion.price
+                                                : "",
+                                    style: AppTextStyles.style13WhiteNormal,
+                                    minFontSize: 4.0,
+                                  ),
+                                ))
+                          ],
+                        ),
+                        Container(
+                          height: AppSizes.maxPadding,
+                        ),
+                      ],
+                    ),
               Text(
-                model.productName??"",
+                model.productName ?? "",
                 style: AppTextStyles.style17BlackBold,
               ),
-              Container(height: AppSizes.minPadding,),
+              Container(
+                height: AppSizes.minPadding,
+              ),
               Row(
                 children: [
                   Expanded(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                              fit: FlexFit.loose,
-                              child: AutoSizeText(
-                                model.newPrice.getMoneyFormat(),
-                                style: AppTextStyles.style17BlackBold,
-                                minFontSize: 1.0,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          model.oldPrice == null?Container():Row(
-                            children: [
-                              Container(width: AppSizes.minPadding,),
-                              Text(
-                                model.oldPrice.getMoneyFormat(),
-                                style: AppTextStyles.style12HintNormal.copyWith(
-                                    decoration: TextDecoration.lineThrough
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Flexible(
+                          fit: FlexFit.loose,
+                          child: AutoSizeText(
+                            model.newPrice.getMoneyFormat(),
+                            style: AppTextStyles.style17BlackBold,
+                            minFontSize: 1.0,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                      model.oldPrice == null
+                          ? Container()
+                          : Row(
+                              children: [
+                                Container(
+                                  width: AppSizes.minPadding,
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
+                                Text(
+                                  model.oldPrice.getMoneyFormat(),
+                                  style: AppTextStyles.style12HintNormal
+                                      .copyWith(
+                                          decoration:
+                                              TextDecoration.lineThrough),
+                                ),
+                              ],
+                            )
+                    ],
+                  )),
+                  Container(
+                    width: AppSizes.minPadding,
                   ),
-                  Container(width: AppSizes.minPadding,),
                   Row(
                     children: [
                       Text(
                         rating.toStringAsFixed(1),
                         style: AppTextStyles.style13BlackBold,
                       ),
-                      Container(width: 2,),
+                      Container(
+                        width: 2,
+                      ),
                       SmoothStarRating(
                         size: 20.0,
                         color: Colors.yellow,
                         borderColor: Colors.orange,
-                        rating: rating??0.0,
+                        rating: rating ?? 0.0,
                         allowHalfRating: true,
                         starCount: 5,
                         isReadOnly: true,
@@ -240,76 +319,76 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  BoxShadow _buildBoxShadow(){
+  BoxShadow _buildBoxShadow() {
     return BoxShadow(
         color: AppColors.black.withOpacity(0.1),
         offset: Offset(0.0, -2),
-        blurRadius: 4.0
-    );
+        blurRadius: 4.0);
   }
 
-  Widget _buildSkeletonInfo(){
+  Widget _buildSkeletonInfo() {
     return CustomShimmer(
       child: Row(
         children: [
-          Flexible(
-              fit: FlexFit.tight,
-              flex: 2,
-              child: CustomSkeleton()
+          Flexible(fit: FlexFit.tight, flex: 2, child: CustomSkeleton()),
+          Container(
+            width: AppSizes.minPadding,
           ),
-          Container(width: AppSizes.minPadding,),
-          Flexible(
-              fit: FlexFit.tight,
-              flex: 5,
-              child: CustomSkeleton()
-          ),
+          Flexible(fit: FlexFit.tight, flex: 5, child: CustomSkeleton()),
         ],
       ),
     );
   }
 
-  Widget _buildProductInfoRow(String title, String content, {bool isColor = false}){
+  Widget _buildProductInfoRow(String title, String content,
+      {bool isColor = false}) {
     return Container(
-      color: isColor?AppColors.borderColor:Colors.white,
+      color: isColor ? AppColors.borderColor : Colors.white,
       padding: EdgeInsets.symmetric(
-          horizontal: AppSizes.minPadding,
-          vertical: AppSizes.maxPadding
-      ),
+          horizontal: AppSizes.minPadding, vertical: AppSizes.maxPadding),
       child: Row(
         children: [
           Flexible(
               fit: FlexFit.tight,
               flex: 2,
               child: Text(
-                title??"",
+                title ?? "",
                 style: AppTextStyles.style12BlackBold,
-              )
+              )),
+          Container(
+            width: AppSizes.minPadding,
           ),
-          Container(width: AppSizes.minPadding,),
           Flexible(
               fit: FlexFit.tight,
               flex: 5,
               child: Text(
-                content??"",
+                content ?? "",
                 style: AppTextStyles.style12BlackNormal,
-              )
-          ),
+              )),
         ],
       ),
     );
   }
 
-  Widget _buildSkeletonDescription(){
+  Widget _buildSkeletonDescription() {
     return CustomShimmer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomSkeleton(),
-          Container(height: AppSizes.minPadding / 2,),
+          Container(
+            height: AppSizes.minPadding / 2,
+          ),
           CustomSkeleton(),
-          Container(height: AppSizes.minPadding / 2,),
-          CustomSkeleton(width: AppSizes.maxWidth / 2,),
-          Container(height: AppSizes.minPadding,),
+          Container(
+            height: AppSizes.minPadding / 2,
+          ),
+          CustomSkeleton(
+            width: AppSizes.maxWidth / 2,
+          ),
+          Container(
+            height: AppSizes.minPadding,
+          ),
           CustomSkeleton(
             width: AppSizes.maxWidth - AppSizes.maxPadding * 2,
             height: 100,
@@ -320,14 +399,10 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildProductInfo(ProductDetailResponseModel model){
+  Widget _buildProductInfo(ProductDetailResponseModel model) {
     return Container(
-      decoration: BoxDecoration(
-          boxShadow: [
-            _buildBoxShadow()
-          ],
-          color: Colors.white
-      ),
+      decoration:
+          BoxDecoration(boxShadow: [_buildBoxShadow()], color: Colors.white),
       padding: EdgeInsets.all(AppSizes.maxPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,273 +411,266 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             AppLocalizations.text(LangKey.details),
             style: AppTextStyles.style17BlackBold,
           ),
-          Container(height: AppSizes.minPadding,),
-          model == null?_buildSkeletonInfo():Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildProductInfoRow(AppLocalizations.text(LangKey.category).toUpperCase(), "${AppLocalizations.text(LangKey.product)} > ${model.categoryName??""}", isColor: true),
-              _buildProductInfoRow(AppLocalizations.text(LangKey.supplier).toUpperCase(), model.supplierName??""),
-              _buildProductInfoRow(AppLocalizations.text(LangKey.trademark).toUpperCase(), model.productModelName??"", isColor: true),
-              _buildProductInfoRow(AppLocalizations.text(LangKey.origin).toUpperCase(), model.madeIn??""),
-            ],
+          Container(
+            height: AppSizes.minPadding,
           ),
-          Container(height: AppSizes.maxPadding,),
+          model == null
+              ? _buildSkeletonInfo()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildProductInfoRow(
+                        AppLocalizations.text(LangKey.category).toUpperCase(),
+                        "${AppLocalizations.text(LangKey.product)} > ${model.categoryName ?? ""}",
+                        isColor: true),
+                    _buildProductInfoRow(
+                        AppLocalizations.text(LangKey.supplier).toUpperCase(),
+                        model.supplierName ?? ""),
+                    _buildProductInfoRow(
+                        AppLocalizations.text(LangKey.trademark).toUpperCase(),
+                        model.productModelName ?? "",
+                        isColor: true),
+                    _buildProductInfoRow(
+                        AppLocalizations.text(LangKey.origin).toUpperCase(),
+                        model.madeIn ?? ""),
+                  ],
+                ),
+          Container(
+            height: AppSizes.maxPadding,
+          ),
           Text(
             AppLocalizations.text(LangKey.product_description),
             style: AppTextStyles.style17BlackBold,
           ),
-          Container(height: AppSizes.minPadding,),
-          model == null?_buildSkeletonDescription():Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                model.description??"",
-                style: AppTextStyles.style14HintNormal,
-              ),
-              Container(height: AppSizes.minPadding,),
-              Stack(
-                children: [
-                  CustomNetworkImage(
-                    width: _widthImageDescription,
-                    height: _heightImageDescription,
-                    url: model.descriptionImage,
-                  ),
-                  Container(
-                    width: _widthImageDescription,
-                    height: _heightImageDescription,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        gradient: LinearGradient(
-                            begin: FractionalOffset.topCenter,
-                            end: FractionalOffset.bottomCenter,
-                            colors: [
-                              Colors.grey.withOpacity(0.0),
-                              Colors.white.withOpacity(0.5),
-                              Colors.white,
-                            ],
-                            stops: [
-                              0.0,
-                              0.5,
-                              1.0
-                            ])
+          Container(
+            height: AppSizes.minPadding,
+          ),
+          model == null
+              ? _buildSkeletonDescription()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      model.description ?? "",
+                      style: AppTextStyles.style14HintNormal,
                     ),
-                  )
-                ],
-              ),
-              CustomButton(
-                text: AppLocalizations.text(LangKey.view_detail),
-                style: AppTextStyles.style15PrimaryNormal,
-                backgroundColor: Colors.transparent,
-                onTap: () => CustomNavigator.showCustomBottomDialog(context, DescriptionDetailScreen(model.descriptionDetail)),
-              )
-            ],
-          )
+                    Container(
+                      height: AppSizes.minPadding,
+                    ),
+                    Stack(
+                      children: [
+                        CustomNetworkImage(
+                          width: _widthImageDescription,
+                          height: _heightImageDescription,
+                          url: model.descriptionImage,
+                        ),
+                        Container(
+                          width: _widthImageDescription,
+                          height: _heightImageDescription,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              gradient: LinearGradient(
+                                  begin: FractionalOffset.topCenter,
+                                  end: FractionalOffset.bottomCenter,
+                                  colors: [
+                                    Colors.grey.withOpacity(0.0),
+                                    Colors.white.withOpacity(0.5),
+                                    Colors.white,
+                                  ],
+                                  stops: [
+                                    0.0,
+                                    0.5,
+                                    1.0
+                                  ])),
+                        )
+                      ],
+                    ),
+                    CustomButton(
+                      text: AppLocalizations.text(LangKey.view_detail),
+                      style: AppTextStyles.style15PrimaryNormal,
+                      backgroundColor: Colors.transparent,
+                      onTap: () => CustomNavigator.showCustomBottomDialog(
+                          context,
+                          DescriptionDetailScreen(model.descriptionDetail)),
+                    )
+                  ],
+                )
         ],
       ),
     );
   }
 
-  Widget _inputField(ProductModel value) {
-    return Center(
-      child: AutoSizeTextField(
-        keyboardType: TextInputType.number,
-        focusNode: value.node,
-        controller: value.controller,
-        maxLength: 3,
-        onChanged: (text) {
-          try {
-            if (text[0] == '0' && text.length > 1) {
-              String val = text.substring(1, text.length);
-              value.controller.text = '$val';
-              GlobalCart.shared.addProduct(value, int.tryParse(val));
-              value.controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: value.controller.text.length));
-            } else {
-              if (text == '' || text == null) {
-                GlobalCart.shared.addProduct(value, 0);
-              } else {
-                GlobalCart.shared.addProduct(value, int.tryParse(text));
-                value.controller.selection = TextSelection.fromPosition(
-                    TextPosition(offset: value.controller.text.length));
-              }
-            }
-          } catch (e) {
-            if (text == '' || text == null) {
-              value.controller.text = '0';
-              GlobalCart.shared.addProduct(value, 0);
-              value.controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: value.controller.text.length));
-            }
-          }
-        },
-        buildCounter: (BuildContext context,
-            {int currentLength, int maxLength, bool isFocused}) =>
-        null,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-    );
+
+  List<KeyboardActionsItem> _listKeyboardAction() {
+    List<KeyboardActionsItem> models = [];
+
+    models.add(buildKeyboardAction(_focusPrice));
+    models.add(buildKeyboardAction(_focusQuantity));
+    models.add(buildKeyboardAction(_focusNote));
+
+    return models;
   }
 
-  Widget _buildAddToCart(){
-    return StreamBuilder(
-        stream: _bloc.outputQuantity,
-        initialData: widget.model.qty,
-        builder: (_, snapshot){
-          return widget.model.qty == 0?CustomButton(
-            text: AppLocalizations.text(LangKey.add_to_cart),
-            backgroundColor: AppColors.subColor,
-            onTap: (){
-              int qty = (widget.model.qty + 1) > 999
-                  ? 999
-                  : widget.model.qty + 1;
-              GlobalCart.shared.addProduct(widget.model, qty);
-              _bloc.setQuantity(widget.model.qty);
-            },
-          ):Row(
-            children: [
-              Expanded(child: Text(
-                AppLocalizations.text(LangKey.quantity),
-                style: AppTextStyles.style15BlackNormal,
-              )),
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: InkWell(
-                  onTap: () {
-                    int qty = (widget.model.qty - 1) <= 0
-                        ? 0
-                        : widget.model.qty - 1;
-                    GlobalCart.shared.addProduct(widget.model, qty);
-                    _bloc.setQuantity(widget.model.qty);
-                  },
-                  child: Container(
-                    height: 20.0,
-                    width: 20.0,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFCCCCCC),
-                        borderRadius:
-                        BorderRadius.circular(10.0)),
-                    child: Center(
-                      child: Text('-',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              // fontSize: 20.0,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
+  KeyboardActionsItem buildKeyboardAction(FocusNode node,
+      {String text = "Done", Function onTap}) {
+    return KeyboardActionsItem(focusNode: node, toolbarButtons: [
+      (node) => InkWell(
+            onTap: onTap ?? () => node.unfocus(),
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                text,
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(color: Colors.grey)),
-                width: 60.0,
-                height: 25.0,
-                child: _inputField(widget.model),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: InkWell(
-                  onTap: () {
-                    int qty = (widget.model.qty + 1) > 999
-                        ? 999
-                        : widget.model.qty + 1;
-                    GlobalCart.shared.addProduct(widget.model, qty);
-                  },
-                  child: Container(
-                    height: 20.0,
-                    width: 20.0,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                        borderRadius:
-                        BorderRadius.circular(10.0)),
-                    child: Icon(
-                      Icons.add,
-                      size: 20.0,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          );
-        }
-    );
+            ),
+          )
+    ]);
   }
 
-  Widget _buildBottom(){
+  Widget _buildBottom() {
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: AppColors.borderColor)
-        )
-      ),
+          border: Border(top: BorderSide(color: AppColors.borderColor))),
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding,
-            vertical: AppSizes.minPadding
-        ),
+            horizontal: AppSizes.maxPadding, vertical: AppSizes.minPadding),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          _buildAddToCart(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: CustomColumnInformation(
+                  title: AppLocalizations.text(LangKey.unit_price),
+                  child: CustomTextField(
+                    focusNode: _focusPrice,
+                    controller: _controllerPrice,
+                    keyboardType:  TextInputType.number,
+                    backgroundColor: Colors.transparent,
+                    borderColor: AppColors.borderColor,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      FormatNumberInputFormatter(AppFormat.moneyFormat),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: AppSizes.minPadding,
+              ),
+              Expanded(
+                child: CustomColumnInformation(
+                  title: AppLocalizations.text(LangKey.quantity),
+                  child: CustomTextField(
+                    focusNode: _focusQuantity,
+                    controller: _controllerQuantity,
+                    hintText: AppLocalizations.text(LangKey.quantity),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)'))
+                    ],
+                    backgroundColor: Colors.transparent,
+                    borderColor: AppColors.borderColor,
+                    onChanged: (event ) {
+                      if (event.startsWith(".")) {
+                        _controllerQuantity.text = "0.";
+                        _controllerQuantity.selection = TextSelection.fromPosition(TextPosition(offset: _controllerQuantity.text.length));
+                        
+                      }
 
-          Container(height: 20)
-          // CustomButton(
-          //   text: AppLocalizations.text(LangKey.buy_now),
-          //   onTap: (){
-          //     if(widget.model.qty == 0){
-          //       GlobalCart.shared.addProduct(widget.model, 1);
-          //     }
-          //     CustomNavigator.pushReplacement(context, CartScreen());
-          //   },
-          // )
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+          CustomTextField(
+            focusNode: _focusNote,
+            controller: _controllerNote,
+            maxLines: 3,
+            hintText: AppLocalizations.text(LangKey.note_information),
+            backgroundColor: Colors.transparent,
+            borderColor: AppColors.borderColor,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+          ),
+          if(widget.isUpdate)
+            CustomButton(
+              text: AppLocalizations.text(LangKey.update),
+              onTap: _update,
+            )
+          else
+            ...[
+              CustomButton(
+                text: AppLocalizations.text(LangKey.add_to_cart),
+                backgroundColor: AppColors.subColor,
+                onTap: _addToCart,
+              ),
+              // CustomButton(
+              //   text: AppLocalizations.text(LangKey.buy_now),
+              //   onTap: _buyNow,
+              // )
+            ]
         ],
       ),
     );
   }
 
-  Widget _buildBody(){
+  //   _buyNow(){
+  //   GlobalCart.shared.addProduct(
+  //       widget.model,
+  //       AppFormat.moneyFormat.parse(_controllerPrice.text),
+  //       double.tryParse(_controllerQuantity.text),
+  //       _controllerNote.text
+  //   );
+  //   CustomNavigator.pushReplacement(context, CreateDealScreen());
+  // }
+
+  Widget _buildBody() {
     return StreamBuilder(
-      stream: _bloc.outputModel,
-      initialData: null,
-      builder: (_, snapshot){
-        ProductDetailResponseModel model = snapshot.data;
-        return Column(
-          children: [
-            Expanded(
-                child: ContainerScrollable(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    children: [
-                      _buildHeader(model),
-                      _buildProductInfo(model),
-                    ],
-                  ),
-                  onRefresh: _onRefresh,
-                )
-            ),
-            if(!widget.isViewOnly)
-              _buildBottom(),
-          ],
-        );
-      }
+        stream: _bloc.outputModel,
+        initialData: null,
+        builder: (_, snapshot) {
+          ProductDetailResponseModel model = snapshot.data;
+          return Column(
+            children: [
+              Expanded(
+                  child: ContainerScrollable(
+                child: ListView(
+                  padding: EdgeInsets.only(top: 90),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  children: [
+                    _buildHeader(model),
+                    _buildProductInfo(model),
+                  ],
+                ),
+                onRefresh: _onRefresh,
+              )),
+              if (!widget.isViewOnly) _buildBottom(),
+            ],
+          );
+        });
+  }
+
+
+  Widget _navigationBar() {
+    return CupertinoNavigationBar(
+      middle: Text(AppLocalizations.text(LangKey.product),
+          style: TextStyle(
+              fontSize: AppTextSizes.size16,
+              fontWeight: FontWeight.w600)),
+      // backgroundColor: AppColors.primaryColor,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title: Text(AppLocalizations.text(LangKey.product),),
-      ),
-      body: _buildBody(),
+    return CustomScaffold(
+      actions: _listKeyboardAction(),
+      body: CupertinoPageScaffold(
+          navigationBar: _navigationBar(), child: _buildBody()),
     );
   }
 }

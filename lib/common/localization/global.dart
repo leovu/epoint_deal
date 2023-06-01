@@ -1,7 +1,9 @@
 class Global {
 
   static bool validateCreateDate = true;
+
   static bool validateClosingDate = true;
+  
   static bool validateClosingDueDate = true;
 
   static bool validateHistoryCareDate = true;
@@ -16,4 +18,7 @@ class Global {
 
   static String branch_code;
 
+  static double amount = 0.0;
+
+  static double discount = 0.0;
 }

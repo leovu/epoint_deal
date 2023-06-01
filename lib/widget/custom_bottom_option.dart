@@ -16,24 +16,28 @@ class CustomBottomOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListView(
-      padding: EdgeInsets.only(left: 20.0,right: 20.0,bottom: 30.0),
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.maxPadding),
       shrinkWrap: true,
       separator: CustomLine(),
       children: (options?.length ?? 0) == 0? [CustomEmpty(
         title: AppLocalizations.text(LangKey.data_empty),
       )]: options.map((e) => InkWell(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
+          padding: EdgeInsets.symmetric(vertical: AppSizes.maxPadding),
           child: Row(
             children: [
-              e.icon == null?Container():Container(
-                padding: EdgeInsets.only(right: 10.0),
-                child: CustomImageIcon(
-                  icon: e.icon,
-                  size: 15.0,
-                  color: e.textColor ?? Color(0xFFD8D8D8),
+              if(e.icon != null || e.image != null)
+                Container(
+                  padding: EdgeInsets.only(right: AppSizes.minPadding),
+                  child: e.icon != null ? CustomImageIcon(
+                    icon: e.icon,
+                    size: 15.0,
+                    color: e.textColor ?? AppColors.grey200Color,
+                  ) : Image.asset(
+                    e.image,
+                    width: 15.0,
+                  ),
                 ),
-              ),
               Expanded(
                 child: Text(
                   e.text ?? "",
@@ -44,7 +48,7 @@ class CustomBottomOption extends StatelessWidget {
               ),
               if(e.isSelected != null && e.isSelected)
                 Container(
-                  padding: EdgeInsets.only(left: 10.0),
+                  padding: EdgeInsets.only(left: AppSizes.minPadding),
                   child: Icon(
                     Icons.check,
                     color: AppColors.primaryColor,
@@ -62,10 +66,11 @@ class CustomBottomOption extends StatelessWidget {
 
 class CustomBottomOptionModel{
   final String icon;
+  final String image;
   final String text;
   final Color textColor;
   final bool isSelected;
   final Function onTap;
 
-  CustomBottomOptionModel({this.icon, this.text, this.textColor, this.isSelected, this.onTap});
+  CustomBottomOptionModel({this.icon, this.image, this.text, this.textColor, this.isSelected, this.onTap});
 }

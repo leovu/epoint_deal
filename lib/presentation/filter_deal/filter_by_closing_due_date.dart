@@ -32,14 +32,14 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
     super.initState();
     // _toDate = _now;
 
-    if (widget.filterScreenModel.fromDate_closing_date != null) {
-      _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.fromDate_closing_date);
-      _fromDate = widget.filterScreenModel.fromDate_created_at;
+    if (widget.filterScreenModel.fromDate_closing_due_date != null) {
+      _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.fromDate_closing_due_date);
+      _fromDate = widget.filterScreenModel.fromDate_closing_due_date;
     }
 
-    if (widget.filterScreenModel.toDate_closing_date != null) {
-      _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.toDate_closing_date);
-      _toDate = widget.filterScreenModel.toDate_created_at;
+    if (widget.filterScreenModel.toDate_closing_due_date != null) {
+      _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.toDate_closing_due_date);
+      _toDate = widget.filterScreenModel.toDate_closing_due_date;
     }
 
     if (widget.filterScreenModel.id_closing_due_date != "") {
@@ -52,6 +52,9 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
           }
       }
     }
+     else {
+      widget.id_closing_due_date = "";
+    }
 
     setState(() {
       
@@ -60,6 +63,15 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (widget.id_closing_due_date == "" ) {
+      _fromDateText.text = "";
+      _toDateText.text = "";
+      _fromDate = null;
+      _toDate = null;
+
+    } ;
+
     return (widget.closingDueDateOptions != null)
         ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,8 +315,8 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
       _fromDateText.text = "";
       _toDateText.text = "";
 
-      widget.filterScreenModel.fromDate_closing_date = null;
-      widget.filterScreenModel.toDate_closing_date = null;
+      widget.filterScreenModel.fromDate_closing_due_date = null;
+      widget.filterScreenModel.toDate_closing_due_date = null;
       _fromDate = null;
       _toDate = null;
     } else {
