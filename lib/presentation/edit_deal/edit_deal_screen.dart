@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -146,7 +145,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       probability: 0,
       dealDescription: "",
       amount: 0,
-      product: []);
+      product: [], discount: 0);
 
   @override
   void dispose() {
@@ -210,6 +209,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     detailDeal.amount = widget.detail.amount;
     detailDeal.probability = widget.detail.probability ?? 0;
     detailDeal.dealCode = widget.detail.dealCode ?? "";
+    detailDeal.discount = widget.detail.discount ?? 0;
 
     // detailDeal.product = widget.detail.productBuy;
 
@@ -228,6 +228,7 @@ class _EditDealScreenState extends State<EditDealScreen>
         ));
       });
     }
+     Global.amount = (widget.detail.amount ?? 0.0).toDouble();
 
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
@@ -1167,13 +1168,13 @@ class _EditDealScreenState extends State<EditDealScreen>
     } else {
       DealConnection.showLoading(context);
 
-      double amount = 0;
-      if (detailDeal.product.length > 0) {
-        for (int i = 0; i < detailDeal.product.length; i++) {
-          amount +=
-              detailDeal.product[i].amount * detailDeal.product[i].quantity;
-        }
-      }
+      // double amount = 0;
+      // if (detailDeal.product.length > 0) {
+      //   for (int i = 0; i < detailDeal.product.length; i++) {
+      //     amount +=
+      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
+      //   }
+      // }
       UpdateDealModelResponse result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
@@ -1193,12 +1194,13 @@ class _EditDealScreenState extends State<EditDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: amount,
+              amount: Global.amount,
               product: detailDeal.product,
               discount: Global.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
+          Global.amount = 0.0;
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
           Navigator.of(context).pop(true);
@@ -1227,13 +1229,13 @@ class _EditDealScreenState extends State<EditDealScreen>
     } else {
       DealConnection.showLoading(context);
 
-      double amount = 0;
-      if (detailDeal.product.length > 0) {
-        for (int i = 0; i < detailDeal.product.length; i++) {
-          amount +=
-              detailDeal.product[i].amount * detailDeal.product[i].quantity;
-        }
-      }
+      // double amount = 0;
+      // if (detailDeal.product.length > 0) {
+      //   for (int i = 0; i < detailDeal.product.length; i++) {
+      //     amount +=
+      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
+      //   }
+      // }
       UpdateDealModelResponse result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
@@ -1253,12 +1255,13 @@ class _EditDealScreenState extends State<EditDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: amount,
+              amount: Global.amount,
               product: detailDeal.product,
               discount: Global.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
+          Global.amount = 0.0;
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
           // if (result.data != null) {

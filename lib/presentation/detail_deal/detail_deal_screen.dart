@@ -1532,14 +1532,36 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   }
 
   Widget infoProductBuy() {
-    return Container(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      margin: EdgeInsets.only(bottom: 8.0),
-      child: (detail.productBuy != null && detail.productBuy.length > 0)
-          ? Column(
-              children:
-                  detail.productBuy.map((e) => infoProductButyItem(e)).toList())
-          : Center(child: CustomDataNotFound()),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+          margin: EdgeInsets.only(bottom: 8.0),
+          child: (detail.productBuy != null && detail.productBuy.length > 0)
+              ? Column(
+                  children:
+                      detail.productBuy.map((e) => infoProductButyItem(e)).toList())
+              : Center(child: CustomDataNotFound()),
+        ),
+
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppLocalizations.text(LangKey.discount), style: TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.bluePrimary,
+      fontWeight: FontWeight.bold)),
+        
+              Text(AppFormat.moneyFormatDot.format(detail.discount ?? 0) + " VND", style: TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.bluePrimary,
+      fontWeight: FontWeight.w500))
+            ],
+          ),
+        )
+      ],
     );
   }
 

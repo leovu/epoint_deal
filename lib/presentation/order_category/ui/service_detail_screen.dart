@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -18,6 +20,7 @@ import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/decimal_number_input_formatter.dart';
 import 'package:epoint_deal_plugin/widget/format_number_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -102,17 +105,22 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     
   }
 
-  _addToCart(){
-    if (_controllerPrice.text == "" ||  _controllerQuantity.text == "") {
+  _addToCart() {
+    if (_controllerPrice.text == "" || _controllerQuantity.text == "") {
       return;
     }
-
+    double f;
+    if (_controllerQuantity.text.contains(',')) {
+      f = double.parse(_controllerQuantity.text.replaceAll(',', '.'));
+    } else {
+      f = double.parse(_controllerQuantity.text);
+    }
     GlobalCart.shared.addService(
         widget.model,
         AppFormat.moneyFormat.parse(_controllerPrice.text),
-        double.tryParse(_controllerQuantity.text),
-        _controllerNote.text
-    );
+        f,
+        _controllerNote.text);
+    print(f);
     Navigator.of(context).pop();
   }
 
@@ -437,18 +445,10 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)'))
+                      DecimalNumberInputFormatter()
                     ],
                     backgroundColor: Colors.transparent,
                     borderColor: AppColors.borderColor,
-                    onChanged: (event ) {
-                      if (event.startsWith(".")) {
-                        _controllerQuantity.text = "0.";
-                        _controllerQuantity.selection = TextSelection.fromPosition(TextPosition(offset: _controllerQuantity.text.length));
-                        
-                      }
-
-                    },
                   ),
                 ),
               )
@@ -476,10 +476,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                 backgroundColor: AppColors.subColor,
                 onTap: _addToCart,
               ),
-              // CustomButton(
-              //   text: AppLocalizations.text(LangKey.buy_now),
-              //   onTap: _buyNow,
-              // )
+  
             ]
         ],
       ),

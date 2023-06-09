@@ -108,16 +108,21 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           GlobalCart.shared.addProduct(item, item.price.toDouble(), item.qty.toDouble(), item.note);
         } else {
           ServiceModel item = ServiceModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addService(item, item.price, item.qty, item.note);
+          GlobalCart.shared.addService(item, item.price.toDouble(), item.qty, item.note);
         }
       });
     }
+
+    _discount = (widget.detail.discount ?? 0.0).toDouble();
+    Global.discount = _discount;
+    _controllerDiscount.text = _discount.toString();
 
       setState(() {});
     });
   }
 
   _addMoreProduct() async {
+    GlobalCart.shared.clearCart();
     if (widget.detailDeal.product.length > 0) {
       widget.detailDeal.product.forEach((v) {
         if (v.objectType == 'product') {
@@ -132,7 +137,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
     final result = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
-    GlobalCart.shared.clearCart();
+    // GlobalCart.shared.clearCart();
     print(result);
 
     if (result != null) {
@@ -538,9 +543,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
         }
         widget.detailDeal.product.removeAt(index);
         productSelected.removeAt(index);
-
         _setDiscount();
-
         setState(() {});
       },
           // - so luong

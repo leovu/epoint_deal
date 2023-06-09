@@ -235,6 +235,8 @@ class DealConnection {
 
   static Future<AddDealModelResponse> addDeal(
       BuildContext context, AddDealModelRequest model) async {
+
+        print(model);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/add-deals', model.toJson());
     if (responseData.isSuccess) {
@@ -248,6 +250,7 @@ class DealConnection {
 
   static Future<UpdateDealModelResponse> updateDeal(
       BuildContext context, UpdateDealModelRequest model) async {
+        print(model);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/update-deal', model.toJson());
     if (responseData.isSuccess) {

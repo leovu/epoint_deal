@@ -17,8 +17,6 @@ class UpdateDealModelRequest {
   String branchCode;
   num amount;
   num discount;
-
-
   List<Product> product;
 
   UpdateDealModelRequest(
@@ -85,6 +83,7 @@ class UpdateDealModelRequest {
       data['product'] = this.product.map((v) => v.toJson()).toList();
     }
     data["discount"] = discount;
+    data["amount"] = amount;
     return data;
   }
 }

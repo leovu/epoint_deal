@@ -107,7 +107,8 @@ class DetailDealData {
       this.diffDay,
       this.relatedWork,
       this.appointment,
-      this.customerCare});
+      this.customerCare,
+      this.discount});
 
   DetailDealData.fromJson(Map<String, dynamic> json) {
     dealId = json['deal_id'] ?? 0;
@@ -152,6 +153,7 @@ class DetailDealData {
     relatedWork = json['related_work'];
     appointment = json['appointment'];
     orderSourceId = json['order_source_id'] ?? 0;
+    discount = json['discount'];
 
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
@@ -218,7 +220,7 @@ class DetailDealData {
     if (this.productBuy != null) {
       data['product_buy'] = this.productBuy.map((v) => v.toJson()).toList();
     }
-
+    data['discount'] = this.discount;
     data['date_last_care'] = this.dateLastCare;
     data['diff_day'] = this.diffDay;
     data['related_work'] = this.relatedWork;

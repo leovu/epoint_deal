@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -18,10 +20,12 @@ import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/decimal_number_input_formatter.dart';
 import 'package:epoint_deal_plugin/widget/format_number_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:keyboard_actions/keyboard_actions_item.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -61,17 +65,19 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _bloc = ProductDetailBloc(context);
 
-    if(widget.isUpdate){
-      _controllerPrice.text = AppFormat.moneyFormat.format(widget.model.newPrice);
+    if (widget.isUpdate) {
+      _controllerPrice.text =
+          AppFormat.moneyFormat.format(widget.model.newPrice);
       _controllerQuantity.text = widget.model.qty.toString();
       _controllerNote.text = widget.model.note ?? "";
-    }
-    else{
-      _controllerPrice.text = AppFormat.moneyFormat.format(widget.model.newPrice);
+    } else {
+      _controllerPrice.text =
+          AppFormat.moneyFormat.format(widget.model.newPrice);
       _controllerQuantity.text = 1.0.toString();
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _onRefresh(isRefresh: false));
+    WidgetsBinding.instance
+        .addPostFrameCallback((timeStamp) => _onRefresh(isRefresh: false));
   }
 
   @override
@@ -87,10 +93,10 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     super.dispose();
   }
 
-  Future _onRefresh({bool isRefresh = true}){
-    return _bloc.productDetail(ProductDetailRequestModel(
-      productId: widget.model.productId
-    ), isRefresh);
+  Future _onRefresh({bool isRefresh = true}) {
+    return _bloc.productDetail(
+        ProductDetailRequestModel(productId: widget.model.productId),
+        isRefresh);
   }
 
   _update() {
@@ -98,20 +104,26 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     widget.model.qty = double.tryParse(_controllerQuantity.text);
     widget.model.note = _controllerNote.text;
     Navigator.of(context).pop(widget.model.toJson());
-    
   }
 
-  _addToCart(){
-    if (_controllerPrice.text == "" ||  _controllerQuantity.text == "") {
+  _addToCart() {
+    if (_controllerPrice.text == "" || _controllerQuantity.text == "") {
       return;
     }
-
+    // double f;
+    // if (_controllerQuantity.text.contains(',')) {
+    //   f = double.parse(_controllerQuantity.text.replaceAll(',', '.'));
+    // } else {
+    //   f = double.parse(_controllerQuantity.text);
+    // }
     GlobalCart.shared.addProduct(
         widget.model,
         AppFormat.moneyFormat.parse(_controllerPrice.text),
         double.tryParse(_controllerQuantity.text),
         _controllerNote.text
     );
+
+    print(double.tryParse(_controllerQuantity.text));
     Navigator.of(context).pop();
   }
 
@@ -500,7 +512,6 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-
   List<KeyboardActionsItem> _listKeyboardAction() {
     List<KeyboardActionsItem> models = [];
 
@@ -546,7 +557,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: CustomTextField(
                     focusNode: _focusPrice,
                     controller: _controllerPrice,
-                    keyboardType:  TextInputType.number,
+                    keyboardType: TextInputType.number,
                     backgroundColor: Colors.transparent,
                     borderColor: AppColors.borderColor,
                     inputFormatters: [
@@ -569,18 +580,18 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)'))
+                      DecimalNumberInputFormatter()
                     ],
                     backgroundColor: Colors.transparent,
                     borderColor: AppColors.borderColor,
-                    onChanged: (event ) {
-                      if (event.startsWith(".")) {
-                        _controllerQuantity.text = "0.";
-                        _controllerQuantity.selection = TextSelection.fromPosition(TextPosition(offset: _controllerQuantity.text.length));
-                        
-                      }
-
-                    },
+                    // onChanged: (event) {
+                    //   if (event.startsWith(".")) {
+                    //     _controllerQuantity.text = "0.";
+                    //     _controllerQuantity.selection =
+                    //         TextSelection.fromPosition(TextPosition(
+                    //             offset: _controllerQuantity.text.length));
+                    //   }
+                    // },
                   ),
                 ),
               )
@@ -596,23 +607,22 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
           ),
-          if(widget.isUpdate)
+          if (widget.isUpdate)
             CustomButton(
               text: AppLocalizations.text(LangKey.update),
               onTap: _update,
             )
-          else
-            ...[
-              CustomButton(
-                text: AppLocalizations.text(LangKey.add_to_cart),
-                backgroundColor: AppColors.subColor,
-                onTap: _addToCart,
-              ),
-              // CustomButton(
-              //   text: AppLocalizations.text(LangKey.buy_now),
-              //   onTap: _buyNow,
-              // )
-            ]
+          else ...[
+            CustomButton(
+              text: AppLocalizations.text(LangKey.add_to_cart),
+              backgroundColor: AppColors.subColor,
+              onTap: _addToCart,
+            ),
+            // CustomButton(
+            //   text: AppLocalizations.text(LangKey.buy_now),
+            //   onTap: _buyNow,
+            // )
+          ]
         ],
       ),
     );
@@ -654,13 +664,11 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
         });
   }
 
-
   Widget _navigationBar() {
     return CupertinoNavigationBar(
       middle: Text(AppLocalizations.text(LangKey.product),
           style: TextStyle(
-              fontSize: AppTextSizes.size16,
-              fontWeight: FontWeight.w600)),
+              fontSize: AppTextSizes.size16, fontWeight: FontWeight.w600)),
       // backgroundColor: AppColors.primaryColor,
     );
   }
@@ -671,6 +679,22 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
       actions: _listKeyboardAction(),
       body: CupertinoPageScaffold(
           navigationBar: _navigationBar(), child: _buildBody()),
+    );
+  }
+}
+
+class CommaFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String _text = newValue.text;
+    //This is only if you need signed numbers. Will convert the first '.'(dot) to '-'(minus)
+    //if (_text.isNotEmpty && _text[0] == '.')
+    //  _text = _text.replaceFirst('.', '-');
+    return newValue.copyWith(
+      text: _text.replaceAll(',', '.'),
     );
   }
 }
