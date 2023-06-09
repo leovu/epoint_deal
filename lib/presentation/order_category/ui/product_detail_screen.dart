@@ -110,12 +110,6 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     if (_controllerPrice.text == "" || _controllerQuantity.text == "") {
       return;
     }
-    // double f;
-    // if (_controllerQuantity.text.contains(',')) {
-    //   f = double.parse(_controllerQuantity.text.replaceAll(',', '.'));
-    // } else {
-    //   f = double.parse(_controllerQuantity.text);
-    // }
     GlobalCart.shared.addProduct(
         widget.model,
         AppFormat.moneyFormat.parse(_controllerPrice.text),

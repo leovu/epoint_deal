@@ -109,18 +109,14 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     if (_controllerPrice.text == "" || _controllerQuantity.text == "") {
       return;
     }
-    double f;
-    if (_controllerQuantity.text.contains(',')) {
-      f = double.parse(_controllerQuantity.text.replaceAll(',', '.'));
-    } else {
-      f = double.parse(_controllerQuantity.text);
-    }
     GlobalCart.shared.addService(
         widget.model,
         AppFormat.moneyFormat.parse(_controllerPrice.text),
-        f,
-        _controllerNote.text);
-    print(f);
+        double.tryParse(_controllerQuantity.text),
+        _controllerNote.text
+    );
+
+    print(double.tryParse(_controllerQuantity.text));
     Navigator.of(context).pop();
   }
 
