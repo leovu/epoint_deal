@@ -1,5 +1,5 @@
 class ServiceDetailRequestModel {
-  int serviceId;
+  int? serviceId;
 
   ServiceDetailRequestModel({this.serviceId});
 

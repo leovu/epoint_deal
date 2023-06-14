@@ -1,6 +1,6 @@
 class ObjectPopCreateDealModel {
-  int deal_id;
-  bool status;
+  int? deal_id;
+  bool? status;
 
   ObjectPopCreateDealModel({this.deal_id, this.status});
 

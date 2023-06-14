@@ -41,8 +41,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditDealScreen extends StatefulWidget {
-  DetailDealData detail;
-  EditDealScreen({Key key, this.detail}) : super(key: key);
+  DetailDealData? detail;
+  EditDealScreen({Key? key, this.detail}) : super(key: key);
 
   @override
   _EditDealScreenState createState() => _EditDealScreenState();
@@ -70,30 +70,30 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   CustomerOptionData customerOptonData = CustomerOptionData();
 
-  List<PipelineData> pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
   PipelineData pipelineSelected = PipelineData();
 
-  List<JourneyData> journeysData = <JourneyData>[];
-  JourneyData journeySelected = JourneyData();
+  List<JourneyData>? journeysData = <JourneyData>[];
+  JourneyData? journeySelected = JourneyData();
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
   AllocatorData allocatorSelected = AllocatorData();
 
-  List<OrderSourceData> orderSources;
-  OrderSourceData orderSourceSelected;
+  List<OrderSourceData>? orderSources;
+  OrderSourceData? orderSourceSelected;
 
-  List<TagData> tags;
+  List<TagData>? tags;
   List<TagData> tagsSelected = <TagData>[];
 
-  List<TagData> tagsData;
+  List<TagData>? tagsData;
 
-  List<BranchData> branchData;
-  BranchData branchSelected;
+  List<BranchData>? branchData;
+  late BranchData branchSelected;
 
   bool selectedCustomer = false;
 
   List<WorkListStaffModel> _modelStaff = [];
-  List<WorkListStaffModel> _modelStaffSelected = [
+  List<WorkListStaffModel>? _modelStaffSelected = [
     WorkListStaffModel(
         staffId: 0,
         staffName: "",
@@ -116,7 +116,7 @@ class _EditDealScreenState extends State<EditDealScreen>
         selected: false),
   ];
 
-  DateTime selectedClosingDueDate;
+  DateTime? selectedClosingDueDate;
 
   List<CustomerData> listCustomer = <CustomerData>[];
   DealItems customerItem = DealItems(
@@ -204,31 +204,31 @@ class _EditDealScreenState extends State<EditDealScreen>
   void bindingData() async {
     _dealNameText.text = widget.detail?.dealName ?? "";
     // detailDeal.dealName = widget.detail?.dealName ?? "";
-    detailDeal.phone = widget.detail.phone ?? "";
-    detailDeal.dealDescription = widget.detail.dealDescription ?? "";
-    detailDeal.amount = widget.detail.amount;
-    detailDeal.probability = widget.detail.probability ?? 0;
-    detailDeal.dealCode = widget.detail.dealCode ?? "";
-    detailDeal.discount = widget.detail.discount ?? 0;
+    detailDeal.phone = widget.detail!.phone ?? "";
+    detailDeal.dealDescription = widget.detail!.dealDescription ?? "";
+    detailDeal.amount = widget.detail!.amount;
+    detailDeal.probability = widget.detail!.probability ?? 0;
+    detailDeal.dealCode = widget.detail!.dealCode ?? "";
+    detailDeal.discount = widget.detail!.discount ?? 0;
 
     // detailDeal.product = widget.detail.productBuy;
 
-    if (widget.detail.productBuy != null &&
-        widget.detail.productBuy.length > 0) {
-           detailDeal.product.clear();
-      widget.detail.productBuy.forEach((element) {
-        detailDeal.product.add(Product(
+    if (widget.detail!.productBuy != null &&
+        widget.detail!.productBuy!.length > 0) {
+           detailDeal.product!.clear();
+      widget.detail!.productBuy!.forEach((element) {
+        detailDeal.product!.add(Product(
           objectCode: "",
           objectType: element.objectType,
           objectId: element.objectId,
           objectName: element.objectName,
           price: element.price,
-          quantity: element.quantity.toDouble(),
+          quantity: element.quantity!.toDouble(),
           amount: element.amount,
         ));
       });
     }
-     Global.amount = (widget.detail.amount ?? 0.0).toDouble();
+     Global.amount = (widget.detail!.amount ?? 0.0).toDouble();
 
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
@@ -253,11 +253,11 @@ class _EditDealScreenState extends State<EditDealScreen>
           (element) => element.staffId == (widget.detail?.saleId ?? 0));
       if (item != null) {
         item.isSelected = true;
-        detailDeal.saleId = _modelStaffSelected[0].staffId;
+        detailDeal.saleId = _modelStaffSelected![0].staffId;
       }
     } catch (e) {}
 
-    detailDeal.saleId = _modelStaffSelected[0].staffId;
+    detailDeal.saleId = _modelStaffSelected![0].staffId;
 
     for (int i = 0; i < customerTypeData.length; i++) {
       if ((widget.detail?.typeCustomer ?? 0) ==
@@ -272,7 +272,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     selectedCustomer =
         customerTypeSelected.customerTypeNameEn == "lead" ? false : true;
     detailDeal.typeCustomer =
-        customerTypeSelected.customerTypeNameEn.toLowerCase();
+        customerTypeSelected.customerTypeNameEn!.toLowerCase();
 
     if (customerTypeSelected.customerTypeNameEn == "customer") {
       selectedCustomer = true;
@@ -281,7 +281,7 @@ class _EditDealScreenState extends State<EditDealScreen>
           customerName: widget.detail?.customerName ?? "",
           phone: widget.detail?.phone ?? "");
       // leadItem = ListCustomLeadItems(customerLeadCode: "");
-      _phoneNumberText.text = widget.detail?.phone;
+      _phoneNumberText.text = widget.detail?.phone ?? "";
       detailDeal.customerCode = customerItem.customerCode;
     } else {
       selectedCustomer = false;
@@ -293,13 +293,13 @@ class _EditDealScreenState extends State<EditDealScreen>
       detailDeal.customerCode = leadItem.customerLeadCode;
     }
 
-    for (int i = 0; i < pipeLineData.length; i++) {
+    for (int i = 0; i < pipeLineData!.length; i++) {
       if ((widget.detail?.pipelineCode ?? "").toLowerCase() ==
-          pipeLineData[i].pipelineCode.toLowerCase()) {
-        pipeLineData[i].selected = true;
-        pipelineSelected = pipeLineData[i];
+          pipeLineData![i].pipelineCode!.toLowerCase()) {
+        pipeLineData![i].selected = true;
+        pipelineSelected = pipeLineData![i];
       } else {
-        pipeLineData[i].selected = false;
+        pipeLineData![i].selected = false;
       }
     }
 
@@ -311,31 +311,43 @@ class _EditDealScreenState extends State<EditDealScreen>
       journeysData = journeys.data;
     }
 
-    for (int i = 0; i < journeysData.length; i++) {
-      if ((widget.detail.journeyCode ?? "").toLowerCase() ==
-          journeysData[i].journeyCode.toLowerCase()) {
-        journeysData[i].selected = true;
-        journeySelected = journeysData[i];
+    for (int i = 0; i < journeysData!.length; i++) {
+      if ((widget.detail!.journeyCode ?? "").toLowerCase() ==
+          journeysData![i].journeyCode!.toLowerCase()) {
+        journeysData![i].selected = true;
+        journeySelected = journeysData![i];
       } else {
-        journeysData[i].selected = false;
+        journeysData![i].selected = false;
       }
     }
-    detailDeal.journeyCode = journeySelected.journeyCode;
+    detailDeal.journeyCode = journeySelected!.journeyCode;
 
-    if (branchData != null && branchData.length > 0) {
-      BranchData result = branchData.firstWhereOrNull(
-          (element) => element.branchName == widget.detail?.branchName ?? "");
-      if (result != null) {
-        result.selected = true;
-        branchSelected = result;
-        detailDeal.branchCode = branchSelected.branchCode;
+    if (branchData != null && branchData!.length > 0) {
+      // BranchData? result = branchData!.firstWhere(
+      //     (element) => element.branchName == (widget.detail?.branchName ?? ""));
+      // if (result != null) {
+      //   result.selected = true;
+      //   branchSelected = result;
+      //   detailDeal.branchCode = branchSelected.branchCode;
+      // }
+
+      for (int i = 0; i < branchData!.length; i++) {
+      if ((widget.detail!.branchName ?? "").toLowerCase() ==
+          branchData![i].branchName!.toLowerCase()) {
+        branchData![i].selected = true;
+        branchSelected = branchData![i];
+      } else {
+        branchData![i].selected = false;
       }
     }
 
-    if (widget.detail.tag.length > 0 && tagsData != null) {
-      List<int> tagInt = [];
-      for (var tag in tagsData) {
-        for (TagData tagSelected in widget.detail.tag) {
+
+    }
+
+    if (widget.detail!.tag!.length > 0 && tagsData != null) {
+      List<int?> tagInt = [];
+      for (var tag in tagsData!) {
+        for (TagData tagSelected in widget.detail!.tag!) {
           if (tag.tagId == tagSelected.tagId) {
             tagInt.add(tag.tagId);
             tag.selected = true;
@@ -345,7 +357,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       }
       for (int i = 0; i < tagsSelected.length; i++) {
         if (tagsString == "") {
-          tagsString = tagsSelected[i].name;
+          tagsString = tagsSelected[i].name ?? "";
         } else {
           tagsString += ", ${tagsSelected[i].name}";
         }
@@ -356,15 +368,15 @@ class _EditDealScreenState extends State<EditDealScreen>
 
     orderSourceSelected = OrderSourceData(
         orderSourceName: widget.detail?.orderSourceName ?? "",
-        orderSourceId: widget.detail.orderSourceId ?? 0,
+        orderSourceId: widget.detail!.orderSourceId ?? 0,
         selected: true);
 
-    detailDeal.orderSourceId = orderSourceSelected.orderSourceId;
+    detailDeal.orderSourceId = orderSourceSelected!.orderSourceId;
 
-    if (widget.detail.closingDate != "") {
-      selectedClosingDueDate = DateTime.parse(widget.detail.closingDate  + ' 00:00:00.000');
+    if (widget.detail!.closingDate != "") {
+      selectedClosingDueDate = DateTime.parse(widget.detail!.closingDate!  + ' 00:00:00.000');
       _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-        .format(DateTime.parse(widget.detail.closingDate));
+        .format(DateTime.parse(widget.detail!.closingDate!));
       }
 
     Navigator.of(context).pop();
@@ -384,7 +396,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.edit_deal),
+              AppLocalizations.text(LangKey.edit_deal)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
             // leadingWidth: 20.0,
@@ -424,7 +436,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.text(LangKey.dealInfomation),
+                AppLocalizations.text(LangKey.dealInfomation)!,
                 style: TextStyle(
                     fontSize: AppTextSizes.size16,
                     color: const Color(0xFF0067AC),
@@ -437,7 +449,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                         setState(() {});
                       },
                       child: Text(
-                        AppLocalizations.text(LangKey.collapse),
+                        AppLocalizations.text(LangKey.collapse)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size16,
                             color: const Color(0xFF0067AC),
@@ -482,7 +494,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.potentialCustomer),
+                      AppLocalizations.text(LangKey.potentialCustomer)!,
                       style: TextStyle(
                           color: !selectedCustomer
                               ? Colors.white
@@ -506,7 +518,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 },
                 child: Container(
                   height: 42.0,
-                  width: AppSizes.maxWidth / 2 - 19,
+                  width: AppSizes.maxWidth! / 2 - 19,
                   padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       color: selectedCustomer
@@ -522,7 +534,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.customerVi),
+                      AppLocalizations.text(LangKey.customerVi)!,
                       style: TextStyle(
                           color: selectedCustomer
                               ? Colors.white
@@ -552,7 +564,7 @@ class _EditDealScreenState extends State<EditDealScreen>
 
             if (customerTypeSelected.customerTypeNameEn ==
                 AppLocalizations.text(LangKey.customer)) {
-              CustomerData customer =
+              CustomerData? customer =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ListCustomerModal(
                             listCustomer: listCustomer,
@@ -563,13 +575,13 @@ class _EditDealScreenState extends State<EditDealScreen>
                 customerItem.customerCode = customer.customerCode;
                 customerItem.customerName = customer.fullName;
                 customerItem.phone = customer.phone1;
-                _phoneNumberText.text = customer.phone1;
+                _phoneNumberText.text = customer.phone1!;
                 detailDeal.customerCode = customer.customerCode;
                 // _phoneNumberText.text = "";
                 setState(() {});
               }
             } else if (customerTypeSelected.customerTypeNameEn == "lead") {
-              ListCustomLeadItems result =
+              ListCustomLeadItems? result =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ListCustomerPotentialModal(
                             items: items,
@@ -600,7 +612,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.customerStyle) +
+                                AppLocalizations.text(LangKey.customerStyle)! +
                                     ": ",
                                 style: TextStyle(
                                     color: Colors.black,
@@ -611,11 +623,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                              (leadItem.leadFullName != "") ? (leadItem.customerType.toLowerCase() ==
-                                        AppLocalizations.text(LangKey.personal)
+                              (leadItem.leadFullName != "") ? (leadItem.customerType!.toLowerCase() ==
+                                        AppLocalizations.text(LangKey.personal)!
                                             .toLowerCase())
-                                    ? AppLocalizations.text(LangKey.personal)
-                                    : AppLocalizations.text(LangKey.business) : "",
+                                    ? AppLocalizations.text(LangKey.personal)!
+                                    : AppLocalizations.text(LangKey.business)! : "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -629,7 +641,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.phoneNumber) +
+                                AppLocalizations.text(LangKey.phoneNumber)! +
                                     ": ",
                                 style: TextStyle(
                                     color: Colors.black,
@@ -687,7 +699,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       children: [
                         Divider(),
                         Text(
-                          AppLocalizations.text(LangKey.showMore),
+                          AppLocalizations.text(LangKey.showMore)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -720,7 +732,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                         false, ontap: () async {
                         FocusScope.of(context).unfocus();
 
-                        if (pipeLineData == null || pipeLineData.length == 0) {
+                        if (pipeLineData == null || pipeLineData!.length == 0) {
                           DealConnection.showLoading(context);
                           var pipelines =
                               await DealConnection.getPipeline(context);
@@ -728,7 +740,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                           if (pipelines != null) {
                             pipeLineData = pipelines.data;
 
-                            PipelineData pipeline = await showModalBottomSheet(
+                            PipelineData? pipeline = await showModalBottomSheet(
                                 context: context,
                                 useRootNavigator: true,
                                 isScrollControlled: true,
@@ -762,7 +774,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                             }
                           }
                         } else {
-                          PipelineData pipeline = await showModalBottomSheet(
+                          PipelineData? pipeline = await showModalBottomSheet(
                               context: context,
                               useRootNavigator: true,
                               isScrollControlled: true,
@@ -809,7 +821,7 @@ class _EditDealScreenState extends State<EditDealScreen>
 
                   FocusScope.of(context).unfocus();
 
-                  JourneyData journey = await showModalBottomSheet(
+                  JourneyData? journey = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -821,7 +833,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       });
                   if (journey != null) {
                     journeySelected = journey;
-                    detailDeal.journeyCode = journeySelected.journeyCode;
+                    detailDeal.journeyCode = journeySelected!.journeyCode;
                     setState(() {
                       // await LeadConnection.getDistrict(context, province.provinceid);
                     });
@@ -832,7 +844,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
                     (_modelStaffSelected != null)
-                        ? _modelStaffSelected[0]?.staffName ?? ""
+                        ? _modelStaffSelected![0]?.staffName ?? ""
                         : "",
                     Assets.iconName,
                     true,
@@ -848,10 +860,10 @@ class _EditDealScreenState extends State<EditDealScreen>
                               )));
 
                   if (_modelStaffSelected != null &&
-                      _modelStaffSelected.length > 0) {
+                      _modelStaffSelected!.length > 0) {
                     print(_modelStaffSelected);
 
-                    detailDeal.saleId = _modelStaffSelected[0].staffId;
+                    detailDeal.saleId = _modelStaffSelected![0].staffId;
 
                     setState(() {});
                   }
@@ -875,12 +887,12 @@ class _EditDealScreenState extends State<EditDealScreen>
                     false, ontap: () async {
                   print("Tag");
                   FocusScope.of(context).unfocus();
-                  if (tagsData == null || tagsData.length == 0) {
+                  if (tagsData == null || tagsData!.length == 0) {
                     DealConnection.showLoading(context);
                     var tags = await DealConnection.getTag(context);
                     Navigator.of(context).pop();
                     if (tags != null) {
-                      List<int> tagsSeletecd = [];
+                      List<int?> tagsSeletecd = [];
                       tagsData = tags.data;
 
                       var listTagsSelected = await Navigator.of(context).push(
@@ -893,13 +905,13 @@ class _EditDealScreenState extends State<EditDealScreen>
                         tagsString = "";
                         tagsData = listTagsSelected;
 
-                        for (int i = 0; i < tagsData.length; i++) {
-                          if (tagsData[i].selected) {
-                            tagsSeletecd.add(tagsData[i].tagId);
+                        for (int i = 0; i < tagsData!.length; i++) {
+                          if (tagsData![i].selected!) {
+                            tagsSeletecd.add(tagsData![i].tagId);
                             if (tagsString == "") {
-                              tagsString = tagsData[i].name;
+                              tagsString = tagsData![i].name ?? "";
                             } else {
-                              tagsString += ", ${tagsData[i].name}";
+                              tagsString += ", ${tagsData![i].name}";
                             }
                           }
                         }
@@ -913,17 +925,17 @@ class _EditDealScreenState extends State<EditDealScreen>
                             builder: (context) =>
                                 TagsModal(tagsData: tagsData)));
                     if (listTagsSelected != null) {
-                      List<int> tagsSeletecd = [];
+                      List<int?> tagsSeletecd = [];
                       tagsString = "";
                       tagsData = listTagsSelected;
 
-                      for (int i = 0; i < tagsData.length; i++) {
-                        if (tagsData[i].selected) {
-                          tagsSeletecd.add(tagsData[i].tagId);
+                      for (int i = 0; i < tagsData!.length; i++) {
+                        if (tagsData![i].selected!) {
+                          tagsSeletecd.add(tagsData![i].tagId);
                           if (tagsString == "") {
-                            tagsString = tagsData[i].name;
+                            tagsString = tagsData![i].name ?? "";
                           } else {
-                            tagsString += ", ${tagsData[i].name}";
+                            tagsString += ", ${tagsData![i].name}";
                           }
                         }
                       }
@@ -977,7 +989,7 @@ class _EditDealScreenState extends State<EditDealScreen>
               onTapConfirm: () {
                 selectedClosingDueDate = selectedDate;
                 _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-                    .format(selectedClosingDueDate)
+                    .format(selectedClosingDueDate!)
                     .toString();
                 // widget.filterScreenModel.fromDate_created_at = selectedDate;
 
@@ -989,16 +1001,16 @@ class _EditDealScreenState extends State<EditDealScreen>
         });
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -1030,7 +1042,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
@@ -1069,9 +1081,9 @@ class _EditDealScreenState extends State<EditDealScreen>
   }
 
   Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -1132,7 +1144,7 @@ class _EditDealScreenState extends State<EditDealScreen>
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
-            AppLocalizations.text(LangKey.editDealTolowcase),
+            AppLocalizations.text(LangKey.editDealTolowcase)!,
             style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.white,
@@ -1175,7 +1187,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
       //   }
       // }
-      UpdateDealModelResponse result = await DealConnection.updateDeal(
+      UpdateDealModelResponse? result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
               dealCode: detailDeal.dealCode,
@@ -1187,7 +1199,7 @@ class _EditDealScreenState extends State<EditDealScreen>
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
               // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,
@@ -1236,7 +1248,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
       //   }
       // }
-      UpdateDealModelResponse result = await DealConnection.updateDeal(
+      UpdateDealModelResponse? result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
               dealCode: detailDeal.dealCode,
@@ -1248,7 +1260,7 @@ class _EditDealScreenState extends State<EditDealScreen>
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
               // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,

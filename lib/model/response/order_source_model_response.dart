@@ -1,7 +1,7 @@
 class OrderSourceModelResponse {
-  int errorCode;
-  String errorDescription;
-  List<OrderSourceData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<OrderSourceData>? data;
 
   OrderSourceModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class OrderSourceModelResponse {
     if (json['Data'] != null) {
       data = <OrderSourceData>[];
       json['Data'].forEach((v) {
-        data.add(new OrderSourceData.fromJson(v));
+        data!.add(new OrderSourceData.fromJson(v));
       });
     }
   }
@@ -21,16 +21,16 @@ class OrderSourceModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class OrderSourceData {
-  int orderSourceId;
-  String orderSourceName;
-  bool selected;
+  int? orderSourceId;
+  String? orderSourceName;
+  bool? selected;
 
   OrderSourceData({this.orderSourceId, this.orderSourceName,this.selected});
 

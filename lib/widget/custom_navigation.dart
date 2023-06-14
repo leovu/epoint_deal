@@ -7,7 +7,7 @@ import '../utils/progress_dialog.dart';
 
 class CustomNavigator {
    static showCustomBottomDialog(BuildContext context, Widget screen,
-      {bool root = true, isScrollControlled = true, Function func, allowBack= false, disMissAble = true}) {
+      {bool root = true, isScrollControlled = true, Function? func, allowBack= false, disMissAble = true}) {
 
     return showModalBottomSheet(
         context: context,
@@ -18,7 +18,7 @@ class CustomNavigator {
         builder: (context) {
           return GestureDetector(
             child: screen,
-            onTap: func ?? () {
+            onTap: func as void Function()? ?? () {
               if(allowBack){
                 Navigator.pop(context);
               }
@@ -45,18 +45,18 @@ class CustomNavigator {
   }
 
   
-  static showCustomAlertDialog(BuildContext context, String title, String content,
+  static showCustomAlertDialog(BuildContext context, String? title, String? content,
       {
         bool root = true,
-        Function onSubmitted,
-        String textSubmitted,
-        Color colorSubmitted,
-        String textSubSubmitted,
-        Function onSubSubmitted,
+        Function? onSubmitted,
+        String? textSubmitted,
+        Color? colorSubmitted,
+        String? textSubSubmitted,
+        Function? onSubSubmitted,
         bool enableCancel = false,
         bool cancelable = true,
         bool isTicket = false,
-        Widget child
+        Widget? child
 }) {
     return push(
         context,
@@ -87,21 +87,21 @@ class CustomNavigator {
   }
 
    static canPop(BuildContext context) {
-    ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
+    ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     return parentRoute?.canPop ?? false;
   }
 
-    static ProgressDialog _pr;
-  static showProgressDialog(BuildContext context) {
+    static ProgressDialog? _pr;
+  static showProgressDialog(BuildContext? context) {
     if (_pr == null) {
       _pr = ProgressDialog(context);
-      _pr.show();
+      _pr!.show();
     }
   }
 
    static hideProgressDialog() {
-    if (_pr != null && _pr.isShowing()) {
-      _pr.hide();
+    if (_pr != null && _pr!.isShowing()) {
+      _pr!.hide();
       _pr = null;
     }
   }

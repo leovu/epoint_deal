@@ -1,7 +1,7 @@
 class ServiceRequestModel {
-  String serviceName;
-  int page;
-  String brandCode;
+  String? serviceName;
+  int? page;
+  String? brandCode;
 
   ServiceRequestModel({this.serviceName, this.page, this.brandCode});
 

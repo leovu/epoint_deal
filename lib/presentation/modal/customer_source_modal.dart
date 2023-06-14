@@ -8,8 +8,8 @@ import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class CustomerSourceModal extends StatefulWidget {
-  List<CustomerOptionSource> sources = <CustomerOptionSource>[];
-   CustomerSourceModal({ Key key , this.sources}) : super(key: key);
+  List<CustomerOptionSource>? sources = <CustomerOptionSource>[];
+   CustomerSourceModal({ Key? key , this.sources}) : super(key: key);
 
   @override
   _CustomerSourceModalState createState() => _CustomerSourceModalState();
@@ -22,7 +22,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.customerSource),
-      widget: (widget.sources.length > 0) ? CustomListView(
+      widget: (widget.sources!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.sources ?? [])
@@ -33,7 +33,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
                           element?.sourceName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.sources.length - 1,
+                          index < widget.sources!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -46,9 +46,9 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
 
   List<Widget> _listWidget() {
     return List.generate(
-        widget.sources.length,
+        widget.sources!.length,
         (index) => _buildItem(
-                widget.sources[index].sourceName, widget.sources[index].selected,
+                widget.sources![index].sourceName!, widget.sources![index].selected!,
                 () {
               selectedItem(index);
             }));
@@ -56,7 +56,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
 
   Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -75,7 +75,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
   }
 
   selectedItem(int index) async {
-    List<CustomerOptionSource> models = widget.sources;
+    List<CustomerOptionSource> models = widget.sources!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

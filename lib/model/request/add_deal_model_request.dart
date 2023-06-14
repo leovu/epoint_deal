@@ -1,20 +1,20 @@
 class AddDealModelRequest {
-  String dealName;
-  int saleId;
-  String typeCustomer;
-  String customerCode;
-  String phone;
-  String pipelineCode;
-  String journeyCode;
-  String closingDate;
-  String branchCode;
-  List<int> tag;
-  int orderSourceId;
-  num probability;
-  String dealDescription;
-  num amount;
-  List<Product> product;
-  num discount;
+  String? dealName;
+  int? saleId;
+  String? typeCustomer;
+  String? customerCode;
+  String? phone;
+  String? pipelineCode;
+  String? journeyCode;
+  String? closingDate;
+  String? branchCode;
+  List<int?>? tag;
+  int? orderSourceId;
+  num? probability;
+  String? dealDescription;
+  num? amount;
+  List<Product>? product;
+  num? discount;
 
   AddDealModelRequest(
       {this.dealName,
@@ -52,7 +52,7 @@ class AddDealModelRequest {
     if (json['product'] != null) {
       product = <Product>[];
       json['product'].forEach((v) {
-        product.add(new Product.fromJson(v));
+        product!.add(new Product.fromJson(v));
       });
     }
     discount = json['discount'];
@@ -75,7 +75,7 @@ class AddDealModelRequest {
     data['deal_description'] = this.dealDescription;
     data['amount'] = this.amount;
     if (this.product != null) {
-      data['product'] = this.product.map((v) => v.toJson()).toList();
+      data['product'] = this.product!.map((v) => v.toJson()).toList();
     }
     data["discount"] = discount;
     return data;
@@ -83,14 +83,14 @@ class AddDealModelRequest {
 }
 
 class Product {
-  String objectType;
-  String objectName;
-  String objectCode;
-  int objectId;
-  num quantity;
-  num price;
-  num amount;
-  String note;
+  String? objectType;
+  String? objectName;
+  String? objectCode;
+  int? objectId;
+  num? quantity;
+  num? price;
+  num? amount;
+  String? note;
 
   Product(
       {this.objectType,
@@ -109,7 +109,7 @@ class Product {
     quantity = json['quantity'];
     price = json['price'];
     amount = json['amount'];
-    amount = json['note'] ?? "";
+    note = json['note'] ?? "" as num?;
   }
 
   Map<String, dynamic> toJson() {

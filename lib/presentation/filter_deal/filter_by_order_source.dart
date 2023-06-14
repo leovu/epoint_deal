@@ -2,8 +2,8 @@ import 'package:epoint_deal_plugin/model/response/order_source_model_response.da
 import 'package:flutter/material.dart';
 
 class FilterByOrderSource extends StatefulWidget {
-  List<OrderSourceData> orderSourceData;
- FilterByOrderSource({ Key key, this.orderSourceData }) : super(key: key);
+  List<OrderSourceData>? orderSourceData;
+ FilterByOrderSource({ Key? key, this.orderSourceData }) : super(key: key);
 
   @override
   _FilterByOrderSourceState createState() => _FilterByOrderSourceState();
@@ -17,9 +17,9 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
             margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
             child: Wrap(
               children: List.generate(
-                  widget.orderSourceData.length,
-                  (index) => _optionItem(widget.orderSourceData[index].orderSourceName,
-                          widget.orderSourceData[index].selected, () {
+                  widget.orderSourceData!.length,
+                  (index) => _optionItem(widget.orderSourceData![index].orderSourceName,
+                          widget.orderSourceData![index].selected!, () {
                         selectedTag(index);
                       })),
               spacing: 20,
@@ -29,9 +29,9 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
         : Container();
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -48,7 +48,7 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -64,7 +64,7 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -75,7 +75,7 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
   }
 
   selectedTag(int index) async {
-    List<OrderSourceData> models = widget.orderSourceData;
+    List<OrderSourceData> models = widget.orderSourceData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

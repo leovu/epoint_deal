@@ -30,19 +30,19 @@ class CommentBloc extends BaseBloc {
     super.dispose();
   }
 
-  List<WorkListCommentModel> _models;
+  List<WorkListCommentModel>? _models;
 
-  final _streamModels = BehaviorSubject<List<WorkListCommentModel>>();
-  ValueStream<List<WorkListCommentModel>> get outputModels => _streamModels.stream;
-  setModels(List<WorkListCommentModel> event) => set(_streamModels, event);
+  final _streamModels = BehaviorSubject<List<WorkListCommentModel>?>();
+  ValueStream<List<WorkListCommentModel>?> get outputModels => _streamModels.stream;
+  setModels(List<WorkListCommentModel>? event) => set(_streamModels, event);
 
-  final _streamCallback = BehaviorSubject<WorkListCommentModel>();
-  ValueStream<WorkListCommentModel> get outputCallback => _streamCallback.stream;
-  setCallback(WorkListCommentModel event) => set(_streamCallback, event);
+  final _streamCallback = BehaviorSubject<WorkListCommentModel?>();
+  ValueStream<WorkListCommentModel?> get outputCallback => _streamCallback.stream;
+  setCallback(WorkListCommentModel? event) => set(_streamCallback, event);
 
-  final _streamFile = BehaviorSubject<String>();
-  ValueStream<String> get outputFile => _streamFile.stream;
-  setFile(String event) => set(_streamFile, event);
+  final _streamFile = BehaviorSubject<String?>();
+  ValueStream<String?> get outputFile => _streamFile.stream;
+  setFile(String? event) => set(_streamFile, event);
 
   workListComment(WorkListCommentRequestModel model) async {
     var response = await DealConnection.workListComment(context, model);
@@ -72,32 +72,32 @@ class CommentBloc extends BaseBloc {
 //   }
 
    workUploadFile(File model) async {
-    DealConnection.showLoading(context);
+    DealConnection.showLoading(context!);
 
     
-    String result = await DealConnection.uploadFileAWS(context, model);
+    String? result = await DealConnection.uploadFileAWS(context, model);
 
 
-    Navigator.of(context).pop();
+    Navigator.of(context!).pop();
     if(result != null){
       // WorkUploadFileResponse response = result.url;
 
       setFile(result);
     } else {
-      DealConnection.handleError(context, AppLocalizations.text(LangKey.server_error));
+      DealConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
   }
 
 
 
-  workCreatedComment(WorkCreateCommentRequestModel model, TextEditingController controller, Function(int) onCallback) async {
-    DealConnection.showLoading(context);
-    WorkListCommentResponseModel response = await DealConnection.workCreatedComment(context, model);
-    Navigator.of(context).pop();
+  workCreatedComment(WorkCreateCommentRequestModel model, TextEditingController controller, Function(int)? onCallback) async {
+    DealConnection.showLoading(context!);
+    WorkListCommentResponseModel response = (await DealConnection.workCreatedComment(context!, model))!;
+    Navigator.of(context!).pop();
     if(response.errorCode == 0){
       _models = response.data ?? [];
     } else {
-      DealConnection.showMyDialog(context, response.errorDescription);
+      DealConnection.showMyDialog(context!, response.errorDescription);
     }
 
     setModels(_models);
@@ -107,7 +107,7 @@ class CommentBloc extends BaseBloc {
 
       if(onCallback != null){
         int total = 0;
-        for(var e in _models){
+        for(var e in _models!){
           total += _getTotalComment(e);
         }
 
@@ -118,7 +118,7 @@ class CommentBloc extends BaseBloc {
   int _getTotalComment(WorkListCommentModel model){
     int total = 1;
     if((model.listObject?.length ?? 0) != 0){
-      for(var e in model.listObject){
+      for(var e in model.listObject!){
         total += _getTotalComment(e);
       }
     }

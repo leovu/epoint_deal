@@ -42,9 +42,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomerCareDeal extends StatefulWidget {
-  DetailDealData detail;
+  DetailDealData? detail;
 
-  CustomerCareDeal({Key key, this.detail}) : super(key: key);
+  CustomerCareDeal({Key? key, this.detail}) : super(key: key);
 
   @override
   _CustomerCareDealState createState() => _CustomerCareDealState();
@@ -63,12 +63,12 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
   TextEditingController _enterWorkDescText = TextEditingController();
   FocusNode _enterWorkDescFocusNode = FocusNode();
 
-  List<GetTypeWorkData> typeOfWorkData = [];
+  List<GetTypeWorkData>? typeOfWorkData = [];
   GetTypeWorkData typeOfWorkSelected = GetTypeWorkData();
 
-  List<GetStatusWorkData> statusWorkData = [];
+  List<GetStatusWorkData>? statusWorkData = [];
   GetStatusWorkData statusWorkSelected = GetStatusWorkData();
-  ListProjectItems projectSelected;
+  ListProjectItems? projectSelected;
 
   List<TypeCardModel> typeCardData = [
     TypeCardModel(
@@ -86,9 +86,9 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
   TypeCardModel typeCardSelected = TypeCardModel(
       name: AppLocalizations.text(LangKey.bonus), id: 0, selected: true);
 
-  List<WorkListStaffModel> _modelStaffSelected = [];
-  List<WorkListStaffModel> _modelStaffSSupportSelected = [];
-  List<TagData> tagsData = [];
+  List<WorkListStaffModel>? _modelStaffSelected = [];
+  List<WorkListStaffModel>? _modelStaffSSupportSelected = [];
+  List<TagData>? tagsData = [];
   // List<TagData> tagsSelected = [];
   String tagsString = "";
   String staffs = "";
@@ -125,8 +125,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
       createObjectType: "",
       createObjectId: 0);
 
-  DateTime _fromDate;
-  DateTime _toDate;
+  DateTime? _fromDate;
+  DateTime? _toDate;
   DateTime _now = DateTime.now();
 
   final TextEditingController _fromDateText = TextEditingController();
@@ -137,7 +137,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
   bool showMore = false;
   bool has_approved = false;
 
-  CustomerCareBloc _bloc;
+  late CustomerCareBloc _bloc;
 
   @override
   void initState() {
@@ -179,7 +179,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
   }
 
    _uploadFile() async {
-    File file = await CustomDocumentPicker.openDocument(context, params: [
+    File? file = await CustomDocumentPicker.openDocument(context, params: [
       "txt",
       "pdf",
       "doc",
@@ -199,9 +199,9 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     }
   }
 
-  static Future<List<File>> openMultiDocument(
+  static Future<List<File>?> openMultiDocument(
     BuildContext context, {
-    List<String> params,
+    List<String>? params,
   }) async {
     try {
       bool permission = true;
@@ -232,7 +232,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.customerCareUpcase),
+              AppLocalizations.text(LangKey.customerCareUpcase)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
             // leadingWidth: 20.0,
@@ -289,7 +289,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               focusNode: _customerCareContentFocusNode, ontap: () async {
 
                 FocusScope.of(context).unfocus();
-            if (typeOfWorkData.length == 0) {
+            if (typeOfWorkData!.length == 0) {
               DealConnection.showLoading(context);
               var types = await DealConnection.getTypeWork(context);
 
@@ -354,7 +354,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               false, ontap: () async {
             FocusScope.of(context).unfocus();
 
-            if (statusWorkData.length == 0) {
+            if (statusWorkData!.length == 0) {
               DealConnection.showLoading(context);
               var statusWorkModel = await DealConnection.getStatusWork(context);
 
@@ -391,8 +391,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           // Chọn người thực hiện
           _buildTextField(
               AppLocalizations.text(LangKey.chooseExecutor),
-              (_modelStaffSelected != null && _modelStaffSelected.length > 0)
-                  ? _modelStaffSelected[0]?.staffName ?? ""
+              (_modelStaffSelected != null && _modelStaffSelected!.length > 0)
+                  ? _modelStaffSelected![0]?.staffName ?? ""
                   : "",
               Assets.iconPerson,
               true,
@@ -409,13 +409,13 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               LangKey.chooseExecutorUpcase),
                         )));
 
-            if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
-              if (addWorkModel.processorId == _modelStaffSelected[0].staffId) {
+            if (_modelStaffSelected != null && _modelStaffSelected!.length > 0) {
+              if (addWorkModel.processorId == _modelStaffSelected![0].staffId) {
                 return;
               }
 
               print(_modelStaffSelected);
-              addWorkModel.processorId = _modelStaffSelected[0].staffId;
+              addWorkModel.processorId = _modelStaffSelected![0].staffId;
 
               staffs = "";
               _modelStaffSSupportSelected = [];
@@ -444,17 +444,21 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<String> models = snapshot.data ?? [];
+                      List<String> models = [];
+                      if (snapshot.data != null) {
+                        models = snapshot.data as List<String>;
+                      }
+                      // List<String> models = snapshot.data as List<String>;
                       return models.isEmpty
                           ? Container()
                           : Container(
                               padding:
-                                  EdgeInsets.only(bottom: AppSizes.minPadding),
+                                  EdgeInsets.only(bottom: AppSizes.minPadding!),
                               margin: EdgeInsets.only(right: 5.0),
                               alignment: Alignment.centerLeft,
                               child: Wrap(
-                                spacing: AppSizes.minPadding,
-                                runSpacing: AppSizes.minPadding,
+                                spacing: AppSizes.minPadding!,
+                                runSpacing: AppSizes.minPadding!,
                                 children: models
                                     .map((e) => Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -497,7 +501,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                           child: Center(
                             child: Text(
                                 AppLocalizations.text(
-                                    LangKey.pressUploadPhotosAndVideos),
+                                    LangKey.pressUploadPhotosAndVideos)!,
                                 style: TextStyle(
                                     color: Color(0xFF9E9E9E),
                                     fontSize: 14.0,
@@ -516,7 +520,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.text(LangKey.setReminderSchedule),
+                AppLocalizations.text(LangKey.setReminderSchedule)!,
                 style: TextStyle(
                     color: Color(0xFF0067AC),
                     fontSize: 16.0,
@@ -571,7 +575,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppLocalizations.text(LangKey.moreInformation),
+                        AppLocalizations.text(LangKey.moreInformation)!,
                         style: TextStyle(
                             fontSize: 16.0,
                             color: const Color(0xFF0067AC),
@@ -580,7 +584,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       showMore
                           ? InkWell(
                               child: Text(
-                                AppLocalizations.text(LangKey.collapse),
+                                AppLocalizations.text(LangKey.collapse)!,
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     color: const Color(0xFF0067AC),
@@ -604,14 +608,14 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppLocalizations.text(LangKey.customerStyle),
+                        AppLocalizations.text(LangKey.customerStyle)!,
                         style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
                             fontWeight: FontWeight.w400),
                       ),
                       Text(
-                        AppLocalizations.text(LangKey.potentialCustomer),
+                        AppLocalizations.text(LangKey.potentialCustomer)!,
                         style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
@@ -619,7 +623,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       )
                     ],
                   ),
-                  (widget.detail.typeCustomer == "business")
+                  (widget.detail!.typeCustomer == "business")
                       ? Container(
                           margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
                           child: Row(
@@ -647,7 +651,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               //   width: 11.0,
                               // ),
                               Text(
-                                widget.detail.dealName,
+                                widget.detail!.dealName!,
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     color: const Color(0xFF121212),
@@ -670,7 +674,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     FocusScope.of(context).unfocus();
                     print("Chọn người ho tro");
 
-                    if (_modelStaffSelected.length == 0) {
+                    if (_modelStaffSelected!.length == 0) {
                       await DealConnection.showMyDialog(
                           context, "Vui lòng chọn trước nhân viên thực hiện!");
                     } else {
@@ -684,23 +688,23 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                   )));
 
                       if (_modelStaffSSupportSelected != null &&
-                          _modelStaffSSupportSelected.length > 0) {
+                          _modelStaffSSupportSelected!.length > 0) {
                         List<StaffSupport> _modelStaffIDSeleted = [];
 
                         staffs = "";
                         print(_modelStaffSSupportSelected);
                         for (int i = 0;
-                            i < _modelStaffSSupportSelected.length;
+                            i < _modelStaffSSupportSelected!.length;
                             i++) {
-                          if (_modelStaffSSupportSelected[i].isSelected) {
+                          if (_modelStaffSSupportSelected![i].isSelected!) {
                             _modelStaffIDSeleted.add(StaffSupport(
                                 staffId:
-                                    _modelStaffSSupportSelected[i].staffId));
+                                    _modelStaffSSupportSelected![i].staffId));
                             if (staffs == "") {
-                              staffs = _modelStaffSSupportSelected[i].staffName;
+                              staffs = _modelStaffSSupportSelected![i].staffName ?? "";
                             } else {
                               staffs +=
-                                  ", ${_modelStaffSSupportSelected[i].staffName}";
+                                  ", ${_modelStaffSSupportSelected![i].staffName}";
                             }
                           }
                         }
@@ -720,7 +724,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     print("Tag");
                     FocusScope.of(context).unfocus();
 
-                    if (tagsData == null || tagsData.length == 0) {
+                    if (tagsData == null || tagsData!.length == 0) {
                       DealConnection.showLoading(context);
                       var tags = await DealConnection.getTag(context);
                       Navigator.of(context).pop();
@@ -737,14 +741,14 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                           tagsString = "";
                           tagsData = listTagsSelected;
 
-                          for (int i = 0; i < tagsData.length; i++) {
-                            if (tagsData[i].selected) {
+                          for (int i = 0; i < tagsData!.length; i++) {
+                            if (tagsData![i].selected!) {
                               listTag
-                                  .add(ListTag(manageTagId: tagsData[i].tagId));
+                                  .add(ListTag(manageTagId: tagsData![i].tagId));
                               if (tagsString == "") {
-                                tagsString = tagsData[i].name;
+                                tagsString = tagsData![i].name ?? "";
                               } else {
-                                tagsString += ", ${tagsData[i].name}";
+                                tagsString += ", ${tagsData![i].name}";
                               }
                             }
                           }
@@ -766,7 +770,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                         for (int i = 0; i < listTagsSelected.length; i++) {
                           if (listTagsSelected[i].selected) {
                             listTag
-                                  .add(ListTag(manageTagId: tagsData[i].tagId));
+                                  .add(ListTag(manageTagId: tagsData![i].tagId));
                             if (tagsString == "") {
                               tagsString = listTagsSelected[i].name;
                             } else {
@@ -800,7 +804,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       print(projectSelected);
 
                       addWorkModel.manageProjectId =
-                          projectSelected.manageProjectId;
+                          projectSelected!.manageProjectId;
                       setState(() {});
                     }
                   }),
@@ -818,7 +822,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               : Icon(Icons.check_box_outline_blank, size: 30)),
                       SizedBox(width: 10.0),
                       Text(
-                        AppLocalizations.text(LangKey.workNeedCensorship),
+                        AppLocalizations.text(LangKey.workNeedCensorship)!,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,
@@ -887,10 +891,10 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
   _showToDate() {
     DateTime selectedDate = _toDate ?? _fromDate ?? _now;
-    DateTime maximumTime = _now;
+    DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
         _toDate?.month == _now.month &&
-        _toDate?.day > _now.day) maximumTime = _toDate;
+        (_toDate?.day ?? 0) > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -946,7 +950,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
   Widget typeOfWorkItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         // width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 16.0),
@@ -974,10 +978,10 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
   }
 
   selectedItem(int index) async {
-    for (int i = 0; i < typeOfWorkData.length; i++) {
-      typeOfWorkData[i].selected = false;
+    for (int i = 0; i < typeOfWorkData!.length; i++) {
+      typeOfWorkData![i].selected = false;
     }
-    typeOfWorkData[index].selected = true;
+    typeOfWorkData![index].selected = true;
     setState(() {});
   }
 
@@ -994,7 +998,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
           List<String> list_document = []; 
           if (_bloc.outputFiles.hasValue) {
-            List<String> models = _bloc.outputFiles.value;
+            List<String> models = _bloc.outputFiles.value!;
           if (models.length > 0) {
             models.forEach((element) {
               list_document.add(element);
@@ -1010,7 +1014,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                 AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DealConnection.showLoading(context);
-            DescriptionModelResponse result = await DealConnection.addWork(
+            DescriptionModelResponse? result = await DealConnection.addWork(
                 context,
                 AddWorkRequestModel(
                     manageWorkTitle: _titleText.text ?? "",
@@ -1034,7 +1038,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     parentId: null,
                     description: _enterWorkDescText.text ?? "",
                     manageProjectId: addWorkModel.manageProjectId,
-                    customerId: widget.detail.dealId,
+                    customerId: widget.detail!.dealId,
                     listTag: addWorkModel.listTag,
                     typeCardWork: null,
                     priority: 1,
@@ -1061,7 +1065,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
         },
         child: Center(
           child: Text(
-            AppLocalizations.text(LangKey.saveWork),
+            AppLocalizations.text(LangKey.saveWork)!,
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 14.0,
@@ -1072,16 +1076,16 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     );
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -1113,7 +1117,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,

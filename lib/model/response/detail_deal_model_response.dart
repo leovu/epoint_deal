@@ -1,9 +1,9 @@
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 
 class DetailDealModelResponse {
-  int errorCode;
-  String errorDescription;
-  DetailDealData data;
+  int? errorCode;
+  String? errorDescription;
+  DetailDealData? data;
 
   DetailDealModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -18,54 +18,54 @@ class DetailDealModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class DetailDealData {
-  int dealId;
-  String dealCode;
-  String dealName;
-  String phone;
-  num amount;
-  String typeCustomer;
-  String customerCode;
-  String journeyName;
-  String journeyCode;
-  String pipelineCode;
-  String closingDate;
-  String closingDueDate;
-  String reasonLoseCode;
-  String branchName;
-  String orderSourceName;
-  int orderSourceId;
-  List<TagData> tag;
-  int probability;
-  String dealDescription;
-  int saleId;
-  String staffName;
-  int timeRevokeLead;
-  String createdAt;
-  String updatedAt;
-  String customerName;
-  String customerAvatar;
-  String customerEmail;
-  String customerGender;
-  String province;
-  String district;
-  String address;
-  String backgroundColorJourney;
-  String productNameBuy;
-  String dateLastCare;
-  int diffDay;
-  int relatedWork;
-  int appointment;
-  List<CustomerCare> customerCare;
-  List<JourneyTracking> journeyTracking;
-  List<ProductBuy> productBuy;
-  num discount;
+  int? dealId;
+  String? dealCode;
+  String? dealName;
+  String? phone;
+  num? amount;
+  String? typeCustomer;
+  String? customerCode;
+  String? journeyName;
+  String? journeyCode;
+  String? pipelineCode;
+  String? closingDate;
+  String? closingDueDate;
+  String? reasonLoseCode;
+  String? branchName;
+  String? orderSourceName;
+  int? orderSourceId;
+  List<TagData>? tag;
+  int? probability;
+  String? dealDescription;
+  int? saleId;
+  String? staffName;
+  int? timeRevokeLead;
+  String? createdAt;
+  String? updatedAt;
+  String? customerName;
+  String? customerAvatar;
+  String? customerEmail;
+  String? customerGender;
+  String? province;
+  String? district;
+  String? address;
+  String? backgroundColorJourney;
+  String? productNameBuy;
+  String? dateLastCare;
+  int? diffDay;
+  int? relatedWork;
+  int? appointment;
+  List<CustomerCare>? customerCare;
+  List<JourneyTracking>? journeyTracking;
+  List<ProductBuy>? productBuy;
+  num? discount;
 
   DetailDealData(
       {this.dealId,
@@ -129,7 +129,7 @@ class DetailDealData {
     if (json['tag'] != null) {
       tag = <TagData>[];
       json['tag'].forEach((v) {
-        tag.add(new TagData.fromJson(v));
+        tag!.add(new TagData.fromJson(v));
       });
     }
     probability = json['probability'] ?? 0;
@@ -158,20 +158,20 @@ class DetailDealData {
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
       json['journey_tracking'].forEach((v) {
-        journeyTracking.add(new JourneyTracking.fromJson(v));
+        journeyTracking!.add(new JourneyTracking.fromJson(v));
       });
     }
     if (json['product_buy'] != null) {
       productBuy = <ProductBuy>[];
       json['product_buy'].forEach((v) {
-        productBuy.add(ProductBuy.fromJson(v));
+        productBuy!.add(ProductBuy.fromJson(v));
       });
     }
 
     if (json['customer_care'] != null) {
       customerCare = <CustomerCare>[];
       json['customer_care'].forEach((v) {
-        customerCare.add(new CustomerCare.fromJson(v));
+        customerCare!.add(new CustomerCare.fromJson(v));
       });
     }
   }
@@ -194,7 +194,7 @@ class DetailDealData {
     data['branch_name'] = this.branchName;
     data['order_source_name'] = this.orderSourceName;
     if (this.tag != null) {
-      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+      data['tag'] = this.tag!.map((v) => v.toJson()).toList();
     }
     data['probability'] = this.probability;
     data['deal_description'] = this.dealDescription;
@@ -215,10 +215,10 @@ class DetailDealData {
     data['order_source_id'] = this.orderSourceId;
     if (this.journeyTracking != null) {
       data['journey_tracking'] =
-          this.journeyTracking.map((v) => v.toJson()).toList();
+          this.journeyTracking!.map((v) => v.toJson()).toList();
     }
     if (this.productBuy != null) {
-      data['product_buy'] = this.productBuy.map((v) => v.toJson()).toList();
+      data['product_buy'] = this.productBuy!.map((v) => v.toJson()).toList();
     }
     data['discount'] = this.discount;
     data['date_last_care'] = this.dateLastCare;
@@ -226,19 +226,19 @@ class DetailDealData {
     data['related_work'] = this.relatedWork;
     data['appointment '] = this.appointment;
     if (this.customerCare != null) {
-      data['customer_care'] = this.customerCare.map((v) => v.toJson()).toList();
+      data['customer_care'] = this.customerCare!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class JourneyTracking {
-  String journeyCode;
-  int journeyId;
-  String journeyName;
-  int pipelineId;
-  String pipelineCode;
-  bool check;
+  String? journeyCode;
+  int? journeyId;
+  String? journeyName;
+  int? pipelineId;
+  String? pipelineCode;
+  bool? check;
 
   JourneyTracking(
       {this.journeyCode,
@@ -270,14 +270,14 @@ class JourneyTracking {
 }
 
 class ProductBuy {
-  int dealDetailId;
-  int objectId;
-  String objectName;
-  String objectType;
-  num price;
-  num quantity;
-  int discount;
-  num amount;
+  int? dealDetailId;
+  int? objectId;
+  String? objectName;
+  String? objectType;
+  num? price;
+  num? quantity;
+  int? discount;
+  num? amount;
 
   ProductBuy(
       {this.dealDetailId,
@@ -315,30 +315,30 @@ class ProductBuy {
 }
 
 class CustomerCare {
-  int manageWorkId;
-  String manageWorkCode;
-  String manageWorkCustomerType;
-  int manageProjectId;
-  String manageProjectName;
-  int manageTypeWorkId;
-  String manageTypeWorkKey;
-  String manageTypeWorkName;
-  String manageTypeWorkIcon;
-  String createdAt;
-  String manageWorkTitle;
-  String dateStart;
-  String dateEnd;
-  String dateFinish;
-  int processorId;
-  String staffFullName;
-  String staffAvatar;
-  int manageStatusId;
-  String manageStatusName;
-  String manageStatusColor;
-  int countFile;
-  int countComment;
-  int daysLate;
-  List<ListTagDetail> listTag;
+  int? manageWorkId;
+  String? manageWorkCode;
+  String? manageWorkCustomerType;
+  int? manageProjectId;
+  String? manageProjectName;
+  int? manageTypeWorkId;
+  String? manageTypeWorkKey;
+  String? manageTypeWorkName;
+  String? manageTypeWorkIcon;
+  String? createdAt;
+  String? manageWorkTitle;
+  String? dateStart;
+  String? dateEnd;
+  String? dateFinish;
+  int? processorId;
+  String? staffFullName;
+  String? staffAvatar;
+  int? manageStatusId;
+  String? manageStatusName;
+  String? manageStatusColor;
+  int? countFile;
+  int? countComment;
+  int? daysLate;
+  List<ListTagDetail>? listTag;
 
   CustomerCare(
       {this.manageWorkId,
@@ -393,7 +393,7 @@ class CustomerCare {
     if (json['list_tag'] != null) {
       listTag = <ListTagDetail>[];
       json['list_tag'].forEach((v) {
-        listTag.add(new ListTagDetail.fromJson(v));
+        listTag!.add(new ListTagDetail.fromJson(v));
       });
     }
   }
@@ -424,17 +424,17 @@ class CustomerCare {
     data['count_comment'] = this.countComment;
     data['days_late'] = this.daysLate;
     if (this.listTag != null) {
-      data['list_tag'] = this.listTag.map((v) => v.toJson()).toList();
+      data['list_tag'] = this.listTag!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ListTagDetail {
-  int manageWorkTagId;
-  int manageWorkId;
-  int manageTagId;
-  String tagName;
+  int? manageWorkTagId;
+  int? manageWorkId;
+  int? manageTagId;
+  String? tagName;
 
   ListTagDetail(
       {this.manageWorkTagId,

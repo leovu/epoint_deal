@@ -1,6 +1,6 @@
 class DiscountCartModel {
-  int amount;
-  int percent;
+  int? amount;
+  int? percent;
   // CheckVoucherResponseModel model;
 
   DiscountCartModel({this.amount, this.percent});

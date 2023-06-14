@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class DescriptionDetailScreen extends StatefulWidget {
 
-  final String html;
+  final String? html;
 
   DescriptionDetailScreen(this.html);
 

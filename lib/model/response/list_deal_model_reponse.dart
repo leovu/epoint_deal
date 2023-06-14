@@ -1,9 +1,9 @@
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 
 class ListDealModelResponse {
-  int errorCode;
-  String errorDescription;
-  ListDealData data;
+  int? errorCode;
+  String? errorDescription;
+  ListDealData? data;
 
   ListDealModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -18,15 +18,15 @@ class ListDealModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class ListDealData {
-  PageInfo pageInfo;
-  List<DealItems> items;
+  PageInfo? pageInfo;
+  List<DealItems>? items;
 
   ListDealData({this.pageInfo, this.items});
 
@@ -37,7 +37,7 @@ class ListDealData {
     if (json['Items'] != null) {
       items = <DealItems>[];
       json['Items'].forEach((v) {
-        items.add(new DealItems.fromJson(v));
+        items!.add(new DealItems.fromJson(v));
       });
     }
   }
@@ -45,26 +45,26 @@ class ListDealData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.pageInfo != null) {
-      data['PageInfo'] = this.pageInfo.toJson();
+      data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items.map((v) => v.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class PageInfo {
-  int total;
-  int itemPerPage;
-  int from;
-  int to;
-  int currentPage;
-  int firstPage;
-  int lastPage;
-  int previousPage;
-  int nextPage;
-  List<int> pageRange;
+  int? total;
+  int? itemPerPage;
+  int? from;
+  int? to;
+  int? currentPage;
+  int? firstPage;
+  int? lastPage;
+  int? previousPage;
+  int? nextPage;
+  List<int>? pageRange;
 
   PageInfo(
       {this.total,
@@ -108,31 +108,31 @@ class PageInfo {
 }
 
 class DealItems {
-   int dealId;
-  String dealCode;
-  String dealName;
-  String phone;
-  String createdAt;
-  String staffFullName;
-  String typeCustomer;
-  String customerCode;
-  String pipelineCode;
-  String journeyCode;
-  String journeyName;
-  String backgroundColorJourney;
-  String branchCode;
-  String branchName;
-  String orderSourceName;
-  String pipelineName;
-  num amount;
-  int probability;
-  String dateLastCare;
-  String customerName;
-  int diffDay;
-  int relatedWork;
-  int appointment;
-  bool selected;
-  List<TagData> tag;
+   int? dealId;
+  String? dealCode;
+  String? dealName;
+  String? phone;
+  String? createdAt;
+  String? staffFullName;
+  String? typeCustomer;
+  String? customerCode;
+  String? pipelineCode;
+  String? journeyCode;
+  String? journeyName;
+  String? backgroundColorJourney;
+  String? branchCode;
+  String? branchName;
+  String? orderSourceName;
+  String? pipelineName;
+  num? amount;
+  int? probability;
+  String? dateLastCare;
+  String? customerName;
+  int? diffDay;
+  int? relatedWork;
+  int? appointment;
+  bool? selected;
+  List<TagData>? tag;
 
   DealItems(
       {this.dealId,
@@ -188,7 +188,7 @@ class DealItems {
     if (json['tag'] != null) {
       tag = <TagData>[];
       json['tag'].forEach((v) {
-        tag.add(new TagData.fromJson(v));
+        tag!.add(new TagData.fromJson(v));
       });
     }
     selected = json['selected'] ?? false;
@@ -220,7 +220,7 @@ class DealItems {
     data['related_work'] = this.relatedWork;
     data['appointment '] = this.appointment;
     if (this.tag != null) {
-      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+      data['tag'] = this.tag!.map((v) => v.toJson()).toList();
     }
     data['selected'] = this.selected;
     return data;

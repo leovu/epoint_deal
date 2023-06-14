@@ -3,9 +3,9 @@
 import 'package:epoint_deal_plugin/model/promotion_model.dart';
 
 class ServiceDetailModel {
-  int errorCode;
-  String errorDescription;
-  ServiceDetailResponseModel data;
+  int? errorCode;
+  String? errorDescription;
+  ServiceDetailResponseModel? data;
 
   ServiceDetailModel({this.errorCode, this.errorDescription, this.data});
 
@@ -20,28 +20,28 @@ class ServiceDetailModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class ServiceDetailResponseModel {
-  String branchName;
-  int branchId;
-  int serviceId;
-  String serviceName;
-  String serviceCode;
-  String serviceAvatar;
-  double oldPrice;
-  double newPrice;
-  String detailDescription;
-  String description;
-  int time;
-  String serviceCategoryId;
-  String descriptionImage;
-  PromotionModel promotion;
-  List<ListImageModel> serviceImages;
+  String? branchName;
+  int? branchId;
+  int? serviceId;
+  String? serviceName;
+  String? serviceCode;
+  String? serviceAvatar;
+  double? oldPrice;
+  double? newPrice;
+  String? detailDescription;
+  String? description;
+  int? time;
+  String? serviceCategoryId;
+  String? descriptionImage;
+  PromotionModel? promotion;
+  List<ListImageModel>? serviceImages;
 
   ServiceDetailResponseModel(
       {this.branchName,
@@ -80,7 +80,7 @@ class ServiceDetailResponseModel {
     if (json['service_images'] != null) {
       serviceImages = <ListImageModel>[];
       json['service_images'].forEach((v) {
-        serviceImages.add(new ListImageModel.fromJson(v));
+        serviceImages!.add(new ListImageModel.fromJson(v));
       });
     }
   }
@@ -101,20 +101,20 @@ class ServiceDetailResponseModel {
     data['service_category_id'] = this.serviceCategoryId;
     data['description_image'] = this.descriptionImage;
     if (this.promotion != null) {
-      data['promotion'] = this.promotion.toJson();
+      data['promotion'] = this.promotion!.toJson();
     }
     if (this.serviceImages != null) {
       data['service_images'] =
-          this.serviceImages.map((v) => v.toJson()).toList();
+          this.serviceImages!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ListImageModel {
-  int serviceImageId;
-  String name;
-  String type;
+  int? serviceImageId;
+  String? name;
+  String? type;
 
   ListImageModel({this.serviceImageId, this.name, this.type});
 

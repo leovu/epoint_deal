@@ -29,10 +29,10 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class MoreInfoCreatDeal extends StatefulWidget {
-  AddDealModelRequest detailDeal;
-  List<BranchData> branchData;
+  AddDealModelRequest? detailDeal;
+  List<BranchData>? branchData;
   MoreInfoCreatDeal({
-    Key key,
+    Key? key,
     this.branchData,
     this.detailDeal,
   });
@@ -54,8 +54,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   final TextEditingController _controllerDiscount = TextEditingController();
   final FocusNode _focusDiscount = FocusNode();
 
-  List<OrderSourceData> orderSourceData;
-  OrderSourceData orderSourceSelected;
+  List<OrderSourceData>? orderSourceData;
+  OrderSourceData? orderSourceSelected;
 
   // List<TagData> tagsData;
   // List<TagData> tagsSelected;
@@ -63,8 +63,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   List<Map<String, dynamic>> productSelected = [];
 
   String tagsString = "";
-  double transportCharge;
-  double _discount;
+  double? transportCharge;
+  double? _discount;
 
   int _discountTypeDirect = 0;
 
@@ -80,7 +80,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // + thêm sản phẩm
-              (widget.detailDeal.product.length == 0)
+              (widget.detailDeal!.product!.length == 0)
                   ? InkWell(
                       onTap: _addProduct,
                       child: Container(
@@ -110,7 +110,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               ),
 
 // + thông tin thêm
-              (!showAdditionDeal && widget.detailDeal.product.length == 0)
+              (!showAdditionDeal && widget.detailDeal!.product!.length == 0)
                   ? InkWell(
                       onTap: () {
                         showAdditionDeal = !showAdditionDeal;
@@ -175,12 +175,12 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
           //     : Container(),
           Column(
             children: [
-              (widget.detailDeal.product.length > 0)
+              (widget.detailDeal!.product!.length > 0)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppLocalizations.text(LangKey.yourOrder),
+                          AppLocalizations.text(LangKey.yourOrder)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -189,7 +189,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                         InkWell(
                           onTap: _addMoreProduct,
                           child: Text(
-                            AppLocalizations.text(LangKey.chooseMoreItem),
+                            AppLocalizations.text(LangKey.chooseMoreItem)!,
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: const Color(0xFF0067AC),
@@ -220,7 +220,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
           ),
 
           // thông tin thêm
-          (!showAdditionDeal && widget.detailDeal.product.length > 0)
+          (!showAdditionDeal && widget.detailDeal!.product!.length > 0)
               ? InkWell(
                   onTap: () {
                     showAdditionDeal = !showAdditionDeal;
@@ -269,7 +269,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppLocalizations.text(LangKey.moreInformation),
+                    AppLocalizations.text(LangKey.moreInformation)!,
                     style: TextStyle(
                         fontSize: 16.0,
                         color: const Color(0xFF0067AC),
@@ -281,7 +281,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                       setState(() {});
                     },
                     child: Text(
-                      AppLocalizations.text(LangKey.collapse),
+                      AppLocalizations.text(LangKey.collapse)!,
                       style: TextStyle(
                           fontSize: 16.0,
                           color: const Color(0xFF0067AC),
@@ -299,7 +299,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Text(
-                      AppLocalizations.text(LangKey.agency),
+                      AppLocalizations.text(LangKey.agency)!,
                       style: TextStyle(
                           fontSize: 15.0,
                           color: const Color(0xFF858080),
@@ -332,14 +332,14 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             false, ontap: () async {
           print("nguon don hang");
           FocusScope.of(context).unfocus();
-          if (orderSourceData == null || orderSourceData.length == 0) {
+          if (orderSourceData == null || orderSourceData!.length == 0) {
             DealConnection.showLoading(context);
             var orderSources = await DealConnection.getOrderSource(context);
             Navigator.of(context).pop();
             if (orderSources != null) {
               orderSourceData = orderSources.data;
 
-              OrderSourceData orderSource = await showModalBottomSheet(
+              OrderSourceData? orderSource = await showModalBottomSheet(
                   context: context,
                   useRootNavigator: true,
                   isScrollControlled: true,
@@ -351,13 +351,13 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                   });
               if (orderSource != null) {
                 orderSourceSelected = orderSource;
-                widget.detailDeal.orderSourceId =
-                    orderSourceSelected.orderSourceId;
+                widget.detailDeal!.orderSourceId =
+                    orderSourceSelected!.orderSourceId;
                 setState(() {});
               }
             }
           } else {
-            OrderSourceData orderSource = await showModalBottomSheet(
+            OrderSourceData? orderSource = await showModalBottomSheet(
                 context: context,
                 useRootNavigator: true,
                 isScrollControlled: true,
@@ -391,7 +391,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             controller: _detailDealText,
             focusNode: _detailDealFocusNode,
             onChanged: (event) {
-              widget.detailDeal.dealDescription = _detailDealText.text;
+              widget.detailDeal!.dealDescription = _detailDealText.text;
             },
           ),
         ),
@@ -401,9 +401,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
 
   List<Widget> listBranch() {
     return List.generate(
-        widget.branchData.length,
+        widget.branchData!.length,
         (index) => buildItemBranch(
-                widget.branchData[index], widget.branchData[index].selected,
+                widget.branchData![index], widget.branchData![index].selected!,
                 () {
               selectedItem(index);
             }));
@@ -411,24 +411,24 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
 
   List<Widget> listProduct() {
     return List.generate(
-      widget.detailDeal.product.length,
-      (index) => product(widget.detailDeal.product[index], index, ()
+      widget.detailDeal!.product!.length,
+      (index) => product(widget.detailDeal!.product![index], index, ()
           // xoa item
           {
-        if (widget.detailDeal.product[index].objectType == "product") {
+        if (widget.detailDeal!.product![index].objectType == "product") {
           var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
-              p0.productId == widget.detailDeal.product[index].objectId);
+              p0.productId == widget.detailDeal!.product![index].objectId);
           if (event != null) {
             GlobalCart.shared.removeProduct(event);
           }
         } else {
           var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
-              p0.serviceId == widget.detailDeal.product[index].objectId);
+              p0.serviceId == widget.detailDeal!.product![index].objectId);
           if (event != null) {
             GlobalCart.shared.removeService(event);
           }
         }
-        widget.detailDeal.product.removeAt(index);
+        widget.detailDeal!.product!.removeAt(index);
         productSelected.removeAt(index);
 
         _setDiscount();
@@ -446,9 +446,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
     );
   }
 
-  Widget buildItemBranch(BranchData item, bool selected, Function ontap) {
+  Widget buildItemBranch(BranchData? item, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         width: 200,
         height: 150,
@@ -474,9 +474,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                    image: (item?.avatar == null)
+                    image: ((item?.avatar == null)
                         ? AssetImage(Assets.imgEpoint)
-                        : NetworkImage(item?.avatar),
+                        : NetworkImage(item?.avatar ?? "")) as ImageProvider<Object>,
                   )),
               child: Center(
                 child: Text(
@@ -506,12 +506,12 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   }
 
   selectedItem(int index) async {
-    List<BranchData> models = widget.branchData;
+    List<BranchData> models = widget.branchData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
-    widget.detailDeal.branchCode = models[index].branchCode;
+    widget.detailDeal!.branchCode = models[index].branchCode;
     setState(() {});
   }
 
@@ -534,7 +534,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AutoSizeText(
-                  AppLocalizations.text(LangKey.apply_promotion),
+                  AppLocalizations.text(LangKey.apply_promotion)!,
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: AppColors.primaryColor),
@@ -596,7 +596,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               stream: GlobalCart.shared.bloc.outputValue,
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
-                  double value = snapshot.data;
+                  double? value = snapshot.data as double;
                   return AutoSizeText(
                     value.getMoneyFormat(),
                     maxLines: 1,
@@ -688,7 +688,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                       stream: GlobalCart.shared.bloc.outputValue,
                       builder: (_, snapshot) {
                         if (snapshot.hasData) {
-                          double valueMoney = snapshot.data;
+                          double valueMoney = snapshot.data as double;
                           double total = valueMoney +
                               (transportCharge ?? 0) -
                               (_discount ?? 0);
@@ -750,7 +750,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
       } else if (value == 0) {
         _discount = null;
       } else {
-        double val = double.tryParse(value.toString());
+        double? val = double.tryParse(value.toString());
         if (val == 0 || val == null) {
           _discount = null;
         } else {
@@ -768,7 +768,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
       } else if (value == 0) {
         _discount = null;
       } else {
-        double val = double.tryParse(value.toString());
+        double? val = double.tryParse(value.toString());
         if (val == 0 || val == null) {
           _discount = null;
         } else {
@@ -801,17 +801,17 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
          }
     }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType,
-      int maxLenght}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType,
+      int? maxLenght}) {
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           // maxLength: (maxLenght != null) ? maxLenght : null,
           enabled: textfield,
@@ -878,11 +878,11 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             if (fillText != null) {
               print(fillText.text);
               if (fillText == _probabilityText) {
-                widget.detailDeal.probability =
+                widget.detailDeal!.probability =
                     double.tryParse(fillText.text) ?? 0;
-                if (widget.detailDeal.probability > 100) {
+                if (widget.detailDeal!.probability! > 100) {
                   _probabilityText.text = "100";
-                  widget.detailDeal.probability = 100;
+                  widget.detailDeal!.probability = 100;
                   _probabilityText.selection = TextSelection.fromPosition(
                       TextPosition(offset: _probabilityText.text.length));
                 }
@@ -902,7 +902,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             ? await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductDetailScreen(
                     ProductModel(
-                        newPrice: item.price.toDouble(),
+                        newPrice: item.price!.toDouble(),
                         productId: item.objectId,
                         qty: item.quantity,
                         note: item.note),
@@ -910,20 +910,20 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                     isUpdate: true)))
             : await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ServiceDetailScreen(
-                    ServiceModel(newPrice: item.price.toDouble(), serviceId: item.objectId, qty: item.quantity, note: item.note),
+                    ServiceModel(newPrice: item.price!.toDouble(), serviceId: item.objectId, qty: item.quantity, note: item.note),
                     false,
                     isUpdate: true)));
 
         if ((event != null)) {
 
-          item.price = event["new_price"] ?? "";
+          item.price = event["new_price"] ?? "" as num?;
           item.quantity = event["quantity"] ?? 0;
           item.note = event["note"] ?? "";
-          item.amount = (item.quantity ?? 0) * item.price ?? 0;
+          item.amount = (item.quantity ?? 0) * item.price! ?? 0;
 
           if (item.objectType == "product") {
             var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
-                p0.productId == widget.detailDeal.product[index].objectId);
+                p0.productId == widget.detailDeal!.product![index].objectId);
             if (event != null) {
               event.price = item.price;
               event.qty = item.quantity;
@@ -931,7 +931,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             }
           } else {
             var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
-                p0.serviceId == widget.detailDeal.product[index].objectId);
+                p0.serviceId == widget.detailDeal!.product![index].objectId);
             if (event != null) {
               event.price = item.price;
               event.qty = item.quantity;
@@ -947,7 +947,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(AppSizes.minPadding),
+        padding: EdgeInsets.all(AppSizes.minPadding!),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -980,7 +980,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                       ]))),
                 ),
                 InkWell(
-                    onTap: ontapDelete,
+                    onTap: ontapDelete as void Function()?,
                     child: Icon(
                       Icons.clear,
                       color: Color(
@@ -997,7 +997,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${(item.amount ?? 0).getMoneyFormat()} VND",
+                  "${(item.amount ?? 0).getMoneyFormatNum()} VND",
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -1062,6 +1062,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   }
 
   void _addProduct() async {
+    FocusScope.of(context).unfocus();
     final result = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
     // GlobalCart.shared.clearCart();
@@ -1071,7 +1072,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
       if (result.length > 0) {
         productSelected.clear();
         for (int i = 0; i < result.length; i++) {
-          widget.detailDeal.product.add(Product(
+          widget.detailDeal!.product!.add(Product(
               objectType: result[i]["object_type"] ?? "",
               objectName: result[i]["object_name"] ?? "",
               objectCode: result[i]["objectCode"] ?? "",
@@ -1080,7 +1081,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               price: result[i]["price"] ?? 0,
               amount:
                   (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
-          productSelected.add(widget.detailDeal.product[i].toJson());
+          productSelected.add(widget.detailDeal!.product![i].toJson());
         }
       }
     }
@@ -1090,16 +1091,17 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   }
 
   void _addMoreProduct() async {
+    FocusScope.of(context).unfocus();
     GlobalCart.shared.clearCart();
 
     if (productSelected.length > 0) {
       productSelected.forEach((v) {
         if (v['object_type'] == 'product') {
           ProductModel item = ProductModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addProduct(item, item.price, item.qty.toDouble(), item.note);
+          GlobalCart.shared.addProduct(item, item.price as double?, item.qty!.toDouble(), item.note);
         } else {
           ServiceModel item = ServiceModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addService(item, item.price, item.qty, item.note);
+          GlobalCart.shared.addService(item, item.price as double?, item.qty as double?, item.note);
         }
       });
     }
@@ -1109,16 +1111,16 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
     // GlobalCart.shared.clearCart();
     print(result);
 
-    for (int i = 0; i < widget.detailDeal.product.length; i++) {
-      productSelected.add(widget.detailDeal.product[i].toJson());
+    for (int i = 0; i < widget.detailDeal!.product!.length; i++) {
+      productSelected.add(widget.detailDeal!.product![i].toJson());
     }
 
     if (result != null) {
-      widget.detailDeal.product.clear();
+      widget.detailDeal!.product!.clear();
       if (result.length > 0) {
         productSelected.clear();
         for (int i = 0; i < result.length; i++) {
-          widget.detailDeal.product.add(Product(
+          widget.detailDeal!.product!.add(Product(
               objectType: result[i]["object_type"] ?? "",
               objectName: result[i]["object_name"] ?? "",
               objectCode: result[i]["objectCode"] ?? "",
@@ -1128,7 +1130,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
               amount:
                   (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
 
-          productSelected.add(widget.detailDeal.product[i].toJson());
+          productSelected.add(widget.detailDeal!.product![i].toJson());
         }
         ;
       }

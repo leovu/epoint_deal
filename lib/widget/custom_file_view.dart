@@ -8,8 +8,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class CustomFileView extends StatefulWidget {
 
-  final String url;
-  final String title;
+  final String? url;
+  final String? title;
 
   CustomFileView(this.url, this.title);
 
@@ -19,7 +19,7 @@ class CustomFileView extends StatefulWidget {
 
 class CustomFileViewState extends State<CustomFileView> {
 
-  WebViewController _controller;
+  late WebViewController _controller;
 
   bool _isStarted = false;
 
@@ -43,7 +43,7 @@ class CustomFileViewState extends State<CustomFileView> {
       onWebResourceError: (WebResourceError error) {},
     ),
   )
-  ..loadRequest(Uri.parse(Platform.isAndroid?"https://docs.google.com/viewer?embedded=true&url=${widget.url}":widget.url));
+  ..loadRequest(Uri.parse(Platform.isAndroid?"https://docs.google.com/viewer?embedded=true&url=${widget.url}":widget.url!));
   }
 
   @override
@@ -62,11 +62,11 @@ class CustomFileViewState extends State<CustomFileView> {
           // actionsIconTheme: Navigator.of(context).pop(true),
           backgroundColor: AppColors.primaryColor,
           title: Text(
-            widget.title,
+            widget.title!,
             style: TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
-      body: ["jpeg", "jpg", "png"].contains(widget.url.split(".").last)?CustomNetworkImage(
+      body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)?CustomNetworkImage(
         width: double.infinity,
         height: double.infinity,
         url: widget.url,

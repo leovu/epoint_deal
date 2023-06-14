@@ -1,8 +1,8 @@
 class AssignRevokeDealModelRequest {
-  String type;
-  String dealCode;
-  int saleId;
-  int timeRevokeLead;
+  String? type;
+  String? dealCode;
+  int? saleId;
+  int? timeRevokeLead;
 
   AssignRevokeDealModelRequest(
       {this.type, this.dealCode, this.saleId, this.timeRevokeLead});

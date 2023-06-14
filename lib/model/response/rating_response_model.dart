@@ -1,12 +1,12 @@
 class RatingResponseModel {
-  int totalRating;
-  double avgRating;
-  int rating1;
-  int rating2;
-  int rating3;
-  int rating4;
-  int rating5;
-  List<ModelRating> ratings;
+  int? totalRating;
+  double? avgRating;
+  int? rating1;
+  int? rating2;
+  int? rating3;
+  int? rating4;
+  int? rating5;
+  List<ModelRating>? ratings;
 
   RatingResponseModel(
       {this.totalRating,
@@ -29,7 +29,7 @@ class RatingResponseModel {
     if (json['ratings'] != null) {
       ratings = [];
       json['ratings'].forEach((v) {
-        ratings.add(new ModelRating.fromJson(v));
+        ratings!.add(new ModelRating.fromJson(v));
       });
     }
   }
@@ -44,23 +44,23 @@ class RatingResponseModel {
     data['rating_4'] = this.rating4;
     data['rating_5'] = this.rating5;
     if (this.ratings != null) {
-      data['ratings'] = this.ratings.map((v) => v.toJson()).toList();
+      data['ratings'] = this.ratings!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ModelRating {
-  int id;
-  String object;
-  String objectValue;
-  int ratingBy;
-  double ratingValue;
-  String comment;
-  String createdAt;
-  String updatedAt;
-  String fullName;
-  bool isExpanded;
+  int? id;
+  String? object;
+  String? objectValue;
+  int? ratingBy;
+  double? ratingValue;
+  String? comment;
+  String? createdAt;
+  String? updatedAt;
+  String? fullName;
+  bool? isExpanded;
 
   ModelRating(
       {this.id,

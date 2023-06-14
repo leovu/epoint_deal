@@ -11,10 +11,10 @@ import 'package:intl/intl.dart';
 
 class FilterByClosingDate extends StatefulWidget {
 
-    FilterScreenModel filterScreenModel = FilterScreenModel();
-  List<ClosingDateModel> closingDateOptions = <ClosingDateModel>[];
-  String id_closing_date;
-  FilterByClosingDate({Key key, this.closingDateOptions, this.filterScreenModel, this.id_closing_date});
+    FilterScreenModel? filterScreenModel = FilterScreenModel();
+  List<ClosingDateModel>? closingDateOptions = <ClosingDateModel>[];
+  String? id_closing_date;
+  FilterByClosingDate({Key? key, this.closingDateOptions, this.filterScreenModel, this.id_closing_date});
 
   @override
   _FilterByClosingDateState createState() => _FilterByClosingDateState();
@@ -23,8 +23,8 @@ class FilterByClosingDate extends StatefulWidget {
 class _FilterByClosingDateState extends State<FilterByClosingDate> {
   // ClosingDateModel closingDateSeleted = ClosingDateModel();
 
-  DateTime _fromDate;
-  DateTime _toDate;
+  DateTime? _fromDate;
+  DateTime? _toDate;
   DateTime _now = DateTime.now();
   final TextEditingController _fromDateText = TextEditingController();
   final TextEditingController _toDateText = TextEditingController();
@@ -34,23 +34,23 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
     super.initState();
     // _toDate = _now;
 
-    if (widget.filterScreenModel.fromDate_closing_date != null) {
-      _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.fromDate_closing_date);
-      _fromDate = widget.filterScreenModel.fromDate_closing_date;
+    if (widget.filterScreenModel!.fromDate_closing_date != null) {
+      _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel!.fromDate_closing_date!);
+      _fromDate = widget.filterScreenModel!.fromDate_closing_date;
     }
 
-    if (widget.filterScreenModel.toDate_closing_date != null) {
-      _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.toDate_closing_date);
-      _toDate = widget.filterScreenModel.toDate_closing_date;
+    if (widget.filterScreenModel!.toDate_closing_date != null) {
+      _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel!.toDate_closing_date!);
+      _toDate = widget.filterScreenModel!.toDate_closing_date;
     }
 
-    if (widget.filterScreenModel.id_closing_date != "") {
-      for (int i = 0; i < widget.closingDateOptions.length ; i++) {
-          if (widget.closingDateOptions[i].closingDateID == int.parse(widget.filterScreenModel.id_closing_date) ) {
-            widget.closingDateOptions[i].selected = true;
-            widget.id_closing_date =  "${widget.closingDateOptions[i].closingDateID}";
+    if (widget.filterScreenModel!.id_closing_date != "") {
+      for (int i = 0; i < widget.closingDateOptions!.length ; i++) {
+          if (widget.closingDateOptions![i].closingDateID == int.parse(widget.filterScreenModel!.id_closing_date!) ) {
+            widget.closingDateOptions![i].selected = true;
+            widget.id_closing_date =  "${widget.closingDateOptions![i].closingDateID}";
           } else {
-            widget.closingDateOptions[i].selected = false;
+            widget.closingDateOptions![i].selected = false;
           }
       }
     } else {
@@ -79,10 +79,10 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                 margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
                 child: Wrap(
                   children: List.generate(
-                      widget.closingDateOptions.length,
+                      widget.closingDateOptions!.length,
                       (index) => _optionItem(
-                              widget.closingDateOptions[index].closingDateName,
-                              widget.closingDateOptions[index].selected, () {
+                              widget.closingDateOptions![index].closingDateName,
+                              widget.closingDateOptions![index].selected!, () {
                             selectedSource(index);
                           })),
                   spacing: 20,
@@ -95,7 +95,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                       children: [
                         // khung thời gian tự chọn
                         Text(
-                          AppLocalizations.text(LangKey.customerTimeFrame),
+                          AppLocalizations.text(LangKey.customerTimeFrame)!,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: const Color(0xFF8E8E8E),
@@ -113,7 +113,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                                         8,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
-                                     widget.id_closing_date != "" ? _fromDateText : "", () {
+                                     widget.id_closing_date != "" ? _fromDateText : "" as TextEditingController, () {
                                   _showFromDatePickerCreateDate();
                                 })),
                             Container(
@@ -130,7 +130,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                                         4,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
-                                     widget.id_closing_date != "" ?  _toDateText : "", () {
+                                     widget.id_closing_date != "" ?  _toDateText : "" as TextEditingController, () {
                                   _showToDatePickerCreateDate();
                                 }))
                           ],
@@ -144,7 +144,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
   }
 
   _showFromDatePickerCreateDate() {
-    DateTime selectedDate = widget.filterScreenModel.fromDate_closing_date ?? _fromDate ?? _toDate ?? _now;
+    DateTime selectedDate = widget.filterScreenModel!.fromDate_closing_date ?? _fromDate ?? _toDate ?? _now;
 
     showModalBottomSheet(
         context: context,
@@ -172,12 +172,12 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                   Global.validateClosingDate = true;
                 }
                 _fromDate = selectedDate;
-                widget.filterScreenModel.fromDate_closing_date = selectedDate;
+                widget.filterScreenModel!.fromDate_closing_date = selectedDate;
 
                 _fromDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
-                print(widget.filterScreenModel.filterModel.createdAt);
+                widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(_fromDate!)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
+                print(widget.filterScreenModel!.filterModel!.createdAt);
                 Navigator.of(context).pop();
               },
               haveBnConfirm: true,
@@ -188,10 +188,10 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
 
   _showToDatePickerCreateDate() {
     DateTime selectedDate = _toDate ?? _now;
-    DateTime maximumTime = _now;
+    DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
         _toDate?.month == _now.month &&
-        _toDate?.day > _now.day) maximumTime = _toDate;
+        (_toDate?.day ?? 0) > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -219,11 +219,11 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                   Global.validateClosingDate = true;
                 }
                 _toDate = selectedDate;
-                widget.filterScreenModel.toDate_closing_date = selectedDate;
+                widget.filterScreenModel!.toDate_closing_date = selectedDate;
                 _toDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
-                print(widget.filterScreenModel.filterModel.closingDate);
+                widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate!)}";
+                print(widget.filterScreenModel!.filterModel!.closingDate);
                 Navigator.of(context).pop();
               },
               haveBnConfirm: true,
@@ -233,9 +233,9 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
   }
 
   Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -261,9 +261,9 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
     );
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -280,7 +280,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -296,7 +296,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -312,50 +312,50 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
       _fromDateText.text = "";
       _toDateText.text = "";
 
-      widget.filterScreenModel.fromDate_closing_date = null;
-      widget.filterScreenModel.toDate_closing_date = null;
+      widget.filterScreenModel!.fromDate_closing_date = null;
+      widget.filterScreenModel!.toDate_closing_date = null;
       _fromDate = null;
       _toDate = null;
     } else {
       Global.validateClosingDate = false;
     }
 
-    List<ClosingDateModel> models = widget.closingDateOptions;
+    List<ClosingDateModel> models = widget.closingDateOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
     widget.id_closing_date = "${models[index].closingDateID}";
-    widget.filterScreenModel.id_closing_date = "${index}";
+    widget.filterScreenModel!.id_closing_date = "${index}";
     switch (index) {
       case 0:
-      widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(_now)} - ${DateFormat("dd/MM/yyyy").format(_now)}";
+      widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(_now)} - ${DateFormat("dd/MM/yyyy").format(_now)}";
 
-      print(widget.filterScreenModel.filterModel.closingDate);
+      print(widget.filterScreenModel!.filterModel!.closingDate);
         break;
       case 1:
-        widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 1)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
-         print(widget.filterScreenModel.filterModel.closingDate);
+        widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 1)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
+         print(widget.filterScreenModel!.filterModel!.closingDate);
         break;
       case 2:
-        widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 7)))} - ${DateFormat("dd/MM/yyyy").format(_now)}";
-         print(widget.filterScreenModel.filterModel.closingDate);
+        widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 7)))} - ${DateFormat("dd/MM/yyyy").format(_now)}";
+         print(widget.filterScreenModel!.filterModel!.closingDate);
         break;
       case 3:
-        widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 31)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
-         print(widget.filterScreenModel.filterModel.closingDate);
+        widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 31)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
+         print(widget.filterScreenModel!.filterModel!.closingDate);
         break;
       case 4:
-        widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month +1, 0).toString()))}";
-         print(widget.filterScreenModel.filterModel.closingDate);
+        widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month +1, 0).toString()))}";
+         print(widget.filterScreenModel!.filterModel!.closingDate);
         break;
       case 5:
        var lastmonth = _now.month - 1;
-        widget.filterScreenModel.filterModel.closingDate = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month - 1, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, lastmonth +1, 0).toString()))}";
-         print(widget.filterScreenModel.filterModel.closingDate);
+        widget.filterScreenModel!.filterModel!.closingDate = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month - 1, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, lastmonth +1, 0).toString()))}";
+         print(widget.filterScreenModel!.filterModel!.closingDate);
         break;
       case 6:
-        widget.filterScreenModel.filterModel.closingDate = "";
+        widget.filterScreenModel!.filterModel!.closingDate = "";
         break;
       default:
     }

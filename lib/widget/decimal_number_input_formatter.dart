@@ -8,7 +8,7 @@ class DecimalNumberInputFormatter extends TextInputFormatter {
     if (newValue.text != "") {
       try {
         String value = newValue.text.replaceAll(",", decimalSympol);
-        TextSelection selection;
+        TextSelection? selection;
         if (decimalSympol.allMatches(value).length > 1) {
           value = value.substring(0, value.length - 1);
           selection = TextSelection.collapsed(offset: value.length);

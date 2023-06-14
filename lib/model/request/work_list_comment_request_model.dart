@@ -1,5 +1,5 @@
 class WorkListCommentRequestModel {
-  int dealId;
+  int? dealId;
 
   WorkListCommentRequestModel({this.dealId});
 

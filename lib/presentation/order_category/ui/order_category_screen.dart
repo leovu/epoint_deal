@@ -26,7 +26,7 @@ class OrderCategoryScreen extends StatefulWidget {
 
 class _OrderCategoryScreenState extends State<OrderCategoryScreen>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
   Widget build(BuildContext context) {
     return CustomScaffold(
       body: CupertinoPageScaffold(
-        navigationBar: _navigationBar(),
+        navigationBar: _navigationBar() as ObstructingPreferredSizeWidget?,
         child: Column(
           children: [
             Expanded(
@@ -113,8 +113,8 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
               initialData: 0.0,
               stream: GlobalCart.shared.bloc.outputValue,
               builder: (_, snapshot) {
-                if (snapshot.hasData && snapshot.data > 0) {
-                  double value = snapshot.data;
+                if (snapshot.hasData && (snapshot.data as double) > 0) {
+                  double? value = snapshot.data as double?;
                   return Container(
                     margin:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -163,7 +163,7 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
                                 borderRadius: BorderRadius.circular(20.0)),
                             child: Center(
                               child: AutoSizeText(
-                                AppLocalizations.text(LangKey.done),
+                                AppLocalizations.text(LangKey.done)!,
                                 textScaleFactor: 1.05,
                                 style: TextStyle(
                                     color: AppColors.white,
@@ -189,7 +189,7 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
   final OrderCategoryScreenController searchController =
       OrderCategoryScreenController();
 
-  TextEditingController _controllerSearch;
+  TextEditingController? _controllerSearch;
   Widget _navigationBar() {
     return CupertinoNavigationBar(
       middle: CupertinoSearchTextField(
@@ -210,5 +210,5 @@ class _OrderCategoryScreenState extends State<OrderCategoryScreen>
 }
 
 class OrderCategoryScreenController {
-  void Function(String value) search;
+  late void Function(String value) search;
 }

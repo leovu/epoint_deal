@@ -3,9 +3,9 @@ import 'package:epoint_deal_plugin/model/response/rating_response_model.dart';
 
 
 class ProductDetailModel {
-  int errorCode;
-  String errorDescription;
-  ProductDetailResponseModel data;
+  int? errorCode;
+  String? errorDescription;
+  ProductDetailResponseModel? data;
 
   ProductDetailModel({this.errorCode, this.errorDescription, this.data});
 
@@ -20,38 +20,38 @@ class ProductDetailModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class ProductDetailResponseModel {
-  int productId;
-  String productCode;
-  String productName;
-  String avatar;
-  int isNew;
-  double oldPrice;
-  double newPrice;
-  String description;
-  String descriptionDetail;
-  String typeApp;
-  int isSales;
-  int percentSale;
-  int productCategoryId;
-  String categoryName;
-  String unitName;
-  int productParentId;
-  String descriptionImage;
-  PromotionModel promotion;
-  String productModelName;
-  String madeIn;
-  String supplierName;
-  int isReview;
-  List<ListImageModel> listImage;
-  int isLike;
-  RatingResponseModel rating;
+  int? productId;
+  String? productCode;
+  String? productName;
+  String? avatar;
+  int? isNew;
+  double? oldPrice;
+  double? newPrice;
+  String? description;
+  String? descriptionDetail;
+  String? typeApp;
+  int? isSales;
+  int? percentSale;
+  int? productCategoryId;
+  String? categoryName;
+  String? unitName;
+  int? productParentId;
+  String? descriptionImage;
+  PromotionModel? promotion;
+  String? productModelName;
+  String? madeIn;
+  String? supplierName;
+  int? isReview;
+  List<ListImageModel>? listImage;
+  int? isLike;
+  RatingResponseModel? rating;
 
   ProductDetailResponseModel(
       {this.productId,
@@ -108,7 +108,7 @@ class ProductDetailResponseModel {
     if (json['list_image'] != null) {
       listImage = [];
       json['list_image'].forEach((v) {
-        listImage.add(new ListImageModel.fromJson(v));
+        listImage!.add(new ListImageModel.fromJson(v));
       });
     }
     isLike = json['is_like'];
@@ -136,7 +136,7 @@ class ProductDetailResponseModel {
     data['product_parent_id'] = this.productParentId;
     data['description_image'] = this.descriptionImage;
     if (this.promotion != null) {
-      data['promotion'] = this.promotion.toJson();
+      data['promotion'] = this.promotion!.toJson();
     }
     data['product_model_name'] = this.productModelName;
     data['made_in'] = this.madeIn;
@@ -145,15 +145,15 @@ class ProductDetailResponseModel {
     data['list_image'] = this.listImage;
     data['is_like'] = this.isLike;
     if (this.rating != null) {
-      data['rating'] = this.rating.toJson();
+      data['rating'] = this.rating!.toJson();
     }
     return data;
   }
 }
 
 class ListImageModel {
-  int productImageId;
-  String image;
+  int? productImageId;
+  String? image;
 
   ListImageModel({this.productImageId, this.image});
 

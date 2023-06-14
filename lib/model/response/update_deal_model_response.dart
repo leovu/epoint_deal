@@ -1,7 +1,7 @@
 class UpdateDealModelResponse {
-  int errorCode;
-  String errorDescription;
-  int data;
+  int? errorCode;
+  String? errorDescription;
+  int? data;
 
   UpdateDealModelResponse({this.errorCode, this.errorDescription, this.data});
 

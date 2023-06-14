@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
 
-  final Function onTap;
-  final String icon;
-  final Widget child;
-  final Color color;
+  final Function? onTap;
+  final String? icon;
+  final Widget? child;
+  final Color? color;
   final bool isText;
 
   CustomIconButton({

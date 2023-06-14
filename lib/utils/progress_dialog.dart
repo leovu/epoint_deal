@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 class ProgressDialog {
   bool _isShowing = false;
 
-  BuildContext buildContext;
+  BuildContext? buildContext;
 
   ProgressDialog(this.buildContext);
 
@@ -23,11 +23,11 @@ class ProgressDialog {
 
   hide() {
     _isShowing = false;
-    Navigator.of(buildContext).pop();
+    Navigator.of(buildContext!).pop();
   }
 
   _showDialog() {
-    Navigator.of(buildContext, rootNavigator: true).push(
+    Navigator.of(buildContext!, rootNavigator: true).push(
       PageRouteBuilder(
         opaque: false,
         // settings: RouteSettings(name: AppKeys.keyHUD),

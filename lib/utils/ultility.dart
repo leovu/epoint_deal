@@ -1,4 +1,5 @@
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 
 void keyboardDismissOnTap(BuildContext context) {
@@ -13,22 +14,22 @@ void keyboardDismissOnTap(BuildContext context) {
 }
 
 extension IterableModifier<E> on Iterable<E> {
-  E firstWhereOrNull(bool Function(E) test) =>
-      cast<E>().firstWhere((v) => v != null && test(v), orElse: () => null);
+  E? firstWhereOrNull(bool Function(E) test) =>
+      cast<E>().firstWhere((v) => v != null && test(v));
 }
 
 class Validators {
   var validatePhone = RegExp(r'(0)+([0-9]{9,10})\b');
   var validateNumber = RegExp(r"^[\d]*$");
 
- bool isValidPhone(String phone){
+ bool isValidPhone(String? phone){
     if (phone!=null&&phone.isNotEmpty&&validatePhone.hasMatch(phone)){
       return true;
     }
     return false;
   }
 
-  bool isNumber(String number){
+  bool isNumber(String? number){
     if (number!=null&&number.isNotEmpty&&validateNumber.hasMatch(number)){
       return true;
     }

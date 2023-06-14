@@ -6,8 +6,8 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class BranchModal extends StatefulWidget {
-  List<BranchData> branchData;
-   BranchModal({ Key key , this.branchData});
+  List<BranchData>? branchData;
+   BranchModal({ Key? key , this.branchData});
 
   @override
   _BranchModalState createState() => _BranchModalState();
@@ -31,7 +31,7 @@ class _BranchModalState extends State<BranchModal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(width: 30),
-              Text(AppLocalizations.text(LangKey.chooseItinerary)
+              Text(AppLocalizations.text(LangKey.chooseItinerary)!
               
               ,style: TextStyle(
                   fontSize: 18.0,
@@ -66,9 +66,9 @@ class _BranchModalState extends State<BranchModal> {
 
   List<Widget> _listWidget() {
     return (widget.branchData != null) ?  List.generate(
-        widget.branchData.length,
+        widget.branchData!.length,
         (index) => _buildItem(
-                widget.branchData[index].address, widget.branchData[index].selected,
+                widget.branchData![index].address!, widget.branchData![index].selected!,
                 () {
               selectedItem(index);
             })) : [CustomDataNotFound()];
@@ -76,7 +76,7 @@ class _BranchModalState extends State<BranchModal> {
 
   Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -95,7 +95,7 @@ class _BranchModalState extends State<BranchModal> {
   }
 
   selectedItem(int index) async {
-    List<BranchData> models = widget.branchData;
+    List<BranchData> models = widget.branchData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

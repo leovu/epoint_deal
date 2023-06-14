@@ -10,10 +10,10 @@ class CustomDialog extends StatelessWidget {
   final Widget screen;
   final bool bottom;
   final bool cancelable;
-  final List<KeyboardActionsItem> actions;
+  final List<KeyboardActionsItem>? actions;
 
   CustomDialog({
-    @required this.screen,
+    required this.screen,
     this.bottom = false,
     this.cancelable = true,
     this.actions
@@ -38,7 +38,7 @@ class CustomDialog extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: AppSizes.maxPadding),
+                    margin: EdgeInsets.symmetric(horizontal: AppSizes.maxPadding!),
                     child: screen,
                   )
                 ],

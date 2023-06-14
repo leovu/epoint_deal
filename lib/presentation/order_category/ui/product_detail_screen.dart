@@ -28,7 +28,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:keyboard_actions/keyboard_actions_item.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductModel model;
@@ -51,13 +51,13 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
   final FocusNode _focusNote = FocusNode();
   final TextEditingController _controllerNote = TextEditingController();
 
-  double _heightHeader = AppSizes.maxWidth * 0.9;
-  double _heightHeaderImage = (AppSizes.maxWidth - AppSizes.maxPadding * 2) / 5;
+  double _heightHeader = AppSizes.maxWidth! * 0.9;
+  double _heightHeaderImage = (AppSizes.maxWidth! - AppSizes.maxPadding! * 2) / 5;
 
-  double _widthImageDescription = AppSizes.maxWidth - AppSizes.maxPadding * 2;
+  double _widthImageDescription = AppSizes.maxWidth! - AppSizes.maxPadding! * 2;
   double _heightImageDescription = 100;
 
-  ProductDetailBloc _bloc;
+  late ProductDetailBloc _bloc;
 
   @override
   void initState() {
@@ -100,7 +100,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   _update() {
-    widget.model.newPrice = AppFormat.moneyFormat.parse(_controllerPrice.text);
+    widget.model.newPrice = AppFormat.moneyFormat.parse(_controllerPrice.text) as double?;
     widget.model.qty = double.tryParse(_controllerQuantity.text);
     widget.model.note = _controllerNote.text;
     Navigator.of(context).pop(widget.model.toJson());
@@ -112,7 +112,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     }
     GlobalCart.shared.addProduct(
         widget.model,
-        AppFormat.moneyFormat.parse(_controllerPrice.text),
+        AppFormat.moneyFormat.parse(_controllerPrice.text) as double?,
         double.tryParse(_controllerQuantity.text),
         _controllerNote.text
     );
@@ -131,7 +131,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             radius: 0.0,
           ),
           Container(
-            margin: EdgeInsets.all(AppSizes.maxPadding),
+            margin: EdgeInsets.all(AppSizes.maxPadding!),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -143,7 +143,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 CustomSkeleton(
                   height: 20.0,
-                  width: AppSizes.maxWidth / 2,
+                  width: AppSizes.maxWidth! / 2,
                 ),
               ],
             ),
@@ -153,7 +153,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildHeaderImage(String url) {
+  Widget _buildHeaderImage(String? url) {
     return InkWell(
       child: CustomNetworkImage(
         width: _heightHeaderImage,
@@ -166,7 +166,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildHeader(ProductDetailResponseModel model) {
+  Widget _buildHeader(ProductDetailResponseModel? model) {
     if (model == null) return _buildSkeletonHeader();
 
     double rating = (model.rating?.avgRating) ?? 0;
@@ -184,7 +184,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                 return CustomNetworkImage(
                   width: AppSizes.maxWidth,
                   height: _heightHeader,
-                  url: snapshot.data,
+                  url: snapshot.data as String,
                   fit: BoxFit.contain,
                   backgroundColor: Colors.white,
                 );
@@ -193,9 +193,9 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
         Container(
           margin: EdgeInsets.only(
               top: _heightHeader - _heightHeaderImage / 2,
-              right: AppSizes.maxPadding,
-              left: AppSizes.maxPadding,
-              bottom: AppSizes.maxPadding),
+              right: AppSizes.maxPadding!,
+              left: AppSizes.maxPadding!,
+              bottom: AppSizes.maxPadding!),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -208,13 +208,13 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (_, index) =>
-                              _buildHeaderImage(model.listImage[index].image),
+                              _buildHeaderImage(model.listImage![index].image),
                           separatorBuilder: (_, index) => Container(
                                 width: AppSizes.minPadding,
                               ),
-                          itemCount: model.listImage.length > 5
+                          itemCount: model.listImage!.length > 5
                               ? 5
-                              : model.listImage.length),
+                              : model.listImage!.length),
                     ),
               Container(
                 height: AppSizes.minPadding,
@@ -233,14 +233,14 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                                       borderRadius: BorderRadius.horizontal(
                                           right: Radius.circular(50.0)),
                                       color: Colors.red),
-                                  padding: EdgeInsets.all(AppSizes.minPadding),
+                                  padding: EdgeInsets.all(AppSizes.minPadding!),
                                   child: AutoSizeText(
                                     model.promotion == null
                                         ? ""
-                                        : model.promotion.gift != null
-                                            ? model.promotion.gift
-                                            : model.promotion.price != null
-                                                ? model.promotion.price
+                                        : model.promotion!.gift != null
+                                            ? model.promotion!.gift!
+                                            : model.promotion!.price != null
+                                                ? model.promotion!.price!
                                                 : "",
                                     style: AppTextStyles.style13WhiteNormal,
                                     minFontSize: 4.0,
@@ -309,10 +309,10 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                         size: 20.0,
                         color: Colors.yellow,
                         borderColor: Colors.orange,
-                        rating: rating ?? 0.0,
+                        rating: rating,
                         allowHalfRating: true,
                         starCount: 5,
-                        isReadOnly: true,
+                        
                       )
                     ],
                   ),
@@ -351,7 +351,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     return Container(
       color: isColor ? AppColors.borderColor : Colors.white,
       padding: EdgeInsets.symmetric(
-          horizontal: AppSizes.minPadding, vertical: AppSizes.maxPadding),
+          horizontal: AppSizes.minPadding!, vertical: AppSizes.maxPadding!),
       child: Row(
         children: [
           Flexible(
@@ -383,20 +383,20 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
         children: [
           CustomSkeleton(),
           Container(
-            height: AppSizes.minPadding / 2,
+            height: AppSizes.minPadding! / 2,
           ),
           CustomSkeleton(),
           Container(
-            height: AppSizes.minPadding / 2,
+            height: AppSizes.minPadding! / 2,
           ),
           CustomSkeleton(
-            width: AppSizes.maxWidth / 2,
+            width: AppSizes.maxWidth! / 2,
           ),
           Container(
             height: AppSizes.minPadding,
           ),
           CustomSkeleton(
-            width: AppSizes.maxWidth - AppSizes.maxPadding * 2,
+            width: AppSizes.maxWidth! - AppSizes.maxPadding! * 2,
             height: 100,
             radius: 0.0,
           )
@@ -405,16 +405,16 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildProductInfo(ProductDetailResponseModel model) {
+  Widget _buildProductInfo(ProductDetailResponseModel? model) {
     return Container(
       decoration:
           BoxDecoration(boxShadow: [_buildBoxShadow()], color: Colors.white),
-      padding: EdgeInsets.all(AppSizes.maxPadding),
+      padding: EdgeInsets.all(AppSizes.maxPadding!),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.details),
+            AppLocalizations.text(LangKey.details)!,
             style: AppTextStyles.style17BlackBold,
           ),
           Container(
@@ -426,18 +426,18 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildProductInfoRow(
-                        AppLocalizations.text(LangKey.category).toUpperCase(),
+                        AppLocalizations.text(LangKey.category)!.toUpperCase(),
                         "${AppLocalizations.text(LangKey.product)} > ${model.categoryName ?? ""}",
                         isColor: true),
                     _buildProductInfoRow(
-                        AppLocalizations.text(LangKey.supplier).toUpperCase(),
+                        AppLocalizations.text(LangKey.supplier)!.toUpperCase(),
                         model.supplierName ?? ""),
                     _buildProductInfoRow(
-                        AppLocalizations.text(LangKey.trademark).toUpperCase(),
+                        AppLocalizations.text(LangKey.trademark)!.toUpperCase(),
                         model.productModelName ?? "",
                         isColor: true),
                     _buildProductInfoRow(
-                        AppLocalizations.text(LangKey.origin).toUpperCase(),
+                        AppLocalizations.text(LangKey.origin)!.toUpperCase(),
                         model.madeIn ?? ""),
                   ],
                 ),
@@ -445,7 +445,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             height: AppSizes.maxPadding,
           ),
           Text(
-            AppLocalizations.text(LangKey.product_description),
+            AppLocalizations.text(LangKey.product_description)!,
             style: AppTextStyles.style17BlackBold,
           ),
           Container(
@@ -517,10 +517,10 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   KeyboardActionsItem buildKeyboardAction(FocusNode node,
-      {String text = "Done", Function onTap}) {
+      {String text = "Done", Function? onTap}) {
     return KeyboardActionsItem(focusNode: node, toolbarButtons: [
       (node) => InkWell(
-            onTap: onTap ?? () => node.unfocus(),
+            onTap: onTap as void Function()? ?? () => node.unfocus(),
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -538,7 +538,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
           border: Border(top: BorderSide(color: AppColors.borderColor))),
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding, vertical: AppSizes.minPadding),
+            horizontal: AppSizes.maxPadding!, vertical: AppSizes.minPadding!),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: [
@@ -637,7 +637,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
         stream: _bloc.outputModel,
         initialData: null,
         builder: (_, snapshot) {
-          ProductDetailResponseModel model = snapshot.data;
+          ProductDetailResponseModel? model = snapshot.data as ProductDetailResponseModel?;
           return Column(
             children: [
               Expanded(
@@ -660,7 +660,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _navigationBar() {
     return CupertinoNavigationBar(
-      middle: Text(AppLocalizations.text(LangKey.product),
+      middle: Text(AppLocalizations.text(LangKey.product)!,
           style: TextStyle(
               fontSize: AppTextSizes.size16, fontWeight: FontWeight.w600)),
       // backgroundColor: AppColors.primaryColor,
@@ -672,7 +672,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     return CustomScaffold(
       actions: _listKeyboardAction(),
       body: CupertinoPageScaffold(
-          navigationBar: _navigationBar(), child: _buildBody()),
+          navigationBar: _navigationBar() as ObstructingPreferredSizeWidget?, child: _buildBody()),
     );
   }
 }

@@ -9,9 +9,9 @@ import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class JourneyModal extends StatefulWidget {
-  List<JourneyData> journeys = <JourneyData>[];
-  JourneyData journeySelected;
- JourneyModal({ Key key , this.journeys, this.journeySelected});
+  List<JourneyData>? journeys = <JourneyData>[];
+  JourneyData? journeySelected;
+ JourneyModal({ Key? key , this.journeys, this.journeySelected});
 
   @override
   _JourneyModalState createState() => _JourneyModalState();
@@ -24,7 +24,7 @@ class _JourneyModalState extends State<JourneyModal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        JourneyData result = widget.journeys.firstWhereOrNull((element) => element.journeyCode == widget.journeySelected?.journeyCode);
+        JourneyData? result = widget.journeys!.firstWhereOrNull((element) => element.journeyCode == widget.journeySelected?.journeyCode);
       if (result != null) {
          widget.journeySelected = result;
          result.selected = true;
@@ -39,7 +39,7 @@ class _JourneyModalState extends State<JourneyModal> {
   Widget build(BuildContext context) {
     return  CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.chooseItinerary),
-      widget: (widget.journeys.length > 0) ? CustomListView(
+      widget: (widget.journeys!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.journeys ?? [])
@@ -50,7 +50,7 @@ class _JourneyModalState extends State<JourneyModal> {
                           element?.journeyName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.journeys.length - 1,
+                          index < widget.journeys!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -92,7 +92,7 @@ class _JourneyModalState extends State<JourneyModal> {
   // }
 
   selectedItem(int index) async {
-    List<JourneyData> models = widget.journeys;
+    List<JourneyData> models = widget.journeys!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

@@ -32,9 +32,9 @@ import 'package:epoint_deal_plugin/presentation/multi_staff_screen_customer_care
 import 'package:flutter/material.dart';
 
 class FilterDealCustomer extends StatefulWidget {
-  FilterScreenModel filterScreenModel = FilterScreenModel();
+  FilterScreenModel? filterScreenModel = FilterScreenModel();
 
-  FilterDealCustomer({Key key, this.filterScreenModel}) : super(key: key);
+  FilterDealCustomer({Key? key, this.filterScreenModel}) : super(key: key);
 
   @override
   _FilterDealCustomerState createState() => _FilterDealCustomerState();
@@ -75,7 +75,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         createDateID: 6,
         selected: false)
   ];
-  CreateDateModel createDateSeleted = CreateDateModel();
+  CreateDateModel? createDateSeleted = CreateDateModel();
 
   List<ClosingDateModel> closingDateOptions = [
     ClosingDateModel(
@@ -107,7 +107,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         closingDateID: 6,
         selected: false)
   ];
-  ClosingDateModel closingDateSeleted;
+  ClosingDateModel? closingDateSeleted;
 
   List<ClosingDueDateModel> closingDueDateOptions = [
     ClosingDueDateModel(
@@ -171,7 +171,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         selected: false)
   ];
 
-  HistoryCareDateModel historyCareDateSeleted;
+  HistoryCareDateModel? historyCareDateSeleted;
 
   List<WorkScheduleModel> workScheduleDateOptions = [
     WorkScheduleModel(
@@ -203,7 +203,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         workscheduleDateID: 6,
         selected: false)
   ];
-  ClosingDueDateModel closingDueDateSeleted;
+  ClosingDueDateModel? closingDueDateSeleted;
 
   List<OrderSourceData> orderSourceData = [
     OrderSourceData(
@@ -214,20 +214,20 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   OrderSourceData orderSourceSeleted = OrderSourceData();
 
-  List<PipelineData> pipeLineData;
+  List<PipelineData>? pipeLineData;
 
-  PipelineData pipelineSelected = PipelineData();
+  PipelineData? pipelineSelected = PipelineData();
 
-  List<JourneyData> journeysData;
-  JourneyData journeySelected = JourneyData();
-  List<WorkListStaffModel> _modelStaffSSupportSelected = [];
-  List<GetStatusWorkData> statusWorkData;
+  List<JourneyData>? journeysData;
+  JourneyData? journeySelected = JourneyData();
+  List<WorkListStaffModel>? _modelStaffSSupportSelected = [];
+  List<GetStatusWorkData>? statusWorkData;
   List<WorkListStaffModel> _modelStaff = [];
 
-  List<BranchData> branchData;
-  BranchData branchSelected;
+  List<BranchData>? branchData;
+  BranchData? branchSelected;
 
-  List<int> statusWorkID = [];
+  List<int?> statusWorkID = [];
 
   String branchString = "";
   String statusWorkString = "";
@@ -273,27 +273,27 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     super.initState();
     filterScreenModel = FilterScreenModel(
       filterModel: ListDealModelRequest.fromJson(
-          widget.filterScreenModel.filterModel.toJson()),
-      fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
-      toDate_closing_date: widget.filterScreenModel.toDate_closing_due_date,
-      id_closing_date: widget.filterScreenModel.id_closing_date,
-      fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-      toDate_created_at: widget.filterScreenModel.toDate_created_at,
-      id_created_at: widget.filterScreenModel.id_created_at,
+          widget.filterScreenModel!.filterModel!.toJson()),
+      fromDate_closing_date: widget.filterScreenModel!.fromDate_closing_date,
+      toDate_closing_date: widget.filterScreenModel!.toDate_closing_due_date,
+      id_closing_date: widget.filterScreenModel!.id_closing_date,
+      fromDate_created_at: widget.filterScreenModel!.fromDate_created_at,
+      toDate_created_at: widget.filterScreenModel!.toDate_created_at,
+      id_created_at: widget.filterScreenModel!.id_created_at,
       fromDate_closing_due_date:
-          widget.filterScreenModel.fromDate_closing_due_date,
-      toDate_closing_due_date: widget.filterScreenModel.toDate_closing_due_date,
-      id_closing_due_date: widget.filterScreenModel.id_closing_due_date,
+          widget.filterScreenModel!.fromDate_closing_due_date,
+      toDate_closing_due_date: widget.filterScreenModel!.toDate_closing_due_date,
+      id_closing_due_date: widget.filterScreenModel!.id_closing_due_date,
       fromDate_history_care_date:
-          widget.filterScreenModel.fromDate_history_care_date,
+          widget.filterScreenModel!.fromDate_history_care_date,
       toDate_history_care_date:
-          widget.filterScreenModel.toDate_history_care_date,
+          widget.filterScreenModel!.toDate_history_care_date,
       fromDate_work_schedule_date:
-          widget.filterScreenModel.fromDate_work_schedule_date,
+          widget.filterScreenModel!.fromDate_work_schedule_date,
       toDate_work_schedule_date:
-          widget.filterScreenModel.toDate_work_schedule_date,
-      id_history_care_date: widget.filterScreenModel.id_history_care_date,
-      id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
+          widget.filterScreenModel!.toDate_work_schedule_date,
+      id_history_care_date: widget.filterScreenModel!.id_history_care_date,
+      id_work_schedule_date: widget.filterScreenModel!.id_work_schedule_date,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -305,10 +305,10 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     });
   }
 
-  void getData() async {
+   getData() async {
     var orderSources = await DealConnection.getOrderSource(context);
     if (orderSources != null) {
-      orderSourceData.addAll(orderSources.data);
+      orderSourceData.addAll(orderSources.data!);
     }
 
     var branchs = await DealConnection.getBranch(context);
@@ -320,10 +320,10 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     if (pipelines != null) {
       pipeLineData = pipelines.data;
 
-      List<String> listPipeline = [];
+      List<String?> listPipeline = [];
 
-      for (int i = 0; i < pipeLineData.length; i++) {
-        listPipeline.add(pipeLineData[i].pipelineCode);
+      for (int i = 0; i < pipeLineData!.length; i++) {
+        listPipeline.add(pipeLineData![i].pipelineCode);
       }
 
       var journeys = await DealConnection.getJourney(
@@ -349,8 +349,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   void bindingModel() async {
     for (int i = 0; i < orderSourceData.length; i++) {
-      if (filterScreenModel.filterModel.orderSourceName != "") {
-        if (widget.filterScreenModel.filterModel.orderSourceName ==
+      if (filterScreenModel.filterModel!.orderSourceName != "") {
+        if (widget.filterScreenModel!.filterModel!.orderSourceName ==
             orderSourceData[i].orderSourceName) {
           orderSourceData[i].selected = true;
         } else {
@@ -358,67 +358,67 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         }
       }
     }
-    if (filterScreenModel.filterModel.branchId.length > 0) {
-      for (int i = 0; i < filterScreenModel.filterModel.branchId.length; i++) {
+    if (filterScreenModel.filterModel!.branchId!.length > 0) {
+      for (int i = 0; i < filterScreenModel.filterModel!.branchId!.length; i++) {
         try {
-          branchData
+          branchData!
               .firstWhere((element) =>
-                  element.branchId == filterScreenModel.filterModel.branchId[i])
+                  element.branchId == filterScreenModel.filterModel!.branchId![i])
               .selected = true;
         } catch (e) {}
       }
 
-      for (int i = 0; i < branchData.length; i++) {
-        if (branchData[i].selected) {
+      for (int i = 0; i < branchData!.length; i++) {
+        if (branchData![i].selected!) {
           if (branchString == "") {
-            branchString = branchData[i].branchName;
+            branchString = branchData![i].branchName ?? "";
           } else {
-            branchString += ", ${branchData[i].branchName}";
+            branchString += ", ${branchData![i].branchName}";
           }
         }
       }
     }
 
-    if (filterScreenModel.filterModel.manageStatusId.length > 0) {
+    if (filterScreenModel.filterModel!.manageStatusId!.length > 0) {
       for (int i = 0;
-          i < filterScreenModel.filterModel.manageStatusId.length;
+          i < filterScreenModel.filterModel!.manageStatusId!.length;
           i++) {
         try {
-          statusWorkData
+          statusWorkData!
               .firstWhere((element) =>
                   element.manageStatusId ==
-                  filterScreenModel.filterModel.manageStatusId[i])
+                  filterScreenModel.filterModel!.manageStatusId![i])
               .selected = true;
         } catch (e) {}
       }
 
-      for (int i = 0; i < statusWorkData.length; i++) {
-        if (statusWorkData[i].selected) {
+      for (int i = 0; i < statusWorkData!.length; i++) {
+        if (statusWorkData![i].selected!) {
           if (statusWorkString == "") {
-            statusWorkString = statusWorkData[i].manageStatusName;
+            statusWorkString = statusWorkData![i].manageStatusName ?? "";
           } else {
-            statusWorkString += ", ${statusWorkData[i].manageStatusName}";
+            statusWorkString += ", ${statusWorkData![i].manageStatusName}";
           }
         }
       }
     }
 
-    if (filterScreenModel.filterModel.staffId.length > 0) {
+    if (filterScreenModel.filterModel!.staffId!.length > 0) {
       _modelStaffSSupportSelected = [];
-      for (int i = 0; i < filterScreenModel.filterModel.staffId.length; i++) {
+      for (int i = 0; i < filterScreenModel.filterModel!.staffId!.length; i++) {
         try {
           _modelStaff
               .firstWhere((element) =>
-                  element.staffId == filterScreenModel.filterModel.staffId[i])
+                  element.staffId == filterScreenModel.filterModel!.staffId![i])
               .isSelected = true;
         } catch (e) {}
       }
 
       for (int i = 0; i < _modelStaff.length; i++) {
-        if (_modelStaff[i].isSelected) {
-          _modelStaffSSupportSelected.add(_modelStaff[i]);
+        if (_modelStaff[i].isSelected!) {
+          _modelStaffSSupportSelected!.add(_modelStaff[i]);
           if (staffs == "") {
-            staffs = _modelStaff[i].staffName;
+            staffs = _modelStaff[i].staffName ?? "";
           } else {
             staffs += ", ${_modelStaff[i].staffName}";
           }
@@ -426,52 +426,52 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
     }
 
-    if (filterScreenModel.filterModel.journey_id.length > 0) {
+    if (filterScreenModel.filterModel!.journey_id!.length > 0) {
       for (int i = 0;
-          i < filterScreenModel.filterModel.journey_id.length;
+          i < filterScreenModel.filterModel!.journey_id!.length;
           i++) {
         try {
-          journeysData
+          journeysData!
               .firstWhere((element) =>
                   element.journeyId ==
-                  filterScreenModel.filterModel.journey_id[i])
+                  filterScreenModel.filterModel!.journey_id![i])
               .selected = true;
         } catch (e) {}
       }
 
-      for (int i = 0; i < journeysData.length; i++) {
-        if (journeysData[i].selected) {
+      for (int i = 0; i < journeysData!.length; i++) {
+        if (journeysData![i].selected!) {
           if (journeyString == "") {
-            journeyString = journeysData[i].journeyName;
+            journeyString = journeysData![i].journeyName ?? "";
           } else {
-            journeyString += ", ${journeysData[i].journeyName}";
+            journeyString += ", ${journeysData![i].journeyName}";
           }
         }
       }
     }
 
-    if (filterScreenModel.filterModel.pipelineId.length > 0) {
+    if (filterScreenModel.filterModel!.pipelineId!.length > 0) {
       for (int i = 0;
-          i < filterScreenModel.filterModel.pipelineId.length;
+          i < filterScreenModel.filterModel!.pipelineId!.length;
           i++) {
         try {
-          pipeLineData
+          pipeLineData!
               .firstWhere((element) =>
                   element.pipelineId ==
-                  filterScreenModel.filterModel.pipelineId[i])
+                  filterScreenModel.filterModel!.pipelineId![i])
               .selected = true;
         } catch (e) {}
       }
 
-      List<String> listPipeline = [];
+      List<String?> listPipeline = [];
 
-      for (int i = 0; i < pipeLineData.length; i++) {
-        if (pipeLineData[i].selected) {
-          listPipeline.add(pipeLineData[i].pipelineCode);
+      for (int i = 0; i < pipeLineData!.length; i++) {
+        if (pipeLineData![i].selected!) {
+          listPipeline.add(pipeLineData![i].pipelineCode);
           if (pipelineString == "") {
-            pipelineString = pipeLineData[i].pipelineName;
+            pipelineString = pipeLineData![i].pipelineName ?? "";
           } else {
-            pipelineString += ", ${pipeLineData[i].pipelineName}";
+            pipelineString += ", ${pipeLineData![i].pipelineName}";
           }
         }
       }
@@ -481,25 +481,25 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       if (journeys != null) {
         journeysData = journeys.data;
 
-        if (filterScreenModel.filterModel.journey_id.length > 0) {
+        if (filterScreenModel.filterModel!.journey_id!.length > 0) {
           for (int i = 0;
-              i < filterScreenModel.filterModel.journey_id.length;
+              i < filterScreenModel.filterModel!.journey_id!.length;
               i++) {
             try {
-              journeysData
+              journeysData!
                   .firstWhere((element) =>
                       element.journeyId ==
-                      filterScreenModel.filterModel.journey_id[i])
+                      filterScreenModel.filterModel!.journey_id![i])
                   .selected = true;
             } catch (e) {}
           }
 
-          for (int i = 0; i < journeysData.length; i++) {
-            if (journeysData[i].selected) {
+          for (int i = 0; i < journeysData!.length; i++) {
+            if (journeysData![i].selected!) {
               if (journeyString == "") {
-                journeyString = journeysData[i].journeyName;
+                journeyString = journeysData![i].journeyName ?? "";
               } else {
-                journeyString += ", ${journeysData[i].journeyName}";
+                journeyString += ", ${journeysData![i].journeyName}";
               }
             }
           }
@@ -507,28 +507,28 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
     }
     if (filterScreenModel.id_created_at != "") {
-      int index = int.parse(widget.filterScreenModel.id_created_at);
+      int index = int.parse(widget.filterScreenModel!.id_created_at!);
       createDateSeleted = createDateOptions[index];
     } else {
       createDateSeleted = null;
     }
 
     if (filterScreenModel.id_closing_date != "") {
-      int index = int.parse(widget.filterScreenModel.id_closing_date);
+      int index = int.parse(widget.filterScreenModel!.id_closing_date!);
       closingDateSeleted = closingDateOptions[index];
     } else {
       closingDateSeleted = null;
     }
 
     if (filterScreenModel.id_closing_due_date != "") {
-      int index = int.parse(widget.filterScreenModel.id_closing_due_date);
+      int index = int.parse(widget.filterScreenModel!.id_closing_due_date!);
       closingDueDateSeleted = closingDueDateOptions[index];
     } else {
       closingDueDateSeleted = null;
     }
 
     if (filterScreenModel.id_history_care_date != "") {
-      int index = int.parse(widget.filterScreenModel.id_history_care_date);
+      int index = int.parse(widget.filterScreenModel!.id_history_care_date!);
       historyCareDateSeleted = historyCareDateOptions[index];
     } else {
       historyCareDateSeleted = null;
@@ -583,7 +583,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           Navigator.of(context).pop();
         }
         return;
-      },
+      } as Future<bool> Function()?,
       child: Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(
@@ -591,7 +591,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.filter),
+              AppLocalizations.text(LangKey.filter)!,
               style: const TextStyle(color: Colors.white, fontSize: 20.0),
             ),
           ),
@@ -627,7 +627,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     return [
       // theo nguon don hang
       Text(
-        AppLocalizations.text(LangKey.accordingOrderSource),
+        AppLocalizations.text(LangKey.accordingOrderSource)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -639,7 +639,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
       Container(height: 10.0),
       Text(
-        AppLocalizations.text(LangKey.byBranch),
+        AppLocalizations.text(LangKey.byBranch)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -649,7 +649,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       _buildTextField(AppLocalizations.text(LangKey.chooseBranch), branchString,
           Assets.iconItinerary, false, true, false, ontap: () async {
         print("Chon chi nhanh");
-        List<int> branchID = [];
+        List<int?> branchID = [];
         var branchDataSelected = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => FilterByBranch(branchData: branchData)));
@@ -659,18 +659,18 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           branchString = "";
           branchData = branchDataSelected;
 
-          for (int i = 0; i < branchData.length; i++) {
-            if (branchData[i].selected) {
-              branchID.add(branchData[i].branchId);
+          for (int i = 0; i < branchData!.length; i++) {
+            if (branchData![i].selected!) {
+              branchID.add(branchData![i].branchId);
               if (branchString == "") {
-                branchString = branchData[i].branchName;
+                branchString = branchData![i].branchName ?? "";
               } else {
-                branchString += ", ${branchData[i].branchName}";
+                branchString += ", ${branchData![i].branchName}";
               }
             }
           }
 
-          filterScreenModel.filterModel.branchId = branchID;
+          filterScreenModel.filterModel!.branchId = branchID;
           setState(() {});
         }
       }),
@@ -678,7 +678,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
       // theo ngày tạo
       Text(
-        AppLocalizations.text(LangKey.byCreationDate),
+        AppLocalizations.text(LangKey.byCreationDate)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -691,7 +691,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       ),
 
       Text(
-        AppLocalizations.text(LangKey.accordingExpectedEnding),
+        AppLocalizations.text(LangKey.accordingExpectedEnding)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -705,7 +705,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       ),
 
       Text(
-        AppLocalizations.text(LangKey.accordingActualEnding),
+        AppLocalizations.text(LangKey.accordingActualEnding)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -719,7 +719,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       ),
 
       Text(
-        AppLocalizations.text(LangKey.byAllocator),
+        AppLocalizations.text(LangKey.byAllocator)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -733,7 +733,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       _buildTextField(AppLocalizations.text(LangKey.chooseAllottedPerson),
           staffs, Assets.iconName, false, true, false, ontap: () async {
         print("Chọn người được phân bổ");
-        List<int> listStaff = [];
+        List<int?> listStaff = [];
         _modelStaffSSupportSelected =
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MultipleStaffScreenCustomerCare(
@@ -741,26 +741,26 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                     )));
 
         if (_modelStaffSSupportSelected != null &&
-            _modelStaffSSupportSelected.length > 0) {
+            _modelStaffSSupportSelected!.length > 0) {
           staffs = "";
-          for (int i = 0; i < _modelStaffSSupportSelected.length; i++) {
-            if (_modelStaffSSupportSelected[i].isSelected) {
-              listStaff.add(_modelStaffSSupportSelected[i].staffId);
+          for (int i = 0; i < _modelStaffSSupportSelected!.length; i++) {
+            if (_modelStaffSSupportSelected![i].isSelected!) {
+              listStaff.add(_modelStaffSSupportSelected![i].staffId);
               if (staffs == "") {
-                staffs = _modelStaffSSupportSelected[i].staffName;
+                staffs = _modelStaffSSupportSelected![i].staffName ?? "";
               } else {
-                staffs += ", ${_modelStaffSSupportSelected[i].staffName}";
+                staffs += ", ${_modelStaffSSupportSelected![i].staffName}";
               }
             }
           }
-          filterScreenModel.filterModel.staffId = listStaff;
+          filterScreenModel.filterModel!.staffId = listStaff;
           setState(() {});
         }
       }),
       Container(height: 10.0),
 
       Text(
-        AppLocalizations.text(LangKey.byPipeline),
+        AppLocalizations.text(LangKey.byPipeline)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -778,9 +778,9 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           false, ontap: () async {
         print("Pipeline");
 
-        List<int> pipelineSelected = [];
-        List<String> pipelineStringSelected = [];
-        List<PipelineData> pipeline = await Navigator.of(context).push(
+        List<int?> pipelineSelected = [];
+        List<String?> pipelineStringSelected = [];
+        List<PipelineData>? pipeline = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => FilterByPipeline(pipeLineData)));
 
@@ -789,18 +789,18 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           pipelineString = "";
           pipeLineData = pipeline;
 
-          for (int i = 0; i < pipeLineData.length; i++) {
-            if (pipeLineData[i].selected) {
-              pipelineSelected.add(pipeLineData[i].pipelineId);
-              pipelineStringSelected.add(pipeLineData[i].pipelineCode);
+          for (int i = 0; i < pipeLineData!.length; i++) {
+            if (pipeLineData![i].selected!) {
+              pipelineSelected.add(pipeLineData![i].pipelineId);
+              pipelineStringSelected.add(pipeLineData![i].pipelineCode);
               if (pipelineString == "") {
-                pipelineString = pipeLineData[i].pipelineName;
+                pipelineString = pipeLineData![i].pipelineName ?? "";
               } else {
-                pipelineString += ", ${pipeLineData[i].pipelineName}";
+                pipelineString += ", ${pipeLineData![i].pipelineName}";
               }
             }
           }
-          filterScreenModel.filterModel.pipelineId = pipelineSelected;
+          filterScreenModel.filterModel!.pipelineId = pipelineSelected;
 
           var journeys = await DealConnection.getJourney(context,
               GetJourneyModelRequest(pipelineCode: pipelineStringSelected));
@@ -815,7 +815,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       Container(height: 10.0),
 
       Text(
-        AppLocalizations.text(LangKey.byJourney),
+        AppLocalizations.text(LangKey.byJourney)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -832,8 +832,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           false, ontap: () async {
         print("Chọn hành trình");
 
-        List<int> journeySelected = [];
-        List<JourneyData> journeys =
+        List<int?> journeySelected = [];
+        List<JourneyData>? journeys =
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => FilterByJourney(
                       journeys: journeysData,
@@ -844,17 +844,17 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           journeyString = "";
           journeysData = journeys;
 
-          for (int i = 0; i < journeysData.length; i++) {
-            if (journeysData[i].selected) {
-              journeySelected.add(journeysData[i].journeyId);
+          for (int i = 0; i < journeysData!.length; i++) {
+            if (journeysData![i].selected!) {
+              journeySelected.add(journeysData![i].journeyId);
               if (journeyString == "") {
-                journeyString = journeysData[i].journeyName;
+                journeyString = journeysData![i].journeyName ?? "";
               } else {
-                journeyString += ", ${journeysData[i].journeyName}";
+                journeyString += ", ${journeysData![i].journeyName}";
               }
             }
           }
-          filterScreenModel.filterModel.journey_id = journeySelected;
+          filterScreenModel.filterModel!.journey_id = journeySelected;
           Navigator.of(context).pop();
           setState(() {});
         }
@@ -865,7 +865,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.byHistoryCustomerCare),
+            AppLocalizations.text(LangKey.byHistoryCustomerCare)!,
             style: TextStyle(
                 fontSize: 16.0,
                 color: const Color(0xFF0067AC),
@@ -882,7 +882,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       Container(height: 10.0),
 
       Text(
-        AppLocalizations.text(LangKey.byWorkStatus),
+        AppLocalizations.text(LangKey.byWorkStatus)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -907,18 +907,18 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           statusWorkString = "";
           statusWorkData = statuswork;
 
-          for (int i = 0; i < statusWorkData.length; i++) {
-            if (statusWorkData[i].selected) {
-              statusWorkID.add(statusWorkData[i].manageStatusId);
+          for (int i = 0; i < statusWorkData!.length; i++) {
+            if (statusWorkData![i].selected!) {
+              statusWorkID.add(statusWorkData![i].manageStatusId);
               if (statusWorkString == "") {
-                statusWorkString = statusWorkData[i].manageStatusName;
+                statusWorkString = statusWorkData![i].manageStatusName ?? "";
               } else {
-                statusWorkString += ", ${statusWorkData[i].manageStatusName}";
+                statusWorkString += ", ${statusWorkData![i].manageStatusName}";
               }
             }
           }
 
-          filterScreenModel.filterModel.manageStatusId = statusWorkID;
+          filterScreenModel.filterModel!.manageStatusId = statusWorkID;
           setState(() {});
         }
       }),
@@ -953,13 +953,13 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
               }
 
               var orderSource =
-                  orderSourceData.firstWhere((element) => element.selected);
+                  orderSourceData.firstWhere((element) => element.selected!);
 
               if (orderSource.orderSourceName ==
                   AppLocalizations.text(LangKey.all)) {
-                filterScreenModel.filterModel.orderSourceName = "";
+                filterScreenModel.filterModel!.orderSourceName = "";
               } else {
-                filterScreenModel.filterModel.orderSourceName =
+                filterScreenModel.filterModel!.orderSourceName =
                     orderSource.orderSourceName;
               }
 
@@ -969,7 +969,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             child: Center(
               child: Text(
                 // AppLocalizations.text(LangKey.convertCustomers),
-                AppLocalizations.text(LangKey.apply),
+                AppLocalizations.text(LangKey.apply)!,
                 style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.white,
@@ -995,7 +995,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             },
             child: Center(
               child: Text(
-                AppLocalizations.text(LangKey.delete),
+                AppLocalizations.text(LangKey.delete)!,
                 style: TextStyle(
                     fontSize: 14.0,
                     color: Color(0xFF1A76B4),
@@ -1009,7 +1009,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     );
   }
 
-  void clearData() async {
+   clearData() async {
     widget.filterScreenModel = FilterScreenModel(
         filterModel: ListDealModelRequest(
             search: "",
@@ -1042,28 +1042,28 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
     filterScreenModel = FilterScreenModel(
         filterModel: ListDealModelRequest.fromJson(
-            widget.filterScreenModel.filterModel.toJson()),
-        fromDate_closing_date: widget.filterScreenModel.fromDate_closing_date,
-        toDate_closing_date: widget.filterScreenModel.toDate_closing_date,
-        id_closing_date: widget.filterScreenModel.id_closing_date,
-        fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-        toDate_created_at: widget.filterScreenModel.toDate_created_at,
-        id_created_at: widget.filterScreenModel.id_created_at,
+            widget.filterScreenModel!.filterModel!.toJson()),
+        fromDate_closing_date: widget.filterScreenModel!.fromDate_closing_date,
+        toDate_closing_date: widget.filterScreenModel!.toDate_closing_date,
+        id_closing_date: widget.filterScreenModel!.id_closing_date,
+        fromDate_created_at: widget.filterScreenModel!.fromDate_created_at,
+        toDate_created_at: widget.filterScreenModel!.toDate_created_at,
+        id_created_at: widget.filterScreenModel!.id_created_at,
         fromDate_closing_due_date:
-            widget.filterScreenModel.fromDate_closing_due_date,
+            widget.filterScreenModel!.fromDate_closing_due_date,
         toDate_closing_due_date:
-            widget.filterScreenModel.toDate_closing_due_date,
-        id_closing_due_date: widget.filterScreenModel.id_closing_due_date,
+            widget.filterScreenModel!.toDate_closing_due_date,
+        id_closing_due_date: widget.filterScreenModel!.id_closing_due_date,
         fromDate_history_care_date:
-            widget.filterScreenModel.fromDate_history_care_date,
+            widget.filterScreenModel!.fromDate_history_care_date,
         toDate_history_care_date:
-            widget.filterScreenModel.toDate_history_care_date,
+            widget.filterScreenModel!.toDate_history_care_date,
         fromDate_work_schedule_date:
-            widget.filterScreenModel.fromDate_work_schedule_date,
+            widget.filterScreenModel!.fromDate_work_schedule_date,
         toDate_work_schedule_date:
-            widget.filterScreenModel.toDate_work_schedule_date,
-        id_history_care_date: widget.filterScreenModel.id_history_care_date,
-        id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date);
+            widget.filterScreenModel!.toDate_work_schedule_date,
+        id_history_care_date: widget.filterScreenModel!.id_history_care_date,
+        id_work_schedule_date: widget.filterScreenModel!.id_work_schedule_date);
 
     for (int i = 0; i < createDateOptions.length; i++) {
       createDateOptions[i].selected = false;
@@ -1080,13 +1080,13 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     }
     closingDueDateSeleted = null;
 
-    for (int i = 0; i < branchData.length; i++) {
-      branchData[i].selected = false;
+    for (int i = 0; i < branchData!.length; i++) {
+      branchData![i].selected = false;
     }
     branchSelected = null;
 
-    for (int i = 0; i < statusWorkData.length; i++) {
-      statusWorkData[i].selected = false;
+    for (int i = 0; i < statusWorkData!.length; i++) {
+      statusWorkData![i].selected = false;
     }
 
     for (int i = 0; i < historyCareDateOptions.length; i++) {
@@ -1107,13 +1107,13 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     }
 
 
-    for (int i = 0; i < pipeLineData.length; i++) {
-      pipeLineData[i].selected = false;
+    for (int i = 0; i < pipeLineData!.length; i++) {
+      pipeLineData![i].selected = false;
     }
     pipelineSelected = null;
 
-     for (int i = 0; i < journeysData.length; i++) {
-      journeysData[i].selected = false;
+     for (int i = 0; i < journeysData!.length; i++) {
+      journeysData![i].selected = false;
     }
     journeySelected = null;
     // journeysData = [];
@@ -1142,13 +1142,13 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     // Navigator.of(context).pop();
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap, TextEditingController fillText, int maxlines}) {
+      {Function? ontap, TextEditingController? fillText, int? maxlines}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: ontap,
+        onTap: ontap as void Function()?,
         child: TextField(
           maxLines: maxlines ?? 1,
           enabled: textfield,
@@ -1181,7 +1181,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,

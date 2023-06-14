@@ -3,27 +3,27 @@
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 
 class FilterScreenModel {
-  ListDealModelRequest filterModel;
+  ListDealModelRequest? filterModel;
 
-  DateTime fromDate_created_at;
-  DateTime toDate_created_at;
-  String id_created_at;
+  DateTime? fromDate_created_at;
+  DateTime? toDate_created_at;
+  String? id_created_at;
 
-  DateTime fromDate_closing_date;
-  DateTime toDate_closing_date;
-  String id_closing_date;
+  DateTime? fromDate_closing_date;
+  DateTime? toDate_closing_date;
+  String? id_closing_date;
 
-  DateTime fromDate_closing_due_date;
-  DateTime toDate_closing_due_date;
-  String id_closing_due_date;
+  DateTime? fromDate_closing_due_date;
+  DateTime? toDate_closing_due_date;
+  String? id_closing_due_date;
 
-   DateTime fromDate_history_care_date;
-  DateTime toDate_history_care_date;
-  String id_history_care_date;
+   DateTime? fromDate_history_care_date;
+  DateTime? toDate_history_care_date;
+  String? id_history_care_date;
 
-  DateTime fromDate_work_schedule_date;
-  DateTime toDate_work_schedule_date;
-  String id_work_schedule_date;
+  DateTime? fromDate_work_schedule_date;
+  DateTime? toDate_work_schedule_date;
+  String? id_work_schedule_date;
 
   FilterScreenModel({
   this.filterModel, 
@@ -70,7 +70,7 @@ class FilterScreenModel {
 
      Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['filterModel'] = filterModel.toJson();
+    data['filterModel'] = filterModel!.toJson();
     data['fromDate_created_at'] = fromDate_created_at;
     data['toDate_created_at'] = toDate_created_at;
     data['id_created_at'] = id_created_at ?? "";

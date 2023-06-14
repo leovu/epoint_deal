@@ -1,7 +1,7 @@
 class ListServiceResponseModel {
-  int errorCode;
-  String errorDescription;
-  ServiceResponseModel data;
+  int? errorCode;
+  String? errorDescription;
+  ServiceResponseModel? data;
 
   ListServiceResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -16,7 +16,7 @@ class ListServiceResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
@@ -24,8 +24,8 @@ class ListServiceResponseModel {
 
 
 class ServiceResponseModel {
-  PageInfo pageInfo;
-  List<ServiceModel> items;
+  PageInfo? pageInfo;
+  List<ServiceModel?>? items;
 
   ServiceResponseModel({this.pageInfo, this.items});
 
@@ -34,9 +34,9 @@ class ServiceResponseModel {
         ? new PageInfo.fromJson(json['PageInfo'])
         : null;
     if (json['Items'] != null) {
-      items = <ServiceModel>[];
+      items = <ServiceModel?>[];
       json['Items'].forEach((v) {
-        items.add(new ServiceModel.fromJson(v));
+        items!.add(new ServiceModel.fromJson(v));
       });
     }
   }
@@ -44,26 +44,26 @@ class ServiceResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.pageInfo != null) {
-      data['PageInfo'] = this.pageInfo.toJson();
+      data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items.map((v) => v.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v!.toJson()).toList();
     }
     return data;
   }
 }
 
 class PageInfo {
-  int total;
-  int itemPerPage;
-  int from;
-  int to;
-  int currentPage;
-  int firstPage;
-  int lastPage;
-  int previousPage;
-  int nextPage;
-  List<int> pageRange;
+  int? total;
+  int? itemPerPage;
+  int? from;
+  int? to;
+  int? currentPage;
+  int? firstPage;
+  int? lastPage;
+  int? previousPage;
+  int? nextPage;
+  List<int>? pageRange;
 
   PageInfo(
       {this.total,
@@ -108,22 +108,22 @@ class PageInfo {
 }
 
 class ServiceModel {
-  String branchName;
-  int serviceId;
-  String serviceName;
-  String serviceCode;
-  String serviceAvatar;
-  double oldPrice;
-  double newPrice;
-  String detailDescription;
-  String description;
-  int time;
-  String categoryName;
-  int isNew;
-  num qty;
-  num price;
-  String note;
-  Promotion promotion;
+  String? branchName;
+  int? serviceId;
+  String? serviceName;
+  String? serviceCode;
+  String? serviceAvatar;
+  double? oldPrice;
+  double? newPrice;
+  String? detailDescription;
+  String? description;
+  int? time;
+  String? categoryName;
+  int? isNew;
+  num? qty;
+  num? price;
+  String? note;
+  Promotion? promotion;
 
   ServiceModel(
       {this.branchName,
@@ -200,7 +200,7 @@ class ServiceModel {
     data['category_name'] = this.categoryName;
     data['is_new'] = this.isNew;
     if (this.promotion != null) {
-      data['promotion'] = this.promotion.toJson();
+      data['promotion'] = this.promotion!.toJson();
     }
     data["quantity"] = this.qty;
     data["note"] = this.note;
@@ -210,7 +210,7 @@ class ServiceModel {
 }
 
 class Promotion {
-  String price;
+  String? price;
 
   Promotion({this.price});
 

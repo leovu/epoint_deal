@@ -20,7 +20,7 @@ class DiscountScreen extends StatefulWidget {
   // final CustomerModel customerModel;
 
   // DiscountScreen({this.bloc, this.customerModel});
-  DiscountScreen({Key key}) : super(key: key);
+  DiscountScreen({Key? key}) : super(key: key);
 
   @override
   DiscountScreenState createState() => DiscountScreenState();
@@ -33,13 +33,13 @@ class DiscountScreenState extends State<DiscountScreen> {
   final FocusNode _focusPercent = FocusNode();
   final TextEditingController _controllerPercent = TextEditingController();
 
-  final FocusNode _focusCode = FocusNode();
-  final TextEditingController _controllerCode = TextEditingController();
+  // final FocusNode _focusCode = FocusNode();
+  // final TextEditingController _controllerCode = TextEditingController();
 
   bool _isMoney = true;
-  int _amount;
+  late int _amount;
 
-  DiscountBloc _bloc;
+  late DiscountBloc _bloc;
 
   @override
   void initState() {
@@ -53,6 +53,8 @@ class DiscountScreenState extends State<DiscountScreen> {
   void dispose() {
     // TODO: implement dispose
     _bloc.dispose();
+    _controllerPercent.dispose();
+    _controllerMoney.dispose();
     super.dispose();
   }
 
@@ -66,14 +68,17 @@ class DiscountScreenState extends State<DiscountScreen> {
             stream: _bloc.outputIsMoney,
             initialData: _isMoney,
             builder: (_, snapshot) {
-              _isMoney = snapshot.data;
+              if (snapshot.data != null) {
+                _isMoney = snapshot.data as bool;
+              }
+              // _isMoney = snapshot.data as bool?;
               return Column(
                 children: [
                   _buildType(
                       "${AppLocalizations.text(LangKey.cash)} (VNĐ)", true),
                   _buildType(
                       "${AppLocalizations.text(LangKey.percent)} (%)", false),
-                  snapshot.data
+                  _isMoney
                       ? CustomTextField(
                           focusNode: _focusMoney,
                           controller: _controllerMoney,
@@ -113,7 +118,8 @@ class DiscountScreenState extends State<DiscountScreen> {
         textSubmitted: AppLocalizations.text(LangKey.confirm), onSubmitted: () {
       CustomNavigator.pop(context, object: true);
     });
-    if ((event ?? false)) {
+    if ((event)) {
+      print(_controllerPercent.text);
       String money = _isMoney ? _controllerMoney.text : _controllerPercent.text;
       CustomNavigator.pop(context,
           object: money.isEmpty

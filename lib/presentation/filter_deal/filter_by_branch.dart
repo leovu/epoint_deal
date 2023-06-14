@@ -9,8 +9,8 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class FilterByBranch extends StatefulWidget {
-  List<BranchData> branchData;
-   FilterByBranch({ Key key, this.branchData }) : super(key: key);
+  List<BranchData>? branchData;
+   FilterByBranch({ Key? key, this.branchData }) : super(key: key);
 
   @override
   _FilterByBranchState createState() => _FilterByBranchState();
@@ -20,8 +20,8 @@ class _FilterByBranchState extends State<FilterByBranch> {
  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<BranchData> branchData;
- List<BranchData> branchDataDisplay;
+  List<BranchData>? branchData;
+ List<BranchData>? branchDataDisplay;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.chooseBranch),
+            AppLocalizations.text(LangKey.chooseBranch)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
@@ -62,7 +62,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
         children: [
           _buildSearch(),
           (branchDataDisplay != null)
-              ? (branchDataDisplay.length > 0)
+              ? (branchDataDisplay!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -90,18 +90,18 @@ class _FilterByBranchState extends State<FilterByBranch> {
   }
 
   List<Widget> _listWidget() {
-    return (branchDataDisplay != null && branchDataDisplay.length > 0)
+    return (branchDataDisplay != null && branchDataDisplay!.length > 0)
         ? List.generate(
-            branchDataDisplay.length,
-            (index) => _buildItem(branchDataDisplay[index], () {
-                  selectedItem(branchDataDisplay[index]);
+            branchDataDisplay!.length,
+            (index) => _buildItem(branchDataDisplay![index], () {
+                  selectedItem(branchDataDisplay![index]);
                 }))
         : [CustomDataNotFound()];
   }
 
   Widget _buildItem(BranchData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -110,18 +110,18 @@ class _FilterByBranchState extends State<FilterByBranch> {
             child: Row(
               children: [
                 Text(
-                  item.branchName,
+                  item.branchName!,
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight:
-                          item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.check_box,
                   color: AppColors.primaryColor,
@@ -172,7 +172,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
       setState(() {});
     } else {
       try {
-        List<BranchData> models = branchData.where((model) {
+        List<BranchData> models = branchData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -192,7 +192,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
   }
 
   selectedItem(BranchData item) async {
-    item.selected = !item.selected;
+    item.selected = !item.selected!;
 
     // var event = models.firstWhere((element) => element.name == item.name);
 

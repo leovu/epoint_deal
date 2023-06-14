@@ -6,35 +6,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
-  final FocusNode focusNode;
-  final TextEditingController controller;
-  final String hintText;
-  final IconData suffixIconData;
-  final String suffixIcon;
-  final String suffixText;
-  final Color borderColor;
-  final Color backgroundColor;
-  final int maxLines;
-  final int minLines;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter> inputFormatters;
-  final bool readOnly;
-  final bool autofocus;
-  final TextAlign textAlign;
-  final TextInputAction textInputAction;
-  final int maxLength;
-  final Function(String) onSubmitted;
-  final Function(String) onChanged;
-  final Function onSuffixTap;
-  final Function onTap;
-  final bool obscureText;
-  final IconData titleIconData;
-  final String titleIcon;
-  final Color colorIcons;
-  final BoxShadow shadow;
-  final Widget widgetRight;
-  final Function onTapTitleIcon;
-  final double suffixIconSize;
+  final FocusNode? focusNode;
+  final TextEditingController? controller;
+  final String? hintText;
+  final IconData? suffixIconData;
+  final String? suffixIcon;
+  final String? suffixText;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final int? maxLines;
+  final int? minLines;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool? readOnly;
+  final bool? autofocus;
+  final TextAlign? textAlign;
+  final TextInputAction? textInputAction;
+  final int? maxLength;
+  final Function(String)? onSubmitted;
+  final Function(String)? onChanged;
+  final Function? onSuffixTap;
+  final Function? onTap;
+  final bool? obscureText;
+  final IconData? titleIconData;
+  final String? titleIcon;
+  final Color? colorIcons;
+  final BoxShadow? shadow;
+  final Widget? widgetRight;
+  final Function? onTapTitleIcon;
+  final double? suffixIconSize;
 
   CustomTextField(
       {this.focusNode,
@@ -82,16 +82,16 @@ class CustomTextField extends StatelessWidget {
                       color: AppColors.black.withOpacity(0))
             ],
             border:
-                borderColor == null ? null : Border.all(color: borderColor)),
+                borderColor == null ? null : Border.all(color: borderColor!)),
         child: Row(
           children: [
             (titleIcon == null && titleIconData == null)
                 ? Container()
                 : InkWell(
-                    onTap: onTapTitleIcon,
+                    onTap: onTapTitleIcon as void Function()?,
                     splashColor: Colors.transparent,
                     child: Container(
-                      padding: EdgeInsets.only(left: AppSizes.minPadding),
+                      padding: EdgeInsets.only(left: AppSizes.minPadding!),
                       child: titleIcon != null
                           ? CustomImageIcon(
                               icon: titleIcon,
@@ -112,7 +112,7 @@ class CustomTextField extends StatelessWidget {
                 style: AppTextStyles.style14BlackNormal,
                 decoration: InputDecoration(
                   isDense: true,
-                  contentPadding: EdgeInsets.all(AppSizes.minPadding),
+                  contentPadding: EdgeInsets.all(AppSizes.minPadding!),
                   hintText: hintText,
                   hintStyle: AppTextStyles.style14HintNormal,
                   border: InputBorder.none,
@@ -136,9 +136,9 @@ class CustomTextField extends StatelessWidget {
                 : InkWell(
                     splashColor: Colors.transparent,
                     child: Container(
-                        padding: EdgeInsets.only(right: AppSizes.minPadding),
+                        padding: EdgeInsets.only(right: AppSizes.minPadding!),
                         child: Text(
-                          suffixText,
+                          suffixText!,
                           style: AppTextStyles.style14WhiteNormal
                               .copyWith(color: AppColors.grey500Color),
                         ))),
@@ -147,7 +147,7 @@ class CustomTextField extends StatelessWidget {
                 : InkWell(
                     splashColor: Colors.transparent,
                     child: Container(
-                      padding: EdgeInsets.only(right: AppSizes.minPadding),
+                      padding: EdgeInsets.only(right: AppSizes.minPadding!),
                       child: (suffixIcon != null)
                           ? CustomImageIcon(
                               icon: suffixIcon,
@@ -160,28 +160,28 @@ class CustomTextField extends StatelessWidget {
                               color: colorIcons ?? AppColors.grey500Color,
                             ),
                     ),
-                    onTap: onSuffixTap,
+                    onTap: onSuffixTap as void Function()?,
                   ),
             widgetRight ?? Container(),
           ],
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }
 
 class CustomQuantityTextField extends StatelessWidget {
   final TextEditingController controller;
-  final int limit;
+  final int? limit;
 
-  CustomQuantityTextField({@required this.controller, this.limit});
+  CustomQuantityTextField({required this.controller, this.limit});
 
   @override
   Widget build(BuildContext context) {
     if (controller.text.isEmpty) {
       if (limit != null) {
-        if (limit <= 1) {
+        if (limit! <= 1) {
           controller.text = limit.toString();
         } else {
           controller.text = "1";
@@ -196,7 +196,7 @@ class CustomQuantityTextField extends StatelessWidget {
         CustomQuantityButton(
             isPlus: false,
             onTap: () {
-              int event = int.tryParse(controller.text);
+              int event = int.tryParse(controller.text)!;
               if (event > 1) {
                 event = event - 1;
 
@@ -226,10 +226,10 @@ class CustomQuantityTextField extends StatelessWidget {
           width: 5.0,
         ),
         CustomQuantityButton(onTap: () {
-          int event = int.tryParse(controller.text);
+          int event = int.tryParse(controller.text)!;
           if (event < 99) {
             if (limit != null) {
-              if (event < limit) {
+              if (event < limit!) {
                 event = event + 1;
               }
             } else {

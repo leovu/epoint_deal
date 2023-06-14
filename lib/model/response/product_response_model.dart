@@ -1,7 +1,7 @@
 class ListProductResponseModel {
-  int errorCode;
-  String errorDescription;
-  ProductResponseModel data;
+  int? errorCode;
+  String? errorDescription;
+  ProductResponseModel? data;
 
   ListProductResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -16,7 +16,7 @@ class ListProductResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
@@ -25,8 +25,8 @@ class ListProductResponseModel {
 
 
 class ProductResponseModel {
-  PageInfo pageInfo;
-  List<ProductModel> items;
+  PageInfo? pageInfo;
+  List<ProductModel?>? items;
 
   ProductResponseModel({this.pageInfo, this.items});
 
@@ -35,9 +35,9 @@ class ProductResponseModel {
         ? new PageInfo.fromJson(json['PageInfo'])
         : null;
     if (json['Items'] != null) {
-      items = <ProductModel>[];
+      items = <ProductModel?>[];
       json['Items'].forEach((v) {
-        items.add(new ProductModel.fromJson(v));
+        items!.add(new ProductModel.fromJson(v));
       });
     }
   }
@@ -45,10 +45,10 @@ class ProductResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.pageInfo != null) {
-      data['PageInfo'] = this.pageInfo.toJson();
+      data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items.map((v) => v.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v!.toJson()).toList();
     }
     return data;
   }
@@ -56,16 +56,16 @@ class ProductResponseModel {
 
 
 class PageInfo {
-  int total;
-  int itemPerPage;
-  int from;
-  int to;
-  int currentPage;
-  int firstPage;
-  int lastPage;
-  int previousPage;
-  int nextPage;
-  List<int> pageRange;
+  int? total;
+  int? itemPerPage;
+  int? from;
+  int? to;
+  int? currentPage;
+  int? firstPage;
+  int? lastPage;
+  int? previousPage;
+  int? nextPage;
+  List<int>? pageRange;
 
   PageInfo(
       {this.total,
@@ -110,24 +110,24 @@ class PageInfo {
 }
 
 class ProductModel {
-  int productId;
-  String productCode;
-  String productName;
-  String avatar;
-  double oldPrice;
-  double newPrice;
-  String description;
-  String descriptionDetail;
+  int? productId;
+  String? productCode;
+  String? productName;
+  String? avatar;
+  double? oldPrice;
+  double? newPrice;
+  String? description;
+  String? descriptionDetail;
   dynamic typeApp;
-  int isSales;
-  int percentSale;
-  int productCategoryId;
-  String categoryName;
-  String unitName;
-  Promotion promotion;
-  num qty;
-  num price;
-  String note;
+  int? isSales;
+  int? percentSale;
+  int? productCategoryId;
+  String? categoryName;
+  String? unitName;
+  Promotion? promotion;
+  num? qty;
+  num? price;
+  String? note;
 
   ProductModel(
       {this.productId,
@@ -211,7 +211,7 @@ class ProductModel {
     data['category_name'] = this.categoryName;
     data['unit_name'] = this.unitName;
     if (this.promotion != null) {
-      data['promotion'] = this.promotion.toJson();
+      data['promotion'] = this.promotion!.toJson();
     }
 
     data["quantity"] = this.qty;
@@ -222,7 +222,7 @@ class ProductModel {
 
 
 class Promotion {
-  String price;
+  String? price;
 
   Promotion({this.price});
 

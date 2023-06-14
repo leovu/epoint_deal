@@ -7,9 +7,9 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class AllocatorModal extends StatefulWidget {
-  List<AllocatorData> allocatorData = <AllocatorData>[];
-  AllocatorData allocatorSelected;
-   AllocatorModal({ Key key ,this.allocatorData, this.allocatorSelected}) : super(key: key);
+  List<AllocatorData>? allocatorData = <AllocatorData>[];
+  AllocatorData? allocatorSelected;
+   AllocatorModal({ Key? key ,this.allocatorData, this.allocatorSelected}) : super(key: key);
 
   @override
   _AllocatorModalState createState() => _AllocatorModalState();
@@ -22,7 +22,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        AllocatorData result = widget.allocatorData.firstWhereOrNull((element) => element.staffId == widget.allocatorSelected?.staffId);
+        AllocatorData? result = widget.allocatorData!.firstWhereOrNull((element) => element.staffId == widget.allocatorSelected?.staffId);
       if (result != null) {
          widget.allocatorSelected = result;
          result.selected = true;
@@ -48,7 +48,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(width: 30,),
-              Text(AppLocalizations.text(LangKey.chooseAllottedPerson),style: TextStyle(
+              Text(AppLocalizations.text(LangKey.chooseAllottedPerson)!,style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
                   fontWeight: FontWeight.w500),),
@@ -81,9 +81,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
   List<Widget> _listWidget() {
     return (widget.allocatorData != null) ? List.generate(
-        widget.allocatorData.length,
+        widget.allocatorData!.length,
         (index) => _buildItem(
-                widget.allocatorData[index].fullName, widget.allocatorData[index].selected,
+                widget.allocatorData![index].fullName!, widget.allocatorData![index].selected!,
                 () {
               selectedItem(index);
             })) : [CustomDataNotFound()];
@@ -91,7 +91,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
   Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -110,7 +110,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   }
 
   selectedItem(int index) async {
-    List<AllocatorData> models = widget.allocatorData;
+    List<AllocatorData> models = widget.allocatorData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

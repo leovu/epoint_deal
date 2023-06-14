@@ -16,13 +16,13 @@ class HTTPConnection {
     Future<ResponseData> upload(String path, MultipartFileModel model) async {
     final uri = Uri.parse('$domain$path');
     var request = http.MultipartRequest('POST', uri);
-    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': DealConnection.locale.languageCode, 'branch-id':'1'});
+    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': DealConnection.locale!.languageCode, 'branch-id':'1'});
     request.files.add(
       http.MultipartFile(
-        model.name,
-        model.file.readAsBytes().asStream(),
-        model.file.lengthSync(),
-        filename: model.file.path.split("/").last,
+        model.name!,
+        model.file!.readAsBytes().asStream(),
+        model.file!.lengthSync(),
+        filename: model.file!.path.split("/").last,
       ),
     );
     if (kDebugMode) {
@@ -57,7 +57,7 @@ class HTTPConnection {
 
   Future<ResponseData>post(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
+    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale!.languageCode};
     // if(LeadConnection.account != null) {
       // headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
       headers['Authorization'] = 'Bearer ${asscessToken}';
@@ -106,9 +106,9 @@ class HTTPConnection {
   }
   Future<ResponseData>delete(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
+    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': DealConnection.locale!.languageCode};
     if(DealConnection.account != null) {
-      headers['Authorization'] = 'Bearer ${DealConnection.account.accessToken}';
+      headers['Authorization'] = 'Bearer ${DealConnection.account!.accessToken}';
     }
     String jsonBody = json.encode(body);
     if (kDebugMode) {
@@ -150,9 +150,9 @@ class HTTPConnection {
   }
   Future<ResponseData>get(String path) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'brand-code':brandCode, 'lang': DealConnection.locale.languageCode};
+    final headers = {'brand-code':brandCode, 'lang': DealConnection.locale!.languageCode};
     if(DealConnection.account != null) {
-      headers['Authorization'] = 'Bearer ${DealConnection.account.accessToken}';
+      headers['Authorization'] = 'Bearer ${DealConnection.account!.accessToken}';
     }
     if (kDebugMode) {
       print('***** GET *****');
@@ -185,13 +185,13 @@ class HTTPConnection {
 }
 
 class ResponseData {
-   bool isSuccess;
-   Map<String,dynamic> data;
+   late bool isSuccess;
+   Map<String,dynamic>? data;
 }
 
 class MultipartFileModel {
-  File file;
-  String name;
+  File? file;
+  String? name;
 
   MultipartFileModel({this.file, this.name});
 

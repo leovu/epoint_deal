@@ -11,7 +11,7 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class AllocatorScreen extends StatefulWidget {
-  const AllocatorScreen({Key key}) : super(key: key);
+  const AllocatorScreen({Key? key}) : super(key: key);
 
   @override
   _AllocatorScreenState createState() => _AllocatorScreenState();
@@ -21,9 +21,9 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  GetAllocatorModelReponse _model;
-  List<AllocatorData> allocators = <AllocatorData>[];
-  GetAllocatorModelReponse dataAllocator;
+  GetAllocatorModelReponse? _model;
+  List<AllocatorData>? allocators = <AllocatorData>[];
+  GetAllocatorModelReponse? dataAllocator;
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.staff),
+            AppLocalizations.text(LangKey.staff)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
@@ -87,7 +87,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   controller: _controller,
                   separator: Divider(),
-                  children: (_model != null) ? (_model.data.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
+                  children: (_model != null) ? (_model!.data!.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
                 ))
               : Container(),
           Container(
@@ -100,14 +100,14 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
 
   List<Widget> _listWidget() {
     return List.generate(
-        _model.data.length,
-        (index) => _buildItemStaff(_model.data[index], () {
+        _model!.data!.length,
+        (index) => _buildItemStaff(_model!.data![index], () {
               selectedStaff(index);
             }));
   }
 
   selectedStaff(int index) async {
-    List<AllocatorData> models = _model.data;
+    List<AllocatorData> models = _model!.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
@@ -119,20 +119,20 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
 
   Widget _buildItemStaff(AllocatorData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: Row(
           children: [
-            _buildAvatar(item.fullName),
+            _buildAvatar(item.fullName!),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  item.fullName,
+                  item.fullName!,
                   style: TextStyle(
                       fontSize: 18.0,
-                      color: item.selected ? Colors.orange : Colors.black,
+                      color: item.selected! ? Colors.orange : Colors.black,
                       fontWeight: FontWeight.normal),
                   maxLines: 1,
                 ),
@@ -197,9 +197,9 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
     );
   }
 
-  searchModel(List<AllocatorData> model, String value) {
+  searchModel(List<AllocatorData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = allocators;
+      _model!.data = allocators;
       setState(() {
       });
     } else {
@@ -215,7 +215,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {
       });
       } catch (_) {
@@ -228,12 +228,12 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
 }
 
 extension NumberParsing on String {
-  double tryParseDouble({bool isRound = false}) {
+  double? tryParseDouble({bool isRound = false}) {
     if (this == null || this == "null") {
       return 0.0;
     }
     String param = this.toString().replaceAll(",", "");
-    double val = double.tryParse(param);
+    double? val = double.tryParse(param);
     return val == null
         ? 0.0
         : (isRound ? double.tryParse(val.toStringAsFixed(2)) : val);

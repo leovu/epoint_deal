@@ -38,8 +38,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealFromLeadScreen extends StatefulWidget {
-  Map<String, dynamic> jsonDetailLead;
-  CreateDealFromLeadScreen({Key key, this.jsonDetailLead}) : super(key: key);
+  Map<String, dynamic>? jsonDetailLead;
+  CreateDealFromLeadScreen({Key? key, this.jsonDetailLead}) : super(key: key);
 
   @override
   _CreateDealFromLeadScreenState createState() =>
@@ -68,25 +68,25 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
   CustomerOptionData customerOptonData = CustomerOptionData();
 
-  List<PipelineData> pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
   PipelineData pipelineSelected = PipelineData();
 
-  List<JourneyData> journeysData = <JourneyData>[];
-  JourneyData journeySelected = JourneyData();
+  List<JourneyData>? journeysData = <JourneyData>[];
+  JourneyData? journeySelected = JourneyData();
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
   AllocatorData allocatorSelected = AllocatorData();
 
-  List<OrderSourceData> orderSources;
-  OrderSourceData orderSourceSelected;
+  List<OrderSourceData>? orderSources;
+  OrderSourceData? orderSourceSelected;
 
-  List<TagData> tags;
+  List<TagData>? tags;
   List<TagData> tagsSelected = <TagData>[];
 
-  List<TagData> tagsData;
+  List<TagData>? tagsData;
 
-  List<BranchData> branchData;
-  BranchData branchSelected;
+  List<BranchData>? branchData;
+  BranchData? branchSelected;
 
   bool selectedCustomer = false;
 
@@ -114,9 +114,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
         selected: false),
   ];
 
-  DateTime selectedClosingDueDate;
+  DateTime? selectedClosingDueDate;
 
-  DetailPotentialData detailLead;
+  DetailPotentialData? detailLead;
 
   List<CustomerData> listCustomer = <CustomerData>[];
   DealItems customerItem = DealItems(
@@ -205,9 +205,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
   }
 
   void bindingData() async {
-    detailLead = DetailPotentialData.fromJson(widget.jsonDetailLead);
+    detailLead = DetailPotentialData.fromJson(widget.jsonDetailLead!);
 
-    detailDeal.phone = detailLead.phone ?? "";
+    detailDeal.phone = detailLead!.phone ?? "";
 
    _dealNameText.text = "Deal của ${detailLead?.fullName ?? ""}";
 
@@ -239,10 +239,10 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
     detailDeal.saleId = _modelStaffSelected[0].staffId;
 
-    if (detailLead.tag.length > 0 && tagsData != null) {
-      List<int> tagInt = [];
-      for (var tag in tagsData) {
-        for (TagData tagLead in detailLead.tag) {
+    if (detailLead!.tag!.length > 0 && tagsData != null) {
+      List<int?> tagInt = [];
+      for (var tag in tagsData!) {
+        for (TagData tagLead in detailLead!.tag!) {
           if (tag.tagId == tagLead.tagId) {
             tagInt.add(tag.tagId);
             tag.selected = true;
@@ -252,7 +252,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
       }
       for (int i = 0; i < tagsSelected.length; i++) {
         if (tagsString == "") {
-          tagsString = tagsSelected[i].name;
+          tagsString = tagsSelected[i].name ?? "";
         } else {
           tagsString += ", ${tagsSelected[i].name}";
         }
@@ -277,7 +277,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.creatDeal),
+              AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
             // leadingWidth: 20.0,
@@ -317,7 +317,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.text(LangKey.dealInfomation),
+                AppLocalizations.text(LangKey.dealInfomation)!,
                 style: TextStyle(
                     fontSize: AppTextSizes.size16,
                     color: const Color(0xFF0067AC),
@@ -330,7 +330,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                         setState(() {});
                       },
                       child: Text(
-                        AppLocalizations.text(LangKey.collapse),
+                        AppLocalizations.text(LangKey.collapse)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size16,
                             color: const Color(0xFF0067AC),
@@ -364,7 +364,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                     ]),
                 child: Center(
                   child: Text(
-                    AppLocalizations.text(LangKey.potentialCustomer),
+                    AppLocalizations.text(LangKey.potentialCustomer)!,
                     style: TextStyle(
                         color: !selectedCustomer
                             ? Colors.white
@@ -376,7 +376,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               ),
               Container(
                 height: 42.0,
-                width: AppSizes.maxWidth / 2 - 19,
+                width: AppSizes.maxWidth! / 2 - 19,
                 padding: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                     color: selectedCustomer
@@ -392,7 +392,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                     ]),
                 child: Center(
                   child: Text(
-                    AppLocalizations.text(LangKey.customerVi),
+                    AppLocalizations.text(LangKey.customerVi)!,
                     style: TextStyle(
                         color:
                             selectedCustomer ? Colors.white : Color(0xFF8E8E8E),
@@ -423,7 +423,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 child: Row(
                   children: [
                     Text(
-                      AppLocalizations.text(LangKey.customerStyle) + ": ",
+                      AppLocalizations.text(LangKey.customerStyle)! + ": ",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
@@ -434,9 +434,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                     ),
                     Text(
                       (detailLead?.customerType != null && detailLead?.customerType != "")
-                          ? (detailLead.customerType.toLowerCase() == "personal")
-                              ? AppLocalizations.text(LangKey.personal)
-                              : AppLocalizations.text(LangKey.business)
+                          ? (detailLead!.customerType!.toLowerCase() == "personal")
+                              ? AppLocalizations.text(LangKey.personal)!
+                              : AppLocalizations.text(LangKey.business)!
                           : "",
                       style: TextStyle(
                           color: Colors.black,
@@ -451,7 +451,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 child: Row(
                   children: [
                     Text(
-                      AppLocalizations.text(LangKey.phoneNumber) + ": ",
+                      AppLocalizations.text(LangKey.phoneNumber)! + ": ",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
@@ -506,7 +506,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       children: [
                         Divider(),
                         Text(
-                          AppLocalizations.text(LangKey.showMore),
+                          AppLocalizations.text(LangKey.showMore)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -539,7 +539,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                         false, ontap: () async {
                         FocusScope.of(context).unfocus();
 
-                        if (pipeLineData == null || pipeLineData.length == 0) {
+                        if (pipeLineData == null || pipeLineData!.length == 0) {
                           DealConnection.showLoading(context);
                           var pipelines =
                               await DealConnection.getPipeline(context);
@@ -547,7 +547,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                           if (pipelines != null) {
                             pipeLineData = pipelines.data;
 
-                            PipelineData pipeline = await showModalBottomSheet(
+                            PipelineData? pipeline = await showModalBottomSheet(
                                 context: context,
                                 useRootNavigator: true,
                                 isScrollControlled: true,
@@ -581,7 +581,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                             }
                           }
                         } else {
-                          PipelineData pipeline = await showModalBottomSheet(
+                          PipelineData? pipeline = await showModalBottomSheet(
                               context: context,
                               useRootNavigator: true,
                               isScrollControlled: true,
@@ -628,7 +628,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
                   FocusScope.of(context).unfocus();
 
-                  JourneyData journey = await showModalBottomSheet(
+                  JourneyData? journey = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -640,7 +640,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       });
                   if (journey != null) {
                     journeySelected = journey;
-                    detailDeal.journeyCode = journeySelected.journeyCode;
+                    detailDeal.journeyCode = journeySelected!.journeyCode;
                     setState(() {
                       // await LeadConnection.getDistrict(context, province.provinceid);
                     });
@@ -660,7 +660,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                   FocusScope.of(context).unfocus();
                   print("Chọn người được phân bổ");
 
-                  List<WorkListStaffModel> result =
+                  List<WorkListStaffModel>? result =
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => MultipleStaffScreenDeal(
                                 models: _modelStaffSelected,
@@ -693,12 +693,12 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                     false, ontap: () async {
                   print("Tag");
                   FocusScope.of(context).unfocus();
-                  if (tagsData == null || tagsData.length == 0) {
+                  if (tagsData == null || tagsData!.length == 0) {
                     DealConnection.showLoading(context);
                     var tags = await DealConnection.getTag(context);
                     Navigator.of(context).pop();
                     if (tags != null) {
-                      List<int> tagsSeletecd = [];
+                      List<int?> tagsSeletecd = [];
                       tagsData = tags.data;
 
                       var listTagsSelected = await Navigator.of(context).push(
@@ -711,13 +711,13 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                         tagsString = "";
                         tagsData = listTagsSelected;
 
-                        for (int i = 0; i < tagsData.length; i++) {
-                          if (tagsData[i].selected) {
-                            tagsSeletecd.add(tagsData[i].tagId);
+                        for (int i = 0; i < tagsData!.length; i++) {
+                          if (tagsData![i].selected!) {
+                            tagsSeletecd.add(tagsData![i].tagId);
                             if (tagsString == "") {
-                              tagsString = tagsData[i].name;
+                              tagsString = tagsData![i].name ?? "";
                             } else {
-                              tagsString += ", ${tagsData[i].name}";
+                              tagsString += ", ${tagsData![i].name}";
                             }
                           }
                         }
@@ -731,17 +731,17 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                             builder: (context) =>
                                 TagsModal(tagsData: tagsData)));
                     if (listTagsSelected != null) {
-                      List<int> tagsSeletecd = [];
+                      List<int?> tagsSeletecd = [];
                       tagsString = "";
                       tagsData = listTagsSelected;
 
-                      for (int i = 0; i < tagsData.length; i++) {
-                        if (tagsData[i].selected) {
-                          tagsSeletecd.add(tagsData[i].tagId);
+                      for (int i = 0; i < tagsData!.length; i++) {
+                        if (tagsData![i].selected!) {
+                          tagsSeletecd.add(tagsData![i].tagId);
                           if (tagsString == "") {
-                            tagsString = tagsData[i].name;
+                            tagsString = tagsData![i].name ?? "";
                           } else {
-                            tagsString += ", ${tagsData[i].name}";
+                            tagsString += ", ${tagsData![i].name}";
                           }
                         }
                       }
@@ -793,7 +793,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               onTapConfirm: () {
                 selectedClosingDueDate = selectedDate;
                 _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-                    .format(selectedClosingDueDate)
+                    .format(selectedClosingDueDate!)
                     .toString();
                 // widget.filterScreenModel.fromDate_created_at = selectedDate;
 
@@ -805,16 +805,16 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
         });
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -846,7 +846,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
@@ -885,9 +885,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
   }
 
   Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -944,7 +944,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
-            AppLocalizations.text(LangKey.creatDeal),
+            AppLocalizations.text(LangKey.creatDeal)!,
             style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.white,
@@ -969,24 +969,24 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
       DealConnection.showLoading(context);
 
       double amount = 0;
-      if (detailDeal.product.length > 0) {
-        for (int i = 0; i < detailDeal.product.length; i++) {
+      if (detailDeal.product!.length > 0) {
+        for (int i = 0; i < detailDeal.product!.length; i++) {
           amount +=
-              detailDeal.product[i].amount * detailDeal.product[i].quantity;
+              detailDeal.product![i].amount! * detailDeal.product![i].quantity!;
         }
       }
-      AddDealModelResponse result = await DealConnection.addDeal(
+      AddDealModelResponse? result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "lead",
-              customerCode: detailLead.customerLeadCode,
+              customerCode: detailLead!.customerLeadCode,
               phone: detailDeal.phone,
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
               // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,

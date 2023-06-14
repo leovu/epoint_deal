@@ -1,7 +1,7 @@
 class ProductRequestModel {
-  String productName;
-  int page;
-  String brandCode;
+  String? productName;
+  int? page;
+  String? brandCode;
 
   ProductRequestModel({this.productName, this.page, this.brandCode});
 

@@ -1,23 +1,23 @@
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 
 class UpdateDealModelRequest {
-  String dealCode;
-  String dealName;
-  String phone;
-  int saleId;
-  String typeCustomer;
-  String pipelineCode;
-  String journeyCode;
-  String closingDate;
-  List<int> tag;
-  int orderSourceId;
-  num probability;
-  String dealDescription;
-  String customerCode;
-  String branchCode;
-  num amount;
-  num discount;
-  List<Product> product;
+  String? dealCode;
+  String? dealName;
+  String? phone;
+  int? saleId;
+  String? typeCustomer;
+  String? pipelineCode;
+  String? journeyCode;
+  String? closingDate;
+  List<int?>? tag;
+  int? orderSourceId;
+  num? probability;
+  String? dealDescription;
+  String? customerCode;
+  String? branchCode;
+  num? amount;
+  num? discount;
+  List<Product>? product;
 
   UpdateDealModelRequest(
       {this.dealCode,
@@ -57,7 +57,7 @@ class UpdateDealModelRequest {
     if (json['product'] != null) {
       product = <Product>[];
       json['product'].forEach((v) {
-        product.add(new Product.fromJson(v));
+        product!.add(new Product.fromJson(v));
       });
     }
     discount = json['discount'];
@@ -80,7 +80,7 @@ class UpdateDealModelRequest {
     data['customer_code'] = this.customerCode;
     data['branch_code'] = this.branchCode;
     if (this.product != null) {
-      data['product'] = this.product.map((v) => v.toJson()).toList();
+      data['product'] = this.product!.map((v) => v.toJson()).toList();
     }
     data["discount"] = discount;
     data["amount"] = amount;

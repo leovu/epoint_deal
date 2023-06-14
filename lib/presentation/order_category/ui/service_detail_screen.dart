@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -51,15 +50,15 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
   final TextEditingController _controllerNote = TextEditingController();
 
 
-  double _heightHeader = AppSizes.maxWidth * 0.9;
-  double _heightHeaderImage = (AppSizes.maxWidth - AppSizes.maxPadding * 2) / 5;
+  double _heightHeader = AppSizes.maxWidth! * 0.9;
+  double _heightHeaderImage = (AppSizes.maxWidth! - AppSizes.maxPadding! * 2) / 5;
 
-  double _widthImageDescription = AppSizes.maxWidth - AppSizes.maxPadding * 2;
+  double _widthImageDescription = AppSizes.maxWidth! - AppSizes.maxPadding! * 2;
   double _heightImageDescription = 100;
 
 
 
-  ServiceDetailBloc _bloc;
+  late ServiceDetailBloc _bloc;
 
   @override
   void initState() {
@@ -98,7 +97,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
   }
 
   _update() {
-    widget.model.newPrice = AppFormat.moneyFormat.parse(_controllerPrice.text);
+    widget.model.newPrice = AppFormat.moneyFormat.parse(_controllerPrice.text) as double?;
     widget.model.qty = double.tryParse(_controllerQuantity.text);
     widget.model.note = _controllerNote.text;
     Navigator.of(context).pop(widget.model.toJson());
@@ -111,7 +110,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     }
     GlobalCart.shared.addService(
         widget.model,
-        AppFormat.moneyFormat.parse(_controllerPrice.text),
+        AppFormat.moneyFormat.parse(_controllerPrice.text) as double?,
         double.tryParse(_controllerQuantity.text),
         _controllerNote.text
     );
@@ -131,13 +130,13 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
             radius: 0.0,
           ),
           Container(
-            margin: EdgeInsets.all(AppSizes.maxPadding),
+            margin: EdgeInsets.all(AppSizes.maxPadding!),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomSkeleton(height: 20.0,),
                 Container(height: AppSizes.minPadding,),
-                CustomSkeleton(height: 20.0, width: AppSizes.maxWidth / 2,),
+                CustomSkeleton(height: 20.0, width: AppSizes.maxWidth! / 2,),
               ],
             ),
           )
@@ -146,7 +145,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     );
   }
 
-  Widget _buildHeaderImage(String url){
+  Widget _buildHeaderImage(String? url){
     return InkWell(
       child: CustomNetworkImage(
         width: _heightHeaderImage,
@@ -159,7 +158,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     );
   }
 
-  Widget _buildHeader(ServiceDetailResponseModel model){
+  Widget _buildHeader(ServiceDetailResponseModel? model){
     if(model == null)
       return _buildSkeletonHeader();
     return Stack(
@@ -175,7 +174,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                 return CustomNetworkImage(
                   width: AppSizes.maxWidth,
                   height: _heightHeader,
-                  url: snapshot.data,
+                  url: snapshot.data as String,
                   fit: BoxFit.contain,
                   backgroundColor: Colors.white,
                 );
@@ -185,9 +184,9 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
         Container(
           margin: EdgeInsets.only(
               top: _heightHeader - _heightHeaderImage / 2,
-              right: AppSizes.maxPadding,
-              left: AppSizes.maxPadding,
-              bottom: AppSizes.maxPadding
+              right: AppSizes.maxPadding!,
+              left: AppSizes.maxPadding!,
+              bottom: AppSizes.maxPadding!
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,9 +197,9 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                 height: _heightHeaderImage,
                 child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, index) => _buildHeaderImage(model.serviceImages[index].name),
+                    itemBuilder: (_, index) => _buildHeaderImage(model.serviceImages![index].name),
                     separatorBuilder: (_, index) => Container(width: AppSizes.minPadding,),
-                    itemCount: model.serviceImages.length > 5?5:model.serviceImages.length
+                    itemCount: model.serviceImages!.length > 5?5:model.serviceImages!.length
                 ),
               ),
               Container(height: AppSizes.minPadding,),
@@ -216,14 +215,14 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                                 borderRadius: BorderRadius.horizontal(
                                     right: Radius.circular(50.0)),
                                 color: Colors.red),
-                            padding: EdgeInsets.all(AppSizes.minPadding),
+                            padding: EdgeInsets.all(AppSizes.minPadding!),
                             child: AutoSizeText(
                               model.promotion == null
                                   ? ""
-                                  : model.promotion.gift != null
-                                  ? model.promotion.gift
-                                  : model.promotion.price != null
-                                  ? model.promotion.price
+                                  : model.promotion!.gift != null
+                                  ? model.promotion!.gift!
+                                  : model.promotion!.price != null
+                                  ? model.promotion!.price!
                                   : "",
                               style: AppTextStyles.style13WhiteNormal,
                               minFontSize: 4.0,
@@ -235,7 +234,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                 ],
               ),
               Text(
-                "${model.time??0} ${AppLocalizations.text(LangKey.minutes).toUpperCase()}",
+                "${model.time??0} ${AppLocalizations.text(LangKey.minutes)!.toUpperCase()}",
                 style: AppTextStyles.style13HintNormal,
               ),
               Container(height: AppSizes.minPadding,),
@@ -289,13 +288,13 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomSkeleton(),
-          Container(height: AppSizes.minPadding / 2,),
+          Container(height: AppSizes.minPadding! / 2,),
           CustomSkeleton(),
-          Container(height: AppSizes.minPadding / 2,),
-          CustomSkeleton(width: AppSizes.maxWidth / 2,),
+          Container(height: AppSizes.minPadding! / 2,),
+          CustomSkeleton(width: AppSizes.maxWidth! / 2,),
           Container(height: AppSizes.minPadding,),
           CustomSkeleton(
-            width: AppSizes.maxWidth - AppSizes.maxPadding * 2,
+            width: AppSizes.maxWidth! - AppSizes.maxPadding! * 2,
             height: 100,
             radius: 0.0,
           )
@@ -304,7 +303,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     );
   }
 
-  Widget _buildServiceInfo(ServiceDetailResponseModel model){
+  Widget _buildServiceInfo(ServiceDetailResponseModel? model){
     return Container(
       decoration: BoxDecoration(
           boxShadow: [
@@ -312,12 +311,12 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
           ],
           color: Colors.white
       ),
-      padding: EdgeInsets.all(AppSizes.maxPadding),
+      padding: EdgeInsets.all(AppSizes.maxPadding!),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.service_description),
+            AppLocalizations.text(LangKey.service_description)!,
             style: AppTextStyles.style17BlackBold,
           ),
           Container(height: AppSizes.minPadding,),
@@ -383,10 +382,10 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
   }
 
   KeyboardActionsItem buildKeyboardAction(FocusNode node,
-      {String text = "Done", Function onTap}) {
+      {String text = "Done", Function? onTap}) {
     return KeyboardActionsItem(focusNode: node, toolbarButtons: [
       (node) => InkWell(
-            onTap: onTap ?? () => node.unfocus(),
+            onTap: onTap as void Function()? ?? () => node.unfocus(),
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -405,7 +404,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
           border: Border(top: BorderSide(color: AppColors.borderColor))),
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding, vertical: AppSizes.minPadding),
+            horizontal: AppSizes.maxPadding!, vertical: AppSizes.minPadding!),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: [
@@ -484,7 +483,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
         stream: _bloc.outputModel,
         initialData: null,
         builder: (_, snapshot){
-          ServiceDetailResponseModel model = snapshot.data;
+          ServiceDetailResponseModel? model = snapshot.data as ServiceDetailResponseModel?;
           return Column(
             children: [
               Expanded(
@@ -510,7 +509,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
 
 Widget _navigationBar() {
     return CupertinoNavigationBar(
-      middle: Text(AppLocalizations.text(LangKey.service),
+      middle: Text(AppLocalizations.text(LangKey.service)!,
           style: TextStyle(
               fontSize: AppTextSizes.size16,
               fontWeight: FontWeight.w600)),
@@ -524,7 +523,7 @@ Widget _navigationBar() {
     return CustomScaffold(
       actions: _listKeyboardAction(),
       body: CupertinoPageScaffold(
-          navigationBar: _navigationBar(), child: _buildBody()),
+          navigationBar: _navigationBar() as ObstructingPreferredSizeWidget?, child: _buildBody()),
     );
   }
 }

@@ -1,7 +1,7 @@
 class OrderHistoryResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<OrderHistoryData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<OrderHistoryData>? data;
 
   OrderHistoryResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class OrderHistoryResponseModel {
     if (json['Data'] != null) {
       data = <OrderHistoryData>[];
       json['Data'].forEach((v) {
-        data.add(new OrderHistoryData.fromJson(v));
+        data!.add(new OrderHistoryData.fromJson(v));
       });
     }
   }
@@ -21,38 +21,38 @@ class OrderHistoryResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class OrderHistoryData {
-  int orderId;
-  String orderCode;
-  int total;
-  int discount;
-  int amount;
-  int branchId;
-  String branchName;
-  int orderSourceId;
-  int receiveAtCounter;
-  String processStatus;
-  String createdAt;
-  String deliveryRequestDate;
-  String shippingAddress;
-  String contactName;
-  String contactPhone;
-  String pickupTime;
-  String dealCode;
-  String cashierDate;
-  String timeAddress;
-  int customerId;
-  String customerCode;
-  String fullName;
-  String phone;
-  String processStatusName;
-  int countProd;
+  int? orderId;
+  String? orderCode;
+  int? total;
+  int? discount;
+  int? amount;
+  int? branchId;
+  String? branchName;
+  int? orderSourceId;
+  int? receiveAtCounter;
+  String? processStatus;
+  String? createdAt;
+  String? deliveryRequestDate;
+  String? shippingAddress;
+  String? contactName;
+  String? contactPhone;
+  String? pickupTime;
+  String? dealCode;
+  String? cashierDate;
+  String? timeAddress;
+  int? customerId;
+  String? customerCode;
+  String? fullName;
+  String? phone;
+  String? processStatusName;
+  int? countProd;
 
   OrderHistoryData(
       {this.orderId,

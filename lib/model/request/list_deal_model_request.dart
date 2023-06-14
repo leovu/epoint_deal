@@ -1,16 +1,16 @@
 class ListDealModelRequest {
-  String search;
-  int page;
-  String orderSourceName;
-  List<int> branchId;
-  String createdAt;
-  String closingDate;
-  List<int> staffId;
-  String closingDueDate;
-  List<int> pipelineId;
-  List<int> journey_id;
-  List<int> manageStatusId;
-  String careHistory;
+  String? search;
+  int? page;
+  String? orderSourceName;
+  List<int?>? branchId;
+  String? createdAt;
+  String? closingDate;
+  List<int?>? staffId;
+  String? closingDueDate;
+  List<int?>? pipelineId;
+  List<int?>? journey_id;
+  List<int?>? manageStatusId;
+  String? careHistory;
 
   ListDealModelRequest(
       {this.search,

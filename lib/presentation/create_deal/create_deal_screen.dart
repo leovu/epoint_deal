@@ -39,7 +39,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealScreen extends StatefulWidget {
-  const CreateDealScreen({Key key}) : super(key: key);
+  const CreateDealScreen({Key? key}) : super(key: key);
 
   @override
   _CreateDealScreenState createState() => _CreateDealScreenState();
@@ -65,23 +65,23 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 
   CustomerOptionData customerOptonData = CustomerOptionData();
 
-  List<PipelineData> pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
   PipelineData pipelineSelected = PipelineData();
 
-  List<JourneyData> journeysData = <JourneyData>[];
-  JourneyData journeySelected = JourneyData();
+  List<JourneyData>? journeysData = <JourneyData>[];
+  JourneyData? journeySelected = JourneyData();
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
   // AllocatorData allocatorSelected = AllocatorData(staffId: 0,fullName: "",selected: false);
 
-  List<OrderSourceData> orderSources;
-  OrderSourceData orderSourceSelected;
+  List<OrderSourceData>? orderSources;
+  OrderSourceData? orderSourceSelected;
 
-  List<TagData> tags;
-  List<TagData> tagsSelected;
+  List<TagData>? tags;
+  List<TagData>? tagsSelected;
 
-  List<BranchData> branchData;
-  BranchData branchSelected;
+  List<BranchData>? branchData;
+  BranchData? branchSelected;
 
   List<CustomerTypeModel> customerTypeData = [
     CustomerTypeModel(
@@ -96,9 +96,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         selected: true),
   ];
 
-  List<WorkListStaffModel> _modelStaffSelected = [];
+  List<WorkListStaffModel>? _modelStaffSelected = [];
 
-  DateTime selectedClosingDueDate;
+  DateTime? selectedClosingDueDate;
 
   List<CustomerData> listCustomer = <CustomerData>[];
   DealItems customerSelected = DealItems(customerCode: "", customerName: "", phone: "");
@@ -132,7 +132,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       product: <Product>[]);
 
   bool selectedCustomer = false;
-  List<TagData> tagsData;
+  List<TagData>? tagsData;
 
   String tagsString = "";
 
@@ -168,7 +168,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       var pipelines = await DealConnection.getPipeline(context);
       if (pipelines != null) {
         pipeLineData = pipelines.data;
-        pipelineSelected = pipeLineData[0];
+        pipelineSelected = pipeLineData![0];
         detailDeal.pipelineCode = pipelineSelected.pipelineCode;
       }
       var journeys = await DealConnection.getJourney(
@@ -178,8 +178,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       if (journeys != null) {
         journeysData = journeys.data;
 
-        journeySelected = journeysData[0];
-        detailDeal.journeyCode = journeySelected.journeyCode;
+        journeySelected = journeysData![0];
+        detailDeal.journeyCode = journeySelected!.journeyCode;
       }
 
       GlobalCart.shared.clearCart();
@@ -201,7 +201,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.creatDeal),
+              AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
             // leadingWidth: 20.0,
@@ -241,7 +241,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.text(LangKey.dealInfomation),
+                AppLocalizations.text(LangKey.dealInfomation)!,
                 style: TextStyle(
                     fontSize: AppTextSizes.size16,
                     color: const Color(0xFF0067AC),
@@ -254,7 +254,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         setState(() {});
                       },
                       child: Text(
-                        AppLocalizations.text(LangKey.collapse),
+                        AppLocalizations.text(LangKey.collapse)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size16,
                             color: const Color(0xFF0067AC),
@@ -305,7 +305,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.potentialCustomer),
+                      AppLocalizations.text(LangKey.potentialCustomer)!,
                       style: TextStyle(
                           color: !selectedCustomer
                               ? Colors.white
@@ -332,7 +332,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 },
                 child: Container(
                   height: 42.0,
-                  width: AppSizes.maxWidth / 2 - 19,
+                  width: AppSizes.maxWidth! / 2 - 19,
                   padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       color: selectedCustomer
@@ -348,7 +348,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.customerVi),
+                      AppLocalizations.text(LangKey.customerVi)!,
                       style: TextStyle(
                           color: selectedCustomer
                               ? Colors.white
@@ -378,7 +378,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 
             if (customerTypeSelected.customerTypeNameEn ==
                 AppLocalizations.text(LangKey.customer)) {
-              CustomerData customer =
+              CustomerData? customer =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ListCustomerModal(
                             listCustomer: listCustomer,
@@ -389,7 +389,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 customerSelected.customerCode = customer.customerCode;
                 customerSelected.customerName = customer.fullName;
                 customerSelected.phone = customer.phone1;
-                _phoneNumberText.text = customer.phone1;
+                _phoneNumberText.text = customer.phone1!;
 
 
                 // detailDeal.customerCode = customerSelected.customerCode;
@@ -400,7 +400,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 setState(() {});
               }
             } else if (customerTypeSelected.customerTypeNameEn == "lead") {
-              ListCustomLeadItems result =
+              ListCustomLeadItems? result =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ListCustomerPotentialModal(
                             items: items,
@@ -441,7 +441,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.customerStyle) + ": ",
+                                AppLocalizations.text(LangKey.customerStyle)! + ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -451,8 +451,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                             (leadItem.customerType != "") ? (leadItem.customerType.toLowerCase() == AppLocalizations.text(LangKey.personal).toLowerCase() ) ?
-                                AppLocalizations.text(LangKey.personal) : AppLocalizations.text(LangKey.business) : "",
+                             (leadItem.customerType != "") ? (leadItem.customerType!.toLowerCase() == AppLocalizations.text(LangKey.personal)!.toLowerCase() ) ?
+                                AppLocalizations.text(LangKey.personal)! : AppLocalizations.text(LangKey.business)! : "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -466,7 +466,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.phoneNumber) +": ",
+                                AppLocalizations.text(LangKey.phoneNumber)! +": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -517,7 +517,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                       children: [
                         Divider(),
                         Text(
-                          AppLocalizations.text(LangKey.showMore),
+                          AppLocalizations.text(LangKey.showMore)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -550,7 +550,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     true,
                     false, ontap: () async {
                   FocusScope.of(context).unfocus();
-                  PipelineData pipeline = await showModalBottomSheet(
+                  PipelineData? pipeline = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -591,7 +591,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 
                   FocusScope.of(context).unfocus();
 
-                  JourneyData journey = await showModalBottomSheet(
+                  JourneyData? journey = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -603,7 +603,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                       });
                   if (journey != null) {
                     journeySelected = journey;
-                    detailDeal.journeyCode = journeySelected.journeyCode;
+                    detailDeal.journeyCode = journeySelected!.journeyCode;
                     setState(() {
                       // await DealConnection.getDistrict(context, province.provinceid);
                     });
@@ -617,9 +617,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 // showMoreInfoDeal ?
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
-                    (_modelStaffSelected.length > 0 &&
+                    (_modelStaffSelected!.length > 0 &&
                             _modelStaffSelected != null)
-                        ? _modelStaffSelected[0]?.staffName ?? ""
+                        ? _modelStaffSelected![0]?.staffName ?? ""
                         : "",
                     Assets.iconName,
                     true,
@@ -635,8 +635,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                               )));
 
                   if (_modelStaffSelected != null &&
-                      _modelStaffSelected.length > 0) {
-                    detailDeal.saleId = _modelStaffSelected[0].staffId;
+                      _modelStaffSelected!.length > 0) {
+                    detailDeal.saleId = _modelStaffSelected![0].staffId;
                     print(_modelStaffSelected);
                     setState(() {});
                   }
@@ -664,7 +664,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     false, ontap: () async {
                   print("Tag");
                   FocusScope.of(context).unfocus();
-                  if (tagsData == null || tagsData.length == 0) {
+                  if (tagsData == null || tagsData!.length == 0) {
                     DealConnection.showLoading(context);
                     var tags = await DealConnection.getTag(context);
                     Navigator.of(context).pop();
@@ -677,17 +677,17 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                   TagsModal(tagsData: tagsData)));
 
                       if (listTagsSelected != null) {
-                        List<int> tagsSeletecd = [];
+                        List<int?> tagsSeletecd = [];
                         tagsString = "";
                         tagsData = listTagsSelected;
 
-                        for (int i = 0; i < tagsData.length; i++) {
-                          if (tagsData[i].selected) {
-                            tagsSeletecd.add(tagsData[i].tagId);
+                        for (int i = 0; i < tagsData!.length; i++) {
+                          if (tagsData![i].selected!) {
+                            tagsSeletecd.add(tagsData![i].tagId);
                             if (tagsString == "") {
-                              tagsString = tagsData[i].name;
+                              tagsString = tagsData![i].name ?? "";
                             } else {
-                              tagsString += ", ${tagsData[i].name}";
+                              tagsString += ", ${tagsData![i].name}";
                             }
                           }
                         }
@@ -702,17 +702,17 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                             builder: (context) =>
                                 TagsModal(tagsData: tagsData)));
                     if (listTagsSelected != null) {
-                      List<int> tagsSeletecd = [];
+                      List<int?> tagsSeletecd = [];
                       tagsString = "";
                       tagsData = listTagsSelected;
 
-                      for (int i = 0; i < tagsData.length; i++) {
-                        if (tagsData[i].selected) {
-                          tagsSeletecd.add(tagsData[i].tagId);
+                      for (int i = 0; i < tagsData!.length; i++) {
+                        if (tagsData![i].selected!) {
+                          tagsSeletecd.add(tagsData![i].tagId);
                           if (tagsString == "") {
-                            tagsString = tagsData[i].name;
+                            tagsString = tagsData![i].name ?? "";
                           } else {
-                            tagsString += ", ${tagsData[i].name}";
+                            tagsString += ", ${tagsData![i].name}";
                           }
                         }
                       }
@@ -761,7 +761,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               onTapConfirm: () {
                 selectedClosingDueDate = selectedDate;
                 _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-                    .format(selectedClosingDueDate)
+                    .format(selectedClosingDueDate!)
                     .toString();
                 // widget.filterScreenModel.fromDate_created_at = selectedDate;
 
@@ -773,16 +773,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         });
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -814,7 +814,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
@@ -853,9 +853,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   }
 
   Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -918,7 +918,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
-            AppLocalizations.text(LangKey.creatDeal),
+            AppLocalizations.text(LangKey.creatDeal)!,
             style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.white,
@@ -962,7 +962,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       //   }
       // }
 
-      AddDealModelResponse result = await DealConnection.addDeal(
+      AddDealModelResponse? result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
               dealName: _dealNameText.text,
@@ -973,7 +973,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
               // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,
@@ -992,7 +992,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           await DealConnection.showMyDialog(context, result.errorDescription);
           if (result.data != null) {
             modelResponse = ObjectPopCreateDealModel(
-                deal_id: result.data.dealId, status: true);
+                deal_id: result.data!.dealId, status: true);
           }
           Navigator.of(context).pop(modelResponse.toJson());
         } else {
@@ -1024,7 +1024,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       //   }
       // }
 
-      AddDealModelResponse result = await DealConnection.addDeal(
+      AddDealModelResponse? result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
               dealName: _dealNameText.text,
@@ -1035,7 +1035,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               pipelineCode: detailDeal.pipelineCode,
               journeyCode: detailDeal.journeyCode,
               closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate)}",
+                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
               // closingDate: "",
               branchCode: detailDeal.branchCode,
               tag: detailDeal.tag,
@@ -1055,7 +1055,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           await DealConnection.showMyDialog(context, result.errorDescription);
           if (result.data != null) {
             modelResponse = ObjectPopCreateDealModel(
-                deal_id: result.data.dealId, status: true);
+                deal_id: result.data!.dealId, status: true);
           }
           Navigator.of(context).pop(modelResponse.toJson());
         } else {

@@ -3,17 +3,17 @@ import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottom extends StatelessWidget {
-  final String text;
-  final Color color;
-  final TextStyle textStyle;
-  final Function onTap;
-  final String subText;
-  final Function onSubTap;
-  final Color subColor;
-  final Widget child;
+  final String? text;
+  final Color? color;
+  final TextStyle? textStyle;
+  final Function? onTap;
+  final String? subText;
+  final Function? onSubTap;
+  final Color? subColor;
+  final Widget? child;
 
   const CustomBottom(
-      {Key key,
+      {Key? key,
       this.text,
       this.color,
       this.textStyle,

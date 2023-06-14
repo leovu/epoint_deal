@@ -14,22 +14,22 @@ import 'package:keyboard_actions/keyboard_actions_item.dart';
 
 class CustomScaffold extends StatelessWidget {
 
-  final Widget body;
-  final String title;
-  final Widget customTitle;
-  final List<CustomOptionAppBar> options;
-  final CustomRefreshCallback onRefresh;
+  final Widget? body;
+  final String? title;
+  final Widget? customTitle;
+  final List<CustomOptionAppBar>? options;
+  final CustomRefreshCallback? onRefresh;
   final bool isBottom;
-  final Color backgroundColor;
-  final Widget floatingActionButton;
-  final List<KeyboardActionsItem> actions;
-  final IconData icon;
-  final List<CustomModelTabBar> tabs;
-  final TabController tabController;
-  final Function onWillPop;
+  final Color? backgroundColor;
+  final Widget? floatingActionButton;
+  final List<KeyboardActionsItem>? actions;
+  final IconData? icon;
+  final List<CustomModelTabBar>? tabs;
+  final TabController? tabController;
+  final Function? onWillPop;
   final bool isBottomSheet;
   final bool isExpanded;
-  final String backgroundImage;
+  final String? backgroundImage;
 
   CustomScaffold({
     this.body,
@@ -104,7 +104,7 @@ class CustomScaffold extends StatelessWidget {
                   child: Container(
                     // width: AppSizes.maxWidth,
                     // height: AppSizes.maxHeight,
-                    child: Image.asset(backgroundImage, fit: BoxFit.fill,),
+                    child: Image.asset(backgroundImage!, fit: BoxFit.fill,),
                   ),
                 ),
                 _buildContent()
@@ -127,7 +127,7 @@ class CustomScaffold extends StatelessWidget {
           : WillPopScope(
         child: _buildBody(),
         onWillPop: () async {
-          onWillPop();
+          onWillPop!();
           return false;
         },
       ),

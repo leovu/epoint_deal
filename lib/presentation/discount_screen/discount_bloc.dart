@@ -15,7 +15,7 @@ class DiscountBloc extends BaseBloc {
     super.dispose();
   }
 
-  final _streamIsMoney = BehaviorSubject<bool>();
-  ValueStream<bool> get outputIsMoney => _streamIsMoney.stream;
+  final _streamIsMoney = BehaviorSubject<bool?>();
+  ValueStream<bool?> get outputIsMoney => _streamIsMoney.stream;
   setIsMoney(bool event) => set(_streamIsMoney, event);
 }

@@ -10,15 +10,15 @@ class Global {
 
   static bool validateWorkScheduleDate = true;
 
-  static Function getListProduct;
+  static Function? getListProduct;
 
-  static Function createJob;
+  static Function? createJob;
 
-  static Function editJob;
+  static Function? editJob;
 
-  static String branch_code;
+  static String? branch_code;
 
   static double amount = 0.0;
 
-  static double discount = 0.0;
+  static double? discount = 0.0;
 }

@@ -20,7 +20,7 @@ import 'order_category_screen.dart';
 
 class ProductTabScreen extends StatefulWidget {
   final OrderCategoryScreenController search;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool isViewOnly;
   final bool isSelected;
   ProductTabScreen(this.search, this.controller, {this.isViewOnly = false, this.isSelected = false});
@@ -30,7 +30,7 @@ class ProductTabScreen extends StatefulWidget {
 
 class _ProductTabScreenState extends State<ProductTabScreen>
     implements OrderItemBase {
-  OrderItemBloc _bloc;
+  late OrderItemBloc _bloc;
   @override
   void initState() {
     // TODO: implement initState
@@ -45,7 +45,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
     _controller.search = search;
   }
   void search(String value) {
-    ProductRequestModel _request = _requestModel;
+    ProductRequestModel _request = _requestModel!;
     _request.productName = value;
     _request.page = 1;
     getProduct(request: _request, isSearch: true);
@@ -58,7 +58,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
         stream: _bloc.outputProduct,
         builder: (_, snapshot) {
           if (snapshot.hasData) {
-            ProductResponseModel _data = snapshot.data;
+            ProductResponseModel _data = snapshot.data as ProductResponseModel;
             return CustomScaffold(
               actions: _listKeyboardAction(_data.items),
               body: NotificationListener(
@@ -82,7 +82,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
     return false;
   }
 
-  List<KeyboardActionsItem> _listKeyboardAction(List<ProductModel> item) {
+  List<KeyboardActionsItem>? _listKeyboardAction(List<ProductModel?>? item) {
     if (item == null) return null;
     List<KeyboardActionsItem> models = [];
     for(var e in item){
@@ -94,10 +94,10 @@ class _ProductTabScreenState extends State<ProductTabScreen>
   }
 
   KeyboardActionsItem buildKeyboardAction(FocusNode node,
-      {String text = "Done", Function onTap}) {
+      {String text = "Done", Function? onTap}) {
     return KeyboardActionsItem(focusNode: node, toolbarButtons: [
       (node) => InkWell(
-            onTap: onTap ?? () => node.unfocus(),
+            onTap: onTap as void Function()? ?? () => node.unfocus(),
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -109,7 +109,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
     ]);
   }
 
-  List<Widget> _getProducts(List<ProductModel> value) {
+  List<Widget> _getProducts(List<ProductModel?>? value) {
     List<Widget> _arr = [];
     if (value == null) return _arr;
     value.forEach((element) {
@@ -160,8 +160,8 @@ class _ProductTabScreenState extends State<ProductTabScreen>
               padding: const EdgeInsets.all(8.0),
               child: CustomNetworkImage(
                 url: value.avatar,
-                width: AppSizes.maxWidth * 0.1,
-                height: AppSizes.maxWidth * 0.1,
+                width: AppSizes.maxWidth! * 0.1,
+                height: AppSizes.maxWidth! * 0.1,
               ),
             ),
             Expanded(
@@ -172,7 +172,7 @@ class _ProductTabScreenState extends State<ProductTabScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      value.productName,
+                      value.productName!,
                       textScaleFactor: 1.05,
                       maxLines: 3,
                       style: TextStyle(fontWeight: FontWeight.w500),
@@ -327,17 +327,17 @@ class _ProductTabScreenState extends State<ProductTabScreen>
   //   );
   // }
 
-  ProductRequestModel _requestModel;
+  ProductRequestModel? _requestModel;
   @override
-  getProduct({ProductRequestModel request, bool isSearch = false}) {
+  getProduct({ProductRequestModel? request, bool isSearch = false}) {
     // TODO: implement getProduct
     try {
       if (_requestModel == null && request == null) {
         _requestModel = ProductRequestModel();
-        _requestModel.productName = widget.controller.text ?? '';
-        _requestModel.brandCode =
+        _requestModel!.productName = widget.controller!.text ?? '';
+        _requestModel!.brandCode =
             Global.branch_code;
-        _requestModel.page = 1;
+        _requestModel!.page = 1;
         _bloc.getProduct(_requestModel);
       } else {
         if (request != null) {

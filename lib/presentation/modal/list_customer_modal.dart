@@ -12,10 +12,10 @@ import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:flutter/material.dart';
 
 class ListCustomerModal extends StatefulWidget {
-  DealItems dealItem = DealItems();
-  List<CustomerData> listCustomer = <CustomerData>[];
+  DealItems? dealItem = DealItems();
+  List<CustomerData>? listCustomer = <CustomerData>[];
 
-  ListCustomerModal({Key key, this.dealItem, this.listCustomer});
+  ListCustomerModal({Key? key, this.dealItem, this.listCustomer});
 
   @override
   _ListCustomerModalState createState() => _ListCustomerModalState();
@@ -26,8 +26,8 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-  GetCustomerModelResponse _model;
-  int indexSelected;
+  GetCustomerModelResponse? _model;
+  int? indexSelected;
 
   @override
   void initState() {
@@ -43,10 +43,10 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
     super.dispose();
   }
 
-  getData(bool loadMore, {int page}) async {
+  getData(bool loadMore, {int? page}) async {
     keyboardDismissOnTap(context);
     FocusScope.of(context).unfocus();
-    GetCustomerModelResponse model = await DealConnection.getCustomer(context);
+    GetCustomerModelResponse? model = await DealConnection.getCustomer(context);
     if (model != null) {
       widget.listCustomer = model.data;
 
@@ -55,14 +55,14 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
               .map((e) => CustomerData.fromJson(e.toJson()))
               .toList());
 
-      for (int i = 0; i < _model.data.length; i++) {
+      for (int i = 0; i < _model!.data!.length; i++) {
         if ((widget.dealItem?.customerCode ?? "") ==
-            _model.data[i].customerCode) {
-          widget.listCustomer[i].selected = true;
-          _model.data[i].selected = true;
+            _model!.data![i].customerCode) {
+          widget.listCustomer![i].selected = true;
+          _model!.data![i].selected = true;
         } else {
-          widget.listCustomer[i].selected = false;
-          _model.data[i].selected = false;
+          widget.listCustomer![i].selected = false;
+          _model!.data![i].selected = false;
         }
       }
 
@@ -79,7 +79,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.listCustomer),
+            AppLocalizations.text(LangKey.listCustomer)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
@@ -96,7 +96,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
         children: [
           _buildSearch(),
           (widget.listCustomer != null)
-              ? (widget.listCustomer.length > 0)
+              ? (widget.listCustomer!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -118,17 +118,17 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
   }
 
   List<Widget> _listWidget() {
-    return (_model?.data != null && _model?.data.length > 0)
+    return (_model?.data != null && (_model?.data!.length ?? 0) > 0)
         ? List.generate(
-            _model.data.length,
-            (index) => _buildItemStaff(_model.data[index], () {
+            _model!.data!.length,
+            (index) => _buildItemStaff(_model!.data![index], () {
                   selectedCustomer(index);
                 }))
         : [CustomDataNotFound()];
   }
 
   selectedCustomer(int index) async {
-    List<CustomerData> models = _model.data;
+    List<CustomerData> models = _model!.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
@@ -142,7 +142,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
 
   Widget _buildItemStaff(CustomerData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         decoration: BoxDecoration(color: Colors.white),
@@ -156,8 +156,8 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
                   style: TextStyle(
                       fontSize: 16.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
-                      fontWeight:item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? AppColors.primaryColor : Colors.black,
+                      fontWeight:item.selected! ? FontWeight.bold : FontWeight.normal),
                   maxLines: 1,
                 ),
               ),
@@ -212,7 +212,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(_model.data, event);
+        searchModel(_model!.data, event);
         print(event.toLowerCase());
         if (_searchext != null) {
           print(_searchext.text);
@@ -221,9 +221,9 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
     );
   }
 
-  searchModel(List<CustomerData> model, String value) {
+  searchModel(List<CustomerData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = widget.listCustomer;
+      _model!.data = widget.listCustomer;
       setState(() {});
     } else {
       try {
@@ -238,7 +238,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {});
       } catch (_) {
         setState(() {});
@@ -248,12 +248,12 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
 }
 
 extension NumberParsing on String {
-  double tryParseDouble({bool isRound = false}) {
+  double? tryParseDouble({bool isRound = false}) {
     if (this == null || this == "null") {
       return 0.0;
     }
     String param = this.toString().replaceAll(",", "");
-    double val = double.tryParse(param);
+    double? val = double.tryParse(param);
     return val == null
         ? 0.0
         : (isRound ? double.tryParse(val.toStringAsFixed(2)) : val);

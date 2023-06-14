@@ -21,22 +21,22 @@ class ProductDetailBloc extends BaseBloc {
     super.dispose();
   }
 
-  final _streamImage = BehaviorSubject<String>();
-  ValueStream<String> get outputImage => _streamImage.stream;
-  setImage(String event) => set(_streamImage, event);
+  final _streamImage = BehaviorSubject<String?>();
+  ValueStream<String?> get outputImage => _streamImage.stream;
+  setImage(String? event) => set(_streamImage, event);
 
-  final _streamModel = BehaviorSubject<ProductDetailResponseModel>();
-  ValueStream<ProductDetailResponseModel> get outputModel => _streamModel.stream;
+  final _streamModel = BehaviorSubject<ProductDetailResponseModel?>();
+  ValueStream<ProductDetailResponseModel?> get outputModel => _streamModel.stream;
   setModel(ProductDetailResponseModel event) => set(_streamModel, event);
 
-  final _streamQuantity = BehaviorSubject<int>();
-  ValueStream<int> get outputQuantity => _streamQuantity.stream;
+  final _streamQuantity = BehaviorSubject<int?>();
+  ValueStream<int?> get outputQuantity => _streamQuantity.stream;
   setQuantity(int event) => set(_streamQuantity, event);
 
   productDetail(ProductDetailRequestModel model, bool isRefresh) async {
-    ProductDetailModel response = await DealConnection.productDetail(context, model);
+    ProductDetailModel? response = await DealConnection.productDetail(context, model);
     if(response != null){
-     ProductDetailResponseModel responseModel = response.data;
+     ProductDetailResponseModel? responseModel = response.data;
 
       setModel(responseModel ?? ProductDetailResponseModel());
     }

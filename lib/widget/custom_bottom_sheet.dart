@@ -9,11 +9,11 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 class CustomBottomSheet extends StatelessWidget {
   
 
-  final List<KeyboardActionsItem> actions;
-  final String title;
-  final Widget body;
-  final CustomRefreshCallback onRefresh;
-  final bool isBottomSheet;
+  final List<KeyboardActionsItem>? actions;
+  final String? title;
+  final Widget? body;
+  final CustomRefreshCallback? onRefresh;
+  final bool? isBottomSheet;
 
   CustomBottomSheet({
     this.actions,
@@ -81,7 +81,7 @@ class CustomBottomSheet extends StatelessWidget {
                               onTap: () => Navigator.pop(context),
                             ),
                             Expanded(child: Text(
-                              title,
+                              title!,
                               style: TextStyle(
       fontSize: AppTextSizes.size17,
       color: Colors.black,

@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListDealScreen extends StatefulWidget {
-  const ListDealScreen({Key key}) : super(key: key);
+  const ListDealScreen({Key? key}) : super(key: key);
 
   @override
   _ListDealScreenState createState() => _ListDealScreenState();
@@ -30,17 +30,17 @@ class _ListDealScreenState extends State<ListDealScreen> {
   ScrollController _controller = ScrollController();
   final TextEditingController _searchtext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<DealItems> items;
+  List<DealItems>? items;
 
   List<PipelineData> pipeLineData = <PipelineData>[];
   List<OrderSourceData> orderSourceData = <OrderSourceData>[];
   List<BranchData> branchData = <BranchData>[];
   List<WorkListStaffModel> models = [];
 
-  int currentPage = 1;
-  int nextPage = 2;
+  int? currentPage = 1;
+  int? nextPage = 2;
 
-  ListDealModelRequest filterModel = ListDealModelRequest(
+  ListDealModelRequest? filterModel = ListDealModelRequest(
       search: "",
       page: 1,
       orderSourceName: "",
@@ -84,22 +84,22 @@ class _ListDealScreenState extends State<ListDealScreen> {
     });
   }
 
-  getData(bool loadMore, {int page}) async {
-    ListDealModelResponse model = await DealConnection.getList(
+  getData(bool loadMore, {int? page}) async {
+    ListDealModelResponse? model = await DealConnection.getList(
         context,
         ListDealModelRequest(
             search: _searchtext.text,
-            page: filterModel.page,
-            orderSourceName: filterModel.orderSourceName,
-            createdAt: filterModel.createdAt,
-            closingDate: filterModel.closingDate,
-            closingDueDate: filterModel.closingDueDate,
-            branchId: filterModel.branchId,
-            staffId: filterModel.staffId,
-            pipelineId: filterModel.pipelineId,
-            journey_id: filterModel.journey_id,
-            manageStatusId: filterModel.manageStatusId,
-            careHistory: filterModel.careHistory));
+            page: filterModel!.page,
+            orderSourceName: filterModel!.orderSourceName,
+            createdAt: filterModel!.createdAt,
+            closingDate: filterModel!.closingDate,
+            closingDueDate: filterModel!.closingDueDate,
+            branchId: filterModel!.branchId,
+            staffId: filterModel!.staffId,
+            pipelineId: filterModel!.pipelineId,
+            journey_id: filterModel!.journey_id,
+            manageStatusId: filterModel!.manageStatusId,
+            careHistory: filterModel!.careHistory));
     if (model != null) {
       if (!loadMore) {
         items = [];
@@ -110,7 +110,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
           curve: Curves.fastOutSlowIn,
         );
       } else {
-        items.addAll(model.data?.items);
+        items!.addAll(model.data?.items! as Iterable<DealItems>);
       }
       currentPage = model.data?.pageInfo?.currentPage;
       nextPage = model.data?.pageInfo?.nextPage;
@@ -124,8 +124,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      if (this.currentPage < this.nextPage) {
-        filterModel.page = currentPage + 1;
+      if (this.currentPage! < this.nextPage!) {
+        filterModel!.page = currentPage! + 1;
         getData(true);
       }
     }
@@ -146,14 +146,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
         ),
         backgroundColor: AppColors.primaryColor,
         title: Text(
-          AppLocalizations.text(LangKey.list_deal),
+          AppLocalizations.text(LangKey.list_deal)!,
           style: const TextStyle(color: Colors.white, fontSize: 16.0),
         ),
         // leadingWidth: 20.0,
         actions: [
           InkWell(
             onTap: () async {
-              FilterScreenModel result =
+              FilterScreenModel? result =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => FilterDealCustomer(
                             filterScreenModel: filterScreenModel,
@@ -162,7 +162,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
               if (result != null) {
                 filterScreenModel = result;
                 filterModel = result.filterModel;
-                filterModel.page = 1;
+                filterModel!.page = 1;
                 getData(false);
               } else {}
             },
@@ -214,9 +214,9 @@ class _ListDealScreenState extends State<ListDealScreen> {
               children: [
                 (items == null)
                     ? Container()
-                    : (items.length > 0)
+                    : (items!.length > 0)
                         ? Column(
-                            children: items.map((e) => _dealItemV2(e)).toList())
+                            children: items!.map((e) => _dealItemV2(e)).toList())
                         : CustomDataNotFound(),
                 Container(height: 100)
               ],
@@ -251,7 +251,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
             suffixIcon: InkWell(
               splashColor: Colors.white,
               onTap: () async {
-                filterModel.page = 1;
+                filterModel!.page = 1;
                 getData(false);
               },
               child: Padding(
@@ -272,7 +272,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
             }
           },
           onSubmitted: (event) async {
-            filterModel.page = 1;
+            filterModel!.page = 1;
             getData(false);
           }
           // },
@@ -285,7 +285,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
       children: [
         InkWell(
           onTap: () async {
-            bool result = await Navigator.of(context).push(MaterialPageRoute(
+            bool? result = await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => DetailDealScreen(
                       deal_code: item.dealCode,
                       indexTab: 0,
@@ -326,7 +326,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          item.dealName,
+                          item.dealName!,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 16.0,
@@ -342,10 +342,10 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 item.backgroundColorJourney ?? "#0067AC"),
                             borderRadius: BorderRadius.circular(10.0)),
                         constraints:
-                            BoxConstraints(maxWidth: AppSizes.maxWidth / 2.5),
+                            BoxConstraints(maxWidth: AppSizes.maxWidth! / 2.5),
                         child: Padding(
                           padding: EdgeInsets.all(5.0),
-                          child: Text(item.journeyName,
+                          child: Text(item.journeyName!,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14.0,
@@ -385,7 +385,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 Expanded(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: item.createdAt + " ",
+                                          text: item.createdAt! + " ",
                                           style: TextStyle(
                                               fontSize: 14.0,
                                               color: Colors.black,
@@ -509,7 +509,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                   Assets.iconCalendar, Color(0xFF26A7AD),
                                   number: item?.relatedWork ?? 0,
                                   ontap: () async {
-                                bool result = await Navigator.of(context)
+                                bool? result = await Navigator.of(context)
                                     .push(MaterialPageRoute(
                                         builder: (context) => DetailDealScreen(
                                               deal_code: item.dealCode,
@@ -525,7 +525,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                               _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
                                   number: item.appointment ?? 0,
                                   ontap: () async {
-                                bool result = await Navigator.of(context)
+                                bool? result = await Navigator.of(context)
                                     .push(MaterialPageRoute(
                                         builder: (context) => DetailDealScreen(
                                               deal_code: item.dealCode,
@@ -545,14 +545,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
                     )
                   ],
                 ),
-                item.tag.length > 0
+                item.tag!.length > 0
                     ? Container(
                         // width: AppSizes.maxWidth * 0.55,
                         padding:
                             EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                         child: Wrap(
-                          children: List.generate(item.tag.length,
-                              (index) => _optionItem(item.tag[index])),
+                          children: List.generate(item.tag!.length,
+                              (index) => _optionItem(item.tag![index])),
                           spacing: 10,
                           runSpacing: 10,
                         ),
@@ -608,7 +608,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
               decoration: BoxDecoration(
                   color: Color(0x790067AC),
                   borderRadius: BorderRadius.circular(1000.0))),
-          Text(item.name,
+          Text(item.name!,
               style: TextStyle(
                   color: Color(0xFF0067AC),
                   fontSize: 14.0,
@@ -618,9 +618,9 @@ class _ListDealScreenState extends State<ListDealScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {num number, Function ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, Function? ontap}) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
           margin: EdgeInsets.only(left: 14),
           child: Stack(

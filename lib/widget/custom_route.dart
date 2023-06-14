@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomRoute extends MaterialPageRoute {
-  final Widget page;
-  CustomRoute({this.page}):super(builder: (context) => page);
+  final Widget? page;
+  CustomRoute({this.page}):super(builder: (context) => page!);
 
   @override
   // TODO: implement settings
@@ -10,12 +10,12 @@ class CustomRoute extends MaterialPageRoute {
 }
 
 class CustomRouteDialog extends PageRouteBuilder {
-  final Widget page;
+  final Widget? page;
   CustomRouteDialog({this.page})
       : super(
       pageBuilder: (context, animation,
           secondaryAnimation) =>
-      page,
+      page!,
       transitionsBuilder: (context,
           animation,
           secondaryAnimation,

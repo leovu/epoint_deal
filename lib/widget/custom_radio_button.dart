@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class CustomRadioButton extends StatelessWidget {
 
   final bool value;
-  final Color activeColor;
-  final Function(bool) onChanged;
+  final Color? activeColor;
+  final Function(bool?) onChanged;
 
-  const CustomRadioButton(this.value, this.onChanged, {Key key, this.activeColor}) : super(key: key);
+  const CustomRadioButton(this.value, this.onChanged, {Key? key, this.activeColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class CustomRadioButton extends StatelessWidget {
       value: value,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       activeColor: activeColor??AppColors.primaryColor,
-      onChanged: onChanged ?? (_){},
+      onChanged: onChanged ?? (dynamic _){},
     );
   }
 }

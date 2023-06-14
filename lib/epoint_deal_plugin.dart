@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'epoint_deal_plugin_platform_interface.dart';
 
 class EpointDealPlugin {
-  Future<String> getPlatformVersion() {
+  Future<String?> getPlatformVersion() {
     return EpointDealPluginPlatform.instance.getPlatformVersion();
   }
 
@@ -21,14 +21,14 @@ class EpointDealPlugin {
 
   static Future<dynamic> open(
       BuildContext context, Locale locale, String token, int create,
-      {String domain,
-      String brandCode,
-      String deal_code,
-      int indexTabDetail,
-      Function getListProduct,
-      Function createJob,
-      Function editJob,
-      Map<String,dynamic> jsonDetail
+      {String? domain,
+      String? brandCode,
+      String? deal_code,
+      int? indexTabDetail,
+      Function? getListProduct,
+      Function? createJob,
+      Function? editJob,
+      Map<String,dynamic>? jsonDetail
       
       }) async {
 
@@ -63,11 +63,11 @@ class EpointDealPlugin {
     bool result = await DealConnection.init(token, domain: domain);
     if (result) {
       if (create == 0) {
-        Map<String, dynamic> event = await Navigator.of(context)
+        Map<String, dynamic>? event = await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => CreateDealScreen()));
         return event;
       } else if (create == 1) {
-       bool result = await Navigator.of(context).push(MaterialPageRoute(
+       bool? result = await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailDealScreen(
                   deal_code: deal_code,
                   indexTab: indexTabDetail ?? 0,
@@ -77,7 +77,7 @@ class EpointDealPlugin {
         await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => ListDealScreen()));
       } else {
-        bool result = await Navigator.of(context)
+        bool? result = await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => CreateDealFromLeadScreen(jsonDetailLead: jsonDetail,)));
 
           return result;

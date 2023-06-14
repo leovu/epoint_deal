@@ -9,9 +9,9 @@ import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class PipelineModal extends StatefulWidget {
-  List<PipelineData> pipeLineData = <PipelineData>[];
-  PipelineData pipelineSelected;
- PipelineModal({ Key key, this.pipeLineData, this.pipelineSelected });
+  List<PipelineData>? pipeLineData = <PipelineData>[];
+  PipelineData? pipelineSelected;
+ PipelineModal({ Key? key, this.pipeLineData, this.pipelineSelected });
 
   @override
   _PipelineModalState createState() => _PipelineModalState();
@@ -24,7 +24,7 @@ class _PipelineModalState extends State<PipelineModal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        PipelineData result = widget.pipeLineData.firstWhereOrNull((element) => element.pipelineCode == widget.pipelineSelected?.pipelineCode);
+        PipelineData? result = widget.pipeLineData!.firstWhereOrNull((element) => element.pipelineCode == widget.pipelineSelected?.pipelineCode);
       if (result != null) {
          widget.pipelineSelected = result;
          result.selected = true;
@@ -40,7 +40,7 @@ class _PipelineModalState extends State<PipelineModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.choosePipeline),
-      widget: (widget.pipeLineData.length > 0) ? CustomListView(
+      widget: (widget.pipeLineData!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.pipeLineData ?? [])
@@ -51,7 +51,7 @@ class _PipelineModalState extends State<PipelineModal> {
                           element?.pipelineName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.pipeLineData.length - 1,
+                          index < widget.pipeLineData!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -64,9 +64,9 @@ class _PipelineModalState extends State<PipelineModal> {
 
   List<Widget> _listWidget() {
     return (widget.pipeLineData != null) ? List.generate(
-        widget.pipeLineData.length,
+        widget.pipeLineData!.length,
         (index) => _buildItem(
-                widget.pipeLineData[index].pipelineName, widget.pipeLineData[index].selected,
+                widget.pipeLineData![index].pipelineName!, widget.pipeLineData![index].selected!,
                 () {
               selectedItem(index);
             })) : [CustomDataNotFound()];
@@ -74,7 +74,7 @@ class _PipelineModalState extends State<PipelineModal> {
 
   Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -93,7 +93,7 @@ class _PipelineModalState extends State<PipelineModal> {
   }
 
   selectedItem(int index) async {
-    List<PipelineData> models = widget.pipeLineData;
+    List<PipelineData> models = widget.pipeLineData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

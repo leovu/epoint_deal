@@ -4,14 +4,14 @@ import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomMenuBottomSheet extends StatelessWidget {
-  final Widget widget;
-  final String title;
+  final Widget? widget;
+  final String? title;
   final bool allowBack;
   final bool haveBnConfirm;
   final bool enableButton;
-  final String textConfirm;
-  final Function onTapConfirm;
-  final Function funcPop;
+  final String? textConfirm;
+  final Function? onTapConfirm;
+  final Function? funcPop;
   CustomMenuBottomSheet(
       {this.widget,
       this.title,
@@ -55,7 +55,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                           Opacity(
                             child: InkWell(
                               onTap:
-                                  funcPop ?? () => Navigator.of(context).pop(),
+                                  funcPop as void Function()? ?? () => Navigator.of(context).pop(),
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,
@@ -90,7 +90,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Flexible(child: widget),
+                        Flexible(child: widget!),
                         if (haveBnConfirm)
                           CustomButton(
                             text: textConfirm ??

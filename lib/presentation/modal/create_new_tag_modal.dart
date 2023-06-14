@@ -8,7 +8,7 @@ import 'package:epoint_deal_plugin/model/response/description_model_response.dar
 import 'package:flutter/material.dart';
 
 class CreateNewTagModal extends StatefulWidget {
-  CreateNewTagModal({Key key}) : super(key: key);
+  CreateNewTagModal({Key? key}) : super(key: key);
 
   @override
   _CreateNewTagModalState createState() => _CreateNewTagModalState();
@@ -63,7 +63,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
               padding: EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  AppLocalizations.text(LangKey.addTag),
+                  AppLocalizations.text(LangKey.addTag)!,
                   style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.black,
@@ -93,7 +93,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
       onTap: () async {
         if (_nameText.text != "") {
           DealConnection.showLoading(context);
-          DescriptionModelResponse result =
+          DescriptionModelResponse? result =
               await DealConnection.addTag(
                   context, AddTagModelRequest(
                     name: _nameText.text,
@@ -123,7 +123,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
           child: Center(
             child: Text(
               // AppLocalizations.text(LangKey.convertCustomers),
-              AppLocalizations.text(LangKey.addNewTag),
+              AppLocalizations.text(LangKey.addNewTag)!,
               style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white,
@@ -133,16 +133,16 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
           )),
     );
   }
-  Widget _tftCreateNewBusiness(String title, String content, String icon,
+  Widget _tftCreateNewBusiness(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

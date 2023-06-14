@@ -1,7 +1,7 @@
 class ListProjectModelResponse {
-  int errorCode;
-  String errorDescription;
-  ListProjectData data;
+  int? errorCode;
+  String? errorDescription;
+  ListProjectData? data;
 
   ListProjectModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -16,15 +16,15 @@ class ListProjectModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class ListProjectData {
-  PageInfo pageInfo;
-  List<ListProjectItems> items;
+  PageInfo? pageInfo;
+  List<ListProjectItems>? items;
 
   ListProjectData({this.pageInfo, this.items});
 
@@ -35,7 +35,7 @@ class ListProjectData {
     if (json['Items'] != null) {
       items = <ListProjectItems>[];
       json['Items'].forEach((v) {
-        items.add(ListProjectItems.fromJson(v));
+        items!.add(ListProjectItems.fromJson(v));
       });
     }
   }
@@ -43,26 +43,26 @@ class ListProjectData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.pageInfo != null ) {
-      data['PageInfo'] = this.pageInfo.toJson();
+      data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items.map((v) => v.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class PageInfo {
-  int total;
-  int itemPerPage;
-  int from;
-  int to;
-  int currentPage;
-  int firstPage;
-  int lastPage;
-  int previousPage;
-  int nextPage;
-  List<int> pageRange;
+  int? total;
+  int? itemPerPage;
+  int? from;
+  int? to;
+  int? currentPage;
+  int? firstPage;
+  int? lastPage;
+  int? previousPage;
+  int? nextPage;
+  List<int>? pageRange;
 
   PageInfo(
       {this.total,
@@ -106,20 +106,20 @@ class PageInfo {
 }
 
 class ListProjectItems {
-  int manageProjectId;
-  String manageProjectName;
-  String managerAvatar;
-  String manager;
-  String manageProjectStatusName;
-  String manageProjectStatusColor;
-  num ratio;
-  List<ListProjectTag> tag;
-  bool selected;
+  int? manageProjectId;
+  String? manageProjectName;
+  String? managerAvatar;
+  // String? manager;
+  String? manageProjectStatusName;
+  String? manageProjectStatusColor;
+  num? ratio;
+  List<ListProjectTag>? tag;
+  bool? selected;
   ListProjectItems(
       {this.manageProjectId,
       this.manageProjectName,
       this.managerAvatar,
-      this.manager,
+      // this.manager,
       this.manageProjectStatusName,
       this.manageProjectStatusColor,
       this.ratio,
@@ -130,7 +130,7 @@ class ListProjectItems {
     manageProjectId = json['manage_project_id'];
     manageProjectName = json['manage_project_name'];
     managerAvatar = json['manager_avatar'];
-    manager = json['manager'];
+    // manager = json['manager'] as String;
     manageProjectStatusName = json['manage_project_status_name'];
     manageProjectStatusColor = json['manage_project_status_color'];
     ratio = json['ratio(%)'];
@@ -138,7 +138,7 @@ class ListProjectItems {
     if (json['tag'] != null) {
       tag = <ListProjectTag>[];
       json['tag'].forEach((v) {
-        tag.add(new ListProjectTag.fromJson(v));
+        tag!.add(new ListProjectTag.fromJson(v));
       });
     }
   }
@@ -148,20 +148,20 @@ class ListProjectItems {
     data['manage_project_id'] = this.manageProjectId;
     data['manage_project_name'] = this.manageProjectName;
     data['manager_avatar'] = this.managerAvatar;
-    data['manager'] = this.manager;
+    // data['manager'] = this.manager;
     data['manage_project_status_name'] = this.manageProjectStatusName;
     data['manage_project_status_color'] = this.manageProjectStatusColor;
     data['ratio(%)'] = this.ratio;
     data['selected'] = this.selected;
     if (this.tag != null) {
-      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+      data['tag'] = this.tag!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ListProjectTag {
-  String manageTagName;
+  String? manageTagName;
 
   ListProjectTag({this.manageTagName});
 

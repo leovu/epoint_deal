@@ -7,20 +7,20 @@ import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog extends StatelessWidget {
-  final String title;
-  final String content;
-  final String textSubmitted;
-  final Function onSubmitted;
-  final String textSubSubmitted;
-  final Function onSubSubmitted;
-  final Color colorSubmitted;
+  final String? title;
+  final String? content;
+  final String? textSubmitted;
+  final Function? onSubmitted;
+  final String? textSubSubmitted;
+  final Function? onSubSubmitted;
+  final Color? colorSubmitted;
   final bool enableCancel;
   final bool isTicket;
-  final Widget child;
+  final Widget? child;
 
   CustomAlertDialog(
       {
-        @required this.title,
+        required this.title,
         this.content,
         this.onSubmitted,
         this.textSubmitted,
@@ -45,12 +45,12 @@ class CustomAlertDialog extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(AppSizes.maxPadding),
+                padding: EdgeInsets.all(AppSizes.maxPadding!),
                 child: Column(
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.sizeOnTap - AppSizes.maxPadding),
+                          horizontal: AppSizes.sizeOnTap! - AppSizes.maxPadding!),
                       child: Text(
                         title ?? "",
                         style: AppTextStyles.style20BlackBold,
@@ -76,7 +76,7 @@ class CustomAlertDialog extends StatelessWidget {
                     textSubSubmitted == null
                         ? Container()
                         : Container(
-                            padding: EdgeInsets.only(top: AppSizes.minPadding),
+                            padding: EdgeInsets.only(top: AppSizes.minPadding!),
                             child: CustomButton(
                               text: textSubSubmitted,
                               backgroundColor: AppColors.subColor,

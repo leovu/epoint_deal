@@ -1,7 +1,7 @@
 class ClosingDueDateModel {
-  String closingDueDateName;
-  int closingDueDateID;
-  bool selected;
+  String? closingDueDateName;
+  int? closingDueDateID;
+  bool? selected;
 
   ClosingDueDateModel({this.closingDueDateName, this.closingDueDateID, this.selected});
 

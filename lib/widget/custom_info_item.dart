@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustomInfoItem extends StatelessWidget {
 
-  final String icon;
-  final String title;
+  final String? icon;
+  final String? title;
 
   CustomInfoItem({
     this.icon,
@@ -22,11 +22,11 @@ class CustomInfoItem extends StatelessWidget {
             margin: const EdgeInsets.only(right: 10.0),
             height: 15.0,
             width: 15.0,
-            child: Image.asset(icon),
+            child: Image.asset(icon!),
           ),
           Expanded(
             child: Text(
-              title,
+              title!,
               overflow: TextOverflow.ellipsis,
               maxLines: 4,
               textAlign: TextAlign.start,

@@ -8,7 +8,7 @@ import 'package:epoint_deal_plugin/model/response/description_model_response.dar
 import 'package:flutter/material.dart';
 
 class CreateNewBusinessAreaModal extends StatefulWidget {
-  CreateNewBusinessAreaModal({Key key}) : super(key: key);
+  CreateNewBusinessAreaModal({Key? key}) : super(key: key);
 
   @override
   _CreateNewBusinessAreaModalState createState() =>
@@ -64,7 +64,7 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
               padding: EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  AppLocalizations.text(LangKey.createNewBusinessAreas),
+                  AppLocalizations.text(LangKey.createNewBusinessAreas)!,
                   style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.black,
@@ -95,7 +95,7 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
         if (_nameText.text != "") {
           DealConnection.showLoading(context);
           // await Future.delayed(Duration(seconds: 2));
-          DescriptionModelResponse result =
+          DescriptionModelResponse? result =
               await DealConnection.addBusinessAreas(
                   context, AddBusinessAreasModelRequest(
                     name: _nameText.text,
@@ -125,7 +125,7 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
           child: Center(
             child: Text(
               // AppLocalizations.text(LangKey.convertCustomers),
-              AppLocalizations.text(LangKey.addNewBusinessAreas),
+              AppLocalizations.text(LangKey.addNewBusinessAreas)!,
               style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white,
@@ -136,16 +136,16 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
     );
   }
 
-  Widget _tftCreateNewBusiness(String title, String content, String icon,
+  Widget _tftCreateNewBusiness(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

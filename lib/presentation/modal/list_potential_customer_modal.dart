@@ -13,10 +13,10 @@ import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:flutter/material.dart';
 
 class ListCustomerPotentialModal extends StatefulWidget {
-  List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
-  ListCustomLeadItems leadItem;
+  List<ListCustomLeadItems>? items = <ListCustomLeadItems>[];
+  ListCustomLeadItems? leadItem;
 
- ListCustomerPotentialModal({ Key key, this.items ,this.leadItem});
+ ListCustomerPotentialModal({ Key? key, this.items ,this.leadItem});
 
   @override
   _ListCustomerPotentialModalState createState() => _ListCustomerPotentialModalState();
@@ -27,7 +27,7 @@ class _ListCustomerPotentialModalState extends State<ListCustomerPotentialModal>
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-ListCustomLeadData _model ;
+ListCustomLeadData? _model ;
 
   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
       search: "",
@@ -46,8 +46,8 @@ ListCustomLeadData _model ;
 
       );
 
-  int currentPage = 1;
-  int nextPage = 2;
+  int? currentPage = 1;
+  int? nextPage = 2;
 
   @override
   void initState() {
@@ -61,8 +61,8 @@ ListCustomLeadData _model ;
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      if (this.currentPage < this.nextPage) {
-        filterModel.page = currentPage + 1;
+      if (this.currentPage! < this.nextPage!) {
+        filterModel.page = currentPage! + 1;
         getData(true);
       }
     }
@@ -74,10 +74,10 @@ ListCustomLeadData _model ;
     super.dispose();
   }
 
-  getData(bool loadMore, {int page}) async {
+  getData(bool loadMore, {int? page}) async {
     keyboardDismissOnTap(context);
     FocusScope.of(context).unfocus();
-    ListCustomLeadModelReponse model = await DealConnection.getListPotentialCustomer(
+    ListCustomLeadModelReponse? model = await DealConnection.getListPotentialCustomer(
         context,
         ListCustomLeadModelRequest(
             search: _searchext.text,
@@ -98,22 +98,24 @@ ListCustomLeadData _model ;
         widget.items = [];
         widget.items = model.data?.items;
         // ignore: null_aware_before_operator
-        (model.data?.items?.length > 0) ??
-            _controller.animateTo(
+       if (widget.items!.length > 0) {
+         _controller.animateTo(
               _controller.position.minScrollExtent,
               duration: Duration(seconds: 2),
               curve: Curves.fastOutSlowIn,
             );
+       }
+              ;
       } else {
-        widget.items.addAll(model.data?.items);
+        widget.items!.addAll(model.data?.items! as Iterable<ListCustomLeadItems>);
       }
 
 
-      for (int i = 0; i < widget.items.length ; i++) {
-        if ((widget.leadItem?.customerLeadCode ?? "") == widget.items[i].customerLeadCode ) {
-          widget.items[i].selected = true;
+      for (int i = 0; i < widget.items!.length ; i++) {
+        if ((widget.leadItem?.customerLeadCode ?? "") == widget.items![i].customerLeadCode ) {
+          widget.items![i].selected = true;
         } else {
-          widget.items[i].selected = false;
+          widget.items![i].selected = false;
         }
       }
 
@@ -142,7 +144,7 @@ ListCustomLeadData _model ;
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.listLead),
+            AppLocalizations.text(LangKey.listLead)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
@@ -179,9 +181,9 @@ ListCustomLeadData _model ;
   }
 
   List<Widget> _listWidget() {
-    return (_model?.items != null && _model.items.length > 0) ? List.generate(
-        _model.items.length,
-        (index) => _buildItemStaff(_model.items[index], () {
+    return (_model?.items != null && _model!.items!.length > 0) ? List.generate(
+        _model!.items!.length,
+        (index) => _buildItemStaff(_model!.items![index], () {
               selectedStaff(index);
             })) : [Container()];
   }
@@ -207,7 +209,7 @@ ListCustomLeadData _model ;
   }
 
   selectedStaff(int index) async {
-    List<ListCustomLeadItems> models = _model.items;
+    List<ListCustomLeadItems> models = _model!.items!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
@@ -219,7 +221,7 @@ ListCustomLeadData _model ;
 
   Widget _buildItemStaff(ListCustomLeadItems item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         decoration: BoxDecoration(color: Colors.white),
@@ -229,10 +231,10 @@ ListCustomLeadData _model ;
               child: Container(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  item.leadFullName,
+                  item.leadFullName!,
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: item.selected ? AppColors.primaryColor : Colors.black,
+                      color: item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight: FontWeight.normal),
                   maxLines: 1,
                 ),
@@ -277,9 +279,9 @@ ListCustomLeadData _model ;
     );
   }
 
-   searchModel(List<ListCustomLeadItems> model, String value) {
+   searchModel(List<ListCustomLeadItems>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.items = widget.items;
+      _model!.items = widget.items;
       setState(() {
       });
     } else {
@@ -295,7 +297,7 @@ ListCustomLeadData _model ;
           }
           return result;
         }).toList();
-        _model.items = models;
+        _model!.items = models;
         setState(() {
       });
       } catch (_) {

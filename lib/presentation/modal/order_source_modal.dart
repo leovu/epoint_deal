@@ -9,9 +9,9 @@ import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class OrderSourcesModal extends StatefulWidget {
-List<OrderSourceData> orderSourceData;
-OrderSourceData orderSourceSelected;
-   OrderSourcesModal({ Key key ,this.orderSourceData,this.orderSourceSelected}) ;
+List<OrderSourceData>? orderSourceData;
+OrderSourceData? orderSourceSelected;
+   OrderSourcesModal({ Key? key ,this.orderSourceData,this.orderSourceSelected}) ;
 
   @override
   _OrderSourcesModalState createState() => _OrderSourcesModalState();
@@ -25,7 +25,7 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        OrderSourceData result = widget.orderSourceData.firstWhereOrNull((element) => element.orderSourceName == widget.orderSourceSelected?.orderSourceName);
+        OrderSourceData? result = widget.orderSourceData!.firstWhereOrNull((element) => element.orderSourceName == widget.orderSourceSelected?.orderSourceName);
       if (result != null) {
          widget.orderSourceSelected = result;
          result.selected = true;
@@ -40,7 +40,7 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.orderSource),
-      widget: (widget.orderSourceData.length > 0) ? CustomListView(
+      widget: (widget.orderSourceData!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.orderSourceData ?? [])
@@ -51,7 +51,7 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
                           element?.orderSourceName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.orderSourceData.length - 1,
+                          index < widget.orderSourceData!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -93,7 +93,7 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
   // }
 
   selectedItem(int index) async {
-    List<OrderSourceData> models = widget.orderSourceData;
+    List<OrderSourceData> models = widget.orderSourceData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

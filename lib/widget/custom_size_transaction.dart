@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CustomSizeTransaction extends StatefulWidget {
 
-  final Widget child;
+  final Widget? child;
   final bool open;
 
   CustomSizeTransaction({this.child, this.open = false});
@@ -15,8 +15,8 @@ class CustomSizeTransaction extends StatefulWidget {
 
 class CustomSizeTransactionState extends State<CustomSizeTransaction> with TickerProviderStateMixin {
 
-  AnimationController _controller;
-  Animation<double> _animation;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {

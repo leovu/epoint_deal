@@ -1,5 +1,5 @@
 class ProductDetailRequestModel {
-  int productId;
+  int? productId;
 
   ProductDetailRequestModel({this.productId});
 

@@ -22,13 +22,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MoreInfoCreateDealFromLead extends StatefulWidget {
-  String tagsString;
-  List<TagData> tagsData;
-  List<BranchData> branchData;
-  OrderSourceData orderSourceSelected;
-  UpdateDealModelRequest detailDeal;
+  String? tagsString;
+  List<TagData>? tagsData;
+  List<BranchData>? branchData;
+  OrderSourceData? orderSourceSelected;
+  UpdateDealModelRequest? detailDeal;
   MoreInfoCreateDealFromLead(
-      {Key key,
+      {Key? key,
       this.branchData,
       this.orderSourceSelected,
       this.tagsData,
@@ -49,11 +49,11 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
   TextEditingController _detailDealText = TextEditingController();
   FocusNode _detailDealFocusNode = FocusNode();
 
-  List<OrderSourceData> orderSourceData;
-  OrderSourceData orderSourceSelected;
+  List<OrderSourceData>? orderSourceData;
+  OrderSourceData? orderSourceSelected;
 
   // List<TagData> tagsData;
-  List<TagData> tagsSelected;
+  List<TagData>? tagsSelected;
   String tagsString = "";
   List<Map<String, dynamic>> productSelected = [];
 
@@ -78,7 +78,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // + thêm sản phẩm
-              (widget.detailDeal.product.length == 0)
+              (widget.detailDeal!.product!.length == 0)
                   ? InkWell(
                       onTap: () async {
                         final result = await Navigator.of(context).push(
@@ -90,7 +90,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                           if (result.length > 0) {
                             productSelected.clear();
                             for (int i = 0; i < result.length; i++) {
-                              widget.detailDeal.product.add(Product(
+                              widget.detailDeal!.product!.add(Product(
                                   objectType: result[i]["object_type"] ?? "",
                                   objectName: result[i]["object_name"] ?? "",
                                   objectCode: result[i]["objectCode"] ?? "",
@@ -100,7 +100,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                                   amount: (result[i]["quantity"] ?? 0) *
                                       (result[i]["price"] ?? 0)));
                               productSelected
-                                  .add(widget.detailDeal.product[i].toJson());
+                                  .add(widget.detailDeal!.product![i].toJson());
                             }
                             ;
                           }
@@ -135,7 +135,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               ),
 
 // + thông tin thêm
-              (!showAdditionDeal && widget.detailDeal.product.length == 0)
+              (!showAdditionDeal && widget.detailDeal!.product!.length == 0)
                   ? InkWell(
                       onTap: () {
                         showAdditionDeal = !showAdditionDeal;
@@ -167,12 +167,12 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
           ),
           Column(
             children: [
-              (widget.detailDeal.product.length > 0)
+              (widget.detailDeal!.product!.length > 0)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppLocalizations.text(LangKey.yourOrder),
+                          AppLocalizations.text(LangKey.yourOrder)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -180,18 +180,18 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                         ),
                         InkWell(
                           onTap: () async {
-                            if (widget.detailDeal.product.length > 0) {
-                              widget.detailDeal.product.forEach((v) {
+                            if (widget.detailDeal!.product!.length > 0) {
+                              widget.detailDeal!.product!.forEach((v) {
                                 if (v.objectType == 'product') {
                                   ProductModel item =
                                       ProductModel.fromJsonOrderDetail(
                                           v.toJson());
-                                  GlobalCart.shared.addProduct(item, item.price,item.qty, item.note);
+                                  GlobalCart.shared.addProduct(item, item.price as double?,item.qty as double?, item.note);
                                 } else {
                                   ServiceModel item =
                                       ServiceModel.fromJsonOrderDetail(
                                           v.toJson());
-                                  GlobalCart.shared.addService(item, item.price,item.qty, item.note);
+                                  GlobalCart.shared.addService(item, item.price as double?,item.qty as double?, item.note);
                                 }
                               });
                             }
@@ -204,11 +204,11 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                             print(result);
 
                             if (result != null) {
-                              widget.detailDeal.product.clear();
+                              widget.detailDeal!.product!.clear();
                               if (result.length > 0) {
                                 productSelected.clear();
                                 for (int i = 0; i < result.length; i++) {
-                                  widget.detailDeal.product.add(Product(
+                                  widget.detailDeal!.product!.add(Product(
                                       objectType:
                                           result[i]["object_type"] ?? "",
                                       objectName:
@@ -221,7 +221,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                                           (result[i]["price"] ?? 0)));
 
                                   productSelected.add(
-                                      widget.detailDeal.product[i].toJson());
+                                      widget.detailDeal!.product![i].toJson());
                                 }
                                 ;
                               }
@@ -230,7 +230,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                             setState(() {});
                           },
                           child: Text(
-                            AppLocalizations.text(LangKey.chooseMoreItem),
+                            AppLocalizations.text(LangKey.chooseMoreItem)!,
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: const Color(0xFF0067AC),
@@ -257,7 +257,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
           ),
 
           // thông tin thêm
-          (!showAdditionDeal && widget.detailDeal.product.length > 0)
+          (!showAdditionDeal && widget.detailDeal!.product!.length > 0)
               ? InkWell(
                   onTap: () {
                     showAdditionDeal = !showAdditionDeal;
@@ -309,7 +309,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppLocalizations.text(LangKey.moreInformation),
+                          AppLocalizations.text(LangKey.moreInformation)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -321,7 +321,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                             setState(() {});
                           },
                           child: Text(
-                            AppLocalizations.text(LangKey.collapse),
+                            AppLocalizations.text(LangKey.collapse)!,
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: const Color(0xFF0067AC),
@@ -341,7 +341,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        AppLocalizations.text(LangKey.branch),
+                        AppLocalizations.text(LangKey.branch)!,
                         style: TextStyle(
                             fontSize: 15.0,
                             color: const Color(0xFF858080),
@@ -379,14 +379,14 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
             print("nguon don hang");
 
             FocusScope.of(context).unfocus();
-            if (orderSourceData == null || orderSourceData.length == 0) {
+            if (orderSourceData == null || orderSourceData!.length == 0) {
               DealConnection.showLoading(context);
               var orderSources = await DealConnection.getOrderSource(context);
               Navigator.of(context).pop();
               if (orderSources != null) {
                 orderSourceData = orderSources.data;
 
-                OrderSourceData orderSource = await showModalBottomSheet(
+                OrderSourceData? orderSource = await showModalBottomSheet(
                     context: context,
                     useRootNavigator: true,
                     isScrollControlled: true,
@@ -405,13 +405,13 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                     });
                 if (orderSource != null) {
                   widget.orderSourceSelected = orderSource;
-                  widget.detailDeal.orderSourceId =
-                      widget.orderSourceSelected.orderSourceId;
+                  widget.detailDeal!.orderSourceId =
+                      widget.orderSourceSelected!.orderSourceId;
                   setState(() {});
                 }
               }
             } else {
-              OrderSourceData orderSource = await showModalBottomSheet(
+              OrderSourceData? orderSource = await showModalBottomSheet(
                   context: context,
                   useRootNavigator: true,
                   isScrollControlled: true,
@@ -430,8 +430,8 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               if (orderSource != null) {
                 // widget.orderSourceSelected = orderSource;
                 // widget.detail?.orderSourceName = orderSource.orderSourceName;
-                widget.detailDeal.orderSourceId =
-                    widget.orderSourceSelected.orderSourceId;
+                widget.detailDeal!.orderSourceId =
+                    widget.orderSourceSelected!.orderSourceId;
                 setState(() {});
               }
             }
@@ -452,7 +452,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               controller: _detailDealText,
               focusNode: _detailDealFocusNode,
               onChanged: (event) {
-                widget.detailDeal.dealDescription = _detailDealText.text;
+                widget.detailDeal!.dealDescription = _detailDealText.text;
               },
             ),
           ),
@@ -463,9 +463,9 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
 
   List<Widget> listBranch() {
     return List.generate(
-        widget.branchData.length,
+        widget.branchData!.length,
         (index) => buildItemBranch(
-                widget.branchData[index], widget.branchData[index].selected,
+                widget.branchData![index], widget.branchData![index].selected!,
                 () {
               selectedItem(index);
             }));
@@ -473,20 +473,20 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
 
   List<Widget> listProduct() {
     return List.generate(
-      widget.detailDeal.product.length,
-      (index) => product(widget.detailDeal.product[index], ()
+      widget.detailDeal!.product!.length,
+      (index) => product(widget.detailDeal!.product![index], ()
           // xoa item
           {
-        widget.detailDeal.product.removeAt(index);
+        widget.detailDeal!.product!.removeAt(index);
         setState(() {});
       },
           // - so luong
           () {
-        minusItem(widget.detailDeal.product[index], productSelected[index]);
+        minusItem(widget.detailDeal!.product![index], productSelected[index]);
       },
           // + so luong
           () {
-        plusItem(widget.detailDeal.product[index], productSelected[index]);
+        plusItem(widget.detailDeal!.product![index], productSelected[index]);
       }),
     );
   }
@@ -497,8 +497,10 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
       return;
     } else {
       json['quantity'] -= 1;
-      item.quantity -= 1;
-      item.amount = item.quantity * item.price;
+      if (item.quantity != null) {
+        item.quantity = (item.quantity! - 1);
+      }
+      item.amount = item.quantity! * item.price!;
     }
 
     setState(() {});
@@ -506,13 +508,15 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
 
   void plusItem(Product item, Map<String, dynamic> json) {
     json['quantity'] += 1;
-    item.quantity += 1;
+    if (item.quantity != null) {
+        item.quantity = (item.quantity! + 1);
+      }
     setState(() {});
   }
 
-  Widget buildItemBranch(BranchData item, bool selected, Function ontap) {
+  Widget buildItemBranch(BranchData? item, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         width: 200,
         height: 150,
@@ -538,9 +542,9 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                    image: (item?.avatar == null)
+                    image: ((item?.avatar == null)
                         ? AssetImage(Assets.imgEpoint)
-                        : NetworkImage(item?.avatar),
+                        : NetworkImage(item?.avatar ?? "")) as ImageProvider<Object>,
                   )),
               child: Center(
                 child: Text(
@@ -570,26 +574,26 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
   }
 
   selectedItem(int index) async {
-    List<BranchData> models = widget.branchData;
+    List<BranchData> models = widget.branchData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
-    widget.detailDeal.branchCode = models[index].branchCode;
+    widget.detailDeal!.branchCode = models[index].branchCode;
     setState(() {});
   }
 
   Widget _buildTextField(String title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType,
-      int maxLenght}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType,
+      int? maxLenght}) {
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -658,11 +662,11 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               if (fillText != null) {
                 print(fillText.text);
                 if (fillText == _probabilityText) {
-                  widget.detailDeal.probability =
+                  widget.detailDeal!.probability =
                       double.tryParse(fillText.text) ?? 0;
                   widget.detailDeal?.probability =
                       num.tryParse(fillText.text ?? "0");
-                  if ((widget.detailDeal.probability ?? 0) > 100) {
+                  if ((widget.detailDeal!.probability ?? 0) > 100) {
                     _probabilityText.text = "100";
                     widget.detailDeal?.probability = 100;
                     _probabilityText.selection = TextSelection.fromPosition(
@@ -701,7 +705,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                     ]))),
               ),
               InkWell(
-                  onTap: ontapDelete,
+                  onTap: ontapDelete as void Function()?,
                   child: Icon(
                     Icons.clear,
                     color: Color(
@@ -728,7 +732,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: OntapMinus,
+                    onTap: OntapMinus as void Function()?,
                     child: Text("-",
                         style: TextStyle(
                             fontSize: 25.0,
@@ -757,7 +761,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                         ),
                       )),
                   InkWell(
-                    onTap: ontapPlus,
+                    onTap: ontapPlus as void Function()?,
                     child: Text("+",
                         style: TextStyle(
                             fontSize: 25.0,

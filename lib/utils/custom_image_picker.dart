@@ -20,7 +20,7 @@ class CustomImagePicker {
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
                 onTap: () async {
-                  File file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
+                  File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
                     Navigator.of(context).pop();
                     onConfirm(file);
@@ -30,7 +30,7 @@ class CustomImagePicker {
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
                 onTap: () async {
-                  File file = await pickImage(context, ImageSource.gallery);
+                  File? file = await pickImage(context, ImageSource.gallery);
                   if(file != null){
                      Navigator.of(context).pop();
                     onConfirm(file);
@@ -49,7 +49,7 @@ class CustomImagePicker {
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
                 onTap: () async {
-                  File file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
+                  File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
                     onConfirm([file]);
                   }
@@ -58,7 +58,7 @@ class CustomImagePicker {
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
                 onTap: () async {
-                  List<File> files = await pickMultiImage(context);
+                  List<File>? files = await pickMultiImage(context);
                   if(files != null){
                     onConfirm(files);
                   }
@@ -69,7 +69,7 @@ class CustomImagePicker {
     ));
   }
 
-  static Future<File> pickImage(BuildContext context, ImageSource source, {bool isSelfie = false}) async {
+  static Future<File?> pickImage(BuildContext context, ImageSource source, {bool isSelfie = false}) async {
     if (source == null)
       return null;
     try {
@@ -109,7 +109,7 @@ class CustomImagePicker {
     return File(file.path);
   }
 
-  static Future<List<File>> pickMultiImage(BuildContext context) async {
+  static Future<List<File>?> pickMultiImage(BuildContext context) async {
     try {
       bool permission = false;
       permission = await CustomPermissionRequest.request(

@@ -17,7 +17,7 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 
 class ServiceTabScreen extends StatefulWidget {
   final OrderCategoryScreenController search;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool isViewOnly;
   final bool isBooking;
   final bool isSelected;
@@ -32,7 +32,7 @@ class ServiceTabScreen extends StatefulWidget {
 
 class _ServiceTabScreenState extends State<ServiceTabScreen>
     implements OrderItemBase {
-  OrderItemBloc _bloc;
+  late OrderItemBloc _bloc;
   @override
   void initState() {
     // TODO: implement initState
@@ -47,7 +47,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
     _controller.search = search;
   }
   void search(String value) {
-    ServiceRequestModel _request = _requestModel;
+    ServiceRequestModel _request = _requestModel!;
     _request.serviceName = value;
     _request.page = 1;
     getService(request: _request, isSearch: true);
@@ -60,7 +60,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
         stream: _bloc.outputService,
         builder: (_, snapshot) {
           if (snapshot.hasData) {
-            ServiceResponseModel _data = snapshot.data;
+            ServiceResponseModel _data = snapshot.data as ServiceResponseModel;
             return CustomScaffold(
               actions: _listKeyboardAction(_data.items),
               body: NotificationListener(
@@ -84,7 +84,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
     return false;
   }
 
-  List<KeyboardActionsItem> _listKeyboardAction(List<ServiceModel> item) {
+  List<KeyboardActionsItem>? _listKeyboardAction(List<ServiceModel?>? item) {
     if (item == null) return null;
     List<KeyboardActionsItem> models = [];
     for(var e in item){
@@ -95,10 +95,10 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
   }
 
   KeyboardActionsItem buildKeyboardAction(FocusNode node,
-      {String text = "Done", Function onTap}) {
+      {String text = "Done", Function? onTap}) {
     return KeyboardActionsItem(focusNode: node, toolbarButtons: [
       (node) => InkWell(
-            onTap: onTap ?? () => node.unfocus(),
+            onTap: onTap as void Function()? ?? () => node.unfocus(),
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -110,7 +110,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
     ]);
   }
 
-  List<Widget> _getProducts(List<ServiceModel> value) {
+  List<Widget> _getProducts(List<ServiceModel?>? value) {
     List<Widget> _arr = [];
     if (value == null) return _arr;
     value.forEach((element) {
@@ -160,8 +160,8 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
               padding: const EdgeInsets.all(8.0),
               child: CustomNetworkImage(
                 url: value.serviceAvatar,
-                width: AppSizes.maxWidth * 0.1,
-                height: AppSizes.maxWidth * 0.1,
+                width: AppSizes.maxWidth! * 0.1,
+                height: AppSizes.maxWidth! * 0.1,
               ),
             ),
             Expanded(
@@ -172,7 +172,7 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      value.serviceName,
+                      value.serviceName!,
                       textScaleFactor: 1.05,
                       maxLines: 3,
                       style: TextStyle(fontWeight: FontWeight.w500),
@@ -232,16 +232,16 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
     // TODO: implement getProduct
   }
 
-  ServiceRequestModel _requestModel;
+  ServiceRequestModel? _requestModel;
   @override
-  getService({ServiceRequestModel request, bool isSearch = false}) {
+  getService({ServiceRequestModel? request, bool isSearch = false}) {
     // TODO: implement getService
     if (_requestModel == null && request == null) {
       _requestModel = ServiceRequestModel();
-      _requestModel.serviceName = widget.controller.text ?? '';
-      _requestModel.brandCode =
+      _requestModel!.serviceName = widget.controller!.text ?? '';
+      _requestModel!.brandCode =
           Global.branch_code;
-      _requestModel.page = 1;
+      _requestModel!.page = 1;
       _bloc.getService(_requestModel);
     } else {
       if (request != null) {

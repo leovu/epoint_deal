@@ -21,22 +21,22 @@ class ServiceDetailBloc extends BaseBloc {
     super.dispose();
   }
 
-  final _streamImage = BehaviorSubject<String>();
-  ValueStream<String> get outputImage => _streamImage.stream;
-  setImage(String event) => set(_streamImage, event);
+  final _streamImage = BehaviorSubject<String?>();
+  ValueStream<String?> get outputImage => _streamImage.stream;
+  setImage(String? event) => set(_streamImage, event);
 
-  final _streamModel = BehaviorSubject<ServiceDetailResponseModel>();
-  ValueStream<ServiceDetailResponseModel> get outputModel => _streamModel.stream;
+  final _streamModel = BehaviorSubject<ServiceDetailResponseModel?>();
+  ValueStream<ServiceDetailResponseModel?> get outputModel => _streamModel.stream;
   setModel(ServiceDetailResponseModel event) => set(_streamModel, event);
 
-  final _streamQuantity = BehaviorSubject<int>();
-  ValueStream<int> get outputQuantity => _streamQuantity.stream;
+  final _streamQuantity = BehaviorSubject<int?>();
+  ValueStream<int?> get outputQuantity => _streamQuantity.stream;
   setQuantity(int event) => set(_streamQuantity, event);
 
   serviceDetail(ServiceDetailRequestModel model, bool isRefresh) async {
-    ServiceDetailModel result = await DealConnection.serviceDetail(context, model);
+    ServiceDetailModel? result = await DealConnection.serviceDetail(context, model);
     if(result != null){
-      ServiceDetailResponseModel responseModel = result.data;
+      ServiceDetailResponseModel? responseModel = result.data;
 
       setModel(responseModel ?? ServiceDetailResponseModel());
     }

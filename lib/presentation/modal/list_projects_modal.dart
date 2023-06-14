@@ -10,8 +10,8 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class ListProjectsModal extends StatefulWidget {
-  ListProjectItems projectSelected = ListProjectItems();
-  ListProjectsModal({Key key, this.projectSelected}) : super(key: key);
+  ListProjectItems? projectSelected = ListProjectItems();
+  ListProjectsModal({Key? key, this.projectSelected}) : super(key: key);
 
   @override
   _ListProjectsModalState createState() => _ListProjectsModalState();
@@ -22,8 +22,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-  List<ListProjectItems> listProjectData = [];
-  List<ListProjectItems> listProjectDataDisplay = [];
+  List<ListProjectItems>? listProjectData = [];
+  List<ListProjectItems>? listProjectDataDisplay = [];
 
   ListProjectModelRequest filterModel =
       ListProjectModelRequest(search: "", page: 1);
@@ -43,7 +43,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      if (this.nextPage != null && this.currentPage < this.nextPage) {
+      if (this.currentPage < this.nextPage) {
         filterModel.page = currentPage + 1;
         getData(true);
       }
@@ -56,34 +56,35 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
     super.dispose();
   }
 
-  getData(bool loadMore, {int page}) async {
+  getData(bool loadMore, {int? page}) async {
     keyboardDismissOnTap(context);
     FocusScope.of(context).unfocus();
-    ListProjectModelResponse model = await DealConnection.getListProject(
+    ListProjectModelResponse? model = await DealConnection.getListProject(
         context,
         ListProjectModelRequest(
             search: _searchext.text, page: filterModel.page));
-    if (model != null && model?.data?.items?.length > 0) {
+    if (model != null && (model.data?.items?.length ?? 0) > 0) {
       if (!loadMore) {
         listProjectData = [];
         listProjectData = model.data?.items;
         // ignore: null_aware_before_operator
-        (model.data?.items?.length > 0) ??
-            _controller.animateTo(
-              _controller.position.minScrollExtent,
-              duration: Duration(seconds: 2),
-              curve: Curves.fastOutSlowIn,
-            );
+        // if (listProjectData!.length > 0) {
+        //   _controller.animateTo(
+        //       _controller.position.minScrollExtent,
+        //       duration: Duration(seconds: 2),
+        //       curve: Curves.fastOutSlowIn,
+        //     );
+        // }
       } else {
-        listProjectData.addAll(model.data?.items);
+        listProjectData!.addAll(model.data?.items! as Iterable<ListProjectItems>);
       }
 
-      for (int i = 0; i < listProjectData.length; i++) {
+      for (int i = 0; i < listProjectData!.length; i++) {
         if ((widget.projectSelected?.manageProjectId ?? 0) ==
-            listProjectData[i].manageProjectId) {
-          listProjectData[i].selected = true;
+            listProjectData![i].manageProjectId) {
+          listProjectData![i].selected = true;
         } else {
-          listProjectData[i].selected = false;
+          listProjectData![i].selected = false;
         }
       }
 
@@ -107,7 +108,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.chooseProject),
+            AppLocalizations.text(LangKey.chooseProject)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
@@ -124,7 +125,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
         children: [
           _buildSearch(),
            Expanded(
-                  child: (listProjectData.length > 0) ? CustomListView(
+                  child: (listProjectData!.length > 0) ? CustomListView(
                   shrinkWrap: true,
                   padding: EdgeInsets.only(
                       top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
@@ -134,10 +135,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
                   children: _listWidget(),
                 ) : Container() )
               ,
-          (_searchext.text == "" && listProjectData.length > 0 &&
-                      this.nextPage != null &&
-                      this.currentPage < this.nextPage ??
-                  0)
+          (_searchext.text == "" && listProjectData!.length > 0 &&
+                      this.currentPage < this.nextPage)
               ? Container(
                   height: 20.0,
                   margin: EdgeInsets.only(bottom: 40),
@@ -177,11 +176,11 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   // }
 
   List<Widget> _listWidget() {
-    return (listProjectDataDisplay != null && listProjectDataDisplay.length > 0)
+    return (listProjectDataDisplay != null && listProjectDataDisplay!.length > 0)
         ? List.generate(
-            listProjectDataDisplay.length,
-            (index) => _buildItem(listProjectDataDisplay[index], () {
-                  selectedStaff(listProjectDataDisplay[index]);
+            listProjectDataDisplay!.length,
+            (index) => _buildItem(listProjectDataDisplay![index], () {
+                  selectedStaff(listProjectDataDisplay![index]);
                 }))
         : [Container()];
   }
@@ -201,7 +200,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
           child: Center(
             child: Text(
               // AppLocalizations.text(LangKey.convertCustomers),
-              AppLocalizations.text(LangKey.confirm),
+              AppLocalizations.text(LangKey.confirm)!,
               style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white,
@@ -213,11 +212,11 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   }
 
   selectedStaff(ListProjectItems item) async {
-    if (item.selected) {
+    if (item.selected!) {
       return;
     }
     try {
-      listProjectData.firstWhere((element) => element.selected).selected =
+      listProjectData!.firstWhere((element) => element.selected!).selected =
           false;
     } catch (_) {}
     item.selected = true;
@@ -227,23 +226,23 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
 
   Widget _buildItem(ListProjectItems item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              item.manageProjectName,
+              item.manageProjectName!,
               style: TextStyle(
                   fontSize: 15.0,
-                  color: item.selected
+                  color: item.selected!
                       ? AppColors.primaryColor
                       : Color(0xFF040C21),
                   fontWeight:
-                      item.selected ? FontWeight.w700 : FontWeight.w400),
+                      item.selected! ? FontWeight.w700 : FontWeight.w400),
             ),
-            item.selected
+            item.selected!
                 ? Icon(
                     Icons.radio_button_on,
                     color: AppColors.primaryColor,
@@ -301,7 +300,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
       setState(() {});
     } else {
       try {
-        List<ListProjectItems> models = listProjectData.where((model) {
+        List<ListProjectItems> models = listProjectData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {

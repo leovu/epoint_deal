@@ -32,14 +32,14 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class MoreInfoEditDeal extends StatefulWidget {
-  String tagsString;
-  List<TagData> tagsData;
-  DetailDealData detail;
-  List<BranchData> branchData;
-  OrderSourceData orderSourceSelected;
-  UpdateDealModelRequest detailDeal;
+  String? tagsString;
+  List<TagData>? tagsData;
+  DetailDealData? detail;
+  List<BranchData>? branchData;
+  OrderSourceData? orderSourceSelected;
+  UpdateDealModelRequest? detailDeal;
   MoreInfoEditDeal(
-      {Key key,
+      {Key? key,
       this.branchData,
       this.orderSourceSelected,
       this.detail,
@@ -64,15 +64,15 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
     final TextEditingController _controllerDiscount = TextEditingController();
   final FocusNode _focusDiscount = FocusNode();
 
-  List<OrderSourceData> orderSourceData;
-  OrderSourceData orderSourceSelected;
+  List<OrderSourceData>? orderSourceData;
+  OrderSourceData? orderSourceSelected;
 
   // List<TagData> tagsData;
-  List<TagData> tagsSelected;
+  List<TagData>? tagsSelected;
   String tagsString = "";
   List<Map<String, dynamic>> productSelected = [];
-  double _discount;
-  double transportCharge;
+  double? _discount;
+  double? transportCharge;
   int _discountTypeDirect = 0;
 
   @override
@@ -83,18 +83,18 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
       _detailDealText.text = widget.detail?.dealDescription ?? "";
 
-      if (widget.detail.productBuy.length > 0) {
-        for (int i = 0; i < widget.detail.productBuy.length; i++) {
-          widget.detailDeal.product.add(Product(
-              objectType: widget.detail.productBuy[i].objectType ?? "",
-              objectName: widget.detail.productBuy[i].objectName ?? "",
+      if (widget.detail!.productBuy!.length > 0) {
+        for (int i = 0; i < widget.detail!.productBuy!.length; i++) {
+          widget.detailDeal!.product!.add(Product(
+              objectType: widget.detail!.productBuy![i].objectType ?? "",
+              objectName: widget.detail!.productBuy![i].objectName ?? "",
               objectCode: "",
-              objectId: widget.detail.productBuy[i].objectId ?? 0,
-              quantity: widget.detail.productBuy[i].quantity ?? 0,
-              price: widget.detail.productBuy[i].price ?? 0,
-              amount: (widget.detail.productBuy[i].quantity ?? 0) *
-                  (widget.detail.productBuy[i].price ?? 0)));
-          productSelected.add(widget.detail.productBuy[i].toJson());
+              objectId: widget.detail!.productBuy![i].objectId ?? 0,
+              quantity: widget.detail!.productBuy![i].quantity ?? 0,
+              price: widget.detail!.productBuy![i].price ?? 0,
+              amount: (widget.detail!.productBuy![i].quantity ?? 0) *
+                  (widget.detail!.productBuy![i].price ?? 0)));
+          productSelected.add(widget.detail!.productBuy![i].toJson());
         }
       } else {
         productSelected = [];
@@ -105,15 +105,15 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       productSelected.forEach((v) {
         if (v['object_type'] == 'product') {
           ProductModel item = ProductModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addProduct(item, item.price.toDouble(), item.qty.toDouble(), item.note);
+          GlobalCart.shared.addProduct(item, item.price!.toDouble(), item.qty!.toDouble(), item.note);
         } else {
           ServiceModel item = ServiceModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addService(item, item.price.toDouble(), item.qty, item.note);
+          GlobalCart.shared.addService(item, item.price!.toDouble(), item.qty as double?, item.note);
         }
       });
     }
 
-    _discount = (widget.detail.discount ?? 0.0).toDouble();
+    _discount = (widget.detail!.discount ?? 0.0).toDouble();
     Global.discount = _discount;
     _controllerDiscount.text = _discount.toString();
 
@@ -122,15 +122,16 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   }
 
   _addMoreProduct() async {
+    FocusScope.of(context).unfocus();
     GlobalCart.shared.clearCart();
-    if (widget.detailDeal.product.length > 0) {
-      widget.detailDeal.product.forEach((v) {
+    if (widget.detailDeal!.product!.length > 0) {
+      widget.detailDeal!.product!.forEach((v) {
         if (v.objectType == 'product') {
           ProductModel item = ProductModel.fromJsonOrderDetail(v.toJson());
-          GlobalCart.shared.addProduct(item, item.price.toDouble(), item.qty, item.note);
+          GlobalCart.shared.addProduct(item, item.price!.toDouble(), item.qty as double?, item.note);
         } else {
           ServiceModel item = ServiceModel.fromJsonOrderDetail(v.toJson());
-          GlobalCart.shared.addService(item, item.price.toDouble(), item.qty, item.note);
+          GlobalCart.shared.addService(item, item.price!.toDouble(), item.qty as double?, item.note);
         }
       });
     }
@@ -141,11 +142,11 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
     print(result);
 
     if (result != null) {
-      widget.detailDeal.product.clear();
+      widget.detailDeal!.product!.clear();
       if (result.length > 0) {
         productSelected.clear();
         for (int i = 0; i < result.length; i++) {
-          widget.detailDeal.product.add(Product(
+          widget.detailDeal!.product!.add(Product(
               objectType: result[i]["object_type"] ?? "",
               objectName: result[i]["object_name"] ?? "",
               objectCode: result[i]["objectCode"] ?? "",
@@ -154,7 +155,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               price: result[i]["price"] ?? 0,
               amount: (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
 
-          productSelected.add(widget.detailDeal.product[i].toJson());
+          productSelected.add(widget.detailDeal!.product![i].toJson());
         }
         ;
       }
@@ -164,6 +165,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   }
 
   _addProduct() async {
+    FocusScope.of(context).unfocus();
     final result = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
     GlobalCart.shared.clearCart();
@@ -172,7 +174,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       if (result.length > 0) {
         productSelected.clear();
         for (int i = 0; i < result.length; i++) {
-          widget.detailDeal.product.add(Product(
+          widget.detailDeal!.product!.add(Product(
               objectType: result[i]["object_type"] ?? "",
               objectName: result[i]["object_name"] ?? "",
               objectCode: result[i]["objectCode"] ?? "",
@@ -180,7 +182,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               quantity: result[i]["quantity"] ?? 0,
               price: result[i]["price"] ?? 0,
               amount: (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
-          productSelected.add(widget.detailDeal.product[i].toJson());
+          productSelected.add(widget.detailDeal!.product![i].toJson());
         };
       }
     }
@@ -200,7 +202,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // + thêm sản phẩm
-              (widget.detailDeal.product.length == 0)
+              (widget.detailDeal!.product!.length == 0)
                   ? InkWell(
                       onTap: _addProduct,
                       child: Container(
@@ -230,7 +232,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               ),
 
 // + thông tin thêm
-              (!showAdditionDeal && widget.detail.productBuy.length == 0)
+              (!showAdditionDeal && widget.detail!.productBuy!.length == 0)
                   ? InkWell(
                       onTap: () {
                         showAdditionDeal = !showAdditionDeal;
@@ -262,12 +264,12 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           ),
           Column(
             children: [
-              (widget.detailDeal.product.length > 0)
+              (widget.detailDeal!.product!.length > 0)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppLocalizations.text(LangKey.yourOrder),
+                          AppLocalizations.text(LangKey.yourOrder)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -276,7 +278,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                         InkWell(
                           onTap: _addMoreProduct,
                           child: Text(
-                            AppLocalizations.text(LangKey.chooseMoreItem),
+                            AppLocalizations.text(LangKey.chooseMoreItem)!,
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: const Color(0xFF0067AC),
@@ -307,7 +309,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
           ),
 
           // thông tin thêm
-          (!showAdditionDeal && widget.detail.productBuy.length > 0)
+          (!showAdditionDeal && widget.detail!.productBuy!.length > 0)
               ? InkWell(
                   onTap: () {
                     showAdditionDeal = !showAdditionDeal;
@@ -359,7 +361,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppLocalizations.text(LangKey.moreInformation),
+                          AppLocalizations.text(LangKey.moreInformation)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -371,7 +373,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                             setState(() {});
                           },
                           child: Text(
-                            AppLocalizations.text(LangKey.collapse),
+                            AppLocalizations.text(LangKey.collapse)!,
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: const Color(0xFF0067AC),
@@ -391,7 +393,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        AppLocalizations.text(LangKey.branch),
+                        AppLocalizations.text(LangKey.branch)!,
                         style: TextStyle(
                             fontSize: 15.0,
                             color: const Color(0xFF858080),
@@ -429,14 +431,14 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             print("nguon don hang");
 
             FocusScope.of(context).unfocus();
-            if (orderSourceData == null || orderSourceData.length == 0) {
+            if (orderSourceData == null || orderSourceData!.length == 0) {
               DealConnection.showLoading(context);
               var orderSources = await DealConnection.getOrderSource(context);
               Navigator.of(context).pop();
               if (orderSources != null) {
                 orderSourceData = orderSources.data;
 
-                OrderSourceData orderSource = await showModalBottomSheet(
+                OrderSourceData? orderSource = await showModalBottomSheet(
                     context: context,
                     useRootNavigator: true,
                     isScrollControlled: true,
@@ -456,13 +458,13 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                 if (orderSource != null) {
                   widget.detail?.orderSourceName = orderSource.orderSourceName;
                   widget.orderSourceSelected = orderSource;
-                  widget.detailDeal.orderSourceId =
-                      widget.orderSourceSelected.orderSourceId;
+                  widget.detailDeal!.orderSourceId =
+                      widget.orderSourceSelected!.orderSourceId;
                   setState(() {});
                 }
               }
             } else {
-              OrderSourceData orderSource = await showModalBottomSheet(
+              OrderSourceData? orderSource = await showModalBottomSheet(
                   context: context,
                   useRootNavigator: true,
                   isScrollControlled: true,
@@ -481,8 +483,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               if (orderSource != null) {
                 // widget.orderSourceSelected = orderSource;
                 widget.detail?.orderSourceName = orderSource.orderSourceName;
-                widget.detailDeal.orderSourceId =
-                    widget.orderSourceSelected.orderSourceId;
+                widget.detailDeal!.orderSourceId =
+                    widget.orderSourceSelected!.orderSourceId;
                 setState(() {});
               }
             }
@@ -503,7 +505,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               controller: _detailDealText,
               focusNode: _detailDealFocusNode,
               onChanged: (event) {
-                widget.detailDeal.dealDescription = _detailDealText.text;
+                widget.detailDeal!.dealDescription = _detailDealText.text;
               },
             ),
           ),
@@ -514,9 +516,9 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
   List<Widget> listBranch() {
     return List.generate(
-        widget.branchData.length,
+        widget.branchData!.length,
         (index) => buildItemBranch(
-                widget.branchData[index], widget.branchData[index].selected,
+                widget.branchData![index], widget.branchData![index].selected!,
                 () {
               selectedItem(index);
             }));
@@ -524,24 +526,24 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
   List<Widget> listProduct() {
     return List.generate(
-      widget.detailDeal.product.length,
-      (index) => product(widget.detailDeal.product[index], index, ()
+      widget.detailDeal!.product!.length,
+      (index) => product(widget.detailDeal!.product![index], index, ()
           // xoa item
           {
-        if (widget.detailDeal.product[index].objectType == "product") {
+        if (widget.detailDeal!.product![index].objectType == "product") {
           var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
-              p0.productId == widget.detailDeal.product[index].objectId);
+              p0.productId == widget.detailDeal!.product![index].objectId);
           if (event != null) {
             GlobalCart.shared.removeProduct(event);
           }
         } else {
           var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
-              p0.serviceId == widget.detailDeal.product[index].objectId);
+              p0.serviceId == widget.detailDeal!.product![index].objectId);
           if (event != null) {
             GlobalCart.shared.removeService(event);
           }
         }
-        widget.detailDeal.product.removeAt(index);
+        widget.detailDeal!.product!.removeAt(index);
         productSelected.removeAt(index);
         _setDiscount();
         setState(() {});
@@ -576,9 +578,9 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   //   setState(() {});
   // }
 
-  Widget buildItemBranch(BranchData item, bool selected, Function ontap) {
+  Widget buildItemBranch(BranchData? item, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         width: 200,
         height: 150,
@@ -604,9 +606,9 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                    image: (item?.avatar == null)
+                    image: ((item?.avatar == null)
                         ? AssetImage(Assets.imgEpoint)
-                        : NetworkImage(item?.avatar),
+                        : NetworkImage(item?.avatar ?? "")) as ImageProvider<Object>,
                   )),
               child: Center(
                 child: Text(
@@ -636,26 +638,26 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   }
 
   selectedItem(int index) async {
-    List<BranchData> models = widget.branchData;
+    List<BranchData> models = widget.branchData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
-    widget.detailDeal.branchCode = models[index].branchCode;
+    widget.detailDeal!.branchCode = models[index].branchCode;
     setState(() {});
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType,
-      int maxLenght}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType,
+      int? maxLenght}) {
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -724,11 +726,11 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               if (fillText != null) {
                 print(fillText.text);
                 if (fillText == _probabilityText) {
-                  widget.detailDeal.probability =
+                  widget.detailDeal!.probability =
                       double.tryParse(fillText.text) ?? 0;
                   widget.detailDeal?.probability =
                       num.tryParse(fillText.text ?? "0");
-                  if ((widget.detailDeal.probability ?? 0) > 100) {
+                  if ((widget.detailDeal!.probability ?? 0) > 100) {
                     _probabilityText.text = "100";
                     widget.detailDeal?.probability = 100;
                     _probabilityText.selection = TextSelection.fromPosition(
@@ -762,7 +764,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AutoSizeText(
-                  AppLocalizations.text(LangKey.apply_promotion),
+                  AppLocalizations.text(LangKey.apply_promotion)!,
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: AppColors.primaryColor),
@@ -824,7 +826,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               stream: GlobalCart.shared.bloc.outputValue,
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
-                  double value = snapshot.data;
+                  double? value = snapshot.data as double?;
                   return AutoSizeText(
                     value.getMoneyFormat(),
                     maxLines: 1,
@@ -916,7 +918,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                       stream: GlobalCart.shared.bloc.outputValue,
                       builder: (_, snapshot) {
                         if (snapshot.hasData) {
-                          double valueMoney = snapshot.data;
+                          double valueMoney = snapshot.data as double;
                           double total = valueMoney +
                               (transportCharge ?? 0) -
                               (_discount ?? 0);
@@ -977,7 +979,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       } else if (value == 0) {
         _discount = null;
       } else {
-        double val = double.tryParse(value.toString());
+        double? val = double.tryParse(value.toString());
         if (val == 0 || val == null) {
           _discount = null;
         } else {
@@ -995,7 +997,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       } else if (value == 0) {
         _discount = null;
       } else {
-        double val = double.tryParse(value.toString());
+        double? val = double.tryParse(value.toString());
         if (val == 0 || val == null) {
           _discount = null;
         } else {
@@ -1036,7 +1038,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             ? await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductDetailScreen(
                     ProductModel(
-                        newPrice: item.price.toDouble(),
+                        newPrice: item.price!.toDouble(),
                         productId: item.objectId,
                         qty: item.quantity,
                         note: item.note),
@@ -1044,20 +1046,20 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                     isUpdate: true)))
             : await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ServiceDetailScreen(
-                    ServiceModel(newPrice: item.price.toDouble(), serviceId: item.objectId, qty: item.quantity, note: item.note),
+                    ServiceModel(newPrice: item.price!.toDouble(), serviceId: item.objectId, qty: item.quantity, note: item.note),
                     false,
                     isUpdate: true)));
 
         if ((event != null)) {
 
-          item.price = event["new_price"] ?? "";
+          item.price = event["new_price"] ?? "" as num?;
           item.quantity = event["quantity"] ?? 0;
           item.note = event["note"] ?? "";
-          item.amount = (item.quantity ?? 0) * item.price ?? 0;
+          item.amount = (item.quantity ?? 0) * item.price! ?? 0;
 
           if (item.objectType == "product") {
             var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
-                p0.productId == widget.detailDeal.product[index].objectId);
+                p0.productId == widget.detailDeal!.product![index].objectId);
             if (event != null) {
               event.price = item.price;
               event.qty = item.quantity;
@@ -1065,7 +1067,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             }
           } else {
             var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
-                p0.serviceId == widget.detailDeal.product[index].objectId);
+                p0.serviceId == widget.detailDeal!.product![index].objectId);
             if (event != null) {
               event.price = item.price;
               event.qty = item.quantity;
@@ -1081,7 +1083,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(AppSizes.minPadding),
+        padding: EdgeInsets.all(AppSizes.minPadding!),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -1113,7 +1115,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                       ]))),
                 ),
                 InkWell(
-                    onTap: ontapDelete,
+                    onTap: ontapDelete as void Function()?,
                     child: Icon(
                       Icons.clear,
                       color: Color(
@@ -1130,7 +1132,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${(item.amount ?? 0).getMoneyFormat()} VND",
+                  "${(item.amount ?? 0).getMoneyFormatNum()} VND",
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -1195,7 +1197,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 }
 
 extension MoneyFormat on int {
-  String getMoneyFormat() {
+  String getMoneyFormatInt() {
     if (this == null) {
       return "0 VND";
     } else {
@@ -1205,7 +1207,7 @@ extension MoneyFormat on int {
 }
 
 extension MoneyFormatNum on num {
-  String getMoneyFormat() {
+  String getMoneyFormatNum() {
     if (this == null) {
       return "0 VND";
     } else {

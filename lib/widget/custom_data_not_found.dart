@@ -4,13 +4,13 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomDataNotFound extends StatelessWidget {
-  final String title;
-  final String content;
-  final Color color;
+  final String? title;
+  final String? content;
+  final Color? color;
   final bool isTitle;
 
   const CustomDataNotFound(
-      {Key key,
+      {Key? key,
       this.title,
       this.content,
       this.color,
@@ -37,7 +37,7 @@ class CustomDataNotFound extends StatelessWidget {
                   left: 20.0,
                   bottom: 8.0),
               child: Text(
-                  title ?? AppLocalizations.text(LangKey.searchNotFound),
+                  title ?? AppLocalizations.text(LangKey.searchNotFound)!,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.style14Black50Weight400
                       .copyWith(color: Colors.grey[850])),
@@ -47,7 +47,7 @@ class CustomDataNotFound extends StatelessWidget {
           if (content != null)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(content,
+              child: Text(content!,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.style14Black50Weight400
                       .copyWith(color: AppColors.grey500Color)),

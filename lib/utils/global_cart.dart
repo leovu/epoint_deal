@@ -10,7 +10,7 @@ class GlobalCart {
   GlobalCart._internal();
   static GlobalCart get shared => _singleton;
 
-  GlobalCartBloc bloc;
+  late GlobalCartBloc bloc;
 
   List<ProductModel> products = <ProductModel>[];
   List<ServiceModel> services = <ServiceModel>[];
@@ -33,7 +33,7 @@ class GlobalCart {
     bloc.getValue();
   }
 
-  addProduct(ProductModel value, double price, double qty, String note) {
+  addProduct(ProductModel value, double? price, double? qty, String? note) {
     final model = ProductModel.fromJson(value.toJson());
     model.price = price;
     model.qty = qty;
@@ -52,7 +52,7 @@ class GlobalCart {
     bloc.getValue();
   }
 
-  addService(ServiceModel value, double price, double qty, String note) {
+  addService(ServiceModel value, double? price, double? qty, String? note) {
     final model = ServiceModel.fromJson(value.toJson());
     model.price = price;
     model.qty = qty;
@@ -89,12 +89,12 @@ class GlobalCart {
     double value = 0;
     products.forEach((e) {
       if (e.qty != null && e.price != null) {
-        value += e.qty * e.price;
+        value += e.qty! * e.price!;
       }
     });
     services.forEach((e) {
       if (e.qty != null && e.price != null) {
-        value += e.qty * e.price;
+        value += e.qty! * e.price!;
       }
     });
     return value;
@@ -102,8 +102,8 @@ class GlobalCart {
 }
 
 class GlobalCartBloc extends BaseBloc {
-  final _streamValue = BehaviorSubject<double>();
-  ValueStream<double> get outputValue => _streamValue.stream;
+  final _streamValue = BehaviorSubject<double?>();
+  ValueStream<double?> get outputValue => _streamValue.stream;
   setValue(double event) => set(_streamValue, event);
   @override
   void dispose() {
@@ -116,12 +116,12 @@ class GlobalCartBloc extends BaseBloc {
     double value = 0;
     GlobalCart.shared.products.forEach((e) {
       if (e.qty != null && e.price != null) {
-        value += e.qty * e.price;
+        value += e.qty! * e.price!;
       }
     });
     GlobalCart.shared.services.forEach((e) {
       if (e.qty != null && e.price != null) {
-        value += e.qty * e.price;
+        value += e.qty! * e.price!;
       }
     });
     setValue(value);
@@ -131,12 +131,12 @@ class GlobalCartBloc extends BaseBloc {
     double qty = 0;
     GlobalCart.shared.products.forEach((e) {
       if (e.qty != null) {
-        qty += e.qty;
+        qty += e.qty!;
       }
     });
     GlobalCart.shared.services.forEach((e) {
       if (e.qty != null) {
-        qty += e.qty;
+        qty += e.qty!;
       }
     });
     return qty;

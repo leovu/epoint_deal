@@ -1,7 +1,7 @@
 class ListCustomLeadModelReponse {
-  int errorCode;
-  String errorDescription;
-  ListCustomLeadData data;
+  int? errorCode;
+  String? errorDescription;
+  ListCustomLeadData? data;
 
   ListCustomLeadModelReponse(
       {this.errorCode, this.errorDescription, this.data});
@@ -17,15 +17,15 @@ class ListCustomLeadModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class ListCustomLeadData {
-  ListCustomLeadPageInfo pageInfo;
-  List<ListCustomLeadItems> items;
+  ListCustomLeadPageInfo? pageInfo;
+  List<ListCustomLeadItems>? items;
 
   ListCustomLeadData({this.pageInfo, this.items});
 
@@ -36,7 +36,7 @@ class ListCustomLeadData {
     if (json['Items'] != null) {
       items = <ListCustomLeadItems>[];
       json['Items'].forEach((v) {
-        items.add(new ListCustomLeadItems.fromJson(v));
+        items!.add(new ListCustomLeadItems.fromJson(v));
       });
     }
   }
@@ -44,26 +44,26 @@ class ListCustomLeadData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.pageInfo != null) {
-      data['PageInfo'] = this.pageInfo.toJson();
+      data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items.map((v) => v.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ListCustomLeadPageInfo {
-  int total;
-  int itemPerPage;
-  int from;
-  int to;
-  int currentPage;
-  int firstPage;
-  int lastPage;
-  int previousPage;
-  int nextPage;
-  List<int> pageRange;
+  int? total;
+  int? itemPerPage;
+  int? from;
+  int? to;
+  int? currentPage;
+  int? firstPage;
+  int? lastPage;
+  int? previousPage;
+  int? nextPage;
+  List<int>? pageRange;
 
   ListCustomLeadPageInfo(
       {this.total,
@@ -107,20 +107,20 @@ class ListCustomLeadPageInfo {
 }
 
 class ListCustomLeadItems {
-  String avatar;
-  String leadFullName;
-  String customerType;
-  String phone;
-  String journeyName;
-  String zalo;
-  String staffFullName;
-  int saleId;
-  String tagName;
-  String customerSourceName;
-  int isConvert;
-  String pipelineName;
-  String customerLeadCode;
-  bool selected;
+  String? avatar;
+  String? leadFullName;
+  String? customerType;
+  String? phone;
+  String? journeyName;
+  String? zalo;
+  String? staffFullName;
+  int? saleId;
+  String? tagName;
+  String? customerSourceName;
+  int? isConvert;
+  String? pipelineName;
+  String? customerLeadCode;
+  bool? selected;
 
   ListCustomLeadItems(
       {this.avatar,

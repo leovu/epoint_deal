@@ -1,7 +1,7 @@
 class BranchModelResponse {
-  int errorCode;
-  String errorDescription;
-  List<BranchData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<BranchData>? data;
 
   BranchModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class BranchModelResponse {
     if (json['Data'] != null) {
       data = <BranchData>[];
       json['Data'].forEach((v) {
-        data.add(new BranchData.fromJson(v));
+        data!.add(new BranchData.fromJson(v));
       });
     }
   }
@@ -21,19 +21,19 @@ class BranchModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class BranchData {
-  int branchId;
-  String branchName;
-  String address;
-  String branchCode;
-  String avatar;
-  bool selected;
+  int? branchId;
+  String? branchName;
+  String? address;
+  String? branchCode;
+  String? avatar;
+  bool? selected;
 
   BranchData({this.branchId, this.branchName, this.address, this.branchCode,this.selected});
 

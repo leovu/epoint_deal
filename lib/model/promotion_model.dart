@@ -1,6 +1,6 @@
 class PromotionModel {
-  String price;
-  String gift;
+  String? price;
+  String? gift;
 
   PromotionModel({this.price, this.gift});
 

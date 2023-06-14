@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 
 class MultipleStaffScreenDeal extends StatefulWidget {
 
-  final List<WorkListStaffModel> models;
-  final List<WorkListStaffModel> staffs;
-  final int projectId;
+  final List<WorkListStaffModel>? models;
+  final List<WorkListStaffModel>? staffs;
+  final int? projectId;
   MultipleStaffScreenDeal({this.models, this.staffs,this.projectId});
 
   @override
@@ -29,7 +29,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
   FocusNode _focusSearch = FocusNode();
   TextEditingController _controllerSearch = TextEditingController();
 
-  MultipleStaffBloc _bloc;
+  late MultipleStaffBloc _bloc;
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     _bloc.search(_controllerSearch.text);
   }
 
-  Widget _buildSearch(List<WorkListStaffModel> models){
+  Widget _buildSearch(List<WorkListStaffModel>? models){
     return Container(
       padding: EdgeInsets.only(
           top: 20.0,
@@ -86,7 +86,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.text(LangKey.agency),
+                  AppLocalizations.text(LangKey.agency)!,
                   style: AppTextStyles.style14BlackBold,
                 ),
                 SizedBox(height: 10.0,),
@@ -96,13 +96,13 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                         stream: _bloc.outputBranchModels,
                         initialData: null,
                         builder: (_, snapshot){
-                          List<CustomDropdownModel> menus = snapshot.data;
+                          List<CustomDropdownModel>? menus = snapshot.data as List<CustomDropdownModel>?;
                           return StreamBuilder(
                               stream: _bloc.outputBranchModel,
                               initialData: null,
                               builder: (_, snapshot){
                                 return CustomDropdown(
-                                  value: snapshot.data,
+                                  value: snapshot.data as CustomDropdownModel,
                                   menus: menus,
                                   hint: AppLocalizations.text(LangKey.agency),
                                   onChanged: (event) {
@@ -120,13 +120,13 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                         stream: _bloc.outputDepartmentModels,
                         initialData: null,
                         builder: (_, snapshot){
-                          List<CustomDropdownModel> menus = snapshot.data;
+                          List<CustomDropdownModel>? menus = snapshot.data as List<CustomDropdownModel>?;
                           return StreamBuilder(
                               stream: _bloc.outputDepartmentModel,
                               initialData: null,
                               builder: (_, snapshot){
                                 return CustomDropdown(
-                                  value: snapshot.data,
+                                  value: snapshot.data as CustomDropdownModel,
                                   menus: menus,
                                   hint: AppLocalizations.text(LangKey.department),
                                   onChanged: (event) {
@@ -149,7 +149,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     );
   }
 
-  Widget _buildItem(List<WorkListStaffModel> models, WorkListStaffModel model){
+  Widget _buildItem(List<WorkListStaffModel>? models, WorkListStaffModel? model){
     return InkWell(
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -186,11 +186,11 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
           ],
         ),
       ),
-      onTap: model == null?null:() => _bloc.selected(models, model),
+      onTap: model == null?null:() => _bloc.selected(models!, model),
     );
   }
 
-  Widget _buildContent(List<WorkListStaffModel> models){
+  Widget _buildContent(List<WorkListStaffModel>? models){
     return CustomListView(
       padding: EdgeInsets.zero,
       physics: AlwaysScrollableScrollPhysics(),
@@ -207,7 +207,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     );
   }
 
-  Widget _buildBottom(List<WorkListStaffModel> models){
+  Widget _buildBottom(List<WorkListStaffModel>? models){
     return CustomBottom(
       text: AppLocalizations.text(LangKey.apply),
       onTap: () => _bloc.confirm(models),
@@ -221,7 +221,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
       stream: _bloc.outputModels,
       initialData: null,
       builder: (_, snapshot){
-        List<WorkListStaffModel> models = snapshot.data;
+        List<WorkListStaffModel>? models = snapshot.data as List<WorkListStaffModel>? ;
         return Column(
           children: [
             _buildSearch(models),
@@ -242,7 +242,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.staff),
+            AppLocalizations.text(LangKey.staff)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
