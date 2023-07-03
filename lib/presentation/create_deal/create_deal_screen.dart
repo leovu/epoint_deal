@@ -617,7 +617,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 // showMoreInfoDeal ?
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
-                    (_modelStaffSelected!.length > 0 &&
+                    ((_modelStaffSelected?.length ?? 0) > 0 &&
                             _modelStaffSelected != null)
                         ? _modelStaffSelected![0]?.staffName ?? ""
                         : "",

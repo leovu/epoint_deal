@@ -35,7 +35,6 @@ class _ServiceTabScreenState extends State<ServiceTabScreen>
   late OrderItemBloc _bloc;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bloc = OrderItemBloc(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -283,6 +283,7 @@ class LangKey {
   static const String i_get_it = "i_get_it";
   static const String enter_discount_amount = "enter_discount_amount";
   static const String enter_discount_percentage = "enter_discount_percentage";
+  static const String enter_keyword = "enter_keyword";
 
 
 

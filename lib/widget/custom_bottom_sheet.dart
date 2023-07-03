@@ -1,5 +1,3 @@
-
-
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
@@ -7,21 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class CustomBottomSheet extends StatelessWidget {
-  
-
   final List<KeyboardActionsItem>? actions;
   final String? title;
   final Widget? body;
   final CustomRefreshCallback? onRefresh;
   final bool? isBottomSheet;
 
-  CustomBottomSheet({
-    this.actions,
-    this.title,
-    this.body,
-    this.onRefresh,
-    this.isBottomSheet
-  });
+  CustomBottomSheet(
+      {this.actions,
+      this.title,
+      this.body,
+      this.onRefresh,
+      this.isBottomSheet});
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +28,8 @@ class CustomBottomSheet extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(height:MediaQuery.of(context).padding.top + 15.0,),
+            Container(height: MediaQuery.of(context).padding.top + 40.0),
             Flexible(
-              fit: FlexFit.loose,
               child: InkWell(
                 child: Container(
                   color: Colors.white,
@@ -49,60 +43,64 @@ class CustomBottomSheet extends StatelessWidget {
                           width: 40.0,
                           height: 4.0,
                           decoration: BoxDecoration(
-                            color: Color(0xFFC4C4C4),
-                            borderRadius: BorderRadius.circular(100.0)
-                          ),
+                              color: Color(0xFFC4C4C4),
+                              borderRadius: BorderRadius.circular(100.0)),
                         ),
                       ),
-                      title == null?Container():Container(
-                        height: kToolbarHeight,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Color(0xFFECECEC))
-                          )
-                        ),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              child: Container(
-                                width: 40.0,
-                                height: 40.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle
-                                ),
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.black,
-                                  size: 20.0,
-                                ),
+                      title == null
+                          ? Container()
+                          : Container(
+                              height: kToolbarHeight,
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFFECECEC)))),
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                    child: Container(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.black,
+                                        size: 20.0,
+                                      ),
+                                    ),
+                                    onTap: () => Navigator.pop(context),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      title!,
+                                      style: TextStyle(
+                                          fontSize: AppTextSizes.size17,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 40.0,
+                                  )
+                                ],
                               ),
-                              onTap: () => Navigator.pop(context),
                             ),
-                            Expanded(child: Text(
-                              title!,
-                              style: TextStyle(
-      fontSize: AppTextSizes.size17,
-      color: Colors.black,
-      fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),),
-                            Container(width: 40.0,)
-                          ],
-                        ),
-                      ),
                       Flexible(
                         fit: FlexFit.loose,
-                        child: onRefresh == null?(body??Container()):ContainerScrollable(
-                            child: body??Container(),
-                            onRefresh: onRefresh
-                        ),
+                        child: onRefresh == null
+                            ? (body ?? Container())
+                            : ContainerScrollable(
+                                child: body ?? Container(),
+                                onRefresh: onRefresh),
                       )
                     ],
                   ),
                 ),
-                onTap: (){},
+                onTap: () {},
               ),
             ),
           ],
