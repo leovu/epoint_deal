@@ -264,4 +264,30 @@ class PickOneStaffBloc extends BaseBloc {
     }
   }
 
+    // search department
+  searchDepartment(String event) {
+    if (_departmentModels == null || event.isEmpty) {
+      setDepartmentModels(_departmentModels);
+    } else {
+      List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
+      try {
+        List<CustomDropdownModel> models = _departmentModels.where((model) {
+          List<String> searchs = event.removeAccents().split(" ");
+          bool result = true;
+          for (String element in searchs) {
+            if (!((model.text ?? "").removeAccents().contains(element))) {
+              result = false;
+              break;
+            }
+          }
+          return result;
+        }).toList();
+        listModel = models ?? [];
+        setDepartmentModels(listModel);
+      } catch (_) {
+        setDepartmentModels(_departmentModels);
+      }
+    }
+  }
+
 }

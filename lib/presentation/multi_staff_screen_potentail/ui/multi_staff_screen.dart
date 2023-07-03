@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -6,28 +7,36 @@ import 'package:epoint_deal_plugin/presentation/multi_staff_screen_potentail/blo
 import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom.dart';
 import 'package:epoint_deal_plugin/widget/custom_dropdown.dart';
+import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
+import 'package:epoint_deal_plugin/widget/custom_item_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_line.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
+import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
+import 'package:epoint_deal_plugin/widget/custom_search_location.dart';
 import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:flutter/material.dart';
 
 class MultipleStaffScreenDeal extends StatefulWidget {
-
   final List<WorkListStaffModel>? models;
   final List<WorkListStaffModel>? staffs;
   final int? projectId;
-  MultipleStaffScreenDeal({this.models, this.staffs,this.projectId});
+  MultipleStaffScreenDeal({this.models, this.staffs, this.projectId});
 
   @override
   MultipleStaffScreenDealState createState() => MultipleStaffScreenDealState();
 }
 
 class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
-
   FocusNode _focusSearch = FocusNode();
   TextEditingController _controllerSearch = TextEditingController();
+  FocusNode _focusAgency = FocusNode();
+  TextEditingController _controllerAgency = TextEditingController();
+
+  FocusNode _focusDepartment = FocusNode();
+  TextEditingController _controllerDepartment = TextEditingController();
 
   late MultipleStaffBloc _bloc;
 
@@ -44,33 +53,29 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
 
   @override
   void dispose() {
-
     _controllerSearch.removeListener(_listener);
     _bloc.dispose();
     super.dispose();
   }
 
-  Future _onRefresh(){
+  Future _onRefresh() {
     final group = <Future>[];
-    if(widget.staffs == null){
-      group.add(_bloc.workListStaff(widget.models, _controllerSearch.text, widget.projectId));
+    if (widget.staffs == null) {
+      group.add(_bloc.workListStaff(
+          widget.models, _controllerSearch.text, widget.projectId));
     }
     group.add(_bloc.workListBranch());
     group.add(_bloc.workListDepartment());
     return Future.wait(group);
   }
 
-  _listener(){
+  _listener() {
     _bloc.search(_controllerSearch.text);
   }
 
-  Widget _buildSearch(List<WorkListStaffModel>? models){
+  Widget _buildSearch(List<WorkListStaffModel>? models) {
     return Container(
-      padding: EdgeInsets.only(
-          top: 20.0,
-          left: 20.0,
-          right: 20.0
-      ),
+      padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
       child: Column(
         children: [
           CustomTextField(
@@ -89,56 +94,126 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                   AppLocalizations.text(LangKey.agency)!,
                   style: AppTextStyles.style14BlackBold,
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Row(
                   children: [
-                    Expanded(child: StreamBuilder(
-                        stream: _bloc.outputBranchModels,
-                        initialData: null,
-                        builder: (_, snapshot){
-                          List<CustomDropdownModel>? menus = snapshot.data as List<CustomDropdownModel>?;
-                          return StreamBuilder(
-                              stream: _bloc.outputBranchModel,
-                              initialData: null,
-                              builder: (_, snapshot){
-                                return CustomDropdown(
-                                  value: snapshot.data as CustomDropdownModel,
-                                  menus: menus,
-                                  hint: AppLocalizations.text(LangKey.agency),
-                                  onChanged: (event) {
-                                    _bloc.branchModel = event;
-                                    _bloc.setBranchModel(event);
-                                    _bloc.search(_controllerSearch.text);
+                    Expanded(
+                        child: StreamBuilder(
+                            stream: _bloc.outputBranchModel,
+                            initialData: null,
+                            builder: (_, snapshot) {
+                              if (snapshot.data == null) {
+                                return CustomShimmer(
+                                  child: CustomSkeleton(
+                                    height: 40.0,
+                                    radius: 5.0,
+                                  ),
+                                );
+                              } else
+                                return InkWell(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1.0,
+                                            color: Color(0xFFE5E5E5)),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        (snapshot.data != null)
+                                            ? Expanded(
+                                                child: Text(
+                                                  (snapshot.data
+                                                              as CustomDropdownModel)
+                                                          .text ??
+                                                      "",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              )
+                                            : Text(AppLocalizations.text(
+                                                    LangKey.all) ??
+                                                ""),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 15.0),
+                                          child: CustomImageIcon(
+                                            color: AppColors.grey500Color,
+                                            icon: Assets.iconDropDown,
+                                            size: 10.0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _showgency();
                                   },
                                 );
-                              }
-                          );
-                        }
-                    )),
-                    SizedBox(width: 10.0,),
-                    Expanded(child: StreamBuilder(
-                        stream: _bloc.outputDepartmentModels,
-                        initialData: null,
-                        builder: (_, snapshot){
-                          List<CustomDropdownModel>? menus = snapshot.data as List<CustomDropdownModel>?;
-                          return StreamBuilder(
-                              stream: _bloc.outputDepartmentModel,
-                              initialData: null,
-                              builder: (_, snapshot){
-                                return CustomDropdown(
-                                  value: snapshot.data as CustomDropdownModel,
-                                  menus: menus,
-                                  hint: AppLocalizations.text(LangKey.department),
-                                  onChanged: (event) {
-                                    _bloc.departmentModel = event;
-                                    _bloc.setDepartmentModel(event);
-                                    _bloc.search(_controllerSearch.text);
+                            })),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                        child: StreamBuilder(
+                            stream: _bloc.outputDepartmentModel,
+                            initialData: null,
+                            builder: (_, snapshot) {
+                              if (snapshot.data == null) {
+                                return CustomShimmer(
+                                  child: CustomSkeleton(
+                                    height: 40.0,
+                                    radius: 5.0,
+                                  ),
+                                );
+                              } else
+                                return InkWell(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1.0,
+                                            color: Color(0xFFE5E5E5)),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        (snapshot.data != null)
+                                            ? Expanded(
+                                                child: Text(
+                                                  (snapshot.data
+                                                              as CustomDropdownModel)
+                                                          .text ??
+                                                      "",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              )
+                                            : Text(AppLocalizations.text(
+                                                    LangKey.all) ??
+                                                ""),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 15.0),
+                                          child: CustomImageIcon(
+                                            color: AppColors.grey500Color,
+                                            icon: Assets.iconDropDown,
+                                            size: 10.0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _showDepartment();
                                   },
                                 );
-                              }
-                          );
-                        }
-                    )),
+                            })),
                   ],
                 )
               ],
@@ -149,48 +224,150 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     );
   }
 
-  Widget _buildItem(List<WorkListStaffModel>? models, WorkListStaffModel? model){
-    return InkWell(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 10.0
-        ),
-        alignment: Alignment.centerLeft,
-        child: model == null?CustomShimmer(
-          child: CustomSkeleton(width: MediaQuery.of(context).size.width / 2,),
-        ):Row(
-          children: [
-            CustomAvatarWithURL(
-              url: model.staffAvatar,
-              name: model.staffName,
-              size: 40.0,
-            ),
-            Container(width: 10.0,),
-            Expanded(child: Text(
-              model.staffName ?? "",
-              style: TextStyle(
-      fontSize: 15.0,
-      color: ((model.isSelected ?? false)) ? AppColors.primaryColor : AppColors.black,
-      fontWeight: ((model.isSelected ?? false)) ? FontWeight.bold : FontWeight.normal),
-            )),
-            if((model.isSelected ?? false))
-              Container(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Icon(
-                  Icons.check,
-                  color: AppColors.primaryColor,
-                  size: 15,
-                ),
-              )
-          ],
-        ),
-      ),
-      onTap: model == null?null:() => _bloc.selected(models!, model),
+  void _showgency() {
+    CustomNavigator.showCustomBottomDialog(
+      context,
+      CustomMenuBottomSheet(
+          title: AppLocalizations.text(LangKey.agency),
+          widget: StreamBuilder(
+            stream: _bloc.outputBranchModels,
+            initialData: null,
+            builder: (_, snapshot) {
+              List<CustomDropdownModel>? menus =
+                  snapshot.data as List<CustomDropdownModel>?;
+              return Column(
+                children: [
+                  CustomSearchLocation(_focusAgency, _controllerAgency,
+                      (event) {
+                    _bloc.searchAgency(event);
+                  }),
+                  Expanded(
+                    child: CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      children: menus
+                          ?.asMap()
+                          .map((index, element) => MapEntry(
+                              index,
+                              CustomItemBottomSheet(
+                                element.text ?? "",
+                                () {
+                                  // _selectDistrict(_list, index);
+                                  _bloc.branchModel = element;
+                                  _bloc.setBranchModel(element);
+                                  _bloc.search(_controllerSearch.text);
+
+                                  CustomNavigator.pop(context);
+                                },
+                              )))
+                          .values
+                          .toList(),
+                    ),
+                  ),
+                ],
+              );
+            },
+          )),
     );
   }
 
-  Widget _buildContent(List<WorkListStaffModel>? models){
+  void _showDepartment() {
+    CustomNavigator.showCustomBottomDialog(
+      context,
+      CustomMenuBottomSheet(
+          title: AppLocalizations.text(LangKey.department),
+          widget: StreamBuilder(
+            stream: _bloc.outputDepartmentModels,
+            initialData: null,
+            builder: (_, snapshot) {
+              List<CustomDropdownModel>? menus =
+                  snapshot.data as List<CustomDropdownModel>?;
+              return Column(
+                children: [
+                  CustomSearchLocation(_focusDepartment, _controllerDepartment,
+                      (event) {
+                    _bloc.searchDepartment(event);
+                  }),
+                  Expanded(
+                    child: CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      children: menus
+                          ?.asMap()
+                          .map((index, element) => MapEntry(
+                              index,
+                              CustomItemBottomSheet(
+                                element.text ?? "",
+                                () {
+                                  _bloc.departmentModel = element;
+                                  _bloc.setDepartmentModel(element);
+                                  _bloc.search(_controllerSearch.text);
+
+                                  CustomNavigator.pop(context);
+                                },
+                              )))
+                          .values
+                          .toList(),
+                    ),
+                  ),
+                ],
+              );
+            },
+          )),
+    );
+  }
+
+  Widget _buildItem(
+      List<WorkListStaffModel>? models, WorkListStaffModel? model) {
+    return InkWell(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        alignment: Alignment.centerLeft,
+        child: model == null
+            ? CustomShimmer(
+                child: CustomSkeleton(
+                  width: MediaQuery.of(context).size.width / 2,
+                ),
+              )
+            : Row(
+                children: [
+                  CustomAvatarWithURL(
+                    url: model.staffAvatar,
+                    name: model.staffName,
+                    size: 40.0,
+                  ),
+                  Container(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                      child: Text(
+                    model.staffName ?? "",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        color: ((model.isSelected ?? false))
+                            ? AppColors.primaryColor
+                            : AppColors.black,
+                        fontWeight: ((model.isSelected ?? false))
+                            ? FontWeight.bold
+                            : FontWeight.normal),
+                  )),
+                  if ((model.isSelected ?? false))
+                    Container(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: Icon(
+                        Icons.check,
+                        color: AppColors.primaryColor,
+                        size: 15,
+                      ),
+                    )
+                ],
+              ),
+      ),
+      onTap: model == null ? null : () => _bloc.selected(models!, model),
+    );
+  }
+
+  Widget _buildContent(List<WorkListStaffModel>? models) {
     return CustomListView(
       padding: EdgeInsets.zero,
       physics: AlwaysScrollableScrollPhysics(),
@@ -203,11 +380,11 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
       children: models == null
           ? List.generate(4, (index) => _buildItem(models, null)).toList()
           : models.map((e) => _buildItem(models, e)).toList(),
-      onRefresh: widget.staffs != null? null: _onRefresh,
+      onRefresh: widget.staffs != null ? null : _onRefresh,
     );
   }
 
-  Widget _buildBottom(List<WorkListStaffModel>? models){
+  Widget _buildBottom(List<WorkListStaffModel>? models) {
     return CustomBottom(
       text: AppLocalizations.text(LangKey.apply),
       onTap: () => _bloc.confirm(models),
@@ -216,37 +393,37 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     );
   }
 
-  Widget _buildBody(){
+  Widget _buildBody() {
     return StreamBuilder(
-      stream: _bloc.outputModels,
-      initialData: null,
-      builder: (_, snapshot){
-        List<WorkListStaffModel>? models = snapshot.data as List<WorkListStaffModel>? ;
-        return Column(
-          children: [
-            _buildSearch(models),
-            Expanded(child: _buildContent(models)),
-            _buildBottom(models)
-          ],
-        );
-      }
-    );
+        stream: _bloc.outputModels,
+        initialData: null,
+        builder: (_, snapshot) {
+          List<WorkListStaffModel>? models =
+              snapshot.data as List<WorkListStaffModel>?;
+          return Column(
+            children: [
+              _buildSearch(models),
+              Expanded(child: _buildContent(models)),
+              _buildBottom(models)
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Color(0xFF0067AC),
-          title: Text(
-            AppLocalizations.text(LangKey.staff)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          // leadingWidth: 20.0,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
         ),
+        backgroundColor: Color(0xFF0067AC),
+        title: Text(
+          AppLocalizations.text(LangKey.staff)!,
+          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+        ),
+        // leadingWidth: 20.0,
+      ),
       body: _buildBody(),
     );
   }
