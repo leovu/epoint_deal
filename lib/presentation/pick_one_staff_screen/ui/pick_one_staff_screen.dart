@@ -37,6 +37,9 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
   FocusNode _focusAgency = FocusNode();
   TextEditingController _controllerAgency = TextEditingController();
 
+   FocusNode _focusDepartment = FocusNode();
+  TextEditingController _controllerDepartment  = TextEditingController();
+
   late PickOneStaffBloc _bloc;
 
   @override
@@ -159,28 +162,59 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
                     ),
                     Expanded(
                         child: StreamBuilder(
-                            stream: _bloc.outputDepartmentModels,
+                            stream: _bloc.outputDepartmentModel,
                             initialData: null,
                             builder: (_, snapshot) {
-                              List<CustomDropdownModel>? menus =
-                                  snapshot.data as List<CustomDropdownModel>?;
-                              return StreamBuilder(
-                                  stream: _bloc.outputDepartmentModel,
-                                  initialData: null,
-                                  builder: (_, snapshot) {
-                                    return CustomDropdown(
-                                      value:
-                                          snapshot.data as CustomDropdownModel,
-                                      menus: menus,
-                                      hint: AppLocalizations.text(
-                                          LangKey.department),
-                                      onChanged: (event) {
-                                        _bloc.departmentModel = event;
-                                        _bloc.setDepartmentModel(event);
-                                        _bloc.search(_controllerSearch.text);
-                                      },
-                                    );
-                                  });
+                              if (snapshot.data == null) {
+                                return CustomShimmer(
+                                  child: CustomSkeleton(
+                                    height: 40.0,
+                                    radius: 5.0,
+                                  ),
+                                );
+                              } else
+                                return InkWell(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1.0,
+                                            color: Color(0xFFE5E5E5)),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        (snapshot.data != null)
+                                            ? Expanded(
+                                                child: Text(
+                                                  (snapshot.data
+                                                              as CustomDropdownModel)
+                                                          .text ??
+                                                      "",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              )
+                                            : Text(AppLocalizations.text(
+                                                    LangKey.all) ??
+                                                ""),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 15.0),
+                                          child: CustomImageIcon(
+                                            color: AppColors.grey500Color,
+                                            icon: Assets.iconDropDown,
+                                            size: 10.0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _showDepartment();
+                                  },
+                                );
                             })),
                   ],
                 )
@@ -238,6 +272,53 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
           )),
     );
   }
+
+   void _showDepartment() {
+    CustomNavigator.showCustomBottomDialog(
+      context,
+      CustomMenuBottomSheet(
+          title: AppLocalizations.text(LangKey.department),
+          widget: StreamBuilder(
+            stream:  _bloc.outputDepartmentModels,
+            initialData: null,
+            builder: (_, snapshot) {
+              List<CustomDropdownModel>? menus =
+                  snapshot.data as List<CustomDropdownModel>?;
+              return Column(
+                children: [
+                  CustomSearchLocation(_focusDepartment, _controllerDepartment,
+                      (event) {
+                    _bloc.searchDepartment(event);
+                  }),
+                  Expanded(
+                    child: CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      children: menus
+                          ?.asMap()
+                          .map((index, element) => MapEntry(
+                              index,
+                              CustomItemBottomSheet(
+                                element.text ?? "",
+                                () {
+                                  _bloc.departmentModel = element;
+                                  _bloc.setDepartmentModel(element);
+                                  _bloc.search(_controllerSearch.text);
+
+                                  CustomNavigator.pop(context);
+                                },
+                              )))
+                          .values
+                          .toList(),
+                    ),
+                  ),
+                ],
+              );
+            },
+          )),
+    );
+  }
+
 
   Widget _buildItem(
       List<WorkListStaffModel>? models, WorkListStaffModel? model) {
