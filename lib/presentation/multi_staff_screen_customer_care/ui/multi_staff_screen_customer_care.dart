@@ -41,7 +41,6 @@ class _MultipleStaffScreenCustomerCareState
   TextEditingController _controllerSearch = TextEditingController();
   FocusNode _focusAgency = FocusNode();
   TextEditingController _controllerAgency = TextEditingController();
-
   FocusNode _focusDepartment = FocusNode();
   TextEditingController _controllerDepartment = TextEditingController();
 

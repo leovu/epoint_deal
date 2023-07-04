@@ -34,7 +34,6 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
   TextEditingController _controllerSearch = TextEditingController();
   FocusNode _focusAgency = FocusNode();
   TextEditingController _controllerAgency = TextEditingController();
-
   FocusNode _focusDepartment = FocusNode();
   TextEditingController _controllerDepartment = TextEditingController();
 

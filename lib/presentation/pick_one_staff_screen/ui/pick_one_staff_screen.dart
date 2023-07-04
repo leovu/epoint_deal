@@ -37,8 +37,8 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
   FocusNode _focusAgency = FocusNode();
   TextEditingController _controllerAgency = TextEditingController();
 
-   FocusNode _focusDepartment = FocusNode();
-  TextEditingController _controllerDepartment  = TextEditingController();
+  FocusNode _focusDepartment = FocusNode();
+  TextEditingController _controllerDepartment = TextEditingController();
 
   late PickOneStaffBloc _bloc;
 
@@ -273,13 +273,13 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
     );
   }
 
-   void _showDepartment() {
+  void _showDepartment() {
     CustomNavigator.showCustomBottomDialog(
       context,
       CustomMenuBottomSheet(
           title: AppLocalizations.text(LangKey.department),
           widget: StreamBuilder(
-            stream:  _bloc.outputDepartmentModels,
+            stream: _bloc.outputDepartmentModels,
             initialData: null,
             builder: (_, snapshot) {
               List<CustomDropdownModel>? menus =
@@ -318,7 +318,6 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
           )),
     );
   }
-
 
   Widget _buildItem(
       List<WorkListStaffModel>? models, WorkListStaffModel? model) {
