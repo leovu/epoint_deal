@@ -20,7 +20,7 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
                   widget.orderSourceData!.length,
                   (index) => _optionItem(widget.orderSourceData![index].orderSourceName,
                           widget.orderSourceData![index].selected!, () {
-                        selectedTag(index);
+                        selectedItem(index);
                       })),
               spacing: 20,
               runSpacing: 20,
@@ -74,7 +74,7 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
     );
   }
 
-  selectedTag(int index) async {
+  selectedItem(int index) async {
     List<OrderSourceData> models = widget.orderSourceData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;

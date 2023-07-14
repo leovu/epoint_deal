@@ -114,7 +114,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
                                      widget.id_closing_date != "" ? _fromDateText : "" as TextEditingController, () {
-                                  _showFromDatePickerCreateDate();
+                                  _showFromDatePickerClosingDate();
                                 })),
                             Container(
                                 margin: EdgeInsets.only(left: 15, right: 5),
@@ -131,7 +131,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
                                      widget.id_closing_date != "" ?  _toDateText : "" as TextEditingController, () {
-                                  _showToDatePickerCreateDate();
+                                  _showToDatePickerClosingDate();
                                 }))
                           ],
                         ),
@@ -143,7 +143,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
         : Container();
   }
 
-  _showFromDatePickerCreateDate() {
+  _showFromDatePickerClosingDate() {
     DateTime selectedDate = widget.filterScreenModel!.fromDate_closing_date ?? _fromDate ?? _toDate ?? _now;
 
     showModalBottomSheet(
@@ -186,7 +186,7 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
         });
   }
 
-  _showToDatePickerCreateDate() {
+  _showToDatePickerClosingDate() {
     DateTime selectedDate = _toDate ?? _now;
     DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
