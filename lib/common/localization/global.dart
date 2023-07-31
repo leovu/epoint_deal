@@ -21,4 +21,6 @@ class Global {
   static double amount = 0.0;
 
   static double? discount = 0.0;
+
+  static List<Map<String, dynamic>>? permissionModels = [];
 }
