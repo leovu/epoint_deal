@@ -178,14 +178,14 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         if (allowPop) {
           Navigator.of(context).pop(allowPop);
         } else {
           Navigator.of(context).pop();
         }
-        return;
-      } as Future<bool> Function()?,
+        return allowPop;
+      },
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(

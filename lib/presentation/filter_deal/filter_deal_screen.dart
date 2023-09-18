@@ -545,7 +545,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         if (allowPop) {
           widget.filterScreenModel = FilterScreenModel(
             filterModel: ListDealModelRequest(
@@ -582,8 +582,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         } else {
           Navigator.of(context).pop();
         }
-        return;
-      } as Future<bool> Function()?,
+        return allowPop;
+      },
       child: Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(
