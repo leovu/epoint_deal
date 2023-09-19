@@ -1144,11 +1144,11 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function? ontap, TextEditingController? fillText, int? maxlines}) {
+      {GestureTapCallback? ontap, TextEditingController? fillText, int? maxlines}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: ontap as void Function()?,
+        onTap: ontap,
         child: TextField(
           maxLines: maxlines ?? 1,
           enabled: textfield,

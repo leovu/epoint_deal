@@ -514,9 +514,9 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
     setState(() {});
   }
 
-  Widget buildItemBranch(BranchData? item, bool selected, Function ontap) {
+  Widget buildItemBranch(BranchData? item, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Container(
         width: 200,
         height: 150,
@@ -585,7 +585,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
 
   Widget _buildTextField(String title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function? ontap,
+      {GestureTapCallback? ontap,
       TextEditingController? fillText,
       FocusNode? focusNode,
       TextInputType? inputType,
@@ -593,7 +593,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: InkWell(
-        onTap: (ontap != null) ? ontap as void Function()? : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -681,8 +681,8 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
     );
   }
 
-  Widget product(Product item, Function ontapDelete, Function OntapMinus,
-      Function ontapPlus) {
+  Widget product(Product item, GestureTapCallback ontapDelete, GestureTapCallback OntapMinus,
+      GestureTapCallback ontapPlus) {
     return Container(
       child: Column(
         children: [
@@ -705,7 +705,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                     ]))),
               ),
               InkWell(
-                  onTap: ontapDelete as void Function()?,
+                  onTap: ontapDelete,
                   child: Icon(
                     Icons.clear,
                     color: Color(
@@ -732,7 +732,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: OntapMinus as void Function()?,
+                    onTap: OntapMinus,
                     child: Text("-",
                         style: TextStyle(
                             fontSize: 25.0,
@@ -761,7 +761,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                         ),
                       )),
                   InkWell(
-                    onTap: ontapPlus as void Function()?,
+                    onTap: ontapPlus,
                     child: Text("+",
                         style: TextStyle(
                             fontSize: 25.0,

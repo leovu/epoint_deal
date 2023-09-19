@@ -236,9 +236,9 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
   }
 
   Widget _buildDatePicker(
-      String? hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -264,9 +264,9 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
     );
   }
 
-  Widget _optionItem(String? name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -15,10 +15,10 @@ class CustomTextField extends StatelessWidget {
   final Color? suffixIconColor;
   final double? suffixSize;
   final Color? backgroundColor;
-  final Function? onSuffixIconTap;
+  final GestureTapCallback? onSuffixIconTap;
   final String? prefixIcon;
   final Color? prefixIconColor;
-  final Function? onPrefixIconTap;
+  final GestureTapCallback? onPrefixIconTap;
   final bool obscureText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final bool? autofocus;
   final bool readOnly;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
   final bool enableBorder;
   final int? maxLines;
   final int? maxLength;
@@ -165,7 +165,7 @@ class CustomTextField extends StatelessWidget {
                   maxLines: maxLines ?? 1,
                   maxLength: maxLength,
                   readOnly: readOnly,
-                  onTap: onTap as void Function()?,
+                  onTap: onTap,
                   textCapitalization:
                       textCapitalization ?? TextCapitalization.none,
                 ),

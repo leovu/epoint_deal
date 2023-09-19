@@ -58,7 +58,7 @@ class CustomBottomOption extends StatelessWidget {
             ],
           ),
         ),
-        onTap: e.onTap as void Function()?,
+        onTap: e.onTap,
       )).toList()
     );
   }
@@ -70,7 +70,7 @@ class CustomBottomOptionModel{
   final String? text;
   final Color? textColor;
   final bool? isSelected;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
 
   CustomBottomOptionModel({this.icon, this.image, this.text, this.textColor, this.isSelected, this.onTap});
 }

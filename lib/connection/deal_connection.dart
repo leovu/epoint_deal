@@ -645,7 +645,7 @@ class DealConnection {
   }
 
   static Future showMyDialogWithFunction(BuildContext context, String? title,
-      {Function? ontap}) async {
+      {VoidCallback? ontap}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -702,7 +702,7 @@ class DealConnection {
                   TextButton(
                     child:
                         Center(child: Text(AppLocalizations.text(LangKey.yes)!)),
-                    onPressed: ontap as void Function()?,
+                    onPressed: ontap,
                   ),
                 ],
               ),

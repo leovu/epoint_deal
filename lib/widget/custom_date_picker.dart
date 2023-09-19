@@ -11,7 +11,7 @@ class CustomDatePicker extends StatelessWidget {
   final Function(DateTime) onChange;
   final DateTime? maximumTime;
   final DateTime? minimumTime;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
   final DatePickerDateOrder? dateOrder;
   const CustomDatePicker(
       {Key? key,

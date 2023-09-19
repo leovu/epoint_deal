@@ -140,9 +140,9 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
     });
   }
 
-  Widget _buildItemStaff(CustomerData item, Function ontap) {
+  Widget _buildItemStaff(CustomerData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Container(
         height: 40,
         decoration: BoxDecoration(color: Colors.white),

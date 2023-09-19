@@ -224,9 +224,9 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
     setState(() {});
   }
 
-  Widget _buildItem(ListProjectItems item, Function ontap) {
+  Widget _buildItem(ListProjectItems item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Container(
         height: 40,
         child: Row(

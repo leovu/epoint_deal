@@ -29,9 +29,9 @@ class _FilterByOrderSourceState extends State<FilterByOrderSource> {
         : Container();
   }
 
-  Widget _optionItem(String? name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

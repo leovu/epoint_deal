@@ -74,9 +74,9 @@ class _BranchModalState extends State<BranchModal> {
             })) : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(String title, bool selected, Function ontap) {
+  Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Container(
         height: 40,
         child: Row(

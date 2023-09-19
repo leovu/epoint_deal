@@ -512,14 +512,14 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     }
   }
 
-  Widget option(String title, bool show, double width, Function ontap) {
+  Widget option(String title, bool show, double width, GestureTapCallback ontap) {
     return Column(
       children: [
         Container(
           padding: EdgeInsets.all(15.0 / 1.5),
           height: 40,
           child: InkWell(
-            onTap: ontap as void Function()?,
+            onTap: ontap,
             child: Center(
               child: Text(
                 title,
@@ -1943,9 +1943,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, Function? ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap}) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Container(
           margin: EdgeInsets.only(left: 8.0),
           child: Stack(
@@ -2162,9 +2162,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _buildFunction(String name, String icon, Color color, Function ontap) {
+  Widget _buildFunction(String name, String icon, Color color, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Column(
         children: [
           Container(

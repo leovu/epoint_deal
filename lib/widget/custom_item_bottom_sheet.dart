@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 class CustomItemBottomSheet extends StatelessWidget {
   final String text;
   final String? subText;
-  final Function function;
+  final GestureTapCallback function;
   final bool? isSelected;
   final String? icon;
   final bool isEdit;
-  final Function? funcEdit;
+  final GestureTapCallback? funcEdit;
   final Widget? iconChild;
   final Color? color;
   final Color? colorIcon;

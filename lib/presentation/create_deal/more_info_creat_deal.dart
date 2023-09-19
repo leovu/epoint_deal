@@ -446,9 +446,9 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
     );
   }
 
-  Widget buildItemBranch(BranchData? item, bool selected, Function ontap) {
+  Widget buildItemBranch(BranchData? item, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Container(
         width: 200,
         height: 150,
@@ -803,7 +803,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
 
   Widget _buildTextField(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function? ontap,
+      {GestureTapCallback? ontap,
       TextEditingController? fillText,
       FocusNode? focusNode,
       TextInputType? inputType,
@@ -811,7 +811,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: InkWell(
-        onTap: (ontap != null) ? ontap as void Function()? : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           // maxLength: (maxLenght != null) ? maxLenght : null,
           enabled: textfield,
@@ -894,7 +894,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
     );
   }
 
-  Widget product(Product item, int index, Function ontapDelete,
+  Widget product(Product item, int index, GestureTapCallback ontapDelete,
       Function OntapMinus, Function ontapPlus) {
     return InkWell(
       onTap: () async {
@@ -980,7 +980,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                       ]))),
                 ),
                 InkWell(
-                    onTap: ontapDelete as void Function()?,
+                    onTap: ontapDelete,
                     child: Icon(
                       Icons.clear,
                       color: Color(

@@ -15,7 +15,7 @@ class CustomSearchLocation extends StatelessWidget {
   final String? hint;
   final TextInputType? inputType;
   final String? suffixIcon;
-  final Function? onTapSuffix;
+  final GestureTapCallback? onTapSuffix;
   final TextSelectionControls? selectionControls;
   final List<TextInputFormatter>? inputFormatters;
    CustomSearchLocation(this.focusNode, this.controller, this.onChanged,

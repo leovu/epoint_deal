@@ -94,10 +94,10 @@ class _ProductTabScreenState extends State<ProductTabScreen>
   }
 
   KeyboardActionsItem buildKeyboardAction(FocusNode node,
-      {String text = "Done", Function? onTap}) {
+      {String text = "Done", GestureTapCallback? onTap}) {
     return KeyboardActionsItem(focusNode: node, toolbarButtons: [
       (node) => InkWell(
-            onTap: onTap as void Function()? ?? () => node.unfocus(),
+            onTap: onTap ?? () => node.unfocus(),
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(

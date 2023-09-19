@@ -10,11 +10,11 @@ class CustomDropDown extends StatelessWidget {
   final Color? suffixIconColor;
   final double? suffixSize;
   final Color? backgroundColor;
-  final Function? onSuffixIconTap;
+  final GestureTapCallback? onSuffixIconTap;
   final String? prefixIcon;
   final Color? prefixIconColor;
-  final Function? onPrefixIconTap;
-  final Function? onTap;
+  final GestureTapCallback? onPrefixIconTap;
+  final GestureTapCallback? onTap;
   final Widget? suffixChild;
   final TextOverflow? overflow;
   final double? suffixChildMargin;
@@ -51,7 +51,7 @@ class CustomDropDown extends StatelessWidget {
                     color: prefixIconColor ?? AppColors.primaryColor,
                   ),
                 ),
-                onTap: onPrefixIconTap as void Function()? ?? onTap as void Function()?,
+                onTap: onPrefixIconTap ?? onTap,
               ),
             Expanded(
                 child: Container(

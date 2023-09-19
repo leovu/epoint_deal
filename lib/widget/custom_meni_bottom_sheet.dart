@@ -10,8 +10,8 @@ class CustomMenuBottomSheet extends StatelessWidget {
   final bool haveBnConfirm;
   final bool enableButton;
   final String? textConfirm;
-  final Function? onTapConfirm;
-  final Function? funcPop;
+  final GestureTapCallback? onTapConfirm;
+  final GestureTapCallback? funcPop;
   CustomMenuBottomSheet(
       {this.widget,
       this.title,
@@ -55,7 +55,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                           Opacity(
                             child: InkWell(
                               onTap:
-                                  funcPop as void Function()? ?? () => Navigator.of(context).pop(),
+                                  funcPop ?? () => Navigator.of(context).pop(),
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,

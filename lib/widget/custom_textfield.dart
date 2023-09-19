@@ -25,15 +25,15 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final Function(String)? onSubmitted;
   final Function(String)? onChanged;
-  final Function? onSuffixTap;
-  final Function? onTap;
+  final GestureTapCallback? onSuffixTap;
+  final GestureTapCallback? onTap;
   final bool? obscureText;
   final IconData? titleIconData;
   final String? titleIcon;
   final Color? colorIcons;
   final BoxShadow? shadow;
   final Widget? widgetRight;
-  final Function? onTapTitleIcon;
+  final GestureTapCallback? onTapTitleIcon;
   final double? suffixIconSize;
 
   CustomTextField(
@@ -88,7 +88,7 @@ class CustomTextField extends StatelessWidget {
             (titleIcon == null && titleIconData == null)
                 ? Container()
                 : InkWell(
-                    onTap: onTapTitleIcon as void Function()?,
+                    onTap: onTapTitleIcon,
                     splashColor: Colors.transparent,
                     child: Container(
                       padding: EdgeInsets.only(left: AppSizes.minPadding!),
@@ -160,13 +160,13 @@ class CustomTextField extends StatelessWidget {
                               color: colorIcons ?? AppColors.grey500Color,
                             ),
                     ),
-                    onTap: onSuffixTap as void Function()?,
+                    onTap: onSuffixTap,
                   ),
             widgetRight ?? Container(),
           ],
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: onTap,
     );
   }
 }

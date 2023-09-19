@@ -99,9 +99,9 @@ class _FilterByBranchState extends State<FilterByBranch> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(BranchData item, Function ontap) {
+  Widget _buildItem(BranchData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -10,9 +10,9 @@ class CustomAlertDialog extends StatelessWidget {
   final String? title;
   final String? content;
   final String? textSubmitted;
-  final Function? onSubmitted;
+  final GestureTapCallback? onSubmitted;
   final String? textSubSubmitted;
-  final Function? onSubSubmitted;
+  final GestureTapCallback? onSubSubmitted;
   final Color? colorSubmitted;
   final bool enableCancel;
   final bool isTicket;

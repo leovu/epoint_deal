@@ -8,7 +8,7 @@ class CustomEmpty extends StatelessWidget {
   final String? text;
   final String? image;
   final EdgeInsetsGeometry? padding;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
 
   CustomEmpty({this.title, this.text, this.image, this.padding, this.onTap});
 

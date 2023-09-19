@@ -6,9 +6,9 @@ class CustomBottom extends StatelessWidget {
   final String? text;
   final Color? color;
   final TextStyle? textStyle;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
   final String? subText;
-  final Function? onSubTap;
+  final GestureTapCallback? onSubTap;
   final Color? subColor;
   final Widget? child;
 

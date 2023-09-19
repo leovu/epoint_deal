@@ -219,9 +219,9 @@ ListCustomLeadData? _model ;
     });
   }
 
-  Widget _buildItemStaff(ListCustomLeadItems item, Function ontap) {
+  Widget _buildItemStaff(ListCustomLeadItems item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Container(
         height: 40,
         decoration: BoxDecoration(color: Colors.white),

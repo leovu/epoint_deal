@@ -9,7 +9,7 @@ class CustomButton extends StatelessWidget {
   final String? icon;
   final String? text;
   final TextStyle? style;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
   final bool isExpand;
   final bool isIcon;
   final Color? iconColor;
@@ -106,14 +106,14 @@ class CustomButton extends StatelessWidget {
             ],
           ),
         ),
-        onTap: enable! ? onTap as void Function()? : null);
+        onTap: enable! ? onTap : null);
   }
 }
 
 
 class CustomQuantityButton extends StatelessWidget {
   final bool isPlus;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
 
   CustomQuantityButton({this.isPlus = true, this.onTap});
 
@@ -132,7 +132,7 @@ class CustomQuantityButton extends StatelessWidget {
           style: AppTextStyles.style14WhiteWeight600,
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: onTap,
     );
   }
 }

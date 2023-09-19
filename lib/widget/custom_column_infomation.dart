@@ -18,8 +18,8 @@ class CustomColumnInformation extends StatelessWidget {
   final Color? borderColor;
   final TextStyle? titleStyle;
   final bool isRequired;
-  final Function? onTap;
-  final Function? onTitleTap;
+  final GestureTapCallback? onTap;
+  final GestureTapCallback? onTitleTap;
   final bool enable;
 
   CustomColumnInformation({
@@ -116,7 +116,7 @@ class CustomColumnInformation extends StatelessWidget {
                 titleSuffix!,
             ],
           ),
-          onTap: onTitleTap as void Function()?,
+          onTap: onTitleTap,
         ),
         Container(height: AppSizes.minPadding,),
         InkWell(
@@ -152,7 +152,7 @@ class CustomColumnInformation extends StatelessWidget {
               ],
             ),
           ),
-          onTap: enable ? onTap as void Function()? : null,
+          onTap: enable ? onTap : null,
         )
       ],
     );

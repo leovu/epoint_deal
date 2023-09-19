@@ -125,9 +125,9 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(GetStatusWorkData item, Function ontap) {
+  Widget _buildItem(GetStatusWorkData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
