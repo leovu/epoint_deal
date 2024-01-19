@@ -1,4 +1,3 @@
-
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -101,10 +100,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   DateTime? selectedClosingDueDate;
 
   List<CustomerData> listCustomer = <CustomerData>[];
-  DealItems customerSelected = DealItems(customerCode: "", customerName: "", phone: "");
+  DealItems customerSelected =
+      DealItems(customerCode: "", customerName: "", phone: "");
 
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
-  ListCustomLeadItems leadItem = ListCustomLeadItems(customerLeadCode: "",phone: "", customerType: "");
+  ListCustomLeadItems leadItem =
+      ListCustomLeadItems(customerLeadCode: "", phone: "", customerType: "");
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel(
       customerTypeName: AppLocalizations.text(LangKey.potentialCustomer),
@@ -369,7 +370,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 // chọn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
-              selectedCustomer ? (customerSelected?.customerName ?? "") : (leadItem?.leadFullName ?? ""),
+              selectedCustomer
+                  ? (customerSelected?.customerName ?? "")
+                  : (leadItem?.leadFullName ?? ""),
               Assets.iconPerson,
               true,
               true,
@@ -390,7 +393,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 customerSelected.customerName = customer.fullName;
                 customerSelected.phone = customer.phone1;
                 _phoneNumberText.text = customer.phone1!;
-
 
                 // detailDeal.customerCode = customerSelected.customerCode;
                 // detailDeal.phone = _phoneNumberText.text;
@@ -441,7 +443,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.customerStyle)! + ": ",
+                                AppLocalizations.text(LangKey.customerStyle)! +
+                                    ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -451,8 +454,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                             (leadItem.customerType != "") ? (leadItem.customerType!.toLowerCase() == AppLocalizations.text(LangKey.personal)!.toLowerCase() ) ?
-                                AppLocalizations.text(LangKey.personal)! : AppLocalizations.text(LangKey.business)! : "",
+                                (leadItem.customerType != "")
+                                    ? (leadItem.customerType!.toLowerCase() ==
+                                            AppLocalizations.text(
+                                                    LangKey.personal)!
+                                                .toLowerCase())
+                                        ? AppLocalizations.text(
+                                            LangKey.personal)!
+                                        : AppLocalizations.text(
+                                            LangKey.business)!
+                                    : "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -466,7 +477,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.phoneNumber)! +": ",
+                                AppLocalizations.text(LangKey.phoneNumber)! +
+                                    ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -643,17 +655,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 }),
 
 // chọn ngày kết thúc thực tế
-                showMoreInfoDeal ?
-                Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    child: _buildDatePicker(
-                        AppLocalizations.text(LangKey.expectedEndingDate),
-                        _closingDueDateText, () {
+                showMoreInfoDeal
+                    ? Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: _buildDatePicker(
+                            AppLocalizations.text(LangKey.expectedEndingDate),
+                            _closingDueDateText, () {
                           FocusScope.of(context).unfocus();
-                      _showClosingDueDate();
-                    }))
-                : Container(),
-                
+                          _showClosingDueDate();
+                        }))
+                    : Container(),
 
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseCards),
@@ -725,7 +736,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             ),
           ),
 
-          MoreInfoCreatDeal( 
+          MoreInfoCreatDeal(
             branchData: branchData,
             detailDeal: detailDeal,
           )
@@ -852,11 +863,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     );
   }
 
-  Widget _buildDatePicker(
-      String? hintText, TextEditingController fillText, GestureTapCallback ontap) {
+  Widget _buildDatePicker(String? hintText, TextEditingController fillText,
+      GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
       child: TextField(
+        style: TextStyle(
+          color: Colors.black,
+        ),
         enabled: false,
         controller: fillText,
         keyboardType: TextInputType.text,
@@ -1002,8 +1016,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     }
   }
 
-    Future<void> addDealLead() async {
-
+  Future<void> addDealLead() async {
     if (_dealNameText.text == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
