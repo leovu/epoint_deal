@@ -947,7 +947,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(AppSizes.minPadding!),
+        padding: EdgeInsets.all(AppSizes.minPadding),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),

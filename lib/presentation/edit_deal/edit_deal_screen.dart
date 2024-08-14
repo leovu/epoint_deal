@@ -173,7 +173,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
 
-      GlobalCart.shared.clearCart();
+      GlobalCart().removeAllServiceCardActivated();
 
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {

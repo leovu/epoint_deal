@@ -17,6 +17,7 @@ class CustomAlertDialog extends StatelessWidget {
   final bool enableCancel;
   final bool isTicket;
   final Widget? child;
+  final bool showSubmitted;
 
   CustomAlertDialog(
       {
@@ -29,6 +30,7 @@ class CustomAlertDialog extends StatelessWidget {
         this.colorSubmitted,
         this.enableCancel = false,
         this.isTicket = false,
+        this.showSubmitted = true,
         this.child
       })
       : assert(enableCancel != null);
@@ -45,12 +47,12 @@ class CustomAlertDialog extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(AppSizes.maxPadding!),
+                padding: EdgeInsets.all(AppSizes.maxPadding),
                 child: Column(
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.sizeOnTap! - AppSizes.maxPadding!),
+                          horizontal: AppSizes.sizeOnTap! - AppSizes.maxPadding),
                       child: Text(
                         title ?? "",
                         style: AppTextStyles.style20BlackBold,
@@ -65,18 +67,24 @@ class CustomAlertDialog extends StatelessWidget {
                       style: AppTextStyles.style15BlackNormal,
                       textAlign: TextAlign.center,
                     ),
-                    Container(
-                      height: AppSizes.minPadding,
-                    ),
-                    CustomButton(
-                      text: textSubmitted ?? AppLocalizations.text(LangKey.i_get_it),
-                      backgroundColor: colorSubmitted ?? AppColors.primaryColor,
-                      onTap: onSubmitted ?? () => Navigator.of(context).pop(),
-                    ),
+                   if (showSubmitted)
+                      ...[
+                        SizedBox(
+                          height: AppSizes.minPadding,
+                        ),
+                        CustomButton(
+                          text: textSubmitted ??
+                              AppLocalizations.text(LangKey.i_get_it),
+                          backgroundColor:
+                          colorSubmitted ?? AppColors.primaryColor,
+                          onTap:
+                          onSubmitted ?? () => CustomNavigator.pop(context),
+                        ),
+                      ],
                     textSubSubmitted == null
                         ? Container()
                         : Container(
-                            padding: EdgeInsets.only(top: AppSizes.minPadding!),
+                            padding: EdgeInsets.only(top: AppSizes.minPadding),
                             child: CustomButton(
                               text: textSubSubmitted,
                               backgroundColor: AppColors.subColor,

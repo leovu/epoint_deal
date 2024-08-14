@@ -1083,7 +1083,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(AppSizes.minPadding!),
+        padding: EdgeInsets.all(AppSizes.minPadding),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -1104,7 +1104,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                       // width: MediaQuery.of(context).size.width - 80,
                       child: RichText(
                           text: TextSpan(
-                              text: item?.objectName ?? "",
+                              text: item.objectName ?? "",
                               style: TextStyle(
                                   fontSize: 16.0,
                                   color: Colors.black,

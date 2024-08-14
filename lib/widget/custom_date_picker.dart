@@ -47,7 +47,7 @@ class CustomDatePicker extends StatelessWidget {
         if (haveBnConfirm)
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: onTap,enable: enableButton,
+            onTap: onTap,enable: enableButton ?? false,
           ),
         Container(
           height: 15.0,

@@ -1,32 +1,6 @@
-class ListProductResponseModel {
-  int? errorCode;
-  String? errorDescription;
-  ProductResponseModel? data;
-
-  ListProductResponseModel({this.errorCode, this.errorDescription, this.data});
-
-  ListProductResponseModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['ErrorCode'];
-    errorDescription = json['ErrorDescription'];
-    data = json['Data'] != null ? new ProductResponseModel.fromJson(json['Data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ErrorCode'] = this.errorCode;
-    data['ErrorDescription'] = this.errorDescription;
-    if (this.data != null) {
-      data['Data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
-
-
-
 class ProductResponseModel {
   PageInfo? pageInfo;
-  List<ProductModel?>? items;
+  List<ProductModel>? items;
 
   ProductResponseModel({this.pageInfo, this.items});
 
@@ -35,7 +9,7 @@ class ProductResponseModel {
         ? new PageInfo.fromJson(json['PageInfo'])
         : null;
     if (json['Items'] != null) {
-      items = <ProductModel?>[];
+      items = <ProductModel>[];
       json['Items'].forEach((v) {
         items!.add(new ProductModel.fromJson(v));
       });
@@ -48,12 +22,11 @@ class ProductResponseModel {
       data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items!.map((v) => v!.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
-
 
 class PageInfo {
   int? total;
@@ -125,8 +98,8 @@ class ProductModel {
   String? categoryName;
   String? unitName;
   Promotion? promotion;
-  num? qty;
-  num? price;
+  double? qty;
+  double? price;
   String? note;
 
   ProductModel(
@@ -144,7 +117,7 @@ class ProductModel {
       this.productCategoryId,
       this.categoryName,
       this.unitName,
-      this.promotion, this.price, this.note, this.qty});
+      this.promotion});
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -166,8 +139,6 @@ class ProductModel {
           ? new Promotion.fromJson(json['promotion'])
           : null;
     }
-    qty = json["quantity"];
-    note = json["note"];
   }
 
   ProductModel.fromJsonOrderDetail(Map<String, dynamic> json) {
@@ -179,7 +150,6 @@ class ProductModel {
     note = json['note'];
     avatar = json['object_image'];
     unitName = json['unit_name'];
-    note = json['note'];
   }
 
   Map<String, dynamic> toJsonOrderDetail() {
@@ -213,13 +183,9 @@ class ProductModel {
     if (this.promotion != null) {
       data['promotion'] = this.promotion!.toJson();
     }
-
-    data["quantity"] = this.qty;
-    data["note"] = this.note;
     return data;
   }
 }
-
 
 class Promotion {
   String? price;

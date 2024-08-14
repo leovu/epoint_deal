@@ -4,9 +4,7 @@ import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/bloc/pick_one_staff_lead_bloc.dart';
-import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom.dart';
-import 'package:epoint_deal_plugin/widget/custom_dropdown.dart';
 import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
 import 'package:epoint_deal_plugin/widget/custom_item_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_line.dart';
@@ -14,9 +12,9 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_search_location.dart';
-import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 
 class PickOneStaffScreen extends StatefulWidget {

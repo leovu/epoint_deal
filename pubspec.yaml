@@ -34,6 +34,13 @@ dependencies:
   aws_s3_upload: ^1.5.0
   connectivity_plus: ^4.0.1
   collection: ^1.15.0-nullsafety.4
+  card_swiper: 3.0.1
+  badges: 3.1.2
+  flutter_datetime_picker_plus: 2.1.0
+  flutter_phone_direct_caller: 2.1.1
+  mobile_scanner: 3.5.6
+  fluttertoast: 8.2.4
+  screenshot: 3.0.0
 
 dev_dependencies:
   flutter_test:

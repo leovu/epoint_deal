@@ -51,9 +51,9 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
 
 
   double _heightHeader = AppSizes.maxWidth! * 0.9;
-  double _heightHeaderImage = (AppSizes.maxWidth! - AppSizes.maxPadding! * 2) / 5;
+  double _heightHeaderImage = (AppSizes.maxWidth! - AppSizes.maxPadding * 2) / 5;
 
-  double _widthImageDescription = AppSizes.maxWidth! - AppSizes.maxPadding! * 2;
+  double _widthImageDescription = AppSizes.maxWidth! - AppSizes.maxPadding * 2;
   double _heightImageDescription = 100;
 
 
@@ -130,7 +130,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
             radius: 0.0,
           ),
           Container(
-            margin: EdgeInsets.all(AppSizes.maxPadding!),
+            margin: EdgeInsets.all(AppSizes.maxPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -184,9 +184,9 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
         Container(
           margin: EdgeInsets.only(
               top: _heightHeader - _heightHeaderImage / 2,
-              right: AppSizes.maxPadding!,
-              left: AppSizes.maxPadding!,
-              bottom: AppSizes.maxPadding!
+              right: AppSizes.maxPadding,
+              left: AppSizes.maxPadding,
+              bottom: AppSizes.maxPadding
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +215,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                                 borderRadius: BorderRadius.horizontal(
                                     right: Radius.circular(50.0)),
                                 color: Colors.red),
-                            padding: EdgeInsets.all(AppSizes.minPadding!),
+                            padding: EdgeInsets.all(AppSizes.minPadding),
                             child: AutoSizeText(
                               model.promotion == null
                                   ? ""
@@ -288,13 +288,13 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomSkeleton(),
-          Container(height: AppSizes.minPadding! / 2,),
+          Container(height: AppSizes.minPadding / 2,),
           CustomSkeleton(),
-          Container(height: AppSizes.minPadding! / 2,),
+          Container(height: AppSizes.minPadding / 2,),
           CustomSkeleton(width: AppSizes.maxWidth! / 2,),
           Container(height: AppSizes.minPadding,),
           CustomSkeleton(
-            width: AppSizes.maxWidth! - AppSizes.maxPadding! * 2,
+            width: AppSizes.maxWidth! - AppSizes.maxPadding * 2,
             height: 100,
             radius: 0.0,
           )
@@ -311,7 +311,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
           ],
           color: Colors.white
       ),
-      padding: EdgeInsets.all(AppSizes.maxPadding!),
+      padding: EdgeInsets.all(AppSizes.maxPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -404,7 +404,7 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
           border: Border(top: BorderSide(color: AppColors.borderColor))),
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding!, vertical: AppSizes.minPadding!),
+            horizontal: AppSizes.maxPadding, vertical: AppSizes.minPadding),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: [

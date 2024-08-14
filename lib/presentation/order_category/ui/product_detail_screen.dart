@@ -11,13 +11,10 @@ import 'package:epoint_deal_plugin/presentation/order_category/bloc/product_deta
 import 'package:epoint_deal_plugin/presentation/order_category/ui/description_detail_screen.dart';
 import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
-import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
-import 'package:epoint_deal_plugin/widget/custom_column_infomation.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
-import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:epoint_deal_plugin/widget/decimal_number_input_formatter.dart';
@@ -52,9 +49,9 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
   final TextEditingController _controllerNote = TextEditingController();
 
   double _heightHeader = AppSizes.maxWidth! * 0.9;
-  double _heightHeaderImage = (AppSizes.maxWidth! - AppSizes.maxPadding! * 2) / 5;
+  double _heightHeaderImage = (AppSizes.maxWidth! - AppSizes.maxPadding * 2) / 5;
 
-  double _widthImageDescription = AppSizes.maxWidth! - AppSizes.maxPadding! * 2;
+  double _widthImageDescription = AppSizes.maxWidth! - AppSizes.maxPadding * 2;
   double _heightImageDescription = 100;
 
   late ProductDetailBloc _bloc;
@@ -131,7 +128,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             radius: 0.0,
           ),
           Container(
-            margin: EdgeInsets.all(AppSizes.maxPadding!),
+            margin: EdgeInsets.all(AppSizes.maxPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -193,9 +190,9 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
         Container(
           margin: EdgeInsets.only(
               top: _heightHeader - _heightHeaderImage / 2,
-              right: AppSizes.maxPadding!,
-              left: AppSizes.maxPadding!,
-              bottom: AppSizes.maxPadding!),
+              right: AppSizes.maxPadding,
+              left: AppSizes.maxPadding,
+              bottom: AppSizes.maxPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -233,7 +230,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
                                       borderRadius: BorderRadius.horizontal(
                                           right: Radius.circular(50.0)),
                                       color: Colors.red),
-                                  padding: EdgeInsets.all(AppSizes.minPadding!),
+                                  padding: EdgeInsets.all(AppSizes.minPadding),
                                   child: AutoSizeText(
                                     model.promotion == null
                                         ? ""
@@ -351,7 +348,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     return Container(
       color: isColor ? AppColors.borderColor : Colors.white,
       padding: EdgeInsets.symmetric(
-          horizontal: AppSizes.minPadding!, vertical: AppSizes.maxPadding!),
+          horizontal: AppSizes.minPadding, vertical: AppSizes.maxPadding),
       child: Row(
         children: [
           Flexible(
@@ -383,11 +380,11 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
         children: [
           CustomSkeleton(),
           Container(
-            height: AppSizes.minPadding! / 2,
+            height: AppSizes.minPadding / 2,
           ),
           CustomSkeleton(),
           Container(
-            height: AppSizes.minPadding! / 2,
+            height: AppSizes.minPadding / 2,
           ),
           CustomSkeleton(
             width: AppSizes.maxWidth! / 2,
@@ -396,7 +393,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
             height: AppSizes.minPadding,
           ),
           CustomSkeleton(
-            width: AppSizes.maxWidth! - AppSizes.maxPadding! * 2,
+            width: AppSizes.maxWidth! - AppSizes.maxPadding * 2,
             height: 100,
             radius: 0.0,
           )
@@ -409,7 +406,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
     return Container(
       decoration:
           BoxDecoration(boxShadow: [_buildBoxShadow()], color: Colors.white),
-      padding: EdgeInsets.all(AppSizes.maxPadding!),
+      padding: EdgeInsets.all(AppSizes.maxPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -538,7 +535,7 @@ class ProductDetailScreenState extends State<ProductDetailScreen> {
           border: Border(top: BorderSide(color: AppColors.borderColor))),
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding!, vertical: AppSizes.minPadding!),
+            horizontal: AppSizes.maxPadding, vertical: AppSizes.minPadding),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: [

@@ -1,21 +1,21 @@
 class ServiceRequestModel {
   String? serviceName;
   int? page;
-  String? brandCode;
+  int? serviceCategoryId;
 
-  ServiceRequestModel({this.serviceName, this.page, this.brandCode});
+  ServiceRequestModel({this.serviceName, this.page, this.serviceCategoryId});
 
   ServiceRequestModel.fromJson(Map<String, dynamic> json) {
     serviceName = json['service_name'];
     page = json['page'];
-    brandCode = json['brand_code'];
+    serviceCategoryId = json['service_category_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['service_name'] = this.serviceName;
     data['page'] = this.page;
-    data['brand_code'] = this.brandCode;
+    data['service_category_id'] = this.serviceCategoryId;
     return data;
   }
 }

@@ -1,30 +1,6 @@
 
-
 import 'package:epoint_deal_plugin/model/promotion_model.dart';
-
-class ServiceDetailModel {
-  int? errorCode;
-  String? errorDescription;
-  ServiceDetailResponseModel? data;
-
-  ServiceDetailModel({this.errorCode, this.errorDescription, this.data});
-
-  ServiceDetailModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['ErrorCode'];
-    errorDescription = json['ErrorDescription'];
-    data = json['Data'] != null ? new ServiceDetailResponseModel.fromJson(json['Data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ErrorCode'] = this.errorCode;
-    data['ErrorDescription'] = this.errorDescription;
-    if (this.data != null) {
-      data['Data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
+import 'package:flutter/material.dart';
 
 class ServiceDetailResponseModel {
   String? branchName;
@@ -42,6 +18,7 @@ class ServiceDetailResponseModel {
   String? descriptionImage;
   PromotionModel? promotion;
   List<ListImageModel>? serviceImages;
+  List<AttachModel>? attach;
 
   ServiceDetailResponseModel(
       {this.branchName,
@@ -58,7 +35,8 @@ class ServiceDetailResponseModel {
         this.serviceCategoryId,
         this.descriptionImage,
         this.promotion,
-        this.serviceImages});
+        this.serviceImages,
+        this.attach});
 
   ServiceDetailResponseModel.fromJson(Map<String, dynamic> json) {
     branchName = json['branch_name'];
@@ -81,6 +59,12 @@ class ServiceDetailResponseModel {
       serviceImages = <ListImageModel>[];
       json['service_images'].forEach((v) {
         serviceImages!.add(new ListImageModel.fromJson(v));
+      });
+    }
+    if (json['attach'] != null) {
+      attach = <AttachModel>[];
+      json['attach'].forEach((v) {
+        attach!.add(new AttachModel.fromJson(v));
       });
     }
   }
@@ -107,6 +91,9 @@ class ServiceDetailResponseModel {
       data['service_images'] =
           this.serviceImages!.map((v) => v.toJson()).toList();
     }
+    if (this.attach != null) {
+      data['attach'] = this.attach!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -129,6 +116,49 @@ class ListImageModel {
     data['service_image_id'] = this.serviceImageId;
     data['name'] = this.name;
     data['type'] = this.type;
+    return data;
+  }
+}
+
+class AttachModel {
+  String? objectType;
+  int? objectId;
+  String? objectCode;
+  String? objectName;
+  double? price;
+  FocusNode? focusNode;
+  FocusNode? focusOrder;
+  FocusNode? focusCategory;
+  FocusNode? focusCart;
+  TextEditingController? controller;
+  bool? isSelected;
+
+  AttachModel(
+      {this.objectType,
+        this.objectId,
+        this.objectCode,
+        this.objectName,
+        this.price,
+        this.focusOrder,
+        this.controller,
+        this.isSelected = true});
+
+  AttachModel.fromJson(Map<String, dynamic> json) {
+    objectType = json['object_type'];
+    objectId = json['object_id'];
+    objectCode = json['object_code'];
+    objectName = json['object_name'];
+    price = double.tryParse((json['price'] ?? 0.0).toString());
+    isSelected = false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['object_type'] = this.objectType;
+    data['object_id'] = this.objectId;
+    data['object_code'] = this.objectCode;
+    data['object_name'] = this.objectName;
+    data['price'] = this.price;
     return data;
   }
 }

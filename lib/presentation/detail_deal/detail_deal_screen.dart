@@ -7,7 +7,6 @@ import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/request/work_create_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart';
@@ -22,18 +21,16 @@ import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/comment_bloc.da
 import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_screen.dart';
 import 'package:epoint_deal_plugin/utils/custom_image_picker.dart';
 import 'package:epoint_deal_plugin/widget/container_data_builder.dart';
-import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_empty.dart';
-import 'package:epoint_deal_plugin/widget/custom_file_view.dart';
 import 'package:epoint_deal_plugin/widget/custom_html.dart';
 import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
 import 'package:epoint_deal_plugin/widget/custom_info_item.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -605,7 +602,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         child: CustomListView(
       physics: AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(
-          vertical: AppSizes.minPadding!, horizontal: AppSizes.maxPadding!),
+          vertical: AppSizes.minPadding, horizontal: AppSizes.maxPadding),
       children: models == null
           ? List.generate(4, (index) => _buildComment(null))
           : models.map((e) => _buildComment(e)).toList(),
@@ -739,7 +736,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       decoration:
           BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
       padding:
-          EdgeInsets.symmetric(horizontal: AppSizes.maxPadding!, vertical: 5.0),
+          EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
       child: Column(
         children: [
           StreamBuilder(
@@ -751,7 +748,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   return Container();
                 }
                 return Container(
-                  padding: EdgeInsets.only(bottom: AppSizes.minPadding!),
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: InkWell(
                     child: Row(
                       children: [
@@ -792,7 +789,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 }
 
                 return Container(
-                  padding: EdgeInsets.only(bottom: AppSizes.minPadding!),
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: Row(
                     children: [
                       InkWell(

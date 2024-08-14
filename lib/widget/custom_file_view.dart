@@ -1,10 +1,4 @@
-
-import 'dart:io';
-
-import 'package:epoint_deal_plugin/common/theme.dart';
-import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
-import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+part of widget;
 
 class CustomFileView extends StatefulWidget {
 

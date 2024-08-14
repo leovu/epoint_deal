@@ -1,7 +1,11 @@
+import 'package:epoint_deal_plugin/resource/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
 abstract class BaseBloc{
+
+   Repository get repository => _repository;
+  Repository _repository = Repository();
 
   BuildContext? _context;
 

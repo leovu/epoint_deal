@@ -5,13 +5,13 @@ class CustomRadioButton extends StatelessWidget {
 
   final bool value;
   final Color? activeColor;
-  final Function(bool?) onChanged;
+  final Function(bool?)? onChanged;
 
   const CustomRadioButton(this.value, this.onChanged, {Key? key, this.activeColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Radio(
+    return Radio<bool>(
       groupValue: true,
       value: value,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -19,4 +19,22 @@ class CustomRadioButton extends StatelessWidget {
       onChanged: onChanged ?? (dynamic _){},
     );
   }
+}
+class CustomSurveyRadioButton extends CustomRadioButton {
+
+  final bool value;
+  final Function(bool?) onChanged;
+  final bool isHistory;
+
+  const CustomSurveyRadioButton(
+      this.value,
+      this.onChanged,
+      this.isHistory, {Key? key}) : super(
+      value,
+      (isHistory? null: onChanged),
+      key: key,
+      activeColor: isHistory
+          ? AppColors.primaryColor
+          : AppColors.red500
+  );
 }

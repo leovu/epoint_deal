@@ -7,7 +7,7 @@ import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_mod
 import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/interface/base_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
-import 'package:epoint_deal_plugin/widget/custom_dropdown.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 

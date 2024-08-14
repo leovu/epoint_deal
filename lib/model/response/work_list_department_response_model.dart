@@ -3,10 +3,10 @@ class WorkListDepartmentResponseModel {
 
   WorkListDepartmentResponseModel({this.data});
 
-  WorkListDepartmentResponseModel.fromJson(Map<String, dynamic> json) {
-    if (json['Data'] != null) {
+  WorkListDepartmentResponseModel.fromJson(List<dynamic>? json) {
+    if (json != null) {
       data = <WorkListDepartmentModel>[];
-      json['Data'].forEach((v) {
+      json.forEach((v) {
         data!.add(new WorkListDepartmentModel.fromJson(v));
       });
     }

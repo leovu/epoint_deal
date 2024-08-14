@@ -1,10 +1,4 @@
-
-
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:epoint_deal_plugin/common/theme.dart';
-import 'package:epoint_deal_plugin/widget/custom_avatar_with_url.dart';
-import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
-import 'package:flutter/material.dart';
+part of widget;
 
 class CustomChip extends StatelessWidget {
   final Color? backgroundColor;
@@ -75,8 +69,8 @@ class CustomChip extends StatelessWidget {
         ),
         padding: padding??(onClose == null?EdgeInsets.symmetric(
             vertical: 5.0,
-            horizontal: isExpand?2.0:AppSizes.maxPadding!
-        ):EdgeInsets.only(left: AppSizes.minPadding!)),
+            horizontal: isExpand?2.0:AppSizes.maxPadding
+        ):EdgeInsets.only(left: AppSizes.minPadding)),
         child: icons != null
             ? Icon(
           icons,
@@ -115,7 +109,7 @@ class CustomChip extends StatelessWidget {
                 if(onClose != null)
                   InkWell(
                     child: Container(
-                      padding: EdgeInsets.all(AppSizes.minPadding!),
+                      padding: EdgeInsets.all(AppSizes.minPadding),
                       child: Icon(
                         Icons.close,
                         color: AppColors.white,
@@ -143,6 +137,7 @@ class CustomChipSelected extends StatelessWidget {
   final bool isExpanded;
   final GestureTapCallback? onTap;
   final bool? enable;
+  final Color? colorSelected;
 
   CustomChipSelected({
     this.text,
@@ -151,7 +146,8 @@ class CustomChipSelected extends StatelessWidget {
     this.selected,
     this.isExpanded = false,
     this.onTap,
-    this.enable
+    this.enable,
+    this.colorSelected
   });
 
   @override
@@ -164,8 +160,8 @@ class CustomChipSelected extends StatelessWidget {
     if(_enable){
       if(type == selected){
         style = AppTextStyles.style14WhiteNormal;
-        backgroundColor = AppColors.primaryColor;
-        borderColor = AppColors.primaryColor;
+        backgroundColor = colorSelected ?? AppColors.primaryColor;
+        borderColor = colorSelected ?? AppColors.primaryColor;
       }
       else{
         style = AppTextStyles.style14PrimaryRegular;
@@ -220,9 +216,8 @@ class ContainerChipSelected extends StatelessWidget {
       children: [
         Container(
           padding: titlePadding ?? EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding!,
-            vertical: AppSizes.minPadding!
-          ),
+            horizontal: AppSizes.maxPadding,
+            vertical: AppSizes.minPadding),
           child: Row(
             children: [
               Expanded(
@@ -237,21 +232,20 @@ class ContainerChipSelected extends StatelessWidget {
         ),
         if(children != null)
           Container(
-            color: AppColors.white,
+            color: AppColors.whiteColor,
             padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.maxPadding!,
-                vertical: AppSizes.minPadding!
-            ),
+                horizontal: AppSizes.maxPadding,
+                vertical: AppSizes.minPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
-                  spacing: AppSizes.minPadding!,
-                  runSpacing: AppSizes.minPadding!,
+                  spacing: AppSizes.minPadding,
+                  runSpacing: AppSizes.minPadding,
                   children: children!,
                 ),
                 child == null?Container():Container(
-                  padding: EdgeInsets.only(top: AppSizes.maxPadding!),
+                  padding: EdgeInsets.only(top: AppSizes.maxPadding),
                   child: child,
                 )
               ],

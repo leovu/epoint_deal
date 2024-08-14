@@ -34,12 +34,15 @@ class EpointDealPlugin {
 
     if (domain != null) {
       HTTPConnection.domain = domain;
+      Global.domain = domain;
     }
     if (brandCode != null) {
       HTTPConnection.brandCode = brandCode;
+      Global.brandCode = brandCode;
     }
     if (token != null) {
       HTTPConnection.asscessToken = token;
+      Global.asscessToken = token;
     }
 
     if (getListProduct != null) {
@@ -54,9 +57,11 @@ class EpointDealPlugin {
     }
 
     Global.branch_code = brandCode;
-    GlobalCart.shared.init();
+    // GlobalCart.shared.init();
 
     DealConnection.locale = locale;
+    Global.locale = locale;
+
     DealConnection.buildContext = context;
     AppSizes.init(context);
     await AppLocalizations(DealConnection.locale).load();

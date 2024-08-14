@@ -1,30 +1,7 @@
 import 'package:epoint_deal_plugin/model/promotion_model.dart';
-import 'package:epoint_deal_plugin/model/response/rating_response_model.dart';
 
-
-class ProductDetailModel {
-  int? errorCode;
-  String? errorDescription;
-  ProductDetailResponseModel? data;
-
-  ProductDetailModel({this.errorCode, this.errorDescription, this.data});
-
-  ProductDetailModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['ErrorCode'];
-    errorDescription = json['ErrorDescription'];
-    data = json['Data'] != null ? new ProductDetailResponseModel.fromJson(json['Data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ErrorCode'] = this.errorCode;
-    data['ErrorDescription'] = this.errorDescription;
-    if (this.data != null) {
-      data['Data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
+import 'rating_response_model.dart';
+import 'service_detail_response_model.dart';
 
 class ProductDetailResponseModel {
   int? productId;
@@ -52,6 +29,7 @@ class ProductDetailResponseModel {
   List<ListImageModel>? listImage;
   int? isLike;
   RatingResponseModel? rating;
+  List<AttachModel>? attach;
 
   ProductDetailResponseModel(
       {this.productId,
@@ -78,7 +56,8 @@ class ProductDetailResponseModel {
         this.isReview,
         this.listImage,
         this.isLike,
-        this.rating,});
+        this.rating,
+        this.attach});
 
   ProductDetailResponseModel.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -114,6 +93,12 @@ class ProductDetailResponseModel {
     isLike = json['is_like'];
     rating =
     json['rating'] != null ? new RatingResponseModel.fromJson(json['rating']) : null;
+    if (json['attach'] != null) {
+      attach = <AttachModel>[];
+      json['attach'].forEach((v) {
+        attach!.add(new AttachModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +131,9 @@ class ProductDetailResponseModel {
     data['is_like'] = this.isLike;
     if (this.rating != null) {
       data['rating'] = this.rating!.toJson();
+    }
+    if (this.attach != null) {
+      data['attach'] = this.attach!.map((v) => v.toJson()).toList();
     }
     return data;
   }

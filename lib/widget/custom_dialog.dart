@@ -38,7 +38,7 @@ class CustomDialog extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: AppSizes.maxPadding!),
+                    margin: EdgeInsets.symmetric(horizontal: AppSizes.maxPadding),
                     child: screen,
                   )
                 ],

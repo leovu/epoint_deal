@@ -35,6 +35,8 @@ class CustomTextField extends StatelessWidget {
   final Widget? widgetRight;
   final GestureTapCallback? onTapTitleIcon;
   final double? suffixIconSize;
+  final String? titleImage;
+  final Color? prefixIconColor;
 
   CustomTextField(
       {this.focusNode,
@@ -65,7 +67,9 @@ class CustomTextField extends StatelessWidget {
       this.shadow,
       this.widgetRight,
       this.onTapTitleIcon,
-      this.suffixIconSize});
+      this.suffixIconSize,
+      this.titleImage,
+      this.prefixIconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -85,24 +89,29 @@ class CustomTextField extends StatelessWidget {
                 borderColor == null ? null : Border.all(color: borderColor!)),
         child: Row(
           children: [
-            (titleIcon == null && titleIconData == null)
+            (titleImage == null && titleIcon == null && titleIconData == null)
                 ? Container()
                 : InkWell(
                     onTap: onTapTitleIcon,
                     splashColor: Colors.transparent,
                     child: Container(
-                      padding: EdgeInsets.only(left: AppSizes.minPadding!),
-                      child: titleIcon != null
-                          ? CustomImageIcon(
-                              icon: titleIcon,
-                              size: 18.0,
-                              color: colorIcons ?? AppColors.grey500Color,
+                      padding: EdgeInsets.only(left: AppSizes.minPadding),
+                      child: titleImage != null
+                          ? Image.asset(
+                              titleImage!,
+                              width: 18.0,
                             )
-                          : Icon(
-                              titleIconData,
-                              size: 18.0,
-                              color: colorIcons ?? AppColors.grey500Color,
-                            ),
+                          : titleIcon != null
+                              ? CustomImageIcon(
+                                  icon: titleIcon,
+                                  size: 18.0,
+                                  color: prefixIconColor ?? colorIcons ?? AppColors.grey500Color,
+                                )
+                              : Icon(
+                                  titleIconData,
+                                  size: 18.0,
+                                  color: prefixIconColor ?? colorIcons ?? AppColors.grey500Color,
+                                ),
                     ),
                   ),
             Expanded(
@@ -112,7 +121,7 @@ class CustomTextField extends StatelessWidget {
                 style: AppTextStyles.style14BlackNormal,
                 decoration: InputDecoration(
                   isDense: true,
-                  contentPadding: EdgeInsets.all(AppSizes.minPadding!),
+                  contentPadding: EdgeInsets.all(AppSizes.minPadding),
                   hintText: hintText,
                   hintStyle: AppTextStyles.style14HintNormal,
                   border: InputBorder.none,
@@ -136,7 +145,7 @@ class CustomTextField extends StatelessWidget {
                 : InkWell(
                     splashColor: Colors.transparent,
                     child: Container(
-                        padding: EdgeInsets.only(right: AppSizes.minPadding!),
+                        padding: EdgeInsets.only(right: AppSizes.minPadding),
                         child: Text(
                           suffixText!,
                           style: AppTextStyles.style14WhiteNormal
@@ -147,7 +156,7 @@ class CustomTextField extends StatelessWidget {
                 : InkWell(
                     splashColor: Colors.transparent,
                     child: Container(
-                      padding: EdgeInsets.only(right: AppSizes.minPadding!),
+                      padding: EdgeInsets.only(right: AppSizes.minPadding),
                       child: (suffixIcon != null)
                           ? CustomImageIcon(
                               icon: suffixIcon,

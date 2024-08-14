@@ -1,23 +1,23 @@
 class WorkCreateCommentRequestModel {
-  int? dealID;
-  int? dealParentCommentId;
+  int? manageWorkId;
+  int? manageParentCommentId;
   String? message;
-  String? path;
+  List<String>? path;
 
   WorkCreateCommentRequestModel(
-      {this.dealID, this.dealParentCommentId, this.message, this.path});
+      {this.manageWorkId, this.manageParentCommentId, this.message, this.path});
 
   WorkCreateCommentRequestModel.fromJson(Map<String, dynamic> json) {
-    dealID = json['deal_id'];
-    dealParentCommentId = json['deal_parent_comment_id'];
+    manageWorkId = json['manage_work_id'];
+    manageParentCommentId = json['manage_parent_comment_id'];
     message = json['message'];
-    path = json['path'];
+    path = json['path']?.cast<String>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['deal_id'] = this.dealID;
-    data['deal_parent_comment_id'] = this.dealParentCommentId;
+    data['manage_work_id'] = this.manageWorkId;
+    data['manage_parent_comment_id'] = this.manageParentCommentId;
     data['message'] = this.message;
     data['path'] = this.path;
     return data;

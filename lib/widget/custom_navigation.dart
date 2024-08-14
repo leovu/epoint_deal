@@ -56,6 +56,7 @@ class CustomNavigator {
         bool enableCancel = false,
         bool cancelable = true,
         bool isTicket = false,
+        bool showSubmitted = true,
         Widget? child
 }) {
     return push(
@@ -71,6 +72,7 @@ class CustomNavigator {
               onSubSubmitted: onSubSubmitted,
               enableCancel: enableCancel,
               isTicket: isTicket,
+              showSubmitted: showSubmitted,
               child: child
           ),
           cancelable: cancelable,

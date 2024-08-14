@@ -1,31 +1,6 @@
-class ListServiceResponseModel {
-  int? errorCode;
-  String? errorDescription;
-  ServiceResponseModel? data;
-
-  ListServiceResponseModel({this.errorCode, this.errorDescription, this.data});
-
-  ListServiceResponseModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['ErrorCode'];
-    errorDescription = json['ErrorDescription'];
-    data = json['Data'] != null ? new ServiceResponseModel.fromJson(json['Data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ErrorCode'] = this.errorCode;
-    data['ErrorDescription'] = this.errorDescription;
-    if (this.data != null) {
-      data['Data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
-
-
 class ServiceResponseModel {
   PageInfo? pageInfo;
-  List<ServiceModel?>? items;
+  List<ServiceModel>? items;
 
   ServiceResponseModel({this.pageInfo, this.items});
 
@@ -34,7 +9,7 @@ class ServiceResponseModel {
         ? new PageInfo.fromJson(json['PageInfo'])
         : null;
     if (json['Items'] != null) {
-      items = <ServiceModel?>[];
+      items = <ServiceModel>[];
       json['Items'].forEach((v) {
         items!.add(new ServiceModel.fromJson(v));
       });
@@ -47,7 +22,7 @@ class ServiceResponseModel {
       data['PageInfo'] = this.pageInfo!.toJson();
     }
     if (this.items != null) {
-      data['Items'] = this.items!.map((v) => v!.toJson()).toList();
+      data['Items'] = this.items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -120,8 +95,8 @@ class ServiceModel {
   int? time;
   String? categoryName;
   int? isNew;
-  num? qty;
-  num? price;
+  double? qty;
+  double? price;
   String? note;
   Promotion? promotion;
 
@@ -139,7 +114,7 @@ class ServiceModel {
       this.categoryName,
       this.isNew,
       this.promotion,
-      this.qty, this.price, this.note});
+      this.qty});
 
   ServiceModel.fromJson(Map<String, dynamic> json) {
     branchName = json['branch_name'];
@@ -159,8 +134,6 @@ class ServiceModel {
           ? new Promotion.fromJson(json['promotion'])
           : null;
     }
-    qty = json["quantity"];
-    note = json["note"];
   }
 
   ServiceModel.fromJsonOrderDetail(Map<String, dynamic> json) {
@@ -202,9 +175,6 @@ class ServiceModel {
     if (this.promotion != null) {
       data['promotion'] = this.promotion!.toJson();
     }
-    data["quantity"] = this.qty;
-    data["note"] = this.note;
-    
     return data;
   }
 }

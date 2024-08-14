@@ -29,14 +29,13 @@ import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_on
 import 'package:epoint_deal_plugin/utils/custom_document_picker.dart';
 import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/widget/custom_chip.dart';
-import 'package:epoint_deal_plugin/widget/custom_column_infomation.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -453,12 +452,12 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                           ? Container()
                           : Container(
                               padding:
-                                  EdgeInsets.only(bottom: AppSizes.minPadding!),
+                                  EdgeInsets.only(bottom: AppSizes.minPadding),
                               margin: EdgeInsets.only(right: 5.0),
                               alignment: Alignment.centerLeft,
                               child: Wrap(
-                                spacing: AppSizes.minPadding!,
-                                runSpacing: AppSizes.minPadding!,
+                                spacing: AppSizes.minPadding,
+                                runSpacing: AppSizes.minPadding,
                                 children: models
                                     .map((e) => Row(
                                           mainAxisSize: MainAxisSize.min,
