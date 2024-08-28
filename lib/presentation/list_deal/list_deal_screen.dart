@@ -42,6 +42,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
 
   ListDealModelRequest? filterModel = ListDealModelRequest(
       search: "",
+      isConvert: 0,
       page: 1,
       orderSourceName: "",
       createdAt: "",
@@ -99,6 +100,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
             pipelineId: filterModel!.pipelineId,
             journey_id: filterModel!.journey_id,
             manageStatusId: filterModel!.manageStatusId,
+            isConvert: filterModel!.isConvert,
             careHistory: filterModel!.careHistory));
     if (model != null) {
       if (!loadMore) {

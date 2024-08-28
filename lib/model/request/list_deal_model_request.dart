@@ -11,6 +11,8 @@ class ListDealModelRequest {
   List<int?>? journey_id;
   List<int?>? manageStatusId;
   String? careHistory;
+  int? isConvert;
+
 
   ListDealModelRequest(
       {this.search,
@@ -24,7 +26,8 @@ class ListDealModelRequest {
       this.pipelineId,
       this.journey_id,
       this.manageStatusId,
-      this.careHistory});
+      this.careHistory,
+      this.isConvert});
 
   ListDealModelRequest.fromJson(Map<String, dynamic> json) {
     search = json['search'];
@@ -39,6 +42,7 @@ class ListDealModelRequest {
     journey_id = json['journey_id'].cast<int>();
     manageStatusId = json['manage_status_id'].cast<int>();
     careHistory = json['care_history'];
+    isConvert = json['is_convert'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +59,7 @@ class ListDealModelRequest {
     data['journey_id'] = this.journey_id;
     data['manage_status_id'] = this.manageStatusId;
     data['care_history'] = this.careHistory;
+    data['is_convert'] = this.isConvert;
     return data;
   }
 }
