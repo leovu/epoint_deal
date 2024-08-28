@@ -16,6 +16,7 @@ import 'package:epoint_deal_plugin/model/response/booking_staff_response_model.d
 import 'package:epoint_deal_plugin/model/response/create_order_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/customer_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/member_discount_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_service_card_response_model.dart';
@@ -244,7 +245,6 @@ class OrderCreateBloc extends BaseBloc {
   ValueStream<CustomerModel?> get outputCustomerModel =>
       _streamCustomerModel.stream;
   setCustomerModel(CustomerModel? event) => set(_streamCustomerModel, event);
-
   final _streamProductModels = BehaviorSubject<List<ProductNewModel>?>();
   ValueStream<List<ProductNewModel>?> get outputProductModels =>
       _streamProductModels.stream;

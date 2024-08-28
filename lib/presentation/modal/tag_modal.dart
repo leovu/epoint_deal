@@ -9,8 +9,8 @@ import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsModal extends StatefulWidget {
@@ -230,10 +230,6 @@ class _TagsModalState extends State<TagsModal> {
       ),
       onChanged: (event) {
         searchModel(event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

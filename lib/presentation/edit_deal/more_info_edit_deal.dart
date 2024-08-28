@@ -12,24 +12,14 @@ import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
-import 'package:epoint_deal_plugin/presentation/create_deal/more_info_creat_deal.dart';
 import 'package:epoint_deal_plugin/presentation/discount_screen/discount_screen.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
-import 'package:epoint_deal_plugin/presentation/order_category/ui/order_category_screen.dart';
-import 'package:epoint_deal_plugin/presentation/order_category/ui/product_detail_screen.dart';
-import 'package:epoint_deal_plugin/presentation/order_category/ui/service_detail_screen.dart';
-import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
-import 'package:epoint_deal_plugin/widget/maximum_number_input_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 class MoreInfoEditDeal extends StatefulWidget {
   String? tagsString;
@@ -101,17 +91,17 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       }
 
 
-      if (productSelected.length > 0) {
-      productSelected.forEach((v) {
-        if (v['object_type'] == 'product') {
-          ProductModel item = ProductModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addProduct(item, item.price!.toDouble(), item.qty!.toDouble(), item.note);
-        } else {
-          ServiceModel item = ServiceModel.fromJsonOrderDetail(v);
-          GlobalCart.shared.addService(item, item.price!.toDouble(), item.qty as double?, item.note);
-        }
-      });
-    }
+    //   if (productSelected.length > 0) {
+    //   productSelected.forEach((v) {
+    //     if (v['object_type'] == 'product') {
+    //       ProductModel item = ProductModel.fromJsonOrderDetail(v);
+    //       GlobalCart.shared.addProduct(item, item.price!.toDouble(), item.qty!.toDouble(), item.note);
+    //     } else {
+    //       ServiceModel item = ServiceModel.fromJsonOrderDetail(v);
+    //       GlobalCart.shared.addService(item, item.price!.toDouble(), item.qty as double?, item.note);
+    //     }
+    //   });
+    // }
 
     _discount = (widget.detail!.discount ?? 0.0).toDouble();
     Global.discount = _discount;
@@ -123,69 +113,69 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
   _addMoreProduct() async {
     FocusScope.of(context).unfocus();
-    GlobalCart.shared.clearCart();
-    if (widget.detailDeal!.product!.length > 0) {
-      widget.detailDeal!.product!.forEach((v) {
-        if (v.objectType == 'product') {
-          ProductModel item = ProductModel.fromJsonOrderDetail(v.toJson());
-          GlobalCart.shared.addProduct(item, item.price!.toDouble(), item.qty as double?, item.note);
-        } else {
-          ServiceModel item = ServiceModel.fromJsonOrderDetail(v.toJson());
-          GlobalCart.shared.addService(item, item.price!.toDouble(), item.qty as double?, item.note);
-        }
-      });
-    }
-
-    final result = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
     // GlobalCart.shared.clearCart();
-    print(result);
+    // if (widget.detailDeal!.product!.length > 0) {
+    //   widget.detailDeal!.product!.forEach((v) {
+    //     if (v.objectType == 'product') {
+    //       ProductModel item = ProductModel.fromJsonOrderDetail(v.toJson());
+    //       GlobalCart.shared.addProduct(item, item.price!.toDouble(), item.qty as double?, item.note);
+    //     } else {
+    //       ServiceModel item = ServiceModel.fromJsonOrderDetail(v.toJson());
+    //       GlobalCart.shared.addService(item, item.price!.toDouble(), item.qty as double?, item.note);
+    //     }
+    //   });
+    // }
 
-    if (result != null) {
-      widget.detailDeal!.product!.clear();
-      if (result.length > 0) {
-        productSelected.clear();
-        for (int i = 0; i < result.length; i++) {
-          widget.detailDeal!.product!.add(Product(
-              objectType: result[i]["object_type"] ?? "",
-              objectName: result[i]["object_name"] ?? "",
-              objectCode: result[i]["objectCode"] ?? "",
-              objectId: result[i]["object_id"] ?? 0,
-              quantity: result[i]["quantity"] ?? 0,
-              price: result[i]["price"] ?? 0,
-              amount: (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
+    // final result = await Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
+    // // GlobalCart.shared.clearCart();
+    // print(result);
 
-          productSelected.add(widget.detailDeal!.product![i].toJson());
-        }
-        ;
-      }
-    }
-     _setDiscount();
-    setState(() {});
+    // if (result != null) {
+    //   widget.detailDeal!.product!.clear();
+    //   if (result.length > 0) {
+    //     productSelected.clear();
+    //     for (int i = 0; i < result.length; i++) {
+    //       widget.detailDeal!.product!.add(Product(
+    //           objectType: result[i]["object_type"] ?? "",
+    //           objectName: result[i]["object_name"] ?? "",
+    //           objectCode: result[i]["objectCode"] ?? "",
+    //           objectId: result[i]["object_id"] ?? 0,
+    //           quantity: result[i]["quantity"] ?? 0,
+    //           price: result[i]["price"] ?? 0,
+    //           amount: (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
+
+    //       productSelected.add(widget.detailDeal!.product![i].toJson());
+    //     }
+    //     ;
+    //   }
+    // }
+    //  _setDiscount();
+    // setState(() {});
   }
 
   _addProduct() async {
     FocusScope.of(context).unfocus();
-    final result = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
-    GlobalCart.shared.clearCart();
+    // final result = await Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => OrderCategoryScreen()));
+    // GlobalCart.shared.clearCart();
 
-    if (result != null) {
-      if (result.length > 0) {
-        productSelected.clear();
-        for (int i = 0; i < result.length; i++) {
-          widget.detailDeal!.product!.add(Product(
-              objectType: result[i]["object_type"] ?? "",
-              objectName: result[i]["object_name"] ?? "",
-              objectCode: result[i]["objectCode"] ?? "",
-              objectId: result[i]["object_id"] ?? 0,
-              quantity: result[i]["quantity"] ?? 0,
-              price: result[i]["price"] ?? 0,
-              amount: (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
-          productSelected.add(widget.detailDeal!.product![i].toJson());
-        };
-      }
-    }
+    // if (result != null) {
+    //   if (result.length > 0) {
+    //     productSelected.clear();
+    //     for (int i = 0; i < result.length; i++) {
+    //       widget.detailDeal!.product!.add(Product(
+    //           objectType: result[i]["object_type"] ?? "",
+    //           objectName: result[i]["object_name"] ?? "",
+    //           objectCode: result[i]["objectCode"] ?? "",
+    //           objectId: result[i]["object_id"] ?? 0,
+    //           quantity: result[i]["quantity"] ?? 0,
+    //           price: result[i]["price"] ?? 0,
+    //           amount: (result[i]["quantity"] ?? 0) * (result[i]["price"] ?? 0)));
+    //       productSelected.add(widget.detailDeal!.product![i].toJson());
+    //     };
+    //   }
+    // }
 
     setState(() {});
   }
@@ -304,9 +294,9 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             ],
           ),
 
-          Column(
-            children: _discountList(),
-          ),
+          // Column(
+          //   children: _discountList(),
+          // ),
 
           // thông tin thêm
           (!showAdditionDeal && widget.detail!.productBuy!.length > 0)
@@ -530,19 +520,19 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
       (index) => product(widget.detailDeal!.product![index], index, ()
           // xoa item
           {
-        if (widget.detailDeal!.product![index].objectType == "product") {
-          var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
-              p0.productId == widget.detailDeal!.product![index].objectId);
-          if (event != null) {
-            GlobalCart.shared.removeProduct(event);
-          }
-        } else {
-          var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
-              p0.serviceId == widget.detailDeal!.product![index].objectId);
-          if (event != null) {
-            GlobalCart.shared.removeService(event);
-          }
-        }
+        // if (widget.detailDeal!.product![index].objectType == "product") {
+        //   var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
+        //       p0.productId == widget.detailDeal!.product![index].objectId);
+        //   if (event != null) {
+        //     GlobalCart.shared.removeProduct(event);
+        //   }
+        // } else {
+        //   var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
+        //       p0.serviceId == widget.detailDeal!.product![index].objectId);
+        //   if (event != null) {
+        //     GlobalCart.shared.removeService(event);
+        //   }
+        // }
         widget.detailDeal!.product!.removeAt(index);
         productSelected.removeAt(index);
         _setDiscount();
@@ -745,213 +735,213 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
     );
   }
 
-   List<Widget> _discountList() {
-    List<Widget> _arr = [];
-    _arr.add(Padding(
-        padding: const EdgeInsets.only(
-            top: 8.0, bottom: 5.0, left: 2.0, right: 10.0),
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: Icon(
-                Icons.card_giftcard,
-                color: AppColors.primaryColor,
-                size: 20.0,
-              ),
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: AutoSizeText(
-                  AppLocalizations.text(LangKey.apply_promotion)!,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primaryColor),
-                ),
-              ),
-            ),
-          ],
-        )));
-    _arr.add(Container(
-      height: 1.0,
-      color: AppColors.subColor.withAlpha(20),
-    ));
-    _arr.add(
-      Container(
-        margin: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
-        child: Row(
-          children: [
-            AutoSizeText(
-              '${AppLocalizations.text(LangKey.total_quantity)}:  ',
-              style: TextStyle(
-                color: AppColors.subColor,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Expanded(
-                child: StreamBuilder(
-              initialData: null,
-              stream: GlobalCart.shared.bloc.outputValue,
-              builder: (_, snapshot) {
-                return AutoSizeText(
-                  '${(GlobalCart.shared.bloc.getQty().toPrecision(2))}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: AppColors.subColor, fontWeight: FontWeight.w600),
-                );
-              },
-            ))
-          ],
-        ),
-      ),
-    );
+  //  List<Widget> _discountList() {
+  //   List<Widget> _arr = [];
+  //   _arr.add(Padding(
+  //       padding: const EdgeInsets.only(
+  //           top: 8.0, bottom: 5.0, left: 2.0, right: 10.0),
+  //       child: Row(
+  //         children: [
+  //           Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 8.0),
+  //             child: Icon(
+  //               Icons.card_giftcard,
+  //               color: AppColors.primaryColor,
+  //               size: 20.0,
+  //             ),
+  //           ),
+  //           Expanded(
+  //             child: Align(
+  //               alignment: Alignment.centerLeft,
+  //               child: AutoSizeText(
+  //                 AppLocalizations.text(LangKey.apply_promotion)!,
+  //                 style: TextStyle(
+  //                     fontWeight: FontWeight.w600,
+  //                     color: AppColors.primaryColor),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       )));
+  //   _arr.add(Container(
+  //     height: 1.0,
+  //     color: AppColors.subColor.withAlpha(20),
+  //   ));
+  //   _arr.add(
+  //     Container(
+  //       margin: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
+  //       child: Row(
+  //         children: [
+  //           AutoSizeText(
+  //             '${AppLocalizations.text(LangKey.total_quantity)}:  ',
+  //             style: TextStyle(
+  //               color: AppColors.subColor,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //           Expanded(
+  //               child: StreamBuilder(
+  //             initialData: null,
+  //             stream: GlobalCart.shared.bloc.outputValue,
+  //             builder: (_, snapshot) {
+  //               return AutoSizeText(
+  //                 '${(GlobalCart.shared.bloc.getQty().toPrecision(2))}',
+  //                 maxLines: 1,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 style: TextStyle(
+  //                     color: AppColors.subColor, fontWeight: FontWeight.w600),
+  //               );
+  //             },
+  //           ))
+  //         ],
+  //       ),
+  //     ),
+  //   );
 
-    _arr.add(
-      Container(
-        margin: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
-        child: Row(
-          children: [
-            AutoSizeText(
-              '${AppLocalizations.text(LangKey.total_money)}:  ',
-              style: TextStyle(
-                color: AppColors.subColor,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Expanded(
-                child: StreamBuilder(
-              initialData: 0.0,
-              stream: GlobalCart.shared.bloc.outputValue,
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  double? value = snapshot.data as double?;
-                  return AutoSizeText(
-                    value.getMoneyFormat(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: AppColors.subColor, fontWeight: FontWeight.w600),
-                  );
-                } else {
-                  return AutoSizeText(
-                    0.0.getMoneyFormat(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: AppColors.subColor, fontWeight: FontWeight.w600),
-                  );
-                }
-              },
-            ))
-          ],
-        ),
-      ),
-    );
+  //   _arr.add(
+  //     Container(
+  //       margin: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
+  //       child: Row(
+  //         children: [
+  //           AutoSizeText(
+  //             '${AppLocalizations.text(LangKey.total_money)}:  ',
+  //             style: TextStyle(
+  //               color: AppColors.subColor,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //           Expanded(
+  //               child: StreamBuilder(
+  //             initialData: 0.0,
+  //             stream: GlobalCart.shared.bloc.outputValue,
+  //             builder: (_, snapshot) {
+  //               if (snapshot.hasData) {
+  //                 double? value = snapshot.data as double?;
+  //                 return AutoSizeText(
+  //                   value.getMoneyFormat(),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   style: TextStyle(
+  //                       color: AppColors.subColor, fontWeight: FontWeight.w600),
+  //                 );
+  //               } else {
+  //                 return AutoSizeText(
+  //                   0.0.getMoneyFormat(),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   style: TextStyle(
+  //                       color: AppColors.subColor, fontWeight: FontWeight.w600),
+  //                 );
+  //               }
+  //             },
+  //           ))
+  //         ],
+  //       ),
+  //     ),
+  //   );
 
-    _arr.add(
-      Container(
-        margin: EdgeInsets.symmetric(
-            vertical: 0.0, horizontal: 10.0),
-        // margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-        child: Row(
-          children: [
-            Text(
-              '${AppLocalizations.text(LangKey.discount)}:  ',
-              style: TextStyle(
-                  color: AppColors.primaryColor, fontWeight: FontWeight.w600),
-            ),
-            Expanded(
-                child: AutoSizeText(
-              (_discount ?? 0.0).getMoneyFormat(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: AppColors.subColor, fontWeight: FontWeight.w600),
-            )),
-            InkWell(
-              onTap: _discount == null
-                  ? () => _showMenu()
-                  : () {
-                      setState(() {
-                        _discount = null;
-                        Global.discount = 0;
-                      });
-                    },
-              child: Container(
-                height: 30.0,
-                width: 30.0,
-                child: Center(
-                  child: _discount == null
-                      ? Icon(
-                    Icons.add,
-                    color: AppColors.primaryColor,
-                    size: 20.0,
-                  )
-                      : Icon(
-                          Icons.close,
-                          color: Colors.red,
-                          size: 20.0,
-                        ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+  //   _arr.add(
+  //     Container(
+  //       margin: EdgeInsets.symmetric(
+  //           vertical: 0.0, horizontal: 10.0),
+  //       // margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+  //       child: Row(
+  //         children: [
+  //           Text(
+  //             '${AppLocalizations.text(LangKey.discount)}:  ',
+  //             style: TextStyle(
+  //                 color: AppColors.primaryColor, fontWeight: FontWeight.w600),
+  //           ),
+  //           Expanded(
+  //               child: AutoSizeText(
+  //             (_discount ?? 0.0).getMoneyFormat(),
+  //             maxLines: 1,
+  //             overflow: TextOverflow.ellipsis,
+  //             style: TextStyle(
+  //                 color: AppColors.subColor, fontWeight: FontWeight.w600),
+  //           )),
+  //           InkWell(
+  //             onTap: _discount == null
+  //                 ? () => _showMenu()
+  //                 : () {
+  //                     setState(() {
+  //                       _discount = null;
+  //                       Global.discount = 0;
+  //                     });
+  //                   },
+  //             child: Container(
+  //               height: 30.0,
+  //               width: 30.0,
+  //               child: Center(
+  //                 child: _discount == null
+  //                     ? Icon(
+  //                   Icons.add,
+  //                   color: AppColors.primaryColor,
+  //                   size: 20.0,
+  //                 )
+  //                     : Icon(
+  //                         Icons.close,
+  //                         color: Colors.red,
+  //                         size: 20.0,
+  //                       ),
+  //               ),
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
 
-    _arr.add(Container(
-                margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                child: Row(
-                  children: [
-                    AutoSizeText(
-                      '${AppLocalizations.text(LangKey.temporary_price)}:   ',
-                      style: TextStyle(
-                          color: AppColors.subColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Expanded(
-                        child: StreamBuilder(
-                      initialData: 0.0,
-                      stream: GlobalCart.shared.bloc.outputValue,
-                      builder: (_, snapshot) {
-                        if (snapshot.hasData) {
-                          double valueMoney = snapshot.data as double;
-                          double total = valueMoney +
-                              (transportCharge ?? 0) -
-                              (_discount ?? 0);
-                          Global.amount = total;
-                          if (total < 0) {
-                            total = 0;
-                          }
-                          return AutoSizeText(
-                            total.getMoneyFormat(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: AppColors.subColor,
-                                fontWeight: FontWeight.w600),
-                          );
-                        } else {
-                          return AutoSizeText(
-                            0.0.getMoneyFormat(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: AppColors.subColor,
-                                fontWeight: FontWeight.w600),
-                          );
-                        }
-                      },
-                    ))
-                  ],
-                ),
-              ),);
+  //   _arr.add(Container(
+  //               margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+  //               child: Row(
+  //                 children: [
+  //                   AutoSizeText(
+  //                     '${AppLocalizations.text(LangKey.temporary_price)}:   ',
+  //                     style: TextStyle(
+  //                         color: AppColors.subColor,
+  //                         fontWeight: FontWeight.w600),
+  //                   ),
+  //                   Expanded(
+  //                       child: StreamBuilder(
+  //                     initialData: 0.0,
+  //                     stream: GlobalCart.shared.bloc.outputValue,
+  //                     builder: (_, snapshot) {
+  //                       if (snapshot.hasData) {
+  //                         double valueMoney = snapshot.data as double;
+  //                         double total = valueMoney +
+  //                             (transportCharge ?? 0) -
+  //                             (_discount ?? 0);
+  //                         Global.amount = total;
+  //                         if (total < 0) {
+  //                           total = 0;
+  //                         }
+  //                         return AutoSizeText(
+  //                           total.getMoneyFormat(),
+  //                           maxLines: 1,
+  //                           overflow: TextOverflow.ellipsis,
+  //                           style: TextStyle(
+  //                               color: AppColors.subColor,
+  //                               fontWeight: FontWeight.w600),
+  //                         );
+  //                       } else {
+  //                         return AutoSizeText(
+  //                           0.0.getMoneyFormat(),
+  //                           maxLines: 1,
+  //                           overflow: TextOverflow.ellipsis,
+  //                           style: TextStyle(
+  //                               color: AppColors.subColor,
+  //                               fontWeight: FontWeight.w600),
+  //                         );
+  //                       }
+  //                     },
+  //                   ))
+  //                 ],
+  //               ),
+  //             ),);
 
-    return _arr;
-  }
+  //   return _arr;
+  // }
 
   _showMenu() async {
     DiscountCartModel model = await CustomNavigator.showCustomBottomDialog(context, DiscountScreen());
@@ -991,96 +981,94 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
   }
 
   void _setDiscountPercentPrice(dynamic value) {
-    setState(() {
-      if (value == null) {
-        _discount = null;
-      } else if (value == 0) {
-        _discount = null;
-      } else {
-        double? val = double.tryParse(value.toString());
-        if (val == 0 || val == null) {
-          _discount = null;
-        } else {
-          _discount = double.tryParse(
-              ((GlobalCart.shared.getValue().round() * val) / 100)
-                  .round()
-                  .toString());
-        }
-      }
-    });
+    // setState(() {
+    //   if (value == null) {
+    //     _discount = null;
+    //   } else if (value == 0) {
+    //     _discount = null;
+    //   } else {
+    //     double? val = double.tryParse(value.toString());
+    //     if (val == 0 || val == null) {
+    //       _discount = null;
+    //     } else {
+    //       _discount = double.tryParse(
+    //           ((GlobalCart.shared.getValue().round() * val) / 100)
+    //               .round()
+    //               .toString());
+    //     }
+    //   }
+    // });
 
-    Global.discount = _discount;
+    // Global.discount = _discount;
   }
 
   void _setDiscount() {
-      double total = GlobalCart.shared.getValue();
-      print(total);
+    //   double total = GlobalCart.shared.getValue();
+    //   print(total);
 
-    if (_discountTypeDirect == 0) {
-        // double totalDiscount = double.tryParse(_controllerDiscount.text) ?? 0.0;
+    // if (_discountTypeDirect == 0) {
+    //     // double totalDiscount = double.tryParse(_controllerDiscount.text) ?? 0.0;
 
-        // if (totalDiscount >= total) {
-        //   _discount = total;
-        //   _controllerDiscount.text = total.toString();
-        // }
+    //     // if (totalDiscount >= total) {
+    //     //   _discount = total;
+    //     //   _controllerDiscount.text = total.toString();
+    //     // }
       
-       _setDiscountDirectPrice(_controllerDiscount.text);
-       } else { 
-         _setDiscountPercentPrice(_controllerDiscount.text);
-         }
+    //    _setDiscountDirectPrice(_controllerDiscount.text);
+    //    } else { 
+    //      _setDiscountPercentPrice(_controllerDiscount.text);
+    //      }
     }
 
   Widget product(Product item, int index, GestureTapCallback ontapDelete, GestureTapCallback OntapMinus,
       GestureTapCallback ontapPlus) {
     return InkWell(
       onTap: () async {
-        var event = item.objectType == "product"
-            ? await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductDetailScreen(
-                    ProductModel(
-                        newPrice: item.price!.toDouble(),
-                        productId: item.objectId,
-                        qty: item.quantity,
-                        note: item.note),
-                    false,
-                    isUpdate: true)))
-            : await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ServiceDetailScreen(
-                    ServiceModel(newPrice: item.price!.toDouble(), serviceId: item.objectId, qty: item.quantity, note: item.note),
-                    false,
-                    isUpdate: true)));
+        // var event = item.objectType == "product"
+        //     ? await Navigator.of(context).push(MaterialPageRoute(
+        //         builder: (context) => ProductDetailScreen(
+        //             ProductModel(
+        //                 newPrice: item.price!.toDouble(),
+        //                 productId: item.objectId,
+        //                 qty: item.quantity,
+        //                 note: item.note),
+        //             false,
+        //             isUpdate: true)))
+        //     : await Navigator.of(context).push(MaterialPageRoute(
+        //         builder: (context) => ServiceDetailScreen(
+        //             ServiceModel(newPrice: item.price!.toDouble(), serviceId: item.objectId, qty: item.quantity, note: item.note),
+        //             false,
+        //             isUpdate: true)));
 
-        if ((event != null)) {
+        // if ((event != null)) {
 
-          item.price = event["new_price"] ?? "" as num?;
-          item.quantity = event["quantity"] ?? 0;
-          item.note = event["note"] ?? "";
-          item.amount = (item.quantity ?? 0) * item.price! ?? 0;
+        //   item.price = event["new_price"] ?? "" as num?;
+        //   item.quantity = event["quantity"] ?? 0;
+        //   item.note = event["note"] ?? "";
+        //   item.amount = (item.quantity ?? 0) * item.price! ?? 0;
 
-          if (item.objectType == "product") {
-            var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
-                p0.productId == widget.detailDeal!.product![index].objectId);
-            if (event != null) {
-              event.price = item.price;
-              event.qty = item.quantity;
-              event.note = item.note;
-            }
-          } else {
-            var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
-                p0.serviceId == widget.detailDeal!.product![index].objectId);
-            if (event != null) {
-              event.price = item.price;
-              event.qty = item.quantity;
-              event.note = item.note;
-            }
-          }
-          // GlobalCart.shared.bloc.getValue();
-          _setDiscount();
+        //   // if (item.objectType == "product") {
+        //   //   var event = GlobalCart.shared.products.firstWhereOrNull((p0) =>
+        //   //       p0.productId == widget.detailDeal!.product![index].objectId);
+        //   //   if (event != null) {
+        //   //     event.price = item.price;
+        //   //     event.qty = item.quantity;
+        //   //     event.note = item.note;
+        //   //   }
+        //   // } else {
+        //   //   var event = GlobalCart.shared.services.firstWhereOrNull((p0) =>
+        //   //       p0.serviceId == widget.detailDeal!.product![index].objectId);
+        //   //   if (event != null) {
+        //   //     event.price = item.price;
+        //   //     event.qty = item.quantity;
+        //   //     event.note = item.note;
+        //   //   }
+        //   // }
+        //   _setDiscount();
+        //   productSelected[index] = item.toJson();
 
-          productSelected[index] = item.toJson();
-
-          setState(() {});
-        }
+        //   setState(() {});
+        // }
       },
       child: Container(
         padding: EdgeInsets.all(AppSizes.minPadding),
@@ -1138,48 +1126,6 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     InkWell(
-                //       onTap: OntapMinus,
-                //       child: Text("-",
-                //           style: TextStyle(
-                //               fontSize: 25.0,
-                //               color: Color.fromARGB(255, 121, 179, 182),
-                //               fontWeight: FontWeight.bold)),
-                //     ),
-                //     Container(
-                //         padding: EdgeInsets.all(4.0),
-                //         margin: EdgeInsets.only(right: 10.0, left: 10.0),
-                //         decoration: BoxDecoration(
-                //           borderRadius: BorderRadius.circular(10),
-                //           border: Border.all(
-                //               width: 1.0,
-                //               color: Color(0xFF4FC4CA),
-                //               style: BorderStyle.solid),
-                //         ),
-                //         width: 80,
-                //         height: 30,
-                //         child: Center(
-                //           child: Text(
-                //             "${item?.quantity}" ?? "1",
-                //             style: TextStyle(
-                //                 fontSize: 16.0,
-                //                 color: Colors.black,
-                //                 fontWeight: FontWeight.normal),
-                //           ),
-                //         )),
-                //     InkWell(
-                //       onTap: ontapPlus,
-                //       child: Text("+",
-                //           style: TextStyle(
-                //               fontSize: 25.0,
-                //               color: Color(0xFF4FC4CA),
-                //               fontWeight: FontWeight.bold)),
-                //     )
-                //   ],
-                // )
                 Text(
                     "x${item.quantity}",
                     style: TextStyle(

@@ -36,9 +36,14 @@ void keyboardDismissOnTap(BuildContext context) {
 }
 
 extension IterableModifier<E> on Iterable<E> {
-  E? firstWhereOrNull(bool Function(E) test) =>
-      cast<E>().firstWhere((v) => v != null && test(v));
+   E? firstWhereOrNull(bool Function(E element) test) {
+    for (var element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
 }
+
 
 Color stringToColor(String? event, {Color? defaultColor}) {
   return (event ?? "").isEmpty

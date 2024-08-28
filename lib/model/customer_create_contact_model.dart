@@ -1,4 +1,5 @@
-import 'package:epoint_deal_plugin/widget/custom_dropdown.dart';
+
+import 'package:epoint_deal_plugin/widget/widget.dart';
 
 class CustomerCreateContactModel {
   String? name;

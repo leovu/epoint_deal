@@ -215,12 +215,16 @@ class OrderDiscountScreenState extends State<OrderDiscountScreen> {
           _bloc.value = snapshot.data as String?;
           return CustomListView(
             children: (widget.fromOrder ? [
-              if(checkConfigKey(ConfigKey.discount_order_direct_money))
-                discountTypeCash,
-              if(checkConfigKey(ConfigKey.discount_order_direct_percent))
-                discountTypePercent,
-              if(checkConfigKey(ConfigKey.discount_order_voucher))
-                discountTypeCode
+              discountTypeCash,
+              discountTypePercent,
+              discountTypeCode
+              
+              // if(checkConfigKey(ConfigKey.discount_order_direct_money))
+              //   discountTypeCash,
+              // if(checkConfigKey(ConfigKey.discount_order_direct_percent))
+              //   discountTypePercent,
+              // if(checkConfigKey(ConfigKey.discount_order_voucher))
+              //   discountTypeCode
             ] : [
               if(checkConfigKey(ConfigKey.discount_direct_money))
                 discountTypeCash,

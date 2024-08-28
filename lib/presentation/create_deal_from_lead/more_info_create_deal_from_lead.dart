@@ -6,14 +6,9 @@ import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
-import 'package:epoint_deal_plugin/presentation/order_category/ui/order_category_screen.dart';
-import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
@@ -81,32 +76,32 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               (widget.detailDeal!.product!.length == 0)
                   ? InkWell(
                       onTap: () async {
-                        final result = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => OrderCategoryScreen()));
-                        GlobalCart.shared.clearCart();
+                        // final result = await Navigator.of(context).push(
+                        //     MaterialPageRoute(
+                        //         builder: (context) => OrderCategoryScreen()));
+                        // GlobalCart.shared.clearCart();
 
-                        if (result != null) {
-                          if (result.length > 0) {
-                            productSelected.clear();
-                            for (int i = 0; i < result.length; i++) {
-                              widget.detailDeal!.product!.add(Product(
-                                  objectType: result[i]["object_type"] ?? "",
-                                  objectName: result[i]["object_name"] ?? "",
-                                  objectCode: result[i]["objectCode"] ?? "",
-                                  objectId: result[i]["object_id"] ?? 0,
-                                  quantity: result[i]["quantity"] ?? 0,
-                                  price: result[i]["price"] ?? 0,
-                                  amount: (result[i]["quantity"] ?? 0) *
-                                      (result[i]["price"] ?? 0)));
-                              productSelected
-                                  .add(widget.detailDeal!.product![i].toJson());
-                            }
-                            ;
-                          }
-                        }
+                        // if (result != null) {
+                        //   if (result.length > 0) {
+                        //     productSelected.clear();
+                        //     for (int i = 0; i < result.length; i++) {
+                        //       widget.detailDeal!.product!.add(Product(
+                        //           objectType: result[i]["object_type"] ?? "",
+                        //           objectName: result[i]["object_name"] ?? "",
+                        //           objectCode: result[i]["objectCode"] ?? "",
+                        //           objectId: result[i]["object_id"] ?? 0,
+                        //           quantity: result[i]["quantity"] ?? 0,
+                        //           price: result[i]["price"] ?? 0,
+                        //           amount: (result[i]["quantity"] ?? 0) *
+                        //               (result[i]["price"] ?? 0)));
+                        //       productSelected
+                        //           .add(widget.detailDeal!.product![i].toJson());
+                        //     }
+                        //     ;
+                        //   }
+                        // }
 
-                        setState(() {});
+                        // setState(() {});
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -180,54 +175,54 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                         ),
                         InkWell(
                           onTap: () async {
-                            if (widget.detailDeal!.product!.length > 0) {
-                              widget.detailDeal!.product!.forEach((v) {
-                                if (v.objectType == 'product') {
-                                  ProductModel item =
-                                      ProductModel.fromJsonOrderDetail(
-                                          v.toJson());
-                                  GlobalCart.shared.addProduct(item, item.price as double?,item.qty as double?, item.note);
-                                } else {
-                                  ServiceModel item =
-                                      ServiceModel.fromJsonOrderDetail(
-                                          v.toJson());
-                                  GlobalCart.shared.addService(item, item.price as double?,item.qty as double?, item.note);
-                                }
-                              });
-                            }
+                            // if (widget.detailDeal!.product!.length > 0) {
+                            //   widget.detailDeal!.product!.forEach((v) {
+                            //     if (v.objectType == 'product') {
+                            //       ProductModel item =
+                            //           ProductModel.fromJsonOrderDetail(
+                            //               v.toJson());
+                            //       GlobalCart.shared.addProduct(item, item.price as double?,item.qty as double?, item.note);
+                            //     } else {
+                            //       ServiceModel item =
+                            //           ServiceModel.fromJsonOrderDetail(
+                            //               v.toJson());
+                            //       GlobalCart.shared.addService(item, item.price as double?,item.qty as double?, item.note);
+                            //     }
+                            //   });
+                            // }
 
-                            final result = await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        OrderCategoryScreen()));
-                            GlobalCart.shared.clearCart();
-                            print(result);
+                            // final result = await Navigator.of(context).push(
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             OrderCategoryScreen()));
+                            // GlobalCart.shared.clearCart();
+                            // print(result);
 
-                            if (result != null) {
-                              widget.detailDeal!.product!.clear();
-                              if (result.length > 0) {
-                                productSelected.clear();
-                                for (int i = 0; i < result.length; i++) {
-                                  widget.detailDeal!.product!.add(Product(
-                                      objectType:
-                                          result[i]["object_type"] ?? "",
-                                      objectName:
-                                          result[i]["object_name"] ?? "",
-                                      objectCode: result[i]["objectCode"] ?? "",
-                                      objectId: result[i]["object_id"] ?? 0,
-                                      quantity: result[i]["quantity"] ?? 0,
-                                      price: result[i]["price"] ?? 0,
-                                      amount: (result[i]["quantity"] ?? 0) *
-                                          (result[i]["price"] ?? 0)));
+                            // if (result != null) {
+                            //   widget.detailDeal!.product!.clear();
+                            //   if (result.length > 0) {
+                            //     productSelected.clear();
+                            //     for (int i = 0; i < result.length; i++) {
+                            //       widget.detailDeal!.product!.add(Product(
+                            //           objectType:
+                            //               result[i]["object_type"] ?? "",
+                            //           objectName:
+                            //               result[i]["object_name"] ?? "",
+                            //           objectCode: result[i]["objectCode"] ?? "",
+                            //           objectId: result[i]["object_id"] ?? 0,
+                            //           quantity: result[i]["quantity"] ?? 0,
+                            //           price: result[i]["price"] ?? 0,
+                            //           amount: (result[i]["quantity"] ?? 0) *
+                            //               (result[i]["price"] ?? 0)));
 
-                                  productSelected.add(
-                                      widget.detailDeal!.product![i].toJson());
-                                }
-                                ;
-                              }
-                            }
+                            //       productSelected.add(
+                            //           widget.detailDeal!.product![i].toJson());
+                            //     }
+                            //     ;
+                            //   }
+                            // }
 
-                            setState(() {});
+                            // setState(() {});
                           },
                           child: Text(
                             AppLocalizations.text(LangKey.chooseMoreItem)!,

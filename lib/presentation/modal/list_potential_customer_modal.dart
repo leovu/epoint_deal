@@ -6,10 +6,9 @@ import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_reques
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/allocator_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_shimer.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 
 class ListCustomerPotentialModal extends StatefulWidget {

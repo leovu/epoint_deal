@@ -5,13 +5,13 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/discount_cart_model.dart';
 import 'package:epoint_deal_plugin/presentation/discount_screen/discount_bloc.dart';
 import 'package:epoint_deal_plugin/utils/global_cart.dart';
-import 'package:epoint_deal_plugin/widget/custom_bottom_option.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_radio_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield.dart';
 import 'package:epoint_deal_plugin/widget/format_number_input_formatter.dart';
 import 'package:epoint_deal_plugin/widget/maximum_number_input_formatter.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -46,7 +46,7 @@ class DiscountScreenState extends State<DiscountScreen> {
     // TODO: implement initState
     super.initState();
     _bloc = DiscountBloc(context);
-     _amount = GlobalCart.shared.getValue().round();
+    //  _amount = GlobalCart.shared.getValue().round();
   }
 
   @override
@@ -90,15 +90,15 @@ class DiscountScreenState extends State<DiscountScreen> {
                             FormatNumberInputFormatter(AppFormat.moneyFormat),
                           ],
                           textAlign: TextAlign.center,
-                          onChanged: (event) {
-                            if (AppFormat.moneyFormat.parse(event) > _amount) {
-                              _controllerMoney.text = AppFormat.moneyFormat
-                                  .format(GlobalCart.shared.getValue());
-                              _controllerMoney.selection =
-                                  TextSelection.collapsed(
-                                      offset: _controllerMoney.text.length);
-                            }
-                          },
+                          // onChanged: (event) {
+                          //   if (AppFormat.moneyFormat.parse(event) > _amount) {
+                          //     _controllerMoney.text = AppFormat.moneyFormat
+                          //         .format(GlobalCart.shared.getValue());
+                          //     _controllerMoney.selection =
+                          //         TextSelection.collapsed(
+                          //             offset: _controllerMoney.text.length);
+                          //   }
+                          // },
                         )
                       : CustomTextField(
                           focusNode: _focusPercent,
@@ -119,15 +119,14 @@ class DiscountScreenState extends State<DiscountScreen> {
       CustomNavigator.pop(context, object: true);
     });
     if ((event)) {
-      print(_controllerPercent.text);
-      String money = _isMoney ? _controllerMoney.text : _controllerPercent.text;
-      CustomNavigator.pop(context,
-          object: money.isEmpty
-              ? null
-              : _isMoney
-                  ? DiscountCartModel(
-                      amount: AppFormat.moneyFormat.parse(money).toInt())
-                  : DiscountCartModel(percent: int.tryParse(money)));
+      // String money = _isMoney ? _controllerMoney.text : _controllerPercent.text;
+      // CustomNavigator.pop(context,
+      //     object: money.isEmpty
+      //         ? null
+      //         : _isMoney
+      //             ? DiscountCartModel(
+      //                 amount: AppFormat.moneyFormat.parse(money).toInt())
+      //             : DiscountCartModel(percent: int.tryParse(money)));
     }
   }
 

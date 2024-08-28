@@ -1,4 +1,5 @@
 import 'package:epoint_deal_plugin/model/request/check_transport_charge_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/get_history_req_model.dart';
 import 'package:epoint_deal_plugin/model/request/maintenance_receipt_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/order_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/booking_staff_request_model.dart';
@@ -27,18 +28,19 @@ import 'package:epoint_deal_plugin/model/request/voucher_request_model.dart';
 import 'package:epoint_deal_plugin/network/http/aws_connection.dart';
 import 'package:epoint_deal_plugin/resource/aws_resource.dart';
 import 'package:epoint_deal_plugin/resource/booking_resource.dart';
+import 'package:epoint_deal_plugin/resource/manage_word_resource.dart';
 import 'package:epoint_deal_plugin/resource/order_resource.dart';
 import 'package:epoint_deal_plugin/resource/payment_resource.dart';
 import 'package:flutter/material.dart';
 
-class Repository { 
+class Repository {
   var _orderResource = OrderResource();
   var _bookingResource = BookingResource();
   var _paymentResource = PaymentResource();
   var _awsResource = AWSResource();
+  var _manageWorkResource = ManageWorkResource();
 
-
- getOrder(BuildContext? context, OrderRequestModel model) =>
+  getOrder(BuildContext? context, OrderRequestModel model) =>
       _orderResource.getOrder(context, model);
   uploadPhotoOrder(BuildContext? context, OrderUploadImageRequestModel model) =>
       _orderResource.uploadPhotoOrder(context, model);
@@ -106,9 +108,9 @@ class Repository {
   removePhotoOrder(BuildContext? context, RemovePhotoOrderModel model) =>
       _orderResource.removePhotoOrder(context, model);
 
-    getRoom(BuildContext? context) => _bookingResource.getRoom(context);
-    
-      getPaymentMethod(BuildContext? context) =>
+  getRoom(BuildContext? context) => _bookingResource.getRoom(context);
+
+  getPaymentMethod(BuildContext? context) =>
       _paymentResource.getPaymentMethod(context);
   payment(BuildContext? context, PaymentRequestModel model) =>
       _paymentResource.payment(context, model);
@@ -120,8 +122,20 @@ class Repository {
           BuildContext? context, MaintenanceReceiptRequestModel model) =>
       _paymentResource.maintenanceReceipt(context, model);
 
-
-
   upload(BuildContext? context, AWSFileModel model, {bool showError = true}) =>
       _awsResource.upload(context, model, showError);
+
+  workListDepartment(BuildContext? context) =>
+      _manageWorkResource.workListDepartment(context);
+
+  getOrderHistory(BuildContext? context, GetHistoryReqModel model) =>
+      _paymentResource.getOrderHistory(context, model);
+
+  getCareDeal(BuildContext? context, GetCareDealModel model) =>
+      _paymentResource.getCareDeal(context, model);
+
+  getListNote(BuildContext? context, GetListNoteModel model) =>
+      _paymentResource.getListNote(context, model);
+  addNote(BuildContext? context, CreateNoteReqModel model) =>
+      _paymentResource.addNote(context, model);
 }

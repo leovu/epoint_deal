@@ -3,7 +3,7 @@
 import 'package:epoint_deal_plugin/model/discount_cart_model.dart';
 import 'package:epoint_deal_plugin/model/page_info_model.dart';
 import 'package:epoint_deal_plugin/model/response/booking_staff_response_model.dart';
-import 'package:epoint_deal_plugin/widget/custom_dropdown.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 
 class OrderServiceCardResponseModel {
   PageInfoModel? pageInfo;

@@ -328,17 +328,17 @@ class DealConnection {
     return null;
   }
 
-   static Future<WorkListDepartmentResponseModel?> workListDepartment(
-      BuildContext? context) async {
-    ResponseData responseData = await connection.post(
-        '/manage-work/list-department',{});
-    if (responseData.isSuccess) {
-      WorkListDepartmentResponseModel data =
-          WorkListDepartmentResponseModel.fromJson(responseData.data!);
-      return data;
-    }
-    return null;
-  }
+  //  static Future<WorkListDepartmentResponseModel?> workListDepartment(
+  //     BuildContext? context) async {
+  //   ResponseData responseData = await connection.post(
+  //       '/manage-work/list-department',{});
+  //   if (responseData.isSuccess) {
+  //     WorkListDepartmentResponseModel data =
+  //         WorkListDepartmentResponseModel.fromJson(responseData.data!);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
        static Future<GetTypeWorkModelResponse?> getTypeWork(
       BuildContext context) async {
@@ -431,54 +431,54 @@ class DealConnection {
     return null;
   }
 
-    static Future<ListServiceResponseModel?> getService(
-      BuildContext? context, ServiceRequestModel model) async {
-    ResponseData responseData =
-        await connection.post('/service/get-services', model.toJson());
-    if (responseData.isSuccess) {
-      ListServiceResponseModel data =
-          ListServiceResponseModel.fromJson(responseData.data!);
-      return data;
-    }
-    return null;
-  }
+  //   static Future<ListServiceResponseModel?> getService(
+  //     BuildContext? context, ServiceRequestModel model) async {
+  //   ResponseData responseData =
+  //       await connection.post('/service/get-services', model.toJson());
+  //   if (responseData.isSuccess) {
+  //     ListServiceResponseModel data =
+  //         ListServiceResponseModel.fromJson(responseData.data!);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-      static Future<ListProductResponseModel?> getProduct(
-      BuildContext? context, ProductRequestModel model) async {
-    // showLoading(context);
-    ResponseData responseData =
-        await connection.post('/product/get-products', model.toJson());
-    if (responseData.isSuccess) {
-      ListProductResponseModel data =
-          ListProductResponseModel.fromJson(responseData.data!);
-      return data;
-    }
-    return null;
-  }
+  //     static Future<ListProductResponseModel?> getProduct(
+  //     BuildContext? context, ProductRequestModel model) async {
+  //   // showLoading(context);
+  //   ResponseData responseData =
+  //       await connection.post('/product/get-products', model.toJson());
+  //   if (responseData.isSuccess) {
+  //     ListProductResponseModel data =
+  //         ListProductResponseModel.fromJson(responseData.data!);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-        static Future<ServiceDetailModel?> serviceDetail(
-      BuildContext? context, ServiceDetailRequestModel model) async {
-    ResponseData responseData =
-        await connection.post('/service/detail', model.toJson());
-    if (responseData.isSuccess) {
-      ServiceDetailModel data =
-          ServiceDetailModel.fromJson(responseData.data!);
-      return data;
-    }
-    return null;
-  }
+  //       static Future<ServiceDetailModel?> serviceDetail(
+  //     BuildContext? context, ServiceDetailRequestModel model) async {
+  //   ResponseData responseData =
+  //       await connection.post('/service/detail', model.toJson());
+  //   if (responseData.isSuccess) {
+  //     ServiceDetailModel data =
+  //         ServiceDetailModel.fromJson(responseData.data!);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
-         static Future<ProductDetailModel?> productDetail(
-      BuildContext? context, ProductDetailRequestModel model) async {
-    ResponseData responseData =
-        await connection.post('/product/product-detail', model.toJson());
-    if (responseData.isSuccess) {
-      ProductDetailModel data =
-          ProductDetailModel.fromJson(responseData.data!);
-      return data;
-    }
-    return null;
-  }
+  //        static Future<ProductDetailModel?> productDetail(
+  //     BuildContext? context, ProductDetailRequestModel model) async {
+  //   ResponseData responseData =
+  //       await connection.post('/product/product-detail', model.toJson());
+  //   if (responseData.isSuccess) {
+  //     ProductDetailModel data =
+  //         ProductDetailModel.fromJson(responseData.data!);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
   static Future<WorkUploadFileResponseModel?> workUploadFile(
       BuildContext context, MultipartFileModel model) async {

@@ -5,6 +5,7 @@ import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.da
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
+import 'package:epoint_deal_plugin/model/response_model.dart';
 import 'package:epoint_deal_plugin/presentation/interface/base_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
@@ -211,19 +212,21 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
   }
 
   workListDepartment() async {
-    var response = await DealConnection.workListDepartment(context);
-    if (response != null) {
+    ResponseModel response = await repository.workListDepartment(context);
+    if(response.success!){
+      var responseModel = WorkListDepartmentResponseModel.fromJson(response.datas);
+
       _departmentModels = [
         CustomDropdownModel(text: AppLocalizations.text(LangKey.all))
       ];
-      _departmentModels.addAll((response.data ?? <WorkListDepartmentModel>[])
-          .map((e) =>
-              CustomDropdownModel(id: e.departmentId, text: e.departmentName)));
+      _departmentModels.addAll((responseModel.data ?? <WorkListDepartmentModel>[]).map((e) => CustomDropdownModel(
+          id: e.departmentId,
+          text: e.departmentName
+      )));
     }
 
     setDepartmentModels(_departmentModels);
-    departmentModel = _departmentModels
-        .firstWhere((element) => element.id == departmentModel?.id);
+    departmentModel = _departmentModels.firstWhere((element) => element.id == departmentModel?.id);
     setDepartmentModel(departmentModel);
   }
 

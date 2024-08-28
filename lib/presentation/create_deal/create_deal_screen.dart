@@ -1,5 +1,6 @@
 
 import 'package:epoint_deal_plugin/common/assets.dart';
+import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
@@ -10,7 +11,9 @@ import 'package:epoint_deal_plugin/model/object_pop_create_deal_model.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/add_deal_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/booking_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_option_model_response.dart';
@@ -19,8 +22,14 @@ import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
+import 'package:epoint_deal_plugin/model/response/order_detail_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/order_service_card_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/product_new_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_card_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_new_response_model.dart';
+import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/more_info_creat_deal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
@@ -39,7 +48,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealScreen extends StatefulWidget {
-  const CreateDealScreen({Key? key}) : super(key: key);
+  final OrderDetailResponseModel? model;
+  final List<ProductNewModel>? productNewModels;
+  final List<ServiceNewModel>? serviceNewModels;
+  final List<OrderServiceCardModel>? serviceCardModels;
+  final List<ServiceCardModel>? serviceCardActivatedModels;
+  final CustomerModel? customerModel;
+  final DeliveryAddress? deliveryAddressModel;
+  final BookingDetailResponseModel? bookingModel;
+  const CreateDealScreen({Key? key, this.model,
+      this.productNewModels,
+      this.serviceNewModels,
+      this.serviceCardModels,
+      this.serviceCardActivatedModels,
+      this.customerModel,
+      this.deliveryAddressModel,
+      this.bookingModel}) : super(key: key);
 
   @override
   _CreateDealScreenState createState() => _CreateDealScreenState();
@@ -47,6 +71,8 @@ class CreateDealScreen extends StatefulWidget {
 
 class _CreateDealScreenState extends State<CreateDealScreen>
     with WidgetsBindingObserver {
+
+  late CreateDealBloc _bloc;
   var _isKeyboardVisible = false;
 
   ScrollController _controller = ScrollController();
@@ -140,8 +166,11 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _controller.removeListener(() {});
+    Globals.cart?.dispose();
+    Globals.cart = null;
     super.dispose();
   }
+
 
   @override
   void didChangeMetrics() {
@@ -158,9 +187,22 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   @override
   void initState() {
     super.initState();
+    Globals.cart = GlobalCart();
+    _bloc = CreateDealBloc(
+        context,
+        widget.model,
+        widget.productNewModels,
+        widget.serviceNewModels,
+        widget.serviceCardModels,
+        widget.serviceCardActivatedModels,
+        widget.customerModel,
+        widget.deliveryAddressModel);
+
+    _bloc.bookingModel = widget.bookingModel;
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
+      Globals.cart = GlobalCart();
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
@@ -182,7 +224,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.journeyCode = journeySelected!.journeyCode;
       }
 
-      GlobalCart.shared.clearCart();
+      // GlobalCart.shared.clearCart();
       Navigator.of(context).pop();
       setState(() {});
     });
@@ -728,6 +770,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           MoreInfoCreatDeal( 
             branchData: branchData,
             detailDeal: detailDeal,
+            bloc: _bloc,
           )
         ]),
       )
@@ -986,7 +1029,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
-          GlobalCart.shared.clearCart;
+          // GlobalCart.shared.clearCart;
           Global.amount = 0.0;
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
@@ -1050,7 +1093,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         if (result.errorCode == 0) {
           print(result.errorDescription);
 
-          GlobalCart.shared.clearCart;
+          // GlobalCart.shared.clearCart;
           Global.amount = 0.0;
           await DealConnection.showMyDialog(context, result.errorDescription);
           if (result.data != null) {

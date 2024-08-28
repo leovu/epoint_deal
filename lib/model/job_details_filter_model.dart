@@ -2,7 +2,7 @@
 
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_project_response_model.dart';
-import 'package:epoint_deal_plugin/widget/custom_dropdown.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 
 class JobDetailsFilterModel{
   String? name;

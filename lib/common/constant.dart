@@ -274,3 +274,5 @@ const String otherFreeBranchTypePercent = "percent";
 // VAT price config
 const String vatPriceConfigInclude = "include";
 const String vatPriceConfigNonInclude = "non-include";
+
+const String NULL_VALUE = '--:--';

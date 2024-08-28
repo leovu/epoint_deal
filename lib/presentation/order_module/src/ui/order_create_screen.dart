@@ -21,6 +21,7 @@ import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom.dart';
 import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield.dart';
@@ -488,7 +489,7 @@ class OrderCreateScreenState extends State<OrderCreateScreen> {
               _buildAmount(),
               if (checkConfigKey(ConfigKey.discount_order_member))
                 _buildMemberDiscount(),
-              if (checkConfigKey(ConfigKey.discount_order)) _buildDiscount(),
+               _buildDiscount(),
               if (checkConfigKey(ConfigKey.receipt_other)) _buildSurcharge(),
               if (checkConfigKey(ConfigKey.vat)) ...[
                 _buildTotalPreTax(),
@@ -523,14 +524,16 @@ class OrderCreateScreenState extends State<OrderCreateScreen> {
   }
 
   Widget _buildBottom() {
-    return CustomBottom(
-      text: AppLocalizations.text(
-          _bloc.isEdit ? LangKey.update : LangKey.order_1),
-      child: _buildTotal(),
-      onTap: _bloc.onOrder,
-      subText: AppLocalizations.text(LangKey.payment),
-      onSubTap: _bloc.onPayment,
-    );
+    return (Globals.cart != null) ?
+                  StreamBuilder(
+                      stream: Globals.cart!.outputValue,
+                      initialData: 0.0,
+                      builder: (_, snapshot) {
+                        double? event = (snapshot.data as double?) ?? 0.0;
+                        return CustomBottomBooking(
+                          onTap: () => CustomNavigator.pop(context, object: true),
+                            value: event, length: Globals.cart!.getQuantity());
+                      }) : SizedBox();
   }
 
   Widget _buildBody() {

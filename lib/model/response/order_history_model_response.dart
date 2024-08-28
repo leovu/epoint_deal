@@ -16,6 +16,15 @@ class OrderHistoryResponseModel {
     }
   }
 
+  OrderHistoryResponseModel.fromList(List<dynamic>? json) {
+    if (json != null) {
+      data = <OrderHistoryData>[];
+      json.forEach((v) {
+        data!.add(new OrderHistoryData.fromJson(v));
+      });
+    }
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ErrorCode'] = this.errorCode;
