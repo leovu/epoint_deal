@@ -6,6 +6,7 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/closing_date_model.dart';
 import 'package:epoint_deal_plugin/model/closing_due_date_model.dart';
+import 'package:epoint_deal_plugin/model/convert_status_model.dart';
 import 'package:epoint_deal_plugin/model/create_date_model.dart';
 import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
 import 'package:epoint_deal_plugin/model/history_customer_care_date.dart';
@@ -22,6 +23,7 @@ import 'package:epoint_deal_plugin/model/work_schedule_date.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_branch.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_closing_date.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_closing_due_date.dart';
+import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_convert_status.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_create_date.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_journey.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_by_order_source.dart';
@@ -203,6 +205,22 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         workscheduleDateID: 6,
         selected: false)
   ];
+
+  List<ConvertStatusModel> convertStatusOptions = [
+    ConvertStatusModel(
+        statusName: AppLocalizations.text(LangKey.all),
+        statusID: 2,
+        selected: false),
+    ConvertStatusModel(
+        statusName: AppLocalizations.text(LangKey.convertCustomersSuccess),
+        statusID: 1,
+        selected: false),
+    ConvertStatusModel(
+        statusName: AppLocalizations.text(LangKey.convertCustomersNotSuccess),
+        statusID: 0,
+        selected: true)
+  ];
+  
   ClosingDueDateModel? closingDueDateSeleted;
 
   List<OrderSourceData> orderSourceData = [
@@ -358,6 +376,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         }
       }
     }
+
+    for (int i = 0; i < convertStatusOptions.length; i++) {
+      if (widget.filterScreenModel!.filterModel!.isConvert == convertStatusOptions[i].statusID) {
+          convertStatusOptions[i].selected = true;
+        } else {
+          convertStatusOptions[i].selected = false;
+        }
+    }
+
     if (filterScreenModel.filterModel!.branchId!.length > 0) {
       for (int i = 0; i < filterScreenModel.filterModel!.branchId!.length; i++) {
         try {
@@ -635,6 +662,19 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       ),
       FilterByOrderSource(
         orderSourceData: orderSourceData,
+      ),
+
+      Container(height: 10.0),
+
+      Text(
+        AppLocalizations.text(LangKey.byConvertStatus)!,
+        style: TextStyle(
+            fontSize: 16.0,
+            color: const Color(0xFF0067AC),
+            fontWeight: FontWeight.bold),
+      ),
+      FilterByConvertStatus(
+        convertStatusOptions: convertStatusOptions,
       ),
 
       Container(height: 10.0),
@@ -963,6 +1003,11 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                     orderSource.orderSourceName;
               }
 
+              var convertStatusOption = convertStatusOptions
+                  .firstWhere((element) => element.selected!);
+
+              filterScreenModel.filterModel!.isConvert = convertStatusOption.statusID;
+
               widget.filterScreenModel = filterScreenModel;
               Navigator.of(context).pop(widget.filterScreenModel);
             },
@@ -1023,7 +1068,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             pipelineId: [],
             journey_id: [],
             manageStatusId: [],
-            careHistory: ""),
+            careHistory: "",
+            isConvert: 0),
         fromDate_closing_date: null,
         fromDate_closing_due_date: null,
         fromDate_created_at: null,
@@ -1116,6 +1162,15 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       journeysData![i].selected = false;
     }
     journeySelected = null;
+
+    for (int i = 0; i < convertStatusOptions.length; i++) {
+      if (i == 2) {
+        convertStatusOptions[i].selected = true;
+      } else {
+        convertStatusOptions[i].selected = false;
+      }
+    }
+
     // journeysData = [];
     // journeySelected = null;
 

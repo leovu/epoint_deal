@@ -237,6 +237,9 @@ class _FilterByClosingDateState extends State<FilterByClosingDate> {
     return InkWell(
       onTap: ontap,
       child: TextField(
+        style: TextStyle(
+          color: Colors.black,
+        ),
         enabled: false,
         controller: fillText,
         keyboardType: TextInputType.text,

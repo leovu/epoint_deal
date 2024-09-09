@@ -239,27 +239,27 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
     detailDeal.saleId = _modelStaffSelected[0].staffId;
 
-    if (detailLead!.tag!.length > 0 && tagsData != null) {
-      List<int?> tagInt = [];
-      for (var tag in tagsData!) {
-        for (TagData tagLead in detailLead!.tag!) {
-          if (tag.tagId == tagLead.tagId) {
-            tagInt.add(tag.tagId);
-            tag.selected = true;
-            tagsSelected?.add(tag);
-          }
-        }
-      }
-      for (int i = 0; i < tagsSelected.length; i++) {
-        if (tagsString == "") {
-          tagsString = tagsSelected[i].name ?? "";
-        } else {
-          tagsString += ", ${tagsSelected[i].name}";
-        }
-      }
+    // if (detailLead!.tag!.length > 0 && tagsData != null) {
+    //   List<int?> tagInt = [];
+    //   for (var tag in tagsData!) {
+    //     for (TagData tagLead in detailLead!.tag!) {
+    //       if (tag.tagId == tagLead.tagId) {
+    //         tagInt.add(tag.tagId);
+    //         tag.selected = true;
+    //         tagsSelected?.add(tag);
+    //       }
+    //     }
+    //   }
+    //   for (int i = 0; i < tagsSelected.length; i++) {
+    //     if (tagsString == "") {
+    //       tagsString = tagsSelected[i].name ?? "";
+    //     } else {
+    //       tagsString += ", ${tagsSelected[i].name}";
+    //     }
+    //   }
 
-      detailDeal.tag = tagInt;
-    }
+    //   detailDeal.tag = tagInt;
+    // }
     Navigator.of(context).pop();
     setState(() {});
   }
@@ -889,6 +889,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
     return InkWell(
       onTap: ontap,
       child: TextField(
+        style: TextStyle(
+          color: Colors.black,
+        ),
         enabled: false,
         controller: fillText,
         keyboardType: TextInputType.text,
