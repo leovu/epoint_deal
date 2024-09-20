@@ -21,6 +21,7 @@ import 'package:epoint_deal_plugin/presentation/detail_deal/chat_screen.dart/cha
 import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
 import 'package:epoint_deal_plugin/widget/container_data_builder.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
@@ -384,7 +385,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconCall,
-            title: detail?.phone,
+            title: hidePhone(
+                                detail?.phone ?? NULL_VALUE,
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.CM000004)),
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconInteraction,
@@ -1534,28 +1538,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             )),
         Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
       ],
-    );
-  }
-
-  Widget _buildAvatar(String name) {
-    return Container(
-      width: 87.0,
-      height: 87.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2.0,
-          color: AppColors.primaryColor,
-        ),
-        shape: BoxShape.circle,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
-        child: CustomAvatarDetail(
-          color: Color(0xFFEEB132),
-          name: name,
-          textSize: 36.0,
-        ),
-      ),
     );
   }
 
