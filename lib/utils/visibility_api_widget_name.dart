@@ -20,7 +20,7 @@ class VisibilityWidgetName {
   static const String LE000013 = "LE000013"; //Xóa KHTN
   static const String LE000014 = "LE000014"; //Chỉnh sửa KHTN
 
-   static const String CM000000 = "CM000000"; //Khóa/bật chức năng khách hàng
+  static const String CM000000 = "CM000000"; //Khóa/bật chức năng khách hàng
   static const String CM000001 = "CM000001"; //Tạo khách hàng
   static const String CM000002 = "CM000002"; //Xem chi tiết khách hàng
   static const String CM000003 = "CM000003"; //Chỉnh sửa khách hàng

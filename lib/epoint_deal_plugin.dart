@@ -136,115 +136,115 @@ class EpointDealPlugin {
     //     "is_disabled_price": 0
     // });
 
-    jsonDetail = {
-        "avatar": null,
-        "customer_lead_id": 1310,
-        "customer_lead_code": "LEAD_220820241310",
-        "full_name": "ductttttttt",
-        "birthday": "2000-10-20 00:00:00",
-        "phone": "0123456789",
-        "hotline": null,
-        "tax_code": null,
-        "customer_source": 3,
-        "customer_source_name": "Giới thiệu",
-        "customer_type": "business",
-        "pipeline_code": "PIPELINE_1201202201",
-        "pipeline_name": null,
-        "journey_code": "JOURNEY_1210202313",
-        "journey_name": "Suy nghĩ thêm",
-        "email": "vund@gmail.com",
-        "gender": "male",
-        "province_id": 1,
-        "province_type": "Thành Phố",
-        "province_name": "Hà Nội",
-        "district_id": 1,
-        "district_type": "Quận",
-        "district_name": "Ba Đình",
-        "ward_id": 1,
-        "ward_type": "Phường",
-        "ward_name": "Phúc Xá",
-        "address": "12 CMT8 abc",
-        "zalo": "WAO",
-        "zalo_id": null,
-        "fanpage": "wao",
-        "facebook_id": null,
-        "sale_id": 96,
-        "sale_name": "Đoàn Huỳnh Ngọc Hân",
-        "is_convert": 0,
-        "representative": "phu",
-        "business_clue": "123ABC",
-        "business_clue_name": null,
-        "bussiness_id": 1,
-        "business_name": "NÔNG NGHIỆP, LÂM NGHIỆP VÀ THỦY SẢN",
-        "employees": 244,
-        "time_revoke_lead": null,
-        "date_revoke": "2024-09-12 17:31:49",
-        "allocation_date": "2024-09-12 17:31:49",
-        "amount": 0,
-        "date_last_care": "2024-08-22 22:42:24",
-        "customer_type_name": "Doanh nghiệp",
-        "customer_group_id": 1,
-        "customer_group_name": "Mặc định",
-        "customer_lead_refer_id": 3,
-        "customer_lead_refer_name": "Hoàng đăng ý thảo",
-        "gender_vi": "Nam",
-        "branch_code": null,
-        "branch_name": null,
-        "employ_qty": 0,
-        "created_at": "2024-08-22 22:42:24",
-        "created_by_name": "Admin Epoints",
-        "updated_at": "2024-08-24 16:24:30",
-        "updated_by_name": "Admin Epoints",
-        "assign_by": 1,
-        "assign_by_name": "Admin Epoints",
-        "note": "note",
-        "tag": [
-            {
-                "tag_id": 5,
-                "keyword": "lieu-trinh-da",
-                "tag_name": "Liệu Trình Da "
-            }
-        ],
-        "diff_day": 26,
-        "related_work": 0,
-        "appointment": 0,
-        "journey_tracking": [],
-        "full_address": "12 CMT8 abc, Phúc Xá, Ba Đình, Hà Nội",
-        "customer_contact_id": 7,
-        "customer_contact_name": "phu phu",
-        "tab_configs": [
-            {
-                "code": "deal",
-                "tab_name_vi": "CƠ HỘI BÁN HÀNG",
-                "tab_name_en": "DEAL",
-                "total": 3
-            },
-            {
-                "code": "care",
-                "tab_name_vi": "CHĂM SÓC KHÁCH HÀNG",
-                "tab_name_en": "CARE",
-                "total": 0
-            },
-            {
-                "code": "contact",
-                "tab_name_vi": "NGƯỜI LIÊN HỆ",
-                "tab_name_en": "CONTACT",
-                "total": 4
-            },
-            {
-                "code": "note",
-                "tab_name_vi": "GHI CHÚ",
-                "tab_name_en": "NOTES",
-                "total": 3
-            },
-            {
-                "code": "file",
-                "tab_name_vi": "TẬP TIN",
-                "tab_name_en": "FILES",
-                "total": 2
-            }
-        ]
-    };
+    // jsonDetail = {
+    //     "avatar": null,
+    //     "customer_lead_id": 1310,
+    //     "customer_lead_code": "LEAD_220820241310",
+    //     "full_name": "ductttttttt",
+    //     "birthday": "2000-10-20 00:00:00",
+    //     "phone": "0123456789",
+    //     "hotline": null,
+    //     "tax_code": null,
+    //     "customer_source": 3,
+    //     "customer_source_name": "Giới thiệu",
+    //     "customer_type": "business",
+    //     "pipeline_code": "PIPELINE_1201202201",
+    //     "pipeline_name": null,
+    //     "journey_code": "JOURNEY_1210202313",
+    //     "journey_name": "Suy nghĩ thêm",
+    //     "email": "vund@gmail.com",
+    //     "gender": "male",
+    //     "province_id": 1,
+    //     "province_type": "Thành Phố",
+    //     "province_name": "Hà Nội",
+    //     "district_id": 1,
+    //     "district_type": "Quận",
+    //     "district_name": "Ba Đình",
+    //     "ward_id": 1,
+    //     "ward_type": "Phường",
+    //     "ward_name": "Phúc Xá",
+    //     "address": "12 CMT8 abc",
+    //     "zalo": "WAO",
+    //     "zalo_id": null,
+    //     "fanpage": "wao",
+    //     "facebook_id": null,
+    //     "sale_id": 96,
+    //     "sale_name": "Đoàn Huỳnh Ngọc Hân",
+    //     "is_convert": 0,
+    //     "representative": "phu",
+    //     "business_clue": "123ABC",
+    //     "business_clue_name": null,
+    //     "bussiness_id": 1,
+    //     "business_name": "NÔNG NGHIỆP, LÂM NGHIỆP VÀ THỦY SẢN",
+    //     "employees": 244,
+    //     "time_revoke_lead": null,
+    //     "date_revoke": "2024-09-12 17:31:49",
+    //     "allocation_date": "2024-09-12 17:31:49",
+    //     "amount": 0,
+    //     "date_last_care": "2024-08-22 22:42:24",
+    //     "customer_type_name": "Doanh nghiệp",
+    //     "customer_group_id": 1,
+    //     "customer_group_name": "Mặc định",
+    //     "customer_lead_refer_id": 3,
+    //     "customer_lead_refer_name": "Hoàng đăng ý thảo",
+    //     "gender_vi": "Nam",
+    //     "branch_code": null,
+    //     "branch_name": null,
+    //     "employ_qty": 0,
+    //     "created_at": "2024-08-22 22:42:24",
+    //     "created_by_name": "Admin Epoints",
+    //     "updated_at": "2024-08-24 16:24:30",
+    //     "updated_by_name": "Admin Epoints",
+    //     "assign_by": 1,
+    //     "assign_by_name": "Admin Epoints",
+    //     "note": "note",
+    //     "tag": [
+    //         {
+    //             "tag_id": 5,
+    //             "keyword": "lieu-trinh-da",
+    //             "tag_name": "Liệu Trình Da "
+    //         }
+    //     ],
+    //     "diff_day": 26,
+    //     "related_work": 0,
+    //     "appointment": 0,
+    //     "journey_tracking": [],
+    //     "full_address": "12 CMT8 abc, Phúc Xá, Ba Đình, Hà Nội",
+    //     "customer_contact_id": 7,
+    //     "customer_contact_name": "phu phu",
+    //     "tab_configs": [
+    //         {
+    //             "code": "deal",
+    //             "tab_name_vi": "CƠ HỘI BÁN HÀNG",
+    //             "tab_name_en": "DEAL",
+    //             "total": 3
+    //         },
+    //         {
+    //             "code": "care",
+    //             "tab_name_vi": "CHĂM SÓC KHÁCH HÀNG",
+    //             "tab_name_en": "CARE",
+    //             "total": 0
+    //         },
+    //         {
+    //             "code": "contact",
+    //             "tab_name_vi": "NGƯỜI LIÊN HỆ",
+    //             "tab_name_en": "CONTACT",
+    //             "total": 4
+    //         },
+    //         {
+    //             "code": "note",
+    //             "tab_name_vi": "GHI CHÚ",
+    //             "tab_name_en": "NOTES",
+    //             "total": 3
+    //         },
+    //         {
+    //             "code": "file",
+    //             "tab_name_vi": "TẬP TIN",
+    //             "tab_name_en": "FILES",
+    //             "total": 2
+    //         }
+    //     ]
+    // };
 
 
 
