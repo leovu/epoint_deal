@@ -535,8 +535,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandCareDeal = event),
                   onTapPlus: () async {
-                    if (Global.createJob != null) {
-                      var result = await Global.createJob!(_bloc.detail!.toJson());
+                    if (Global.createCare != null) {
+                      var result = await Global.createCare!(_bloc.detail!.toJson());
                       if (result != null && result) {
                         getData();
                       }
@@ -766,7 +766,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return InkWell(
       onTap: () async {
         if (Global.editJob != null) {
-          var result = await Global.editJob!(_bloc.detail!.toJson());
+          var result = await Global.editJob!(item.manageWorkId ?? 0);
           if (result != null && result) {
             allowPop = true;
             await getData();
