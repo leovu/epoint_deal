@@ -15,7 +15,7 @@ class Global {
 
   static Function? getListProduct;
 
-  static Function(Map<String,dynamic>)?  createJob;
+  static  Function? createJob;
 
   static Function(Map<String,dynamic>)?  createCare;
 

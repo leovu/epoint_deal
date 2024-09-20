@@ -26,7 +26,7 @@ class EpointDealPlugin {
       String? deal_code,
       int? indexTabDetail,
       Function? getListProduct,
-      Function(Map<String,dynamic>)? createJob,
+      Function? createJob,
       Function(Map<String,dynamic>)?  createCare,
       Function(int)?  editJob,
       Function(Map<String,dynamic>)?  createOrder,
