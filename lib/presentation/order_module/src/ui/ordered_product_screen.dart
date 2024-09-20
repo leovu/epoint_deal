@@ -258,9 +258,10 @@ class OrderedProductScreenState extends State<OrderedProductScreen> {
         _buildInfo(),
         _buildQuantity(),
         _buildPrice(),
-        if (checkConfigKey(ConfigKey.discount)) _buildDiscount(),
+        // if (checkConfigKey(ConfigKey.discount)) _buildDiscount(),
+        _buildDiscount(),
         // _buildSurcharge(),
-        _buildStaffs(),
+        // _buildStaffs(),
         _buildNote()
       ],
     );

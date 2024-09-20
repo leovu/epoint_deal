@@ -1,5 +1,6 @@
-
 import 'package:epoint_deal_plugin/common/assets.dart';
+import 'package:epoint_deal_plugin/common/constant.dart';
+import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
@@ -7,10 +8,13 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/customer_type.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/booking_store_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/response/booking_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
@@ -20,9 +24,16 @@ import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
+import 'package:epoint_deal_plugin/model/response/order_detail_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/order_service_card_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/product_new_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_card_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/service_new_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
+import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/edit_deal/more_info_edit_deal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
@@ -41,8 +52,27 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditDealScreen extends StatefulWidget {
-  DetailDealData? detail;
-  EditDealScreen({Key? key, this.detail}) : super(key: key);
+  final DetailDealData? detail;
+  final OrderDetailResponseModel? model;
+  final List<ProductNewModel>? productNewModels;
+  final List<ServiceNewModel>? serviceNewModels;
+  final List<OrderServiceCardModel>? serviceCardModels;
+  final List<ServiceCardModel>? serviceCardActivatedModels;
+  final CustomerModel? customerModel;
+  final DeliveryAddress? deliveryAddressModel;
+  final BookingDetailResponseModel? bookingModel;
+  EditDealScreen(
+      {Key? key,
+      this.detail,
+      this.model,
+      this.productNewModels,
+      this.serviceNewModels,
+      this.serviceCardModels,
+      this.serviceCardActivatedModels,
+      this.customerModel,
+      this.deliveryAddressModel,
+      this.bookingModel})
+      : super(key: key);
 
   @override
   _EditDealScreenState createState() => _EditDealScreenState();
@@ -50,6 +80,7 @@ class EditDealScreen extends StatefulWidget {
 
 class _EditDealScreenState extends State<EditDealScreen>
     with WidgetsBindingObserver {
+  late EditDealBloc _bloc;
   var _isKeyboardVisible = false;
 
   ScrollController _controller = ScrollController();
@@ -123,7 +154,8 @@ class _EditDealScreenState extends State<EditDealScreen>
       customerCode: "", customerName: "", typeCustomer: "", phone: "");
 
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
-  ListCustomLeadItems leadItem = ListCustomLeadItems(customerLeadCode: "",phone: "", customerType: "");
+  ListCustomLeadItems leadItem =
+      ListCustomLeadItems(customerLeadCode: "", phone: "", customerType: "");
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel();
 
@@ -145,12 +177,15 @@ class _EditDealScreenState extends State<EditDealScreen>
       probability: 0,
       dealDescription: "",
       amount: 0,
-      product: [], discount: 0);
+      product: [],
+      discount: 0);
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _controller.removeListener(() {});
+    Globals.cart?.dispose();
+    Globals.cart = null;
     super.dispose();
   }
 
@@ -169,12 +204,21 @@ class _EditDealScreenState extends State<EditDealScreen>
   @override
   void initState() {
     super.initState();
+    Globals.cart = GlobalCart();
+    _bloc = EditDealBloc(
+        context,
+        widget.detail,
+        widget.productNewModels,
+        widget.serviceNewModels,
+        widget.serviceCardModels,
+        widget.serviceCardActivatedModels,
+        widget.customerModel,
+        widget.deliveryAddressModel);
+    _bloc.detail = widget.detail;
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _bloc.onRefresh();
       DealConnection.showLoading(context);
-
-      GlobalCart().removeAllServiceCardActivated();
-
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
@@ -202,6 +246,7 @@ class _EditDealScreenState extends State<EditDealScreen>
   }
 
   void bindingData() async {
+    _bloc.onEditProducts();
     _dealNameText.text = widget.detail?.dealName ?? "";
     // detailDeal.dealName = widget.detail?.dealName ?? "";
     detailDeal.phone = widget.detail!.phone ?? "";
@@ -215,7 +260,7 @@ class _EditDealScreenState extends State<EditDealScreen>
 
     if (widget.detail!.productBuy != null &&
         widget.detail!.productBuy!.length > 0) {
-           detailDeal.product!.clear();
+      detailDeal.product!.clear();
       widget.detail!.productBuy!.forEach((element) {
         detailDeal.product!.add(Product(
           objectCode: "",
@@ -228,7 +273,7 @@ class _EditDealScreenState extends State<EditDealScreen>
         ));
       });
     }
-     Global.amount = (widget.detail!.amount ?? 0.0).toDouble();
+    Global.amount = (widget.detail!.amount ?? 0.0).toDouble();
 
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((widget.detail?.saleId ?? 0) == _modelStaff[i].staffId) {
@@ -332,16 +377,14 @@ class _EditDealScreenState extends State<EditDealScreen>
       // }
 
       for (int i = 0; i < branchData!.length; i++) {
-      if ((widget.detail!.branchName ?? "").toLowerCase() ==
-          branchData![i].branchName!.toLowerCase()) {
-        branchData![i].selected = true;
-        branchSelected = branchData![i];
-      } else {
-        branchData![i].selected = false;
+        if ((widget.detail!.branchName ?? "").toLowerCase() ==
+            branchData![i].branchName!.toLowerCase()) {
+          branchData![i].selected = true;
+          branchSelected = branchData![i];
+        } else {
+          branchData![i].selected = false;
+        }
       }
-    }
-
-
     }
 
     if (widget.detail!.tag!.length > 0 && tagsData != null) {
@@ -374,10 +417,11 @@ class _EditDealScreenState extends State<EditDealScreen>
     detailDeal.orderSourceId = orderSourceSelected!.orderSourceId;
 
     if (widget.detail!.closingDate != "") {
-      selectedClosingDueDate = DateTime.parse(widget.detail!.closingDate!  + ' 00:00:00.000');
+      selectedClosingDueDate =
+          DateTime.parse(widget.detail!.closingDate! + ' 00:00:00.000');
       _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-        .format(DateTime.parse(widget.detail!.closingDate!));
-      }
+          .format(DateTime.parse(widget.detail!.closingDate!));
+    }
 
     Navigator.of(context).pop();
     setState(() {});
@@ -555,7 +599,9 @@ class _EditDealScreenState extends State<EditDealScreen>
           // chọn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
-               selectedCustomer ? (customerItem?.customerName ?? "") : (leadItem?.leadFullName ?? ""),
+              selectedCustomer
+                  ? (customerItem?.customerName ?? "")
+                  : (leadItem?.leadFullName ?? ""),
               Assets.iconPerson,
               true,
               true,
@@ -623,11 +669,16 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                              (leadItem.leadFullName != "") ? (leadItem.customerType!.toLowerCase() ==
-                                        AppLocalizations.text(LangKey.personal)!
-                                            .toLowerCase())
-                                    ? AppLocalizations.text(LangKey.personal)!
-                                    : AppLocalizations.text(LangKey.business)! : "",
+                                (leadItem.leadFullName != "")
+                                    ? (leadItem.customerType!.toLowerCase() ==
+                                            AppLocalizations.text(
+                                                    LangKey.personal)!
+                                                .toLowerCase())
+                                        ? AppLocalizations.text(
+                                            LangKey.personal)!
+                                        : AppLocalizations.text(
+                                            LangKey.business)!
+                                    : "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -944,7 +995,6 @@ class _EditDealScreenState extends State<EditDealScreen>
                     }
                   }
                 }),
-
               ],
             ),
           ),
@@ -956,6 +1006,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             orderSourceSelected: orderSourceSelected,
             // tagsData: tagsData,
             tagsString: tagsString,
+            bloc: _bloc,
           )
         ]),
       )
@@ -977,8 +1028,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             child: CustomMenuBottomSheet(
               title: AppLocalizations.text(LangKey.expectedEndingDate),
               widget: CustomDatePicker(
-                minimumTime: selectedDate ?? DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day, 0, 0, 0),
+                minimumTime: selectedDate,
                 initTime: selectedDate,
                 maximumTime: DateTime(2025, 12, 31),
                 dateOrder: DatePickerDateOrder.dmy,
@@ -1080,8 +1130,8 @@ class _EditDealScreenState extends State<EditDealScreen>
     );
   }
 
-  Widget _buildDatePicker(
-      String? hintText, TextEditingController fillText, GestureTapCallback ontap) {
+  Widget _buildDatePicker(String? hintText, TextEditingController fillText,
+      GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
       child: TextField(
@@ -1176,54 +1226,83 @@ class _EditDealScreenState extends State<EditDealScreen>
         detailDeal.journeyCode == "" ||
         customerItem.customerCode == "" ||
         detailDeal.saleId == 0 ||
-         selectedClosingDueDate == null) {
+        selectedClosingDueDate == null) {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
     } else {
       DealConnection.showLoading(context);
 
-      // double amount = 0;
-      // if (detailDeal.product.length > 0) {
-      //   for (int i = 0; i < detailDeal.product.length; i++) {
-      //     amount +=
-      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
-      //   }
-      // }
+      if (_bloc.voucherModel != null) {
+        if (_bloc.voucherModel!.amount != null) {
+          _bloc.discountType = discountTypeCash;
+          _bloc.discountValue = _bloc.voucherModel!.amount;
+        } else if (_bloc.voucherModel!.percent != null) {
+          _bloc.discountType = discountTypePercent;
+          _bloc.discountValue = _bloc.voucherModel!.percent!.toDouble();
+        } else {
+          _bloc.discountType = discountTypeCode;
+          _bloc.discountValue = _bloc.voucherModel!.model!.discount;
+        }
+      }
       UpdateDealModelResponse? result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
-              dealCode: detailDeal.dealCode,
-              dealName: _dealNameText.text,
-              saleId: detailDeal.saleId,
-              typeCustomer: "customer",
-              customerCode: customerItem.customerCode,
-              phone: _phoneNumberText.text,
-              pipelineCode: detailDeal.pipelineCode,
-              journeyCode: detailDeal.journeyCode,
-              closingDate:
-                  "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
-              // closingDate: "",
-              branchCode: detailDeal.branchCode,
-              tag: detailDeal.tag,
-              orderSourceId: detailDeal.orderSourceId,
-              probability: detailDeal.probability,
-              dealDescription: detailDeal.dealDescription,
-              amount: Global.amount,
-              product: detailDeal.product,
-              discount: Global.discount));
+            dealCode: detailDeal.dealCode,
+            dealId: _bloc.detail?.dealId,
+            dealName: _dealNameText.text,
+            saleId: detailDeal.saleId,
+            typeCustomer: "customer",
+            customerCode: customerItem.customerCode,
+            phone: _phoneNumberText.text,
+            pipelineCode: detailDeal.pipelineCode,
+            journeyCode: detailDeal.journeyCode,
+            closingDate:
+                "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
+            // closingDate: "",
+            branchCode: detailDeal.branchCode,
+            tag: detailDeal.tag,
+            orderSourceId: detailDeal.orderSourceId,
+            probability: detailDeal.probability,
+            dealDescription: detailDeal.dealDescription,
+            amount: _bloc.amount,
+            product: _bloc.getListProductsRequest(),
+            otherFee: _bloc.surchargeModels
+                .where((element) =>
+                    element.isSelected && element.controller.text.isNotEmpty)
+                .toList()
+                .map((e) {
+              double value = e.isMoney
+                  ? parseMoney(e.controller.text)
+                  : (int.tryParse(e.controller.text) ?? 0).toDouble();
+              double totalValue = e.isMoney ? value : value / 100 * _bloc.total;
+              return  OrderFeeModel(
+                    otherFeeId: e.otherFeeId,
+                    otherFeeCode: e.otherFeeCode,
+                    otherFeeName: e.otherFeeName,
+                    otherFeeValue: value,
+                    feeType: e.isMoney
+                        ? otherFreeBranchTypeMoney
+                        : otherFreeBranchTypePercent,
+                    feeMoney: totalValue);
+            }).toList(),
+            total: _bloc.total,
+            totalOtherFee: _bloc.surcharge,
+            vatValue: _bloc.vatModel?.id,
+            vatDeal: _bloc.vatModel == null
+                ? _bloc.vatDefault
+                : _bloc.vatModel?.data,
+            amountBeforeVat: _bloc.amountBeforeTax,
+            discount: _bloc.discount,
+            discountMember: _bloc.discountMember,
+            discountType: _bloc.discountType,
+            discountValue: _bloc.discountValue,
+          ));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
-          Global.amount = 0.0;
-          print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
           Navigator.of(context).pop(true);
-          if (result.data != null) {
-            // modelResponse = ObjectPopCreateDealModel(
-            //     deal_id: result.data.dealId, status: true);
-          }
-          // Navigator.of(context).pop(modelResponse.toJson());
         } else {
           DealConnection.showMyDialog(context, result.errorDescription);
         }
@@ -1243,18 +1322,23 @@ class _EditDealScreenState extends State<EditDealScreen>
           warning: true);
     } else {
       DealConnection.showLoading(context);
-
-      // double amount = 0;
-      // if (detailDeal.product.length > 0) {
-      //   for (int i = 0; i < detailDeal.product.length; i++) {
-      //     amount +=
-      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
-      //   }
-      // }
+      if (_bloc.voucherModel != null) {
+        if (_bloc.voucherModel!.amount != null) {
+          _bloc.discountType = discountTypeCash;
+          _bloc.discountValue = _bloc.voucherModel!.amount;
+        } else if (_bloc.voucherModel!.percent != null) {
+          _bloc.discountType = discountTypePercent;
+          _bloc.discountValue = _bloc.voucherModel!.percent!.toDouble();
+        } else {
+          _bloc.discountType = discountTypeCode;
+          _bloc.discountValue = _bloc.voucherModel!.model!.discount;
+        }
+      }
       UpdateDealModelResponse? result = await DealConnection.updateDeal(
           context,
           UpdateDealModelRequest(
               dealCode: detailDeal.dealCode,
+              dealId: _bloc.detail?.dealId,
               dealName: _dealNameText.text,
               saleId: detailDeal.saleId,
               typeCustomer: "lead",
@@ -1264,25 +1348,48 @@ class _EditDealScreenState extends State<EditDealScreen>
               journeyCode: detailDeal.journeyCode,
               closingDate:
                   "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
-              // closingDate: "",
               branchCode: detailDeal.branchCode,
-              tag: detailDeal.tag,
-              orderSourceId: detailDeal.orderSourceId,
-              probability: detailDeal.probability,
-              dealDescription: detailDeal.dealDescription,
-              amount: Global.amount,
-              product: detailDeal.product,
-              discount: Global.discount));
+            tag: detailDeal.tag,
+            orderSourceId: detailDeal.orderSourceId,
+            probability: detailDeal.probability,
+            dealDescription: detailDeal.dealDescription,
+            amount: _bloc.amount,
+            product: _bloc.getListProductsRequest(),
+            otherFee: _bloc.surchargeModels
+                .where((element) =>
+                    element.isSelected && element.controller.text.isNotEmpty)
+                .toList()
+                .map((e) {
+              double value = e.isMoney
+                  ? parseMoney(e.controller.text)
+                  : (int.tryParse(e.controller.text) ?? 0).toDouble();
+              double totalValue = e.isMoney ? value : value / 100 * _bloc.total;
+              return OrderFeeModel(
+                    otherFeeId: e.otherFeeId,
+                    otherFeeCode: e.otherFeeCode,
+                    otherFeeName: e.otherFeeName,
+                    otherFeeValue: value,
+                    feeType: e.isMoney
+                        ? otherFreeBranchTypeMoney
+                        : otherFreeBranchTypePercent,
+                    feeMoney: totalValue);
+            }).toList(),
+            total: _bloc.total,
+            totalOtherFee: _bloc.surcharge,
+            vatValue: _bloc.vatModel?.id,
+            vatDeal: _bloc.vatModel == null
+                ? _bloc.vatDefault
+                : _bloc.vatModel?.data,
+            amountBeforeVat: _bloc.amountBeforeTax,
+            discount: _bloc.discount,
+            discountMember: _bloc.discountMember,
+            discountType: _bloc.discountType,
+            discountValue: _bloc.discountValue));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
-          Global.amount = 0.0;
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
-          // if (result.data != null) {
-          //   modelResponse = ObjectPopCreateDealModel(
-          //       deal_id: result.data.dealId, status: true);
-          // }
           Navigator.of(context).pop(true);
         } else {
           DealConnection.showMyDialog(context, result.errorDescription);

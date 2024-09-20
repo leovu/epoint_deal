@@ -1,4 +1,5 @@
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
 
 class DetailDealModelResponse {
   int? errorCode;
@@ -62,10 +63,25 @@ class DetailDealData {
   int? diffDay;
   int? relatedWork;
   int? appointment;
+  int? expectedRevenue;
+  int? total;
+  String? discountType;
+  int? discountValue;
+  int? voucherCode;
+  int? totalOtherFee;
+  int? amountBeforeVat;
+  int? totalVat;
+  String? ward;
+  String? businessClue;
+  String? fanpage;
+  String? zalo;
+  String? customerSourceName;
+  List<OrderFeeModel>? otherFee;
   List<CustomerCare>? customerCare;
   List<JourneyTracking>? journeyTracking;
   List<ProductBuy>? productBuy;
   num? discount;
+  List<CustomerDetailConfigModel>? tabConfigs;
 
   DetailDealData(
       {this.dealId,
@@ -108,7 +124,23 @@ class DetailDealData {
       this.relatedWork,
       this.appointment,
       this.customerCare,
-      this.discount});
+      this.discount,
+      this.tabConfigs,
+      this.expectedRevenue,
+      this.total,
+      this.discountType,
+      this.discountValue,
+      this.voucherCode,
+      this.totalOtherFee,
+      this.amountBeforeVat,
+      this.totalVat,
+      this.ward,
+      this.businessClue,
+      this.fanpage,
+      this.zalo,
+      this.customerSourceName,
+      this.otherFee});
+
 
   DetailDealData.fromJson(Map<String, dynamic> json) {
     dealId = json['deal_id'] ?? 0;
@@ -126,10 +158,17 @@ class DetailDealData {
     reasonLoseCode = json['reason_lose_code'] ?? "";
     branchName = json['branch_name'] ?? "";
     orderSourceName = json['order_source_name'] ?? "";
+    expectedRevenue = json['expected_revenue'] ?? 0;
     if (json['tag'] != null) {
       tag = <TagData>[];
       json['tag'].forEach((v) {
         tag!.add(new TagData.fromJson(v));
+      });
+    }
+    if (json['tab_configs'] != null) {
+      tabConfigs = <CustomerDetailConfigModel>[];
+      json['tab_configs'].forEach((v) {
+        tabConfigs!.add(new CustomerDetailConfigModel.fromJson(v));
       });
     }
     probability = json['probability'] ?? 0;
@@ -146,7 +185,6 @@ class DetailDealData {
     province = json['province'] ?? "";
     district = json['district'] ?? "";
     backgroundColorJourney = json['background_color_journey'] ?? "";
-    district = json['district'] ?? "";
     productNameBuy = json['product_name_buy'] ?? "";
     dateLastCare = json['date_last_care'];
     diffDay = json['diff_day'];
@@ -154,6 +192,7 @@ class DetailDealData {
     appointment = json['appointment'];
     orderSourceId = json['order_source_id'] ?? 0;
     discount = json['discount'];
+    voucherCode = json["voucher_code"];
 
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
@@ -174,6 +213,26 @@ class DetailDealData {
         customerCare!.add(new CustomerCare.fromJson(v));
       });
     }
+
+    total = json['total'];
+    discountType = json['discount_type'];
+    discountValue = json['discount_value'];
+    totalOtherFee = json['total_other_fee'];
+    amountBeforeVat = json['amount_before_vat'];
+    totalVat = json['total_vat'];
+    ward = json['ward'];
+    address = json['address'];
+    businessClue = json['business_clue'];
+    fanpage = json['fanpage'];
+    zalo = json['zalo'];
+    customerSourceName = json['customer_source_name'];
+    if (json['other_fee'] != null) {
+      otherFee = <OrderFeeModel>[];
+      json['other_fee'].forEach((v) {
+        otherFee!.add(new OrderFeeModel.fromJson(v));
+      });
+    }
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -193,6 +252,7 @@ class DetailDealData {
     data['reason_lose_code'] = this.reasonLoseCode;
     data['branch_name'] = this.branchName;
     data['order_source_name'] = this.orderSourceName;
+    
     if (this.tag != null) {
       data['tag'] = this.tag!.map((v) => v.toJson()).toList();
     }
@@ -213,6 +273,19 @@ class DetailDealData {
     data['background_color_journey'] = this.backgroundColorJourney;
     data['product_name_buy'] = this.productNameBuy;
     data['order_source_id'] = this.orderSourceId;
+    data['expected_revenue'] = this.expectedRevenue;
+    data['total'] = this.total;
+    data['discount'] = this.discount;
+    data['discount_type'] = this.discountType;
+    data['discount_value'] = this.discountValue;
+    data['total_other_fee'] = this.totalOtherFee;
+    data['amount_before_vat'] = this.amountBeforeVat;
+    data['total_vat'] = this.totalVat;
+    data['ward'] = this.ward;
+    data['business_clue'] = this.businessClue;
+    data['fanpage'] = this.fanpage;
+    data['zalo'] = this.zalo;
+    data['customer_source_name'] = this.customerSourceName;
     if (this.journeyTracking != null) {
       data['journey_tracking'] =
           this.journeyTracking!.map((v) => v.toJson()).toList();
@@ -220,11 +293,15 @@ class DetailDealData {
     if (this.productBuy != null) {
       data['product_buy'] = this.productBuy!.map((v) => v.toJson()).toList();
     }
+    if (this.otherFee != null) {
+      data['other_fee'] = this.otherFee!.map((v) => v.toJson()).toList();
+    }
     data['discount'] = this.discount;
     data['date_last_care'] = this.dateLastCare;
     data['diff_day'] = this.diffDay;
     data['related_work'] = this.relatedWork;
     data['appointment '] = this.appointment;
+
     if (this.customerCare != null) {
       data['customer_care'] = this.customerCare!.map((v) => v.toJson()).toList();
     }
@@ -269,6 +346,80 @@ class JourneyTracking {
   }
 }
 
+class CustomerDetailConfigModel {
+  int? customerConfigTabDetailId;
+  String? code;
+  String? tabNameVi;
+  String? tabNameEn;
+  int? sortOrder;
+  int? total;
+
+  CustomerDetailConfigModel(
+      {this.customerConfigTabDetailId,
+      this.code,
+      this.tabNameVi,
+      this.tabNameEn,
+      this.sortOrder,
+      this.total});
+
+  CustomerDetailConfigModel.fromJson(Map<String, dynamic> json) {
+    customerConfigTabDetailId = json['customer_config_tab_detail_id'];
+    code = json['code'];
+    tabNameVi = json['tab_name_vi'];
+    tabNameEn = json['tab_name_en'];
+    sortOrder = json['sort_order'];
+    total = json['total'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['customer_config_tab_detail_id'] = this.customerConfigTabDetailId;
+    data['code'] = this.code;
+    data['tab_name_vi'] = this.tabNameVi;
+    data['tab_name_en'] = this.tabNameEn;
+    data['sort_order'] = this.sortOrder;
+    data['total'] = this.total;
+    return data;
+  }
+}
+
+// class OtherFee {
+//   int? otherFeeId;
+//   String? otherFeeCode;
+//   String? otherFeeName;
+//   int? otherFeeValue;
+//   String? feeType;
+//   String? feeMoney;
+
+//   OtherFee(
+//       {this.otherFeeId,
+//       this.otherFeeCode,
+//       this.otherFeeName,
+//       this.otherFeeValue,
+//       this.feeType,
+//       this.feeMoney});
+
+//   OtherFee.fromJson(Map<String, dynamic> json) {
+//     otherFeeId = json['other_fee_id'];
+//     otherFeeCode = json['other_fee_code'];
+//     otherFeeName = json['other_fee_name'];
+//     otherFeeValue = json['other_fee_value'];
+//     feeType = json['fee_type'];
+//     feeMoney = json['fee_money'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['other_fee_id'] = this.otherFeeId;
+//     data['other_fee_code'] = this.otherFeeCode;
+//     data['other_fee_name'] = this.otherFeeName;
+//     data['other_fee_value'] = this.otherFeeValue;
+//     data['fee_type'] = this.feeType;
+//     data['fee_money'] = this.feeMoney;
+//     return data;
+//   }
+// }
+
 class ProductBuy {
   int? dealDetailId;
   int? objectId;
@@ -278,6 +429,22 @@ class ProductBuy {
   num? quantity;
   int? discount;
   num? amount;
+  String? note;
+  String? dealCode;
+  String? objectCode;
+  int? position;
+  int? discountValue;
+  String? discountType;
+  String? voucherCode;
+  String? objectDescription;
+  int? unitId;
+  String? unitName;
+  String? productsDescription;
+  int? productId;
+  String? productChildType;
+  int? productChildBaseId;
+  int? serviceOtherFlagId;
+  String? serviceOtherFlagName;
 
   ProductBuy(
       {this.dealDetailId,
@@ -287,7 +454,23 @@ class ProductBuy {
       this.price,
       this.quantity,
       this.discount,
-      this.amount});
+      this.amount,
+      this.note,
+      this.dealCode, 
+      this.objectCode,
+      this.position,
+      this.discountValue,
+      this.discountType,
+      this.voucherCode,
+      this.objectDescription,
+      this.unitId,
+      this.unitName,
+      this.productsDescription,
+      this.productId,
+      this.productChildType,
+      this.productChildBaseId,
+      this.serviceOtherFlagId,
+      this.serviceOtherFlagName});
 
   ProductBuy.fromJson(Map<String, dynamic> json) {
     dealDetailId = json['deal_detail_id'];
@@ -298,6 +481,22 @@ class ProductBuy {
     quantity = json['quantity'];
     discount = json['discount'];
     amount = json['amount'];
+    note = json['note'];
+    dealCode = json['deal_code'];
+    objectCode = json['object_code'];
+    position = json['position'];
+    discountValue = json['discount_value'];
+    discountType = json['discount_type'];
+    voucherCode = json['voucher_code'];
+    objectDescription = json['object_description'];
+    unitId = json['unit_id'];
+    unitName = json['unit_name'];
+    productsDescription = json['products_description'];
+    productId = json['product_id'];
+    productChildType = json['product_child_type'];
+    productChildBaseId = json['product_child_base_id'];
+    serviceOtherFlagId = json['service_other_flag_id'];
+    serviceOtherFlagName = json['service_other_flag_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -310,6 +509,23 @@ class ProductBuy {
     data['quantity'] = this.quantity;
     data['discount'] = this.discount;
     data['amount'] = this.amount;
+    data['note'] = this.note;
+    data['deal_code'] = this.dealCode;
+    data['object_code'] = this.objectCode;
+    data['position'] = this.position;
+    data['discount_value'] = this.discountValue;
+    data['discount_type'] = this.discountType;
+    data['voucher_code'] = this.voucherCode;
+    data['object_description'] = this.objectDescription;
+    data['unit_id'] = this.unitId;
+    data['unit_name'] = this.unitName;
+    data['products_description'] = this.productsDescription;
+    data['product_id'] = this.productId;
+    data['product_child_type'] = this.productChildType;
+    data['product_child_base_id'] = this.productChildBaseId;
+    data['service_other_flag_id'] = this.serviceOtherFlagId;
+    data['service_other_flag_name'] = this.serviceOtherFlagName;
+    
     return data;
   }
 }

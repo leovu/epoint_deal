@@ -24,6 +24,7 @@ import 'package:epoint_deal_plugin/model/request/service_detail_request_model.da
 import 'package:epoint_deal_plugin/model/request/service_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/status_vnpay_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/transport_method_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/upload_file_req_model.dart';
 import 'package:epoint_deal_plugin/model/request/voucher_request_model.dart';
 import 'package:epoint_deal_plugin/network/http/aws_connection.dart';
 import 'package:epoint_deal_plugin/resource/aws_resource.dart';
@@ -138,4 +139,9 @@ class Repository {
       _paymentResource.getListNote(context, model);
   addNote(BuildContext? context, CreateNoteReqModel model) =>
       _paymentResource.addNote(context, model);
+  getListFile(BuildContext? context, GetCareDealModel model) =>
+      _paymentResource.getListFile(context, model);
+
+  addFile(BuildContext? context, UploadFileReqModel model) =>
+      _paymentResource.addFile(context, model);
 }

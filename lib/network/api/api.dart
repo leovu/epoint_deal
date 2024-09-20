@@ -87,4 +87,6 @@ class API {
 
   static getListNote() => "/customer-deals/list-note";
   static addNote() => "/customer-deals/add-note";
+  static getListFile() => "/customer-deals/list-file";
+  static addFile() => "/customer-deals/add-file";
 }

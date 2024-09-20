@@ -1,3 +1,6 @@
+import 'package:epoint_deal_plugin/model/request/booking_store_request_model.dart';
+import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
+
 class AddDealModelRequest {
   String? dealName;
   int? saleId;
@@ -16,6 +19,19 @@ class AddDealModelRequest {
   List<Product>? product;
   num? discount;
 
+  num? total;
+  num? discountMember;
+  String? discountType;
+  num? discountValue;
+  String? voucherCode;
+  num? totalOtherFee;
+  num? amountBeforeVat;
+  num? vatValue;
+  num? vatDeal;
+  num? expectedRevenue;
+  List<OrderFeeModel>? otherFee;
+
+
   AddDealModelRequest(
       {this.dealName,
       this.saleId,
@@ -32,7 +48,20 @@ class AddDealModelRequest {
       this.dealDescription,
       this.amount,
       this.product,
-      this.discount});
+      this.discount,
+      this.amountBeforeVat,
+      this.discountMember,
+      this.discountType,
+      this.discountValue,
+      this.voucherCode,
+      this.total,
+      this.totalOtherFee,
+      this.vatValue,
+      this.vatDeal,
+      this.expectedRevenue,
+      this.otherFee
+
+       });
 
   AddDealModelRequest.fromJson(Map<String, dynamic> json) {
     dealName = json['deal_name'];
@@ -78,6 +107,19 @@ class AddDealModelRequest {
       data['product'] = this.product!.map((v) => v.toJson()).toList();
     }
     data["discount"] = discount;
+    data['total'] = this.total;
+    data['discount_member'] = this.discountMember;
+    data['discount_type'] = this.discountType;
+    data['discount_value'] = this.discountValue;
+    data['voucher_code'] = this.voucherCode;
+    data['total_other_fee'] = this.totalOtherFee;
+    data['amount_before_vat'] = this.amountBeforeVat;
+    data['vat_value'] = this.vatValue;
+    data['vat_deal'] = this.vatDeal;
+    data['expected_revenue'] = this.expectedRevenue;
+    if (this.otherFee != null) {
+      data['other_fee'] = this.otherFee!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -91,6 +133,13 @@ class Product {
   num? price;
   num? amount;
   String? note;
+  double? discountValue;
+  String? discountType;
+  double? discount;
+  String? voucherCode;
+  String? description;
+  int? position;
+  
 
   Product(
       {this.objectType,
@@ -99,17 +148,30 @@ class Product {
       this.objectId,
       this.quantity,
       this.price,
-      this.amount, this.note});
+      this.discountValue,
+      this.discountType,
+      this.discount,
+      this.voucherCode,
+      this.amount,
+      this.description,
+      this.position,
+      this.note});
 
   Product.fromJson(Map<String, dynamic> json) {
-    objectType = json['object_type'];
+   objectType = json['object_type'];
     objectName = json['object_name'];
     objectCode = json['object_code'];
     objectId = json['object_id'];
     quantity = json['quantity'];
     price = json['price'];
+    discountValue = json['discount_value'];
+    discountType = json['discount_type'];
+    discount = json['discount'];
+    voucherCode = json['voucher_code'];
     amount = json['amount'];
-    note = json['note'] ?? "" as num?;
+    description = json['description'];
+    position = json['position'];
+    note = json['note'];
   }
 
   Map<String, dynamic> toJson() {
@@ -120,7 +182,13 @@ class Product {
     data['object_id'] = this.objectId;
     data['quantity'] = this.quantity;
     data['price'] = this.price;
+    data['discount_value'] = this.discountValue;
+    data['discount_type'] = this.discountType;
+    data['discount'] = this.discount;
+    data['voucher_code'] = this.voucherCode;
     data['amount'] = this.amount;
+    data['description'] = this.description;
+    data['position'] = this.position;
     data['note'] = this.note;
     return data;
   }

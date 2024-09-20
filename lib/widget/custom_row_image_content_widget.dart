@@ -2,16 +2,18 @@ part of widget;
 
 
 class CustomRowImageContentWidget extends StatelessWidget {
-  const CustomRowImageContentWidget({super.key,  this.icon, this.title,this.child, this.iconColor});
+  const CustomRowImageContentWidget({super.key,  this.icon, this.title,this.child, this.iconColor, this.titleStyle, this.paddingBottom = 13.0});
   final String? icon;
   final String? title;
+  final TextStyle? titleStyle;
   final Widget? child;
   final Color? iconColor;
+  final double paddingBottom;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 13.0),
+      padding: EdgeInsets.only(bottom: paddingBottom),
       margin: EdgeInsets.only(left: 7.5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,7 +30,7 @@ class CustomRowImageContentWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               textAlign: TextAlign.start,
-              style: TextStyle(
+              style: titleStyle ?? TextStyle(
                   color: AppColors.black,
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal),

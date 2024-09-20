@@ -1,4 +1,5 @@
 import 'package:epoint_deal_plugin/common/assets.dart';
+import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -31,7 +32,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
 
 
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => widget.bloc.getCareDeal(context));
+        .addPostFrameCallback((_) => widget.bloc.getOrderHistory(context));
   }
 
   @override
@@ -64,7 +65,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
 
   Widget _buildContent() {
     return StreamBuilder(
-      stream: widget.bloc.outputOrderHistory,
+      stream: widget.bloc.outputListOrderHistory,
       initialData: null,
       builder: (_, snapshot){
         List<OrderHistoryData>? models = snapshot.data as List<OrderHistoryData>?;
@@ -106,7 +107,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
             children: [
               Expanded(
                   child: CustomInfoItem(
-                      icon: Assets.iconDeal, title: item.orderCode ?? "N/A")),
+                      icon: Assets.iconDeal, title: item.orderCode ?? NULL_VALUE)),
               Container(
                 height: 24,
                 // width: 55,
@@ -116,7 +117,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
                     color: Color(0xFF11B482),
                     borderRadius: BorderRadius.circular(50.0)),
                 child: Center(
-                  child: Text(item.processStatusName ?? "N/A",
+                  child: Text(item.processStatusName ?? NULL_VALUE,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -125,13 +126,13 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
               )
             ],
           ),
-          CustomInfoItem(icon: Assets.iconTime, title: item.createdAt ?? "N/A"),
+          CustomInfoItem(icon: Assets.iconTime, title: item.createdAt ?? NULL_VALUE),
           CustomInfoItem(
-              icon: Assets.iconBranch, title: item.branchName ?? "N/A"),
+              icon: Assets.iconBranch, title: item.branchName ?? NULL_VALUE),
           CustomInfoItem(
               icon: Assets.iconShipper,
               title:
-                  "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? "N/A"}"),
+                  "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? NULL_VALUE}"),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -169,7 +170,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: AppLocalizations.text(LangKey.care_list),
+      title: AppLocalizations.text(LangKey.order_history),
       body: _buildContent(),
       onWillPop: () => CustomNavigator.pop(context, object: false),
     );

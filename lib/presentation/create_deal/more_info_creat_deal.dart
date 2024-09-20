@@ -15,8 +15,6 @@ import 'package:epoint_deal_plugin/model/response/service_new_response_model.dar
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
-import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
@@ -41,6 +39,8 @@ class MoreInfoCreatDeal extends StatefulWidget {
 class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   TextEditingController _probabilityText = TextEditingController();
   FocusNode _probabilityFocusNode = FocusNode();
+  TextEditingController _expectRevenueText = TextEditingController();
+  FocusNode _expectRevenueFocusNode = FocusNode();
   TextEditingController _detailDealText = TextEditingController();
   FocusNode _detailDealFocusNode = FocusNode();
   List<OrderSourceData>? orderSourceData;
@@ -75,103 +75,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
       },
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // + thêm sản phẩm
-              // (widget.detailDeal!.product!.length == 0)
-              //     ? InkWell(
-              //         child: Container(
-              //           margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              //           padding: EdgeInsets.all(8.0),
-              //           height: 45,
-              //           decoration: BoxDecoration(
-              //               borderRadius: BorderRadius.circular(5.0),
-              //               border: Border.all(
-              //                   width: 1.0,
-              //                   color: Colors.blue,
-              //                   style: BorderStyle.solid)),
-              //           child: Center(
-              //             child: Text(
-              //               "+ ${AppLocalizations.text(LangKey.addProduct)}",
-              //               style: TextStyle(
-              //                   fontSize: 16.0,
-              //                   color: const Color(0xFF0067AC),
-              //                   fontWeight: FontWeight.normal),
-              //             ),
-              //           ),
-              //         ),
-              //       )
-              //     : Container(),
-              // Container(
-              //   width: 15.0,
-              // ),
-
-// + thông tin thêm
-              (!showAdditionDeal && widget.detailDeal!.product!.length == 0)
-                  ? InkWell(
-                      onTap: () {
-                        showAdditionDeal = !showAdditionDeal;
-                        setState(() {});
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        padding: EdgeInsets.all(8.0),
-                        height: 45,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                                width: 1.0,
-                                color: Colors.blue,
-                                style: BorderStyle.solid)),
-                        child: Center(
-                          child: Text(
-                            "+ ${AppLocalizations.text(LangKey.moreInformation)}",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: const Color(0xFF0067AC),
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container()
-            ],
-          ),
-
-          if (widget.detailDeal != null)
-            Column(
-              children: [
-                (widget.detailDeal!.product!.length > 0)
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocalizations.text(LangKey.yourOrder)!,
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: const Color(0xFF0067AC),
-                                fontWeight: FontWeight.normal),
-                          ),
-                          InkWell(
-                            child: Text(
-                              AppLocalizations.text(LangKey.chooseMoreItem)!,
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: const Color(0xFF0067AC),
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          )
-                        ],
-                      )
-                    : Container(),
-              ],
-            ),
-
-          _buildOrder(),
-
           // thông tin thêm
-          (!showAdditionDeal && widget.detailDeal!.product!.length > 0)
+          (!showAdditionDeal)
               ? InkWell(
                   onTap: () {
                     showAdditionDeal = !showAdditionDeal;
@@ -200,12 +105,12 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                 )
               : Container(),
 
-          // showAdditionDeal ? moreInfo() : Container()
-
           CustomSizeTransaction(
             open: showAdditionDeal,
             child: moreInfo(),
-          )
+          ),
+          Gaps.vGap10,
+           _buildOrder(),
         ],
       ),
     );
@@ -324,6 +229,17 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             }
           }
         }),
+        CustomTextfieldDropdownWidget(
+          title: "Doanh thu kỳ vọng",
+          content: "",
+          textfield: true,
+          mandatory: false,
+          icon: Assets.iconItinerary,
+          fillText: _expectRevenueText,
+          focusNode: _expectRevenueFocusNode,
+          inputType: TextInputType.numberWithOptions(signed: false, decimal: false),
+          inputMoney: true,
+        ),
         _buildTextField("Nhập xác suất thành công (%)", "",
             Assets.iconProbability, false, false, true,
             fillText: _probabilityText,
@@ -482,7 +398,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                                           widget.bloc.amount = 0;
                                         }
 
-                                        if (checkConfigKey(ConfigKey.vat)) {
+                                        if (widget.bloc.vatModel != null) {
                                           double vat = widget.bloc.vatModel == null
                                               ? widget.bloc.vatDefault
                                               : widget.bloc.vatModel!.data;
@@ -511,19 +427,24 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   }
 
   Widget _buildContent() {
-    return StreamBuilder(
-        stream: widget.bloc.outputReloadGlobalCart,
-        initialData: true,
-        builder: (_, snapshot) {
-          return Column(
-            children: [
-              _buildItems(),
-              _buildDiscount(),
-              // _buildVAT(),
-              _buildTotalPreTax(),
-            ],
-          );
-        });
+    return Column(
+      children: [
+        _buildItems(),
+         Gaps.vGap10,
+          _buildTotal(),
+         Gaps.vGap10,
+        _buildDiscount(),
+         Gaps.vGap10,
+        _buildTotalPreTax(),
+         Gaps.vGap10,
+        _buildVAT(),
+         Gaps.vGap10,
+        _buildSurcharge(),
+        Gaps.vGap10,
+        _buildFinalMoney(),
+        Gaps.vGap20,
+      ],
+    );
   }
 
   Widget _buildItems() {
@@ -592,6 +513,14 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
         });
   }
 
+  Widget _buildTotal() {
+    return CustomRowInformation(
+      title: AppLocalizations.text(LangKey.total),
+      content: formatMoney(widget.bloc.total),
+      contentStyle: AppTextStyles.style14BlackBold,
+    );
+  }
+
   Widget _buildDiscount() {
     return CustomBookingDiscount(
         model: widget.bloc.voucherModel,
@@ -628,6 +557,37 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
           }),
     );
   }
+
+  Widget _buildSurcharge() {
+    return CustomRowInformation(
+      title: AppLocalizations.text(LangKey.other_revenues),
+      icon: Assets.iconMoneyOwed,
+      titleStyle: AppTextStyles.style14BlackNormal,
+      child: InkWell(
+          child: CustomDropdown(
+            isText: true,
+            hint: AppLocalizations.text(LangKey.apply_other_revenues),
+            value: widget.bloc.surcharge == 0.0
+                ? null
+                : CustomDropdownModel(text: formatMoney(widget.bloc.surcharge)),
+            isHint: widget.bloc.surcharge == 0.0,
+            menus: [CustomDropdownModel()],
+            showIcon: true,
+            suffixIcon: Icons.navigate_next,
+            onRemove: widget.bloc.onRemoveSurcharge,
+          ),
+          onTap: widget.bloc.otherFreeBranch),
+    );
+  }
+
+  Widget _buildFinalMoney() {
+   return CustomRowInformation(
+      title: AppLocalizations.text(LangKey.final_money),
+      content: formatMoney(widget.bloc.amount),
+      contentStyle: AppTextStyles.style14BlackBold,
+    );
+  }
+
 
   Widget _buildTextField(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,

@@ -1,7 +1,10 @@
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
+import 'package:epoint_deal_plugin/model/request/booking_store_request_model.dart';
+import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
 
 class UpdateDealModelRequest {
   String? dealCode;
+  int? dealId;
   String? dealName;
   String? phone;
   int? saleId;
@@ -19,6 +22,18 @@ class UpdateDealModelRequest {
   num? discount;
   List<Product>? product;
 
+  num? total;
+  num? discountMember;
+  String? discountType;
+  num? discountValue;
+  String? voucherCode;
+  num? totalOtherFee;
+  num? amountBeforeVat;
+  num? vatValue;
+  num? vatDeal;
+  num? expectedRevenue;
+  List<OrderFeeModel>? otherFee;
+
   UpdateDealModelRequest(
       {this.dealCode,
       this.dealName,
@@ -33,10 +48,23 @@ class UpdateDealModelRequest {
       this.probability,
       this.dealDescription,
       this.amount,
+      this.product,
+      this.discount,
+      this.amountBeforeVat,
+      this.discountMember,
+      this.discountType,
+      this.discountValue,
+      this.voucherCode,
+      this.total,
+      this.totalOtherFee,
+      this.vatValue,
+      this.vatDeal,
+      this.expectedRevenue,
+      this.otherFee,
       this.customerCode,
       this.branchCode,
-      this.product,
-      this.discount});
+      this.dealId});
+      
 
   UpdateDealModelRequest.fromJson(Map<String, dynamic> json) {
     dealCode = json['deal_code'];
@@ -61,6 +89,7 @@ class UpdateDealModelRequest {
       });
     }
     discount = json['discount'];
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -82,8 +111,22 @@ class UpdateDealModelRequest {
     if (this.product != null) {
       data['product'] = this.product!.map((v) => v.toJson()).toList();
     }
+    data["deal_id"] = dealId;
     data["discount"] = discount;
     data["amount"] = amount;
+    data['total'] = this.total;
+    data['discount_member'] = this.discountMember;
+    data['discount_type'] = this.discountType;
+    data['discount_value'] = this.discountValue;
+    data['voucher_code'] = this.voucherCode;
+    data['total_other_fee'] = this.totalOtherFee;
+    data['amount_before_vat'] = this.amountBeforeVat;
+    data['vat_value'] = this.vatValue;
+    data['vat_deal'] = this.vatDeal;
+    data['expected_revenue'] = this.expectedRevenue;
+    if (this.otherFee != null) {
+      data['other_fee'] = this.otherFee!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

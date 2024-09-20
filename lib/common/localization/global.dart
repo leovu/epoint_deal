@@ -15,9 +15,9 @@ class Global {
 
   static Function? getListProduct;
 
-  static Function? createJob;
+  static Function(Map<String,dynamic>)?  createJob;
 
-  static Function? editJob;
+  static Function(int?)? editJob;
 
   static String? branch_code;
 
@@ -39,6 +39,8 @@ class Global {
   static int isDisabledPrice = 0;
 
   static int branchId = 0;
+
+  static Function(Map<String,dynamic>)? callHotline; 
 
 
 }

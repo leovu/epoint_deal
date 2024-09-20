@@ -3,6 +3,7 @@ import 'package:epoint_deal_plugin/model/request/check_transport_charge_request_
 import 'package:epoint_deal_plugin/model/request/get_history_req_model.dart';
 import 'package:epoint_deal_plugin/model/request/maintenance_receipt_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/payment_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/upload_file_req_model.dart';
 import 'package:epoint_deal_plugin/network/api/api.dart';
 import 'package:epoint_deal_plugin/network/api/interaction.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,18 @@ class PaymentResource{
   addNote(BuildContext? context, CreateNoteReqModel model) => Interaction(
     context: context,
     url: API.addNote(),
+    param: model.toJson(),
+  ).post();
+
+  getListFile(BuildContext? context, GetCareDealModel model) => Interaction(
+    context: context,
+    url: API.getListFile(),
+    param: model.toJson(),
+  ).post();
+
+  addFile(BuildContext? context, UploadFileReqModel model) => Interaction(
+    context: context,
+    url: API.addFile(),
     param: model.toJson(),
   ).post();
 

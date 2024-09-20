@@ -7,12 +7,18 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/discount_cart_model.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/member_discount_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/order_service_card_detail_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/order_store_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/other_free_branch_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/product_detail_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/service_card_detail_request_model.dart';
+import 'package:epoint_deal_plugin/model/request/service_detail_request_model.dart';
+import 'package:epoint_deal_plugin/model/response/booking_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/booking_list_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/booking_staff_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/create_order_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/member_discount_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_service_card_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
@@ -44,12 +50,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
-class CreateDealBloc extends BaseBloc {
-  CreateDealBloc(
-      BuildContext context) {
+class EditDealBloc extends BaseBloc {
+  EditDealBloc(
+      BuildContext context,
+      // OrderDetailResponseModel? model,
+      DetailDealData? model,
+      List<ProductNewModel>? productModels,
+      List<ServiceNewModel>? serviceModels,
+      List<OrderServiceCardModel>? serviceCardModels,
+      List<ServiceCardModel>? serviceCardActivatedModels,
+      CustomerModel? customerModel,
+      DeliveryAddress? deliveryAddressModel) {
     setContext(context);
 
-    if (checkConfigKey(ConfigKey.vat)) {
+    // if (checkConfigKey(ConfigKey.vat)) {
       final vatModel = Globals.configModels
           ?.firstWhereOrNull((element) => element.key == ConfigKey.vat_value);
       if (vatModel != null) {
@@ -61,6 +75,34 @@ class CreateDealBloc extends BaseBloc {
       if (configModel != null) {
         vatIncluded = configModel.value == vatPriceConfigInclude;
       }
+    // }
+
+    if (model == null) {
+      setDate(DateTime.now());
+
+      staffModel = BookingStaffModel(
+          staffId: Globals.model!.staffId, fullName: Globals.model!.fullName);
+    } else {
+      isEdit = true;
+      controllerNote.text = model.dealDescription ?? "";
+
+      if ((model.discount ?? 0.0) > 0) {
+        voucherModel = parseDiscount(model.discount!.toDouble(), model.discountType,
+            model.discountValue!.toDouble(), "${model.voucherCode}");
+        controllerDiscount.text = formatMoney(model.discount!.toDouble());
+      }
+
+      if (model.saleId != null) {
+        staffModel =
+            BookingStaffModel(staffId: model.saleId, fullName: model.staffName);
+      }
+
+      if ((model.otherFee?.length ?? 0) > 0) {
+        surchargeModels = model.otherFee!
+            .map((e) => OtherFreeBranchModel.fromJson(e.toJson(),isUpdate: true))
+            .toList();
+            // setSurchargeModels(surchargeModels);
+      }
     }
 
     this.customerModel = customerModel ?? guestCustomerModel;
@@ -69,6 +111,8 @@ class CreateDealBloc extends BaseBloc {
 
   @override
   void dispose() {
+    // TODO: implement dispose
+
     _streamProductModels.close();
     _streamServiceModels.close();
     _streamServiceCardModels.close();
@@ -87,7 +131,10 @@ class CreateDealBloc extends BaseBloc {
     _streamReload.close();
     super.dispose();
   }
-  bool isEdit = false;
+  bool isEdit = true;
+  BookingDetailResponseModel? bookingModel;
+  DetailDealData? detail;
+
 
   List<BookingStatusUpdateModel>? statusModels;
   BookingStatusUpdateModel? statusModel;
@@ -391,6 +438,20 @@ class CreateDealBloc extends BaseBloc {
     }
   }
 
+  onType(bool value) {
+    isAtStore = value;
+    setIsAtStore(isAtStore);
+    // if (!isAtStore && deliveryAddressModel == null) {
+    //   chooseDeliveryAddress();
+    // }
+  }
+
+
+  onDeletePresenter() {
+    presenterModel = null;
+    controllerPresenter.text = "";
+    setPresenterModel(presenterModel);
+  }
 
   onChooseStaff() async {
     var result = await CustomNavigator.push(
@@ -437,18 +498,6 @@ class CreateDealBloc extends BaseBloc {
     return surcharge;
   }
 
-  double finalMoney(double amount) {
-    final models =
-        surchargeModels.where((element) => element.isSelected).toList();
-    double surcharge = 0.0;
-    for (var e in models) {
-      surcharge += e.isMoney
-          ? parseMoney(e.controller.text)
-          : (int.tryParse(e.controller.text) ?? 0.0) / 100 * amount;
-    }
-    return surcharge;
-  }
-
   getMemberDiscount({bool isRefresh = false}) async {
     if (customerModel!.customerId == customerGuestId) {
       setMemberDiscountModel(defaultDiscountMemberModel);
@@ -478,6 +527,144 @@ class CreateDealBloc extends BaseBloc {
       }
     }
   }
+
+  onEditProducts() async {
+    CustomNavigator.showProgressDialog(context!);
+    final group = <Future>[];
+
+    List<ProductNewModel> productNewModels = [];
+    List<ServiceNewModel> serviceNewModels = [];
+    List<OrderServiceCardModel> serviceCardModels = [];
+    List<ServiceCardModel> serviceCardActivatedModels = [];
+
+    for (var e in detail!.productBuy ?? <ProductBuy>[]) {
+      if (e.objectType == subjectTypeProduct) {
+        group.add(productDetail(e, (model) {
+          // model.staffModels = e.staffs;
+          model.quantity = (e.quantity ?? 0).toDouble();
+          model.changePrice = (e.price ?? 0).toDouble();
+          model.discount = (e.discount ?? 0).toDouble() ;
+          model.description = e.objectDescription;
+          model.note = e.note;
+          model.voucherModel = e.discount != null ? DiscountCartModel(
+            amount:(e.discount ?? 0).toDouble()
+          ) : null;
+          // model.surcharge = (e.surcharge ?? 0) == 0? null : e.surcharge;
+          productNewModels.add(model);
+        }, (event) =>print("error : ${event}")));
+      } else if (e.objectType == subjectTypeService) {
+        group.add(serviceDetail(e, (model) {
+          // model.staffModels = e.staffs;
+          model.quantity = (e.quantity ?? 0).toDouble();
+          model.changePrice = (e.price ?? 0).toDouble();
+          model.discount = (e.discount ?? 0).toDouble() ;
+          model.description = e.objectDescription;
+          model.note = e.note;
+          model.voucherModel = e.discount != null ? DiscountCartModel(
+            amount:(e.discount ?? 0).toDouble()
+          ) : null;
+          // model.surcharge = (e.surcharge ?? 0) == 0? null : e.surcharge;
+          serviceNewModels.add(model);
+        }, (event) => print("error : ${event}")));
+      } else if (e.objectType == subjectTypeServiceCard) {
+        group.add(orderServiceCardDetail(e, (model) {
+          // model.staffModels = e.staffs;
+          model.quantity = (e.quantity ?? 0).toDouble();
+          model.changePrice = (e.price ?? 0).toDouble();
+          model.discount = (e.discount ?? 0).toDouble() ;
+          model.description = e.objectDescription;
+          model.note = e.note;
+          model.voucherModel = e.discount != null ? DiscountCartModel(
+            amount:(e.discount ?? 0).toDouble()
+          ) : null;
+          // model.surcharge = (e.surcharge ?? 0) == 0? null : e.surcharge;
+          serviceCardModels.add(model);
+        }, (event) => print("error : ${event}")));
+      } else {
+        group.add(orderServiceCardDetailActive(e, (model) {
+          // model.staffModels = e.staffs;
+          model.quantity = (e.quantity ?? 0).toDouble();
+          model.note = e.note;
+          serviceCardActivatedModels.add(model);
+        }, (event) => print("error : ${event}")));
+      }
+    }
+    await Future.wait(group);
+    CustomNavigator.hideProgressDialog();
+
+    Globals.cart!.products.addAll(productNewModels);
+    Globals.cart!.services.addAll(serviceNewModels);
+    Globals.cart!.serviceCards.addAll(serviceCardModels);
+    Globals.cart!.serviceActivatedCards
+        .addAll(serviceCardActivatedModels);
+
+    total = Globals.cart!.getValue();
+    setSurchargeModels(surchargeModels);
+    setProductModels(Globals.cart!.products);
+    setServiceModels(Globals.cart!.services);
+    setServiceCardModels(Globals.cart!.serviceCards);
+    setServiceCardActivatedModels(Globals.cart!.serviceActivatedCards);
+  }
+
+   productDetail(ProductBuy model, Function(ProductNewModel) onSuccess,
+      Function(String) onError) async {
+    ResponseModel response = await repository.productDetail(
+        context, ProductDetailRequestModel(productId: model.objectId),
+        showError: false);
+    if (response.success!) {
+      var responseModel = ProductNewModel.fromJson(response.data!);
+      onSuccess(responseModel);
+    } else {
+      onError(response.errorDescription ?? "");
+    }
+  }
+
+   serviceDetail(ProductBuy model, Function(ServiceNewModel) onSuccess,
+      Function(String) onError) async {
+    ResponseModel response = await repository.serviceDetail(
+        context, ServiceDetailRequestModel(serviceId: model.objectId),
+        showError: false);
+    if (response.success!) {
+      var responseModel = ServiceNewModel.fromJson(response.data!);
+      onSuccess(responseModel);
+    } else {
+      onError(response.errorDescription ?? "");
+    }
+  }
+
+  orderServiceCardDetail(
+      ProductBuy model,
+      Function(OrderServiceCardModel) onSuccess,
+      Function(String) onError) async {
+    ResponseModel response = await repository.orderServiceCardDetail(
+        context,
+        OrderServiceCardDetailRequestModel(
+          serviceCardId: model.objectId,
+        ),
+        showError: false);
+    if (response.success!) {
+      var responseModel = OrderServiceCardModel.fromJson(response.data!);
+      onSuccess(responseModel);
+    } else {
+      onError(response.errorDescription ?? "");
+    }
+  }
+
+  orderServiceCardDetailActive(ProductBuy model,
+      Function(ServiceCardModel) onSuccess, Function(String) onError) async {
+    ResponseModel response = await repository.orderServiceCardDetailActive(
+        context,
+        ServiceCardDetailRequestModel(
+            customerServiceCardId: model.objectId),
+        showError: false);
+    if (response.success!) {
+      var responseModel = ServiceCardModel.fromJson(response.data!);
+      onSuccess(responseModel);
+    } else {
+      onError(response.errorDescription ?? "");
+    }
+  }
+
 
   orderStore(OrderStoreRequestModel model, bool isPayment) async {
     CustomNavigator.showProgressDialog(context);
@@ -532,6 +719,17 @@ class CreateDealBloc extends BaseBloc {
                   textAlign: TextAlign.center,
                   style: AppTextStyles.style14BlackNormal,
                 ),
+                // CustomButton(
+                //     text: AppLocalizations.text(LangKey.create_ticket),
+                //     backgroundColor: AppColors.orange300,
+                //     onTap: () async {
+                //       await CustomNavigator.push(
+                //           context!,
+                //           TicketCreateScreen(
+                //             model: model,
+                //           ));
+                //       CustomNavigator.pop(context!);
+                //     }),
               ]
             ],
           ));
@@ -539,45 +737,31 @@ class CreateDealBloc extends BaseBloc {
     }
   }
 
-  orderUpdate(OrderStoreRequestModel model, bool isPayment) async {
-    CustomNavigator.showProgressDialog(context);
-    ResponseModel response = await repository.orderUpdate(context, model);
-    CustomNavigator.hideProgressDialog();
-    if (response.success!) {
-      if (isPayment) {
-        final responseModel = CreateOrderResponseModel.fromJson(response.data!);
-        await CustomNavigator.push(
-            context!,
-            OrderPaymentNewScreen(
-              orderModel: responseModel.orderInfo,
-            ));
-      } else {
-        await CustomNavigator.showCustomAlertDialog(
-            context!,
-            AppLocalizations.text(LangKey.notification),
-            response.errorDescription);
-      }
-      CustomNavigator.pop(context!, object: true);
-    }
-  }
 
   orderVAT() async {
-    if ((vatModels?.isNotEmpty ?? false)) {
-      return;
-    }
     ResponseModel response = await repository.orderVAT(context);
     if (response.success!) {
       var responseModel = VATResponseModel.fromJson(response.datas);
-
       vatModels = responseModel.data
               ?.map((e) => CustomDropdownModel(
                   id: e.vatId, text: e.description, data: e.vat))
               .toList() ??
           [];
+
+      if (isEdit) {
+      if (detail?.totalVat != null) {
+       VATModel? model = responseModel.data?.firstWhereOrNull(
+            (element) => element.vat == detail?.totalVat!.toDouble());
+            if (model != null) {
+              vatModel = CustomDropdownModel(id: model.vatId, text: model.description, data: model.vat);
+              setVATModel(vatModel);
+            }
+      }
+    }
+
     } else {
       vatModels = [];
     }
-
     setVATModels(vatModels);
   }
 
@@ -770,6 +954,7 @@ class CreateDealBloc extends BaseBloc {
     }
     return models;
   }
+
 
   _pushSurcharge() async {
     await CustomNavigator.push(

@@ -69,7 +69,7 @@ class CustomRowInformation extends StatelessWidget {
           ),
         if ((title ?? "").isNotEmpty || titleWidget != null)
           Container(
-            width: AppSizes.maxWidth! * 0.35,
+            width: AppSizes.maxWidth! * 0.5,
             padding: EdgeInsets.only(right: AppSizes.minPadding),
             child: titleWidget ??
                 Text(

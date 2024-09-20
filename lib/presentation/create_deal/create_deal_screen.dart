@@ -1,5 +1,5 @@
-
 import 'package:epoint_deal_plugin/common/assets.dart';
+import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -11,9 +11,7 @@ import 'package:epoint_deal_plugin/model/object_pop_create_deal_model.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/add_deal_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/booking_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_customer_option_model_response.dart';
@@ -22,13 +20,9 @@ import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
-import 'package:epoint_deal_plugin/model/response/order_detail_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/order_service_card_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/product_new_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/service_card_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/service_new_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/more_info_creat_deal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
@@ -48,22 +42,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealScreen extends StatefulWidget {
-  final OrderDetailResponseModel? model;
-  final List<ProductNewModel>? productNewModels;
-  final List<ServiceNewModel>? serviceNewModels;
-  final List<OrderServiceCardModel>? serviceCardModels;
-  final List<ServiceCardModel>? serviceCardActivatedModels;
-  final CustomerModel? customerModel;
-  final DeliveryAddress? deliveryAddressModel;
-  final BookingDetailResponseModel? bookingModel;
-  const CreateDealScreen({Key? key, this.model,
-      this.productNewModels,
-      this.serviceNewModels,
-      this.serviceCardModels,
-      this.serviceCardActivatedModels,
-      this.customerModel,
-      this.deliveryAddressModel,
-      this.bookingModel}) : super(key: key);
+  const CreateDealScreen(
+      {Key? key,})
+      : super(key: key);
 
   @override
   _CreateDealScreenState createState() => _CreateDealScreenState();
@@ -71,7 +52,6 @@ class CreateDealScreen extends StatefulWidget {
 
 class _CreateDealScreenState extends State<CreateDealScreen>
     with WidgetsBindingObserver {
-
   late CreateDealBloc _bloc;
   var _isKeyboardVisible = false;
 
@@ -127,10 +107,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   DateTime? selectedClosingDueDate;
 
   List<CustomerData> listCustomer = <CustomerData>[];
-  DealItems customerSelected = DealItems(customerCode: "", customerName: "", phone: "");
+  DealItems customerSelected =
+      DealItems(customerCode: "", customerName: "", phone: "");
 
   List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
-  ListCustomLeadItems leadItem = ListCustomLeadItems(customerLeadCode: "",phone: "", customerType: "");
+  ListCustomLeadItems leadItem =
+      ListCustomLeadItems(customerLeadCode: "", phone: "", customerType: "");
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel(
       customerTypeName: AppLocalizations.text(LangKey.potentialCustomer),
@@ -171,7 +153,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     super.dispose();
   }
 
-
   @override
   void didChangeMetrics() {
     final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
@@ -188,21 +169,11 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   void initState() {
     super.initState();
     Globals.cart = GlobalCart();
-    _bloc = CreateDealBloc(
-        context,
-        widget.model,
-        widget.productNewModels,
-        widget.serviceNewModels,
-        widget.serviceCardModels,
-        widget.serviceCardActivatedModels,
-        widget.customerModel,
-        widget.deliveryAddressModel);
-
-    _bloc.bookingModel = widget.bookingModel;
+    _bloc = CreateDealBloc(context);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
-      Globals.cart = GlobalCart();
+      _bloc.onRefresh(isRefresh: false, isInit: true);
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
@@ -246,7 +217,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
-            // leadingWidth: 20.0,
           ),
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),
@@ -320,11 +290,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                   if (!selectedCustomer) {
                     return;
                   }
-                  // detailPotential.customerType = "business";
                   customerTypeSelected = customerTypeData[1];
-                  // customerSelected =
-                  //     DealItems(customerCode: "", customerName: "");
-                  // leadItem = ListCustomLeadItems(customerLeadCode: "");
                   _dealNameText.text = "";
                   selectedCustomer = false;
                   setState(() {});
@@ -364,11 +330,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                   if (selectedCustomer) {
                     return;
                   }
-                  // detailPotential.customerType = "personal";
                   customerTypeSelected = customerTypeData[0];
                   _dealNameText.text = "";
-                  // customerSelected = DealItems(customerCode: "", customerName: "");
-                  // leadItem = ListCustomLeadItems(customerLeadCode: "");
                   selectedCustomer = true;
                   setState(() {});
                 },
@@ -408,16 +371,17 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             height: 15.0,
           ),
 
-// chọn khách hàng
+        // chọn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
-              selectedCustomer ? (customerSelected?.customerName ?? "") : (leadItem?.leadFullName ?? ""),
+              selectedCustomer
+                  ? (customerSelected.customerName ?? "")
+                  : (leadItem.leadFullName ?? ""),
               Assets.iconPerson,
               true,
               true,
               false, ontap: () async {
             FocusScope.of(context).unfocus();
-
             if (customerTypeSelected.customerTypeNameEn ==
                 AppLocalizations.text(LangKey.customer)) {
               CustomerData? customer =
@@ -432,13 +396,6 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 customerSelected.customerName = customer.fullName;
                 customerSelected.phone = customer.phone1;
                 _phoneNumberText.text = customer.phone1!;
-
-
-                // detailDeal.customerCode = customerSelected.customerCode;
-                // detailDeal.phone = _phoneNumberText.text;
-                // _dealNameText.text =
-                //     "${AppLocalizations.text(LangKey.dealOf)} ${customer?.fullName ?? ""}";
-
                 setState(() {});
               }
             } else if (customerTypeSelected.customerTypeNameEn == "lead") {
@@ -450,20 +407,10 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           )));
 
               if (result != null) {
-                // _phoneNumberText.text = "";
-                // customerSelected.customerCode = result.customerLeadCode;
-                // customerSelected.customerName = result.leadFullName;
-                // customerSelected.phone = result.phone;
-                // customerSelected.typeCustomer = result.customerType;
-
                 leadItem.customerLeadCode = result.customerLeadCode;
                 leadItem.customerType = result.customerType;
                 leadItem.phone = result.phone;
                 leadItem.leadFullName = result.leadFullName;
-
-                // detailDeal.phone = result.phone;
-                // detailDeal.typeCustomer = result.customerType;
-                // detailDeal.customerCode = customerSelected.customerCode;
 
                 setState(() {});
               }
@@ -474,7 +421,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             }
           }),
 
-          (!selectedCustomer && leadItem != null)
+          (!selectedCustomer)
               ? (leadItem.customerLeadCode != "")
                   ? Column(
                       children: [
@@ -483,7 +430,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.customerStyle)! + ": ",
+                                AppLocalizations.text(LangKey.customerStyle)! +
+                                    ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -493,8 +441,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                 width: 20.0,
                               ),
                               Text(
-                             (leadItem.customerType != "") ? (leadItem.customerType!.toLowerCase() == AppLocalizations.text(LangKey.personal)!.toLowerCase() ) ?
-                                AppLocalizations.text(LangKey.personal)! : AppLocalizations.text(LangKey.business)! : "",
+                                (leadItem.customerType != "")
+                                    ? (leadItem.customerType!.toLowerCase() ==
+                                            AppLocalizations.text(
+                                                    LangKey.personal)!
+                                                .toLowerCase())
+                                        ? AppLocalizations.text(
+                                            LangKey.personal)!
+                                        : AppLocalizations.text(
+                                            LangKey.business)!
+                                    : "",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -508,7 +464,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.text(LangKey.phoneNumber)! +": ",
+                                AppLocalizations.text(LangKey.phoneNumber)! +
+                                    ": ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14.0,
@@ -582,11 +539,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             open: showMoreInfoDeal,
             child: Column(
               children: [
-                // chọn pipeline
-                // showMoreInfoDeal ?
                 _buildTextField(
                     AppLocalizations.text(LangKey.choosePipeline),
-                    pipelineSelected?.pipelineName ?? "",
+                    pipelineSelected.pipelineName ?? "",
                     Assets.iconChance,
                     true,
                     true,
@@ -647,11 +602,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     journeySelected = journey;
                     detailDeal.journeyCode = journeySelected!.journeyCode;
                     setState(() {
-                      // await DealConnection.getDistrict(context, province.provinceid);
                     });
                   }
                 })
-                // : Container()
                 ,
 
                 // chọn người được phân bổ
@@ -685,17 +638,16 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                 }),
 
 // chọn ngày kết thúc thực tế
-                showMoreInfoDeal ?
-                Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    child: _buildDatePicker(
-                        AppLocalizations.text(LangKey.expectedEndingDate),
-                        _closingDueDateText, () {
+                showMoreInfoDeal
+                    ? Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: _buildDatePicker(
+                            AppLocalizations.text(LangKey.expectedEndingDate),
+                            _closingDueDateText, () {
                           FocusScope.of(context).unfocus();
-                      _showClosingDueDate();
-                    }))
-                : Container(),
-                
+                          _showClosingDueDate();
+                        }))
+                    : Container(),
 
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseCards),
@@ -767,7 +719,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             ),
           ),
 
-          MoreInfoCreatDeal( 
+          MoreInfoCreatDeal(
             branchData: branchData,
             detailDeal: detailDeal,
             bloc: _bloc,
@@ -895,8 +847,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     );
   }
 
-  Widget _buildDatePicker(
-      String? hintText, TextEditingController fillText, GestureTapCallback ontap) {
+  Widget _buildDatePicker(String? hintText, TextEditingController fillText,
+      GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
       child: TextField(
@@ -999,15 +951,18 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           warning: true);
     } else {
       DealConnection.showLoading(context);
-
-      // double amount = 0;
-      // if (detailDeal.product.length > 0) {
-      //   for (int i = 0; i < detailDeal.product.length; i++) {
-      //     amount +=
-      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
-      //   }
-      // }
-
+      if (_bloc.voucherModel != null) {
+        if (_bloc.voucherModel!.amount != null) {
+          _bloc.discountType = discountTypeCash;
+          _bloc.discountValue = _bloc.voucherModel!.amount;
+        } else if (_bloc.voucherModel!.percent != null) {
+          _bloc.discountType = discountTypePercent;
+          _bloc.discountValue = _bloc.voucherModel!.percent!.toDouble();
+        } else {
+          _bloc.discountType = discountTypeCode;
+          _bloc.discountValue = _bloc.voucherModel!.model!.discount;
+        }
+      }
       AddDealModelResponse? result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
@@ -1026,14 +981,42 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: Global.amount,
-              product: detailDeal.product,
-              discount: Global.discount));
+              amount: _bloc.amount,
+              product: _bloc.getListProductsRequest(),
+              otherFee: _bloc.surchargeModels
+                  .where((element) =>
+                      element.isSelected && element.controller.text.isNotEmpty)
+                  .toList()
+                  .map((e) {
+                double value = e.isMoney
+                    ? parseMoney(e.controller.text)
+                    : (int.tryParse(e.controller.text) ?? 0).toDouble();
+                double totalValue =
+                    e.isMoney ? value : value / 100 * _bloc.total;
+                return OrderFeeModel(
+                    otherFeeId: e.otherFeeId,
+                    otherFeeCode: e.otherFeeCode,
+                    otherFeeName: e.otherFeeName,
+                    otherFeeValue: value,
+                    feeType: e.isMoney
+                        ? otherFreeBranchTypeMoney
+                        : otherFreeBranchTypePercent,
+                    feeMoney: totalValue);
+              }).toList(),
+              total: _bloc.total,
+              totalOtherFee: _bloc.surcharge,
+              vatValue: _bloc.vatModel?.id,
+              vatDeal: _bloc.vatModel == null
+                  ? _bloc.vatDefault
+                  : _bloc.vatModel?.data,
+              amountBeforeVat: _bloc.amountBeforeTax,
+              discountMember: _bloc.discountMember,
+              discountType: _bloc.discountType,
+              discountValue: _bloc.discountValue,
+              discount: _bloc.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
-          // GlobalCart.shared.clearCart;
-          Global.amount = 0.0;
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
           if (result.data != null) {
@@ -1048,8 +1031,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     }
   }
 
-    Future<void> addDealLead() async {
-
+  Future<void> addDealLead() async {
     if (_dealNameText.text == "" ||
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
@@ -1060,16 +1042,19 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
     } else {
+      if (_bloc.voucherModel != null) {
+        if (_bloc.voucherModel!.amount != null) {
+          _bloc.discountType = discountTypeCash;
+          _bloc.discountValue = _bloc.voucherModel!.amount;
+        } else if (_bloc.voucherModel!.percent != null) {
+          _bloc.discountType = discountTypePercent;
+          _bloc.discountValue = _bloc.voucherModel!.percent!.toDouble();
+        } else {
+          _bloc.discountType = discountTypeCode;
+          _bloc.discountValue = _bloc.voucherModel!.model!.discount;
+        }
+      }
       DealConnection.showLoading(context);
-
-      // double amount = 0;
-      // if (detailDeal.product.length > 0) {
-      //   for (int i = 0; i < detailDeal.product.length; i++) {
-      //     amount +=
-      //         detailDeal.product[i].amount * detailDeal.product[i].quantity;
-      //   }
-      // }
-
       AddDealModelResponse? result = await DealConnection.addDeal(
           context,
           AddDealModelRequest(
@@ -1088,9 +1073,39 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: Global.amount,
-              product: detailDeal.product,
-              discount: Global.discount));
+              amount: _bloc.amount,
+              product: _bloc.getListProductsRequest(),
+              otherFee: _bloc.surchargeModels
+                  .where((element) =>
+                      element.isSelected && element.controller.text.isNotEmpty)
+                  .toList()
+                  .map((e) {
+                double value = e.isMoney
+                    ? parseMoney(e.controller.text)
+                    : (int.tryParse(e.controller.text) ?? 0).toDouble();
+                double totalValue =
+                    e.isMoney ? value : value / 100 * _bloc.total;
+                return OrderFeeModel(
+                    otherFeeId: e.otherFeeId,
+                    otherFeeCode: e.otherFeeCode,
+                    otherFeeName: e.otherFeeName,
+                    otherFeeValue: value,
+                    feeType: e.isMoney
+                        ? otherFreeBranchTypeMoney
+                        : otherFreeBranchTypePercent,
+                    feeMoney: totalValue);
+              }).toList(),
+              total: _bloc.total,
+              totalOtherFee: _bloc.surcharge,
+              vatValue: _bloc.vatModel?.id,
+              vatDeal: _bloc.vatModel == null
+                  ? _bloc.vatDefault
+                  : _bloc.vatModel?.data,
+              amountBeforeVat: _bloc.amountBeforeTax,
+              discountMember: _bloc.discountMember,
+              discountType: _bloc.discountType,
+              discountValue: _bloc.discountValue,
+              discount: _bloc.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {

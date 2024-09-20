@@ -276,3 +276,10 @@ const String vatPriceConfigInclude = "include";
 const String vatPriceConfigNonInclude = "non-include";
 
 const String NULL_VALUE = '--:--';
+
+//deal detail
+const String dealConfigOrder = "order";
+const String dealConfigNote = "note";
+const String dealConfigFile = "file";
+const String dealConfigCustomerCare = "care";
+const String dealConfigProduct = "product";

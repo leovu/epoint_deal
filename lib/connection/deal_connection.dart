@@ -52,6 +52,8 @@ import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_mod
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
+import 'package:epoint_deal_plugin/widget/custom_button.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -277,7 +279,7 @@ class DealConnection {
     return null;
   }
 
-    static Future<DescriptionModelResponse?> assignRevokeLead(
+    static Future<DescriptionModelResponse?> assignRevokeDeal(
       BuildContext context, AssignRevokeDealModelRequest model) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
@@ -689,20 +691,28 @@ class DealConnection {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    child: Center(
-                        child: Text(
-                      AppLocalizations.text(LangKey.no)!,
-                      style: TextStyle(color: Color(0xFF0067AC)),
-                    )),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+                  Flexible(
+                    child: CustomButton(
+                      backgroundColor: AppColors.primaryColor,
+                      child: Center(
+                          child: Text(
+                        AppLocalizations.text(LangKey.no)!,
+                        style: TextStyle(color: AppColors.white),
+                      )),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   ),
-                  TextButton(
-                    child:
-                        Center(child: Text(AppLocalizations.text(LangKey.yes)!)),
-                    onPressed: ontap,
+                  Gaps.hGap10,
+                  Flexible(
+                    child: CustomButton(
+                      backgroundColor: AppColors.white,
+                      borderColor: AppColors.darkGrey,
+                      child:
+                          Center(child: Text(AppLocalizations.text(LangKey.yes)!, style: TextStyle(color: AppColors.primaryColor))),
+                      onTap: ontap,
+                    ),
                   ),
                 ],
               ),

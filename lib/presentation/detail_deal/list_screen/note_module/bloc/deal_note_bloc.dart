@@ -18,12 +18,12 @@ class DealNoteBloc extends BaseBloc {
   }
   late DetailDealData model;
 
-  onAdd(Function? onReload) async {
-    bool? event = await CustomNavigator.showCustomBottomDialog(context!, CreateNoteScreen(
-      model: model,
-    ));
-    if (event == null || event){
-      onReload?.call();
-    }
-  }
+  // onAdd(Function? onReload) async {
+  //   bool? event = await CustomNavigator.showCustomBottomDialog(context!, CreateNoteScreen(
+  //     model: model,
+  //   ));
+  //   if (event == null || event){
+  //     onReload?.call();
+  //   }
+  // }
 }

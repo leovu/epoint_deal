@@ -39,9 +39,11 @@ class ListNoteScreenState extends State<ListNoteScreen> {
     _options = [
       CustomOptionAppBar(
           icon: Assets.iconPlus,
-          onTap: _bloc.onAdd(() {
+          onTap:() {
+             widget.bloc.onAddNote(() {
             widget.bloc.getListNote(context);
-          }))
+          });
+          })
     ];
 
     WidgetsBinding.instance
@@ -78,7 +80,7 @@ class ListNoteScreenState extends State<ListNoteScreen> {
 
   Widget _buildContent() {
     return StreamBuilder(
-        stream: widget.bloc.outputCareDeal,
+        stream: widget.bloc.outputListNote,
         initialData: null,
         builder: (_, snapshot) {
           List<NoteData>? models = snapshot.data as List<NoteData>?;
@@ -91,7 +93,7 @@ class ListNoteScreenState extends State<ListNoteScreen> {
               bodyBuilder: () => _buildContainer(models!
                   .map((e) => noteItem(
                         e,
-                        models.indexOf(e) + 1,
+                        models.indexOf(e),
                       ))
                   .toList()));
         });
@@ -104,40 +106,44 @@ class ListNoteScreenState extends State<ListNoteScreen> {
       name = model.createdByName ?? "";
       date = model.createdAt ?? "";
     }
-    return Column(
-      children: [
-        Text(
-          model.content ?? "",
-          style: AppTextStyles.style14BlackNormal,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+    return CustomContainerList(
+      child: Padding(
+        padding: EdgeInsets.all(AppSizes.minPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-                child: CustomListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
+            Text(
+              model.content ?? "",
+              style: AppTextStyles.style14BlackWeight600,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  name ?? "",
-                  style: AppTextStyles.style14HintNormal,
-                ),
-                Text(
-                  parseAndFormatDate(date, format: AppFormat.formatDateTime),
-                  style: AppTextStyles.style14HintNormal,
-                ),
+                Expanded(
+                    child: CustomListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  children: [
+                    Text(
+                      name ?? "",
+                      style: AppTextStyles.style14HintNormal,
+                    ),
+                    Text(
+                      parseAndFormatDate(date, format: AppFormat.formatDateTime),
+                      style: AppTextStyles.style14HintNormal,
+                    ),
+                  ],
+                )),
+                SizedBox(
+                    width: AppSizes.minPadding,
+                  ),
+                  CustomIndex(index: index)
               ],
-            )),
-            if (index != 0) ...[
-              SizedBox(
-                width: AppSizes.minPadding,
-              ),
-              CustomIndex(index: index)
-            ]
+            ),
           ],
         ),
-      ],
+      ),
     );
   }
 

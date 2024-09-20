@@ -92,8 +92,8 @@ class CustomChip extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: isExpand?MainAxisSize.max:MainAxisSize.min,
               children: [
-                icon == null?Container():iconAsset?ImageIcon(
-                  AssetImage(icon!),
+                icon == null?Container():iconAsset?CustomImageIcon(
+                  icon:icon!,
                   size: iconSize,
                   color: AppColors.white,
                 ):CustomNetworkImage(

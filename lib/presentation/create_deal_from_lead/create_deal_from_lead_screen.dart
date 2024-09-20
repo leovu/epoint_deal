@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:epoint_deal_plugin/common/assets.dart';
+import 'package:epoint_deal_plugin/common/constant.dart';
+import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -22,12 +24,15 @@ import 'package:epoint_deal_plugin/model/response/journey_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_customer_lead_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
+import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal_from_lead/more_info_create_deal_from_lead.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
 import 'package:epoint_deal_plugin/presentation/multi_staff_screen_potentail/ui/multi_staff_screen.dart';
+import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -38,7 +43,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealFromLeadScreen extends StatefulWidget {
-  Map<String, dynamic>? jsonDetailLead;
+  final Map<String, dynamic>? jsonDetailLead;
   CreateDealFromLeadScreen({Key? key, this.jsonDetailLead}) : super(key: key);
 
   @override
@@ -48,6 +53,7 @@ class CreateDealFromLeadScreen extends StatefulWidget {
 
 class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
     with WidgetsBindingObserver {
+  late CreateDealBloc _bloc;
   var _isKeyboardVisible = false;
 
   ScrollController _controller = ScrollController();
@@ -170,14 +176,12 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
   @override
   void initState() {
     super.initState();
+    Globals.cart = GlobalCart();
+    _bloc = CreateDealBloc(context);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
-
-      // DetailPotentialModelResponse dataDetail =
-      //         await LeadConnection.getdetailPotential(
-      //             context, widget.customer_lead_code);
-
+      _bloc.onRefresh(isRefresh: false, isInit: true);
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
@@ -206,11 +210,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
   void bindingData() async {
     detailLead = DetailPotentialData.fromJson(widget.jsonDetailLead!);
-
     detailDeal.phone = detailLead!.phone ?? "";
-
    _dealNameText.text = "Deal của ${detailLead?.fullName ?? ""}";
-
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((detailLead?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
@@ -231,35 +232,11 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
     try {
       var item = _modelStaff.firstWhere(
           (element) => element.staffId == (detailLead?.saleId ?? 0));
-      if (item != null) {
         item.isSelected = true;
         detailDeal.saleId = _modelStaffSelected[0].staffId;
-      }
     } catch (e) {}
 
     detailDeal.saleId = _modelStaffSelected[0].staffId;
-
-    // if (detailLead!.tag!.length > 0 && tagsData != null) {
-    //   List<int?> tagInt = [];
-    //   for (var tag in tagsData!) {
-    //     for (TagData tagLead in detailLead!.tag!) {
-    //       if (tag.tagId == tagLead.tagId) {
-    //         tagInt.add(tag.tagId);
-    //         tag.selected = true;
-    //         tagsSelected?.add(tag);
-    //       }
-    //     }
-    //   }
-    //   for (int i = 0; i < tagsSelected.length; i++) {
-    //     if (tagsString == "") {
-    //       tagsString = tagsSelected[i].name ?? "";
-    //     } else {
-    //       tagsString += ", ${tagsSelected[i].name}";
-    //     }
-    //   }
-
-    //   detailDeal.tag = tagInt;
-    // }
     Navigator.of(context).pop();
     setState(() {});
   }
@@ -280,7 +257,6 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
-            // leadingWidth: 20.0,
           ),
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),
@@ -488,7 +464,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 )
               : Container(),
 
-// nhập tên deal
+      // nhập tên deal
           _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
               Assets.iconDealName, true, false, true,
               fillText: _dealNameText,
@@ -760,6 +736,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
             orderSourceSelected: orderSourceSelected,
             // tagsData: tagsData,
             tagsString: tagsString,
+            bloc: _bloc,
           )
         ]),
       )
@@ -970,12 +947,16 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
           warning: true);
     } else {
       DealConnection.showLoading(context);
-
-      double amount = 0;
-      if (detailDeal.product!.length > 0) {
-        for (int i = 0; i < detailDeal.product!.length; i++) {
-          amount +=
-              detailDeal.product![i].amount! * detailDeal.product![i].quantity!;
+      if (_bloc.voucherModel != null) {
+        if (_bloc.voucherModel!.amount != null) {
+          _bloc.discountType = discountTypeCash;
+          _bloc.discountValue = _bloc.voucherModel!.amount;
+        } else if (_bloc.voucherModel!.percent != null) {
+          _bloc.discountType = discountTypePercent;
+          _bloc.discountValue = _bloc.voucherModel!.percent!.toDouble();
+        } else {
+          _bloc.discountType = discountTypeCode;
+          _bloc.discountValue = _bloc.voucherModel!.model!.discount;
         }
       }
       AddDealModelResponse? result = await DealConnection.addDeal(
@@ -996,8 +977,39 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
-              amount: amount,
-              product: detailDeal.product));
+              amount: _bloc.amount,
+              product: _bloc.getListProductsRequest(),
+              otherFee: _bloc.surchargeModels
+                  .where((element) =>
+                      element.isSelected && element.controller.text.isNotEmpty)
+                  .toList()
+                  .map((e) {
+                double value = e.isMoney
+                    ? parseMoney(e.controller.text)
+                    : (int.tryParse(e.controller.text) ?? 0).toDouble();
+                double totalValue =
+                    e.isMoney ? value : value / 100 * _bloc.total;
+                return OrderFeeModel(
+                    otherFeeId: e.otherFeeId,
+                    otherFeeCode: e.otherFeeCode,
+                    otherFeeName: e.otherFeeName,
+                    otherFeeValue: value,
+                    feeType: e.isMoney
+                        ? otherFreeBranchTypeMoney
+                        : otherFreeBranchTypePercent,
+                    feeMoney: totalValue);
+              }).toList(),
+              total: _bloc.total,
+              totalOtherFee: _bloc.surcharge,
+              vatValue: _bloc.vatModel?.id,
+              vatDeal: _bloc.vatModel == null
+                  ? _bloc.vatDefault
+                  : _bloc.vatModel?.data,
+              amountBeforeVat: _bloc.amountBeforeTax,
+              discountMember: _bloc.discountMember,
+              discountType: _bloc.discountType,
+              discountValue: _bloc.discountValue,
+              discount: _bloc.discount));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {

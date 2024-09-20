@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -6,24 +7,29 @@ import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
+import 'package:epoint_deal_plugin/model/request/assign_revoke_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart';
+import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
+import 'package:epoint_deal_plugin/model/response/list_deal_file_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/list_note_res_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/detail_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/chat_screen.dart/chat_screen.dart';
+import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_screen.dart';
+import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/container_data_builder.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_info_item.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
 class DetailDealScreen extends StatefulWidget {
@@ -100,9 +106,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         detail = dataDetail.data;
         _bloc.detail = detail;
         _bloc.setModel(detail);
+        _bloc.setListProductBuy(detail!.productBuy ?? []);
         _bloc.getCareDeal(context);
         _bloc.getListNote(context);
         _bloc.getOrderHistory(context);
+        _bloc.getListFile(context);
 
         // selectedTab(index);
         setState(() {});
@@ -111,6 +119,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         Navigator.of(context).pop();
       }
     }
+  }
+
+  String getNameFromPath(String path) {
+    String event = path ?? "";
+    return event.contains("/") ? event.split("/").last : event;
   }
 
   @override
@@ -126,8 +139,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                    bottom: AppSizes.maxHeight * 0.1 +
-                        (index == 0 ? 0 : AppSizes.bottomHeight!)),
+                    bottom: AppSizes.maxHeight * 0.1),
                 child: Column(
                   children: [
                     buildListOption(),
@@ -144,8 +156,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                    height: AppSizes.maxHeight * 0.11 +
-                        (index == 0 ? 0 : AppSizes.bottomHeight!),
+                    height: AppSizes.maxHeight * 0.1,
                     child: (index == 0)
                         ? _listButtonRelevant()
                         : _listButtonInfo()),
@@ -221,127 +232,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return [(index == 0) ? listInfomationRelevant() : infomation()];
   }
 
-  // // thông tin chi tiết
-  // Widget detailInformation() {
-  //   return Container(
-  //     padding: const EdgeInsets.all(8.0),
-  //     margin: EdgeInsets.only(bottom: 20.0),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         // Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.customerVi)!,
-  //           ((detail?.customerName == null || detail?.customerName == "")
-  //               ? "N/A"
-  //               : detail?.customerName!)!,
-  //         ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.allottedPerson)!,
-  //           ((detail?.staffName == null || detail?.staffName == "")
-  //               ? "N/A"
-  //               : detail?.staffName!)!,
-  //         ),
-  //         // Divider(),
-  //         // _infoDetailItem(
-  //         //   AppLocalizations.text(LangKey.product),
-  //         //   detail?.productNameBuy ?? "N/A",
-  //         // ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.expectedEndingDate)!,
-  //           ((detail?.closingDate == null || detail?.closingDate == "")
-  //               ? "N/A"
-  //               : detail?.closingDate!)!,
-  //         ),
-  //         // Divider(),
-  //         // _infoDetailItem(
-  //         //   AppLocalizations.text(LangKey.actualEndDate),
-  //         //   detail?.closingDueDate ?? "N/A",
-  //         // ),
-  //         // Divider(),
-  //         // _infoDetailItem(
-  //         //   AppLocalizations.text(LangKey.reasonForFailure),
-  //         //   detail?.reasonLoseCode ?? "N/A",
-  //         // ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.agency)!,
-  //           ((detail?.branchName == null || detail?.branchName == "")
-  //               ? "N/A"
-  //               : detail?.branchName!)!,
-  //         ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.orderSource)!,
-  //           ((detail?.orderSourceName == null || detail?.orderSourceName == "")
-  //               ? "N/A"
-  //               : detail?.orderSourceName!)!,
-  //         ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.probability)!,
-  //           "${detail?.probability ?? 0} %",
-  //         ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.dealDetail)!,
-  //           ((detail?.dealDescription == null || detail?.dealDescription == "")
-  //               ? "N/A"
-  //               : detail?.dealDescription!)!,
-  //         ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.dateCreated)!,
-  //           ((detail?.createdAt == null || detail?.createdAt == "")
-  //               ? "N/A"
-  //               : detail?.createdAt!)!,
-  //         ),
-  //         Divider(),
-  //         _infoDetailItem(
-  //           AppLocalizations.text(LangKey.lastModifiedDate)!,
-  //           ((detail?.updatedAt == null || detail?.updatedAt == "")
-  //               ? "N/A"
-  //               : detail?.updatedAt!)!,
-  //         ),
-  //         Divider(),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _infoDetailItem(String title, String content, {TextStyle? style}) {
-    return Container(
-      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-      margin: EdgeInsets.only(left: 15.0 / 2),
-      child: Row(
-        children: [
-          Container(
-            width: (MediaQuery.of(context).size.width) / 2,
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 8.0),
-                  child: Text(
-                    title,
-                    style: AppTextStyles.style15BlackNormal,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-              child: Text(
-            content,
-            style: style ?? AppTextStyles.style15BlackNormal,
-            // maxLines: 1,
-          )),
-        ],
-      ),
-    );
-  }
-
   Widget infomation() {
     return Container(
       padding: EdgeInsets.all(8.0),
@@ -356,6 +246,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
+            icon: Assets.iconDeal,
+            title:
+                "${AppLocalizations.text(LangKey.dealCode)} : ${detail?.dealCode ?? NULL_VALUE}",
+          ),
+          Gaps.vGap4,
+          CustomRowImageContentWidget(
             icon: Assets.iconPerson,
             title:
                 "${AppLocalizations.text(LangKey.allottedPerson)} : ${detail?.staffName ?? NULL_VALUE}",
@@ -367,7 +263,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
-            icon: Assets.iconDeal,
+            icon: Assets.iconStyleCustomer,
             title: detail!.dealName ?? NULL_VALUE,
           ),
           Gaps.vGap4,
@@ -423,13 +319,13 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
-            icon: Assets.iconProbability,
+            icon: Assets.iconProjectName,
             title:
                 "Doanh thu kỳ vọng: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
-            icon: Assets.iconProbability,
+            icon: Assets.iconMoneySquare,
             title: "Số tiền: ${detail!.probability ?? NULL_VALUE}",
           ),
           Gaps.vGap4,
@@ -520,55 +416,70 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         initialData: null,
         builder: (_, snapshot) {
           DetailDealData? model = snapshot.data as DetailDealData?;
-
-          if (model != null && _bloc.children == null) {
-             _bloc.children = [];
-            _bloc.children!.add(_buildLisNote());
-          _bloc.children!.add(SizedBox(height: AppSizes.minPadding / 2));
-          _bloc.children!.add(_buildListCustomerCare());
-          _bloc.children!.add(SizedBox(height: AppSizes.minPadding / 2));
-          _bloc.children!.add(_buildListOrderHistory());
-          }
-
-          return Column(
-            children: [
-              if (_bloc.children != null) ..._bloc.children!,
-            ],
-          );
-
-          // return ContainerDataBuilder(
-          //   data: model,
-          //   skeletonBuilder: _buildSkeleton(),
-          //   bodyBuilder: () {
-          //     if (_bloc.children == null && model!.tabConfigs != null) {
-          //         _bloc.children = [];
-          //       for (var e in model.tabConfigs!) {
-          //         switch (e.code) {
-          //           case leadConfigDeal:
-          //             _bloc.children!.add(_buildListDeal(e));
-          //             _bloc.children!.add(SizedBox(height: AppSizes.minPadding/2));
-          //             break;
-          //           case leadConfigCustomerCare:
-          //             _bloc.children!.add(_buildListCustomerCare(e));
-          //             _bloc.children!.add(SizedBox(height: AppSizes.minPadding/2));
-          //             break;
-          //           case leadConfigContact:
-          //             _bloc.children!.add(_buildListContact(e));
-          //             break;
-          //         }
-          //       }
-          //     }
-          //     return Column(
-          //       children: [
-          //         if (_bloc.children != null) ..._bloc.children!,
-          //       ],
-          //     );
-          //   },
-          // );
+          return (model != null)
+              ? Container(
+                  child: ContainerDataBuilder(
+                    data: model,
+                    skeletonBuilder: _buildSkeleton(),
+                    bodyBuilder: () {
+                      if (_bloc.children == null && model!.tabConfigs != null) {
+                        _bloc.children = [];
+                        for (var e in model.tabConfigs!) {
+                          switch (e.code) {
+                            case dealConfigOrder:
+                              _bloc.children!.add(_buildListOrderHistory(e));
+                              _bloc.children!.add(
+                                  SizedBox(height: AppSizes.minPadding / 2));
+                              break;
+                            case dealConfigCustomerCare:
+                              _bloc.children!.add(_buildListCustomerCare(e));
+                              _bloc.children!.add(
+                                  SizedBox(height: AppSizes.minPadding / 2));
+                              break;
+                            case dealConfigNote:
+                              _bloc.children!.add(_buildLisNote(e));
+                              _bloc.children!.add(
+                                  SizedBox(height: AppSizes.minPadding / 2));
+                              break;
+                            case dealConfigFile:
+                              _bloc.children!.add(_buildListDealFile(e));
+                              _bloc.children!.add(
+                                  SizedBox(height: AppSizes.minPadding / 2));
+                              break;
+                            case dealConfigProduct:
+                              _bloc.children!.add(_buildListProduct(e));
+                              _bloc.children!.add(
+                                  SizedBox(height: AppSizes.minPadding / 2));
+                              break;
+                          }
+                        }
+                      }
+                      return Column(
+                        children: [
+                          if (_bloc.children != null) ..._bloc.children!,
+                        ],
+                      );
+                    },
+                  ),
+                )
+              : Container();
         });
   }
 
-  Widget _buildLisNote() {
+  Widget _buildSkeleton() {
+    return LoadingWidget(
+        padding: EdgeInsets.zero,
+        child: CustomListView(
+          children: List.generate(
+              3,
+              (index) => CustomSkeleton(
+                    height: 60,
+                    radius: 4.0,
+                  )),
+        ));
+  }
+
+  Widget _buildLisNote(CustomerDetailConfigModel e) {
     return StreamBuilder(
         stream: _bloc.outputExpandListNote,
         initialData: _bloc.expandListNote,
@@ -582,14 +493,19 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 return CustomComboBox(
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandListNote = event),
-                  title: "Ghi chú",
+                  title: e.tabNameVi ?? "Ghi chú",
                   isExpand: _bloc.expandListNote,
-                  // onTapList: _bloc.onTapListDeal,
-                  onTapPlus: () => print("onTapPlus"),
+                  onTapList: _bloc.onTapListNote,
+                  onTapPlus: () {
+                    _bloc.onAddNote(() {
+                      _bloc.getListNote(context);
+                    });
+                  },
                   quantity: _bloc.listNoteData.length,
                   child: CustomListView(
-                    padding: EdgeInsets.only(
-                        top: AppSizes.minPadding, bottom: AppSizes.minPadding),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding / 2,
+                        vertical: AppSizes.minPadding / 2),
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: List.generate(
@@ -604,7 +520,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         });
   }
 
-  Widget _buildListCustomerCare() {
+  Widget _buildListCustomerCare(CustomerDetailConfigModel e) {
     return StreamBuilder(
         stream: _bloc.outputExpandCareDeal,
         initialData: _bloc.expandCareDeal,
@@ -618,11 +534,18 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 return CustomComboBox(
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandCareDeal = event),
-                  onTapPlus: () => print("onTapPlus"),
-                  // onTapList: _bloc.onTapListCustomerCare,
-                  title: "Chăm sóc khách hàng",
+                  onTapPlus: () async {
+                    if (Global.createJob != null) {
+                      var result = await Global.createJob!(_bloc.detail!.toJson());
+                      if (result != null) {
+                        getData();
+                      }
+                    }
+                  },
+                  onTapList: _bloc.onTapListCustomerCare,
+                  title: e.tabNameVi ?? "Chăm sóc khách hàng",
                   isExpand: _bloc.expandCareDeal,
-                  quantity:_bloc.listCareDeal.length,
+                  quantity: _bloc.listCareDeal.length,
                   child: CustomListView(
                     padding: EdgeInsets.only(
                         top: AppSizes.minPadding, bottom: AppSizes.minPadding),
@@ -637,33 +560,115 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         });
   }
 
-  Widget _buildListOrderHistory() {
+  Widget _buildListOrderHistory(CustomerDetailConfigModel e) {
     return StreamBuilder(
         stream: _bloc.outputExpandOrderHistory,
         initialData: _bloc.expandOrderHistory,
         builder: (_, snapshot) {
           _bloc.expandOrderHistory = snapshot.data as bool;
           return StreamBuilder(
-              stream: _bloc.outputOrderHistory,
+              stream: _bloc.outputListOrderHistory,
               initialData: _bloc.listOrderHistory,
               builder: (context, snapshot) {
                 _bloc.listOrderHistory =
                     snapshot.data as List<OrderHistoryData>;
                 return CustomComboBox(
+                  isShowPlus:_bloc.listOrderHistory.length == 0,
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandOrderHistory = event),
                   onTapPlus: () => print("onTapPlus"),
-                  // onTapList: _bloc.onTapListOrderHistory,
-                  title: "Lịch sử đơn hàng",
+                  onTapList: _bloc.onTapListOrDerHistory,
+                  title: e.tabNameVi ?? "Lịch sử đơn hàng",
                   isExpand: _bloc.expandOrderHistory,
                   quantity: _bloc.listOrderHistory.length,
                   child: CustomListView(
-                    padding: EdgeInsets.only(
-                        top: AppSizes.minPadding, bottom: AppSizes.minPadding),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding / 2,
+                        vertical: AppSizes.minPadding / 2),
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    children: _bloc.listOrderHistory!
+                    children: _bloc.listOrderHistory
                         .map((e) => orderHistoryItem(e))
+                        .toList(),
+                  ),
+                );
+              });
+        });
+  }
+
+  Widget _buildListDealFile(CustomerDetailConfigModel e) {
+    return StreamBuilder(
+        stream: _bloc.outputExpandListFile,
+        initialData: _bloc.expandListFile,
+        builder: (_, snapshot) {
+          _bloc.expandListFile = snapshot.data as bool;
+          return StreamBuilder(
+              stream: _bloc.outputDealsFile,
+              initialData: _bloc.listDealFiles,
+              builder: (context, snapshot) {
+                _bloc.listDealFiles = snapshot.data as List<DealFilesModel>;
+                return CustomComboBox(
+                  onChanged: (event) =>
+                      _bloc.onSetExpand(() => _bloc.expandListFile = event),
+                  onTapPlus: () {
+                    _bloc.onAddFile();
+                  },
+                  onTapList: () {
+                    _bloc.onTapListFile();
+                  },
+                  title: e.tabNameVi ?? "Tập tin",
+                  isExpand: _bloc.expandListFile,
+                  quantity: _bloc.listDealFiles.length,
+                  child: CustomListView(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding / 2,
+                        vertical: AppSizes.minPadding / 2),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: _bloc.listDealFiles
+                        .map(
+                            (e) => _fileItem(e, _bloc.listDealFiles.indexOf(e)))
+                        .toList(),
+                  ),
+                );
+              });
+        });
+  }
+
+  Widget _buildListProduct(CustomerDetailConfigModel e) {
+    return StreamBuilder(
+        stream: _bloc.outputExpandListProduct,
+        initialData: _bloc.expandListProduct,
+        builder: (_, snapshot) {
+          _bloc.expandListProduct = snapshot.data as bool;
+          return StreamBuilder(
+              stream: _bloc.outputListProductBuy,
+              initialData: null,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return Container();
+                }
+                List<ProductBuy> _listProduct =
+                    snapshot.data as List<ProductBuy>;
+                return CustomComboBox(
+                  isShowPlus: false,
+                  onChanged: (event) =>
+                      _bloc.onSetExpand(() => _bloc.expandListProduct = event),
+                  onTapPlus: () {},
+                  onTapList: () {
+                    _bloc.onTapListProduct();
+                  },
+                  title: e.tabNameVi ?? "Sản phẩm",
+                  isExpand: _bloc.expandListProduct,
+                  quantity: _listProduct.length,
+                  child: CustomListView(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding / 2,
+                        vertical: AppSizes.minPadding / 2),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: _listProduct
+                        .map((e) => _productItem(e, _listProduct.indexOf(e)))
                         .toList(),
                   ),
                 );
@@ -710,83 +715,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             ]));
   }
 
-  Widget infoProductBuy() {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          margin: EdgeInsets.only(bottom: 8.0),
-          child: (detail!.productBuy != null && detail!.productBuy!.length > 0)
-              ? Column(
-                  children: detail!.productBuy!
-                      .map((e) => infoProductButyItem(e))
-                      .toList())
-              : Center(child: CustomDataNotFound()),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.text(LangKey.discount)!,
-                  style: TextStyle(
-                      fontSize: AppTextSizes.size14,
-                      color: AppColors.bluePrimary,
-                      fontWeight: FontWeight.bold)),
-              Text(
-                  AppFormat.moneyFormatDot.format(detail!.discount ?? 0) +
-                      " VND",
-                  style: TextStyle(
-                      fontSize: AppTextSizes.size14,
-                      color: AppColors.bluePrimary,
-                      fontWeight: FontWeight.w500))
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget infoProductButyItem(ProductBuy item) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: RichText(
-                  text: TextSpan(
-                      text: "${item.quantity ?? 0}x ",
-                      style: TextStyle(
-                          fontSize: AppTextSizes.size15,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.normal),
-                      children: [
-                    TextSpan(
-                        text: item.objectName ?? "N/A",
-                        style: TextStyle(color: Colors.black))
-                  ])),
-            ),
-            Text(
-              AppFormat.moneyFormatDot.format(item.amount ?? 0) + " VND",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold),
-              // maxLines: 1,
-            )
-          ],
-        ),
-        (item != detail!.productBuy!.last)
-            ? Divider(
-                color: Colors.black,
-              )
-            : Container()
-      ],
-    );
-  }
-
   Widget _tagDetail(TagData item) {
     return Container(
       padding: EdgeInsets.only(left: 4.0, right: 4.0),
@@ -814,37 +742,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget infoItem(String icon, String title) {
-    return Container(
-      padding: const EdgeInsets.only(left: 8, bottom: 8.0),
-      margin: EdgeInsets.only(bottom: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 5.0),
-            height: 15.0,
-            width: 15.0,
-            child: Image.asset(icon),
-          ),
-          Expanded(
-            child: Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 4,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.normal),
-              // maxLines: 1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget customerCare() {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -862,11 +759,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       onTap: () async {
         if (Global.editJob != null) {
           var result = await Global.editJob!(item.manageWorkId);
-          if (result != null && result) {
+          if (result != null) {
             allowPop = true;
-            reloadCSKH = true;
             await getData();
-            selectedTab(1);
           }
         }
       },
@@ -977,7 +872,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 width: 5.0,
                               ),
                               Text(
-                                item.manageTypeWorkName ?? "N/A",
+                                item.manageTypeWorkName ?? NULL_VALUE,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: AppColors.primaryColor,
@@ -1066,7 +961,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         child: Row(
                           children: [
                             CustomAvatarWithURL(
-                              name: item.staffFullName ?? "N/A",
+                              name: item.staffFullName ?? NULL_VALUE,
                               url: item.staffAvatar ?? "",
                               size: 50.0,
                             ),
@@ -1078,7 +973,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item.staffFullName ?? "N/A",
+                                  item.staffFullName ?? NULL_VALUE,
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: AppColors.primaryColor,
@@ -1150,54 +1045,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color,
-      {required num number, GestureTapCallback? ontap}) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-          margin: EdgeInsets.only(left: 8.0),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                height: 45,
-                width: 45,
-                decoration: BoxDecoration(
-                    color: color, borderRadius: BorderRadius.circular(1000.0)),
-                child: Center(
-                  child: Image.asset(
-                    icon,
-                    scale: 2.5,
-                  ),
-                ),
-              ),
-              (number > 0)
-                  ? Positioned(
-                      left: 30,
-                      bottom: 30,
-                      child: Container(
-                        width: (number > 99)
-                            ? 30
-                            : (number > 9)
-                                ? 25
-                                : 22,
-                        height: 20,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Color(0xFFF45E38)),
-                        child: Center(
-                            child: Text((number > 9) ? "9+" : "${number ?? 0}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600))),
-                      ))
-                  : Container()
-            ],
-          )),
-    );
-  }
-
   Widget orderHistory() {
     return Container(
       margin: EdgeInsets.only(bottom: 20, left: 8.0, right: 8.0),
@@ -1215,40 +1062,225 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       name = model.createdByName ?? "";
       date = model.createdAt ?? "";
     }
-    return Column(
-      children: [
-        Text(
-          model.content ?? "",
-          style: AppTextStyles.style14BlackNormal,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+    return CustomContainerList(
+      child: Padding(
+        padding: EdgeInsets.all(AppSizes.minPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-                child: CustomListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
+            Text(
+              model.content ?? "",
+              style: AppTextStyles.style14BlackWeight600,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  name ?? "",
-                  style: AppTextStyles.style14HintNormal,
+                Expanded(
+                    child: CustomListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  children: [
+                    Text(
+                      name ?? "",
+                      style: AppTextStyles.style14HintNormal,
+                    ),
+                    Text(
+                      parseAndFormatDate(date,
+                          format: AppFormat.formatDateTime),
+                      style: AppTextStyles.style14HintNormal,
+                    ),
+                  ],
+                )),
+                SizedBox(
+                  width: AppSizes.minPadding,
                 ),
-                Text(
-                  parseAndFormatDate(date, format: AppFormat.formatDateTime),
-                  style: AppTextStyles.style14HintNormal,
-                ),
+                CustomIndex(index: index)
               ],
-            )),
-            if (index != 0) ...[
-              SizedBox(
-                width: AppSizes.minPadding,
-              ),
-              CustomIndex(index: index)
-            ]
+            ),
           ],
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _fileItem(DealFilesModel model, int index) {
+    String? name, date;
+
+    if (model.createdBy != null) {
+      name = model.createdBy ?? "";
+      date = model.createdAt ?? "";
+    }
+    return GestureDetector(
+      onTap: () {
+        _bloc.onOpenFile(model.fileName ?? "", model.path);
+      },
+      child: CustomContainerList(
+        child: Padding(
+          padding: EdgeInsets.all(AppSizes.minPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          pathToImage(model.path!)!,
+                          width: 24,
+                        ),
+                        Container(
+                          width: 5.0,
+                        ),
+                        Container(
+                          child: AutoSizeText(
+                            model.fileName!,
+                            style: AppTextStyles.style14BlackNormal,
+                            minFontSize: 1,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Text(
+                model.content ?? "",
+                style: AppTextStyles.style14BlackWeight600,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                      child: CustomListView(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    children: [
+                      Text(
+                        name ?? "",
+                        style: AppTextStyles.style14HintNormal,
+                      ),
+                      Text(
+                        parseAndFormatDate(date,
+                            format: AppFormat.formatDateTime),
+                        style: AppTextStyles.style14HintNormal,
+                      ),
+                    ],
+                  )),
+                  SizedBox(
+                    width: AppSizes.minPadding,
+                  ),
+                  CustomIndex(index: index)
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _productItem(ProductBuy model, int index) {
+    return Container(
+      padding: EdgeInsets.all(AppSizes.minPadding),
+      decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16.0),
+          boxShadow: [
+            BoxShadow(
+                color: AppColors.black.withOpacity(0.1),
+                blurRadius: 10.0,
+                offset: Offset(0, 2))
+          ],
+          border: Border.all(color: AppColors.grey100)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    CustomRowImageContentWidget(
+                      paddingBottom: 8.0,
+                      icon: Assets.iconDeal,
+                      title: model.objectCode ?? NULL_VALUE,
+                      titleStyle: AppTextStyles.style14PrimaryBold,
+                    ),
+                    CustomRowImageContentWidget(
+                      paddingBottom: 0.0,
+                      icon: Assets.iconTag,
+                      title: formatMoney(model.amount!.toDouble()),
+                      titleStyle: AppTextStyles.style14PrimaryBold,
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(16.0)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSizes.minPadding * 1.5,
+                    vertical: AppSizes.minPadding / 2),
+                child:
+                    Text("${index + 1}", style: AppTextStyles.style14WhiteBold),
+              )
+            ],
+          ),
+          Gaps.vGap8,
+          Text(
+            model.objectName ?? NULL_VALUE,
+            textAlign: TextAlign.start,
+            style: AppTextStyles.style12BlackNormal,
+            // maxLines: 1,
+          ),
+          Gaps.vGap8,
+          CustomRowInformation(
+            title: formatMoney(model.price!.toDouble()),
+            content: "${model.quantity}x",
+          ),
+          Gaps.vGap8,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: CustomRowImageContentWidget(
+                  icon: Assets.iconTag,
+                  iconColor: Colors.orange,
+                  title: formatMoney(model.discount!.toDouble()),
+                  titleStyle: AppTextStyles.style14BlackNormal
+                      .copyWith(color: Colors.orange),
+                ),
+              ),
+              Text(
+                model.unitName ?? NULL_VALUE,
+                style: AppTextStyles.style12BlackNormal,
+              ),
+            ],
+          ),
+          Text(
+            model.objectDescription ?? NULL_VALUE,
+            textAlign: TextAlign.start,
+            style: AppTextStyles.style12grey500Normal,
+            // maxLines: 1,
+          ),
+        ],
+      ),
     );
   }
 
@@ -1274,7 +1306,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             children: [
               Expanded(
                   child: CustomInfoItem(
-                      icon: Assets.iconDeal, title: item.orderCode ?? "N/A")),
+                      icon: Assets.iconDeal, title: item.orderCode ?? NULL_VALUE)),
               Container(
                 height: 24,
                 // width: 55,
@@ -1284,7 +1316,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     color: Color(0xFF11B482),
                     borderRadius: BorderRadius.circular(50.0)),
                 child: Center(
-                  child: Text(item.processStatusName ?? "N/A",
+                  child: Text(item.processStatusName ?? NULL_VALUE,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -1293,13 +1325,13 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               )
             ],
           ),
-          CustomInfoItem(icon: Assets.iconTime, title: item.createdAt ?? "N/A"),
+          CustomInfoItem(icon: Assets.iconTime, title: item.createdAt ?? NULL_VALUE),
           CustomInfoItem(
-              icon: Assets.iconBranch, title: item.branchName ?? "N/A"),
+              icon: Assets.iconBranch, title: item.branchName ?? NULL_VALUE),
           CustomInfoItem(
               icon: Assets.iconShipper,
               title:
-                  "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? "N/A"}"),
+                  "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? NULL_VALUE}"),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -1333,123 +1365,109 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-  Widget _phoneNumberItem() {
-    return Container(
-      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-      margin: EdgeInsets.only(left: 15.0 / 2),
-      child: Row(
-        children: [
-          Container(
-            width: (MediaQuery.of(context).size.width) / 2.1,
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 8.0),
-                  child: Text(
-                    AppLocalizations.text(LangKey.phoneNumber)!,
-                    style: AppTextStyles.style15BlackNormal,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Text(detail?.phone ?? "",
-                style: AppTextStyles.style16BlueWeight500),
-          ),
-          InkWell(
-            onTap: () {
-              callPhone(detail?.phone ?? "");
-            },
-            child: Container(
-              padding: EdgeInsets.all(8.0),
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                color: Color(0xFF06A605),
-                borderRadius: BorderRadius.circular(50),
-                // border:  Border.all(color: AppColors.white,)
-              ),
-              child: Center(
-                  child: Image.asset(
-                Assets.iconCall,
-                color: AppColors.white,
-              )),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Future<bool> callPhone(String phone) async {
-  //   final regSpace = RegExp(r"\s+");
-  //   // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-  //   return await launch("tel:" + phone.replaceAll(regSpace, ""));
-  // }
-
   Widget _listButtonRelevant() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
-      child: Row(
-        children: [
-          Flexible(
-            child: CustomButton(
-              style: AppTextStyles.style15WhiteNormal
-                  .copyWith(fontWeight: FontWeight.bold),
-              height: AppSizes.sizeOnTap,
-              text: "Chỉnh sửa",
-              onTap: () async {},
-            ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
+          child: Row(
+            children: [
+              Flexible(
+                child: CustomButton(
+                    style: AppTextStyles.style15WhiteNormal
+                        .copyWith(fontWeight: FontWeight.bold),
+                    height: AppSizes.sizeOnTap,
+                    text: "Chỉnh sửa",
+                    onTap: () async {
+                      if (detail?.journeyCode != "PJD_DEAL_END") {
+                        bool? result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    EditDealScreen(detail: detail)));
+
+                        if (result != null) {
+                          if (result) {
+                            allowPop = true;
+                            getData();
+                            ;
+                          }
+                        }
+                      }
+                    }),
+              ),
+              SizedBox(
+                width: AppSizes.minPadding,
+              ),
+              Flexible(
+                child: CustomButton(
+                  style: AppTextStyles.style15WhiteNormal
+                      .copyWith(fontWeight: FontWeight.bold),
+                  height: AppSizes.sizeOnTap,
+                  text: AppLocalizations.text(LangKey.discuss),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                              detail: detail,
+                            )));
+                  },
+                ),
+              ),
+              SizedBox(
+                width: AppSizes.minPadding,
+              ),
+              Flexible(
+                child: CustomButton(
+                  style: AppTextStyles.style15WhiteNormal
+                      .copyWith(fontWeight: FontWeight.bold),
+                  height: AppSizes.sizeOnTap,
+                  text: "Liên hệ",
+                  onTap: () {},
+                ),
+              ),
+            ],
           ),
-          SizedBox(
-            width: AppSizes.minPadding,
-          ),
-          Flexible(
-            child: CustomButton(
-              style: AppTextStyles.style15WhiteNormal
-                  .copyWith(fontWeight: FontWeight.bold),
-              height: AppSizes.sizeOnTap,
-              text: AppLocalizations.text(LangKey.discuss),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                          detail: detail,
-                        )));
-              },
-            ),
-          ),
-          SizedBox(
-            width: AppSizes.minPadding,
-          ),
-          Flexible(
-            child: CustomButton(
-              style: AppTextStyles.style15WhiteNormal
-                  .copyWith(fontWeight: FontWeight.bold),
-              height: AppSizes.sizeOnTap,
-              text: "Liên hệ",
-              onTap: () {},
-            ),
-          ),
-        ],
-      ),
+        ),
+        Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1)),
+      ],
     );
   }
 
   Widget _listButtonInfo() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
-        child: Column(
-          children: [
-            Row(
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
+            child: Row(
               children: [
                 Flexible(
                   child: CustomButton(
+                    backgroundColor: AppColors.redColor,
                     style: AppTextStyles.style15WhiteNormal
                         .copyWith(fontWeight: FontWeight.bold),
                     height: AppSizes.sizeOnTap,
-                    text: "Chuyển đổi KH",
-                    onTap: () {},
+                    text: "XÓA DEAL",
+                    onTap: () {
+                      DealConnection.showMyDialogWithFunction(context,
+                          "${AppLocalizations.text(LangKey.warningDeleteDeal)} ${detail?.dealCode}",
+                          ontap: () async {
+                        DescriptionModelResponse? result =
+                            await DealConnection.deleteDeal(
+                                context, detail!.dealCode);
+                        Navigator.of(context).pop();
+                        if (result != null) {
+                          if (result.errorCode == 0) {
+                            await DealConnection.showMyDialog(
+                                context, result.errorDescription);
+                            Navigator.of(context).pop(true);
+                          } else {
+                            DealConnection.showMyDialog(
+                                context, result.errorDescription);
+                          }
+                        }
+                      });
+                    },
                   ),
                 ),
                 SizedBox(
@@ -1460,27 +1478,55 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     style: AppTextStyles.style15WhiteNormal
                         .copyWith(fontWeight: FontWeight.bold),
                     height: AppSizes.sizeOnTap,
-                    text: "Cập nhật liên hệ",
-                    onTap: () {},
+                    text: (_bloc.detail?.saleId != null &&
+                            _bloc.detail?.saleId != 0)
+                        ? "THU HỒI"
+                        : "PHÂN CÔNG",
+                    onTap: () async {
+                      if (detail?.saleId != null && detail?.saleId != 0) {
+                        await _bloc
+                            .assignRevokeDeal(AssignRevokeDealModelRequest(
+                                dealCode: detail?.dealCode,
+                                saleId: detail?.saleId ?? 0,
+                                timeRevokeLead: detail?.timeRevokeLead ?? 0,
+                                type: "revoke"))
+                            .then((value) {
+                          if (value) {
+                            allowPop = true;
+                            getData();
+                          }
+                        });
+                      } else {
+                        List<WorkListStaffModel>? models =
+                            await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PickOneStaffScreen()));
+                        if (models != null && models.length > 0) {
+                          await _bloc
+                              .assignRevokeDeal(
+                                  AssignRevokeDealModelRequest(
+                                      dealCode: detail?.dealCode,
+                                      saleId: models[0].staffId,
+                                      timeRevokeLead:
+                                          detail?.timeRevokeLead ?? 0,
+                                      type: "assign"))
+                              .then((value) {
+                            if (value) {
+                              allowPop = true;
+                              getData();
+                            }
+                          });
+                        }
+                      }
+                    },
                   ),
-                )
+                ),
               ],
-            ),
-            SizedBox(
-              height: AppSizes.minPadding,
-            ),
-            Flexible(
-              child: CustomButton(
-                style: AppTextStyles.style15WhiteNormal
-                    .copyWith(fontWeight: FontWeight.bold),
-                isExpand: true,
-                height: AppSizes.sizeOnTap,
-                text: "Thêm cơ hội bán hàng",
-                onTap: () {},
-              ),
-            ),
-          ],
-        ));
+            )),
+        Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
+      ],
+    );
   }
 
   Widget _buildAvatar(String name) {

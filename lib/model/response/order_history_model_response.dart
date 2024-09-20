@@ -1,28 +1,14 @@
 class OrderHistoryResponseModel {
   int? errorCode;
   String? errorDescription;
-  List<OrderHistoryData>? data;
+  OrderHistoryResponseData? data;
 
   OrderHistoryResponseModel({this.errorCode, this.errorDescription, this.data});
 
   OrderHistoryResponseModel.fromJson(Map<String, dynamic> json) {
     errorCode = json['ErrorCode'];
     errorDescription = json['ErrorDescription'];
-    if (json['Data'] != null) {
-      data = <OrderHistoryData>[];
-      json['Data'].forEach((v) {
-        data!.add(new OrderHistoryData.fromJson(v));
-      });
-    }
-  }
-
-  OrderHistoryResponseModel.fromList(List<dynamic>? json) {
-    if (json != null) {
-      data = <OrderHistoryData>[];
-      json.forEach((v) {
-        data!.add(new OrderHistoryData.fromJson(v));
-      });
-    }
+    data = json['Data'] != null ? new OrderHistoryResponseData.fromJson(json['Data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -30,7 +16,43 @@ class OrderHistoryResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data!.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class OrderHistoryResponseData {
+  int? totalOrders;
+  int? totalOrdersAmount;
+  int? totalNotPaid;
+  List<OrderHistoryData>? orders;
+
+  OrderHistoryResponseData(
+      {this.totalOrders,
+      this.totalOrdersAmount,
+      this.totalNotPaid,
+      this.orders});
+
+  OrderHistoryResponseData.fromJson(Map<String, dynamic> json) {
+    totalOrders = json['total_orders'];
+    totalOrdersAmount = json['total_orders_amount'];
+    totalNotPaid = json['total_not_paid'];
+    if (json['orders'] != null) {
+      orders = <OrderHistoryData>[];
+      json['orders'].forEach((v) {
+        orders!.add(new OrderHistoryData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total_orders'] = this.totalOrders;
+    data['total_orders_amount'] = this.totalOrdersAmount;
+    data['total_not_paid'] = this.totalNotPaid;
+    if (this.orders != null) {
+      data['orders'] = this.orders!.map((v) => v.toJson()).toList();
     }
     return data;
   }

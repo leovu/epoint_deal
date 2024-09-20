@@ -4,6 +4,7 @@ import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/detail_deal_bloc.dart';
+import 'package:epoint_deal_plugin/presentation/detail_deal/list_screen/list_customer_care_bloc.dart';
 import 'package:epoint_deal_plugin/widget/container_data_builder.dart';
 import 'package:epoint_deal_plugin/widget/custom_empty.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -24,14 +25,18 @@ class ListCustomerCareScreen extends StatefulWidget {
 
 class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
 
+  late ListCustomerCareBloc _bloc;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
+  _bloc = ListCustomerCareBloc(context);
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => widget.bloc.getCareDeal(context));
+        .addPostFrameCallback((_) {
+          _bloc.listCareDeal = widget.bloc.listCareDeal;
+           _bloc.setCareDeal(widget.bloc.listCareDeal);
+           _bloc.getStatusWork();
+        });
   }
 
   @override
@@ -41,12 +46,71 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
     super.dispose();
   }
 
-  Widget _buildContainer(List<Widget> children){
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Gaps.vGap10,
+          _buildCustomerType(),
+          Gaps.vGap10,
+          _buildListOption(),
+          Gaps.vGap10,
+          Expanded(child: _buildContent())
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    return StreamBuilder(
+        stream: _bloc.outputCareDeal,
+        initialData: null,
+        builder: (_, snapshot) {
+          List<CareDealData>? models = snapshot.data as List<CareDealData>?;
+          return ContainerDataBuilder(
+              data: models,
+              skeletonBuilder: _buildSkeleton(),
+              emptyBuilder: CustomEmpty(
+                title: AppLocalizations.text(LangKey.data_empty),
+              ),
+              bodyBuilder: () => _buildContainer(models!
+                  .map((e) => customerCareItem(
+                        e,
+                      ))
+                  .toList()));
+        });
+  }
+
+  Widget _buildContainer(List<Widget> children) {
     return CustomListView(
       padding: EdgeInsets.all(AppSizes.minPadding),
       separator: SizedBox(height: AppSizes.minPadding),
       children: children,
     );
+  }
+
+  Widget _buildListOption() {
+    return CustomRowInformation(
+        title: AppLocalizations.text(LangKey.list),
+        titleStyle: AppTextStyles.style14PrimaryBold,
+        child: StreamBuilder(
+            stream: _bloc.outputStatusWorkData,
+            initialData: null,
+            builder: (context, snapshot) {
+              return CustomDropdown(
+                value: _bloc.statusWorkDataSelected,
+                menus: _bloc.statusWorkData,
+                hint: "Chọn trạng thái",
+                onChanged: (p0) {
+                  _bloc.onChange(p0!);
+                },
+                onRemove: () {
+                  _bloc.onRemove();
+                },
+              );
+            }));
   }
 
   Widget _buildSkeleton() {
@@ -62,34 +126,31 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
         ));
   }
 
-  Widget _buildContent() {
-    return StreamBuilder(
-      stream: widget.bloc.outputCareDeal,
-      initialData: null,
-      builder: (_, snapshot){
-        List<CareDealData>? models = snapshot.data as List<CareDealData>?;
-        return ContainerDataBuilder(
-            data: models,
-            skeletonBuilder: _buildSkeleton(),
-            emptyBuilder: CustomEmpty(
-              title: AppLocalizations.text(LangKey.data_empty),
-            ),
-            bodyBuilder: () => _buildContainer(
-                models!
-                    .map((e) => customerCareItem(
-                  e,
-                ))
-                    .toList()));
-      }
-    );
+  _buildCustomerType() {
+    return RichText(
+        text: TextSpan(
+            text: widget.bloc.detail?.typeCustomer == "customer"
+                ? "${AppLocalizations.text(LangKey.customerVi)} - "
+                : "${AppLocalizations.text(LangKey.sales_leads)} - ",
+            style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.grey,
+                fontWeight: FontWeight.normal),
+            children: [
+          TextSpan(
+              text: widget.bloc.detail?.dealName,
+              style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold))
+        ]));
   }
 
-   Widget customerCareItem(CareDealData item) {
+  Widget customerCareItem(CareDealData item) {
     final createTime = DateTime.parse(item.createdAt ?? "");
 
     return InkWell(
-      onTap: () async {
-      },
+      onTap: () async {},
       child: Container(
         child: Container(
           // margin: EdgeInsets.all(10),
@@ -188,7 +249,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                               CustomNetworkImage(
                                 width: 15,
                                 height: 15,
-                                url: item?.manageTypeWorkIcon ??
+                                url: item.manageTypeWorkIcon ??
                                     "https://epoint-bucket.s3.ap-southeast-1.amazonaws.com/0f73a056d6c12b508a05eea29735e8a52022/07/14/3Ujo25165778317714072022.png",
                                 fit: BoxFit.fill,
                                 backgroundColor: Colors.transparent,
@@ -375,7 +436,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: AppLocalizations.text(LangKey.care_list),
-      body: _buildContent(),
+      body: _buildBody(),
       onWillPop: () => CustomNavigator.pop(context, object: false),
     );
   }

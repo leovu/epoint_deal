@@ -9,7 +9,6 @@ import 'package:epoint_deal_plugin/model/request/voucher_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/voucher_response_model.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
@@ -226,11 +225,11 @@ class OrderDiscountScreenState extends State<OrderDiscountScreen> {
               // if(checkConfigKey(ConfigKey.discount_order_voucher))
               //   discountTypeCode
             ] : [
-              if(checkConfigKey(ConfigKey.discount_direct_money))
+              // if(checkConfigKey(ConfigKey.discount_direct_money))
                 discountTypeCash,
-              if(checkConfigKey(ConfigKey.discount_direct_percent))
+              // if(checkConfigKey(ConfigKey.discount_direct_percent))
                 discountTypePercent,
-              if(checkConfigKey(ConfigKey.discount_voucher))
+              // if(checkConfigKey(ConfigKey.discount_voucher))
                 discountTypeCode
             ]).map((e) => _buildItem(value: e)).toList(),
           );

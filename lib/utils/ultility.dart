@@ -222,7 +222,12 @@ String formatTextDateTime(String? datetime, bool textMonth) {
   return textFormat;
 }
 
-String? pathToImage(String path) {
+String? pathToImage(String paths) {
+  String path = paths.split(".").last;
+
+  print(path);
+
+
   if (path == "doc" || path == "docx") {
     return Assets.imageMSWord;
   } else if (path == "xls" || path == "xlsx" || path == "xlsm") {
