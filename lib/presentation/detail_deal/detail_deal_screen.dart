@@ -537,7 +537,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapPlus: () async {
                     if (Global.createJob != null) {
                       var result = await Global.createJob!(_bloc.detail!.toJson());
-                      if (result != null) {
+                      if (result != null && result) {
                         getData();
                       }
                     }
@@ -576,7 +576,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   isShowPlus:_bloc.listOrderHistory.length == 0,
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandOrderHistory = event),
-                  onTapPlus: () => print("onTapPlus"),
+                  onTapPlus: () async {
+                    if (Global.createOrder != null) {
+                      var result = await Global.createOrder!(_bloc.detail!.toJson());
+                      if (result != null && result) {
+                        allowPop = true;
+                        getData();
+                      }
+                    }
+                  },
                   onTapList: _bloc.onTapListOrDerHistory,
                   title: e.tabNameVi ?? "Lịch sử đơn hàng",
                   isExpand: _bloc.expandOrderHistory,
@@ -758,8 +766,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return InkWell(
       onTap: () async {
         if (Global.editJob != null) {
-          var result = await Global.editJob!(item.manageWorkId);
-          if (result != null) {
+          var result = await Global.editJob!(_bloc.detail!.toJson());
+          if (result != null && result) {
             allowPop = true;
             await getData();
           }
