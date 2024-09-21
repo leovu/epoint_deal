@@ -1015,6 +1015,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
         if (result.errorCode == 0) {
           print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
+          print("return true rồi` nè");
           Navigator.of(context).pop(true);
         } else {
           DealConnection.showMyDialog(context, result.errorDescription);
