@@ -37,6 +37,7 @@ import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_meni_bottom_sheet.dart';
+import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -946,7 +947,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
     } else {
-      DealConnection.showLoading(context);
+      CustomNavigator.showProgressDialog(context);
       if (_bloc.voucherModel != null) {
         if (_bloc.voucherModel!.amount != null) {
           _bloc.discountType = discountTypeCash;
@@ -1010,13 +1011,11 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               discountType: _bloc.discountType,
               discountValue: _bloc.discountValue,
               discount: _bloc.discount));
-      Navigator.of(context).pop();
+      CustomNavigator.hideProgressDialog();
       if (result != null) {
         if (result.errorCode == 0) {
-          print(result.errorDescription);
           await DealConnection.showMyDialog(context, result.errorDescription);
-          print("return true rồi` nè");
-          Navigator.of(context).pop(true);
+          CustomNavigator.pop(context, object: true);
         } else {
           DealConnection.showMyDialog(context, result.errorDescription);
         }

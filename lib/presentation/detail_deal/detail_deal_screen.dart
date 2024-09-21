@@ -27,6 +27,7 @@ import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_info_item.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
@@ -1473,7 +1474,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           if (result.errorCode == 0) {
                             await DealConnection.showMyDialog(
                                 context, result.errorDescription);
-                            Navigator.of(context).pop(true);
+                                allowPop = true;
+                            CustomNavigator.pop(context, object: true);
                           } else {
                             DealConnection.showMyDialog(
                                 context, result.errorDescription);
