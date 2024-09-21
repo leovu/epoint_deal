@@ -541,7 +541,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapPlus: () async {
                     if (Global.createCare != null) {
                       var result = await Global.createCare!(_bloc.detail!.toJson());
-                      if (result != null && result) {
+                      if (result != null) {
+                        allowPop = true;
                         getData();
                       }
                     }
@@ -583,7 +584,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapPlus: () async {
                     if (Global.createOrder != null) {
                       var result = await Global.createOrder!(_bloc.detail!.toJson());
-                      if (result != null && result) {
+                      if (result != null) {
                         allowPop = true;
                         getData();
                       }
@@ -771,7 +772,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       onTap: () async {
         if (Global.editJob != null) {
           var result = await Global.editJob!(item.manageWorkId ?? 0);
-          if (result != null && result) {
+          if (result != null) {
             allowPop = true;
             await getData();
           }
