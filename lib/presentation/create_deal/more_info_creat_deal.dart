@@ -39,8 +39,6 @@ class MoreInfoCreatDeal extends StatefulWidget {
 class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
   TextEditingController _probabilityText = TextEditingController();
   FocusNode _probabilityFocusNode = FocusNode();
-  TextEditingController _expectRevenueText = TextEditingController();
-  FocusNode _expectRevenueFocusNode = FocusNode();
   TextEditingController _detailDealText = TextEditingController();
   FocusNode _detailDealFocusNode = FocusNode();
   List<OrderSourceData>? orderSourceData;
@@ -235,8 +233,8 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
           textfield: true,
           mandatory: false,
           icon: Assets.iconItinerary,
-          fillText: _expectRevenueText,
-          focusNode: _expectRevenueFocusNode,
+          fillText: widget.bloc.expectRevenueText,
+          focusNode: widget.bloc.expectRevenueFocusNode,
           inputType: TextInputType.numberWithOptions(signed: false, decimal: false),
           inputMoney: true,
         ),

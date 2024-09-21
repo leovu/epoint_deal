@@ -187,6 +187,9 @@ class EditDealBloc extends BaseBloc {
   final FocusNode focusPresenter = FocusNode();
   final TextEditingController controllerPresenter = TextEditingController();
 
+  TextEditingController expectRevenueText = TextEditingController();
+  FocusNode expectRevenueFocusNode = FocusNode();
+
   // final _streamCustomerModel = BehaviorSubject<CustomerModel?>();
   // ValueStream<CustomerModel?> get outputCustomerModel =>
   //     _streamCustomerModel.stream;

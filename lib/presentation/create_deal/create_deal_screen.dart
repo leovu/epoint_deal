@@ -981,6 +981,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
+              expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
               amount: _bloc.amount,
               product: _bloc.getListProductsRequest(),
               otherFee: _bloc.surchargeModels
@@ -1073,6 +1074,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
+              expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
               amount: _bloc.amount,
               product: _bloc.getListProductsRequest(),
               otherFee: _bloc.surchargeModels

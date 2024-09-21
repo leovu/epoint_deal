@@ -852,10 +852,6 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
             isDense: true,
           ),
           onChanged: (event) {
-            print(event.toLowerCase());
-            if (fillText != null) {
-              print(fillText.text);
-            }
           },
         ),
       ),
@@ -978,6 +974,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               orderSourceId: detailDeal.orderSourceId,
               probability: detailDeal.probability,
               dealDescription: detailDeal.dealDescription,
+              expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
               amount: _bloc.amount,
               product: _bloc.getListProductsRequest(),
               otherFee: _bloc.surchargeModels

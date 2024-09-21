@@ -323,17 +323,17 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           CustomRowImageContentWidget(
             icon: Assets.iconProjectName,
             title:
-                "Doanh thu kỳ vọng: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
+                "Doanh thu kỳ vọng: ${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ",
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
             icon: Assets.iconMoneySquare,
-            title: "Số tiền: ${detail!.probability ?? NULL_VALUE}",
+            title: "Số tiền: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
             icon: Assets.iconProbability,
-            title: "Tỉ lệ thành công: ${detail!.probability ?? NULL_VALUE}",
+            title: "Tỉ lệ thành công: ${detail!.probability ?? NULL_VALUE}%",
           ),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
@@ -345,7 +345,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
-              "Đây là một ghi chú",
+             detail!.dealDescription ?? NULL_VALUE,
               style: AppTextStyles.style14BlackNormal,
             ),
           )

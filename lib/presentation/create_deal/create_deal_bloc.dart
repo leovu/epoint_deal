@@ -140,10 +140,8 @@ class CreateDealBloc extends BaseBloc {
   final FocusNode focusPresenter = FocusNode();
   final TextEditingController controllerPresenter = TextEditingController();
 
-  // final _streamCustomerModel = BehaviorSubject<CustomerModel?>();
-  // ValueStream<CustomerModel?> get outputCustomerModel =>
-  //     _streamCustomerModel.stream;
-  // setCustomerModel(CustomerModel? event) => set(_streamCustomerModel, event);
+  TextEditingController expectRevenueText = TextEditingController();
+  FocusNode expectRevenueFocusNode = FocusNode();
 
   final _streamProductModels = BehaviorSubject<List<ProductNewModel>?>();
   ValueStream<List<ProductNewModel>?> get outputProductModels =>

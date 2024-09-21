@@ -255,6 +255,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     detailDeal.probability = widget.detail!.probability ?? 0;
     detailDeal.dealCode = widget.detail!.dealCode ?? "";
     detailDeal.discount = widget.detail!.discount ?? 0;
+    _bloc.expectRevenueText.text = widget.detail!.expectedRevenue.toString();
 
     // detailDeal.product = widget.detail.productBuy;
 
@@ -1265,6 +1266,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             orderSourceId: detailDeal.orderSourceId,
             probability: detailDeal.probability,
             dealDescription: detailDeal.dealDescription,
+            expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
             amount: _bloc.amount,
             product: _bloc.getListProductsRequest(),
             otherFee: _bloc.surchargeModels
@@ -1353,6 +1355,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             orderSourceId: detailDeal.orderSourceId,
             probability: detailDeal.probability,
             dealDescription: detailDeal.dealDescription,
+            expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
             amount: _bloc.amount,
             product: _bloc.getListProductsRequest(),
             otherFee: _bloc.surchargeModels

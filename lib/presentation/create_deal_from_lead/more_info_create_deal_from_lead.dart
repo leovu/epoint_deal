@@ -4,7 +4,6 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
@@ -17,7 +16,6 @@ import 'package:epoint_deal_plugin/model/response/service_new_response_model.dar
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
@@ -47,10 +45,7 @@ class MoreInfoCreateDealFromLead extends StatefulWidget {
 class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead> {
   ScrollController _controller = ScrollController();
   bool showAdditionDeal = false;
-
-  TextEditingController _expectRevenueText = TextEditingController();
-  FocusNode _expectRevenueFocusNode = FocusNode();
-
+  
   TextEditingController _probabilityText = TextEditingController();
   FocusNode _probabilityFocusNode = FocusNode();
 
@@ -281,8 +276,8 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
           textfield: true,
           mandatory: false,
           icon: Assets.iconItinerary,
-          fillText: _expectRevenueText,
-          focusNode: _expectRevenueFocusNode,
+          fillText: widget.bloc.expectRevenueText,
+          focusNode: widget.bloc.expectRevenueFocusNode,
           inputType: TextInputType.numberWithOptions(signed: false, decimal: false),
           inputMoney: true,
         ),

@@ -1,13 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
-import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/model/discount_cart_model.dart';
-import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
@@ -18,13 +15,9 @@ import 'package:epoint_deal_plugin/model/response/order_source_model_response.da
 import 'package:epoint_deal_plugin/model/response/product_new_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/service_card_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/service_new_response_model.dart';
-import 'package:epoint_deal_plugin/presentation/discount_screen/discount_screen.dart';
 import 'package:epoint_deal_plugin/presentation/edit_deal/edit_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
-import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
@@ -281,8 +274,8 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             textfield: true,
             mandatory: false,
             icon: Assets.iconItinerary,
-            fillText: _expectRevenueText,
-            focusNode: _expectRevenueFocusNode,
+            fillText: widget.bloc.expectRevenueText,
+            focusNode: widget.bloc.expectRevenueFocusNode,
             inputType:
                 TextInputType.numberWithOptions(signed: false, decimal: false),
             inputMoney: true,
