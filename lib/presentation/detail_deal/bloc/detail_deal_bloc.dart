@@ -121,10 +121,10 @@ class DetailDealBloc extends BaseBloc {
 
   resetExpand() {
     expandOrderHistory = false;
+    expandListProduct = false;
     expandCareDeal = false;
     expandListNote = false;
     expandListFile = false;
-    expandListProduct = false;
   }
 
   onSetExpand(Function onFunction) {
@@ -135,10 +135,10 @@ class DetailDealBloc extends BaseBloc {
 
   resetStreamExpand() {
     setExpandOrderHistory(expandOrderHistory);
+    setExpandListProduct(expandListProduct);
     setExpandCareDeal(expandCareDeal);
     setExpandListNote(expandListNote);
     setExpandListFile(expandListFile);
-    setExpandListProduct(expandListProduct);
   }
 
   Future<List<OrderHistoryData>?> getOrderHistory(BuildContext context) async {

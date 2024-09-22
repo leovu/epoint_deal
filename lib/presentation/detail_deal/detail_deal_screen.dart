@@ -427,7 +427,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     data: model,
                     skeletonBuilder: _buildSkeleton(),
                     bodyBuilder: () {
-                      if (_bloc.children == null && model!.tabConfigs != null) {
+                      if (_bloc.children == null && model.tabConfigs != null) {
                         _bloc.children = [];
                         for (var e in model.tabConfigs!) {
                           switch (e.code) {
