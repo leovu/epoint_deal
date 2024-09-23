@@ -59,11 +59,11 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     _bloc.workCreatedComment(
         WorkCreateCommentRequestModel(
-            manageWorkId: widget.detail!.dealId,
-            manageParentCommentId: (_callbackModel?.dealParentCommentId) ??
+            dealID: widget.detail!.dealId,
+            parentDealCommentId: (_callbackModel?.dealParentCommentId) ??
                 (_callbackModel?.dealCommentId),
             message: _controllerComment.text,
-            path: [_file ?? ""],),
+            path: _file ?? "",),
         _controllerComment,
        null);
   }
@@ -296,7 +296,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 if (_file == null) {
                   return Container();
                 }
-
                 return Container(
                   padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: Row(

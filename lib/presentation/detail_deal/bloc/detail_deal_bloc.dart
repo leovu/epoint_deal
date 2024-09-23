@@ -118,6 +118,7 @@ class DetailDealBloc extends BaseBloc {
   bool expandListNote = false;
   bool expandListFile = false;
   bool expandListProduct = false;
+  bool allowPop = false;
 
   resetExpand() {
     expandOrderHistory = false;
@@ -220,12 +221,14 @@ class DetailDealBloc extends BaseBloc {
     }
   }
 
-  onTapListCustomerCare() {
-    CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));
+  onTapListCustomerCare() async {
+    await CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));
+    allowPop = true;
   }
 
-  onTapListOrDerHistory() {
-    CustomNavigator.push(context!, ListOrderHistoryScreen(bloc: this));
+  onTapListOrDerHistory() async {
+   await CustomNavigator.push(context!, ListOrderHistoryScreen(bloc: this));
+   allowPop = true;
   }
 
   onTapListNote() {

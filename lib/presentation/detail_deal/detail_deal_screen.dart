@@ -57,7 +57,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   final ScrollController _controller = ScrollController();
   List<WorkListStaffModel> models = [];
   DetailDealData? detail;
-  bool allowPop = false;
   bool reloadCSKH = false;
   late DetailDealBloc _bloc;
 
@@ -544,7 +543,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       var result =
                           await Global.createCare!(_bloc.detail!.toJson());
                       if (result != null) {
-                        allowPop = true;
+                        _bloc.allowPop = true;
                         getData();
                       }
                     }
@@ -591,7 +590,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                            Navigator.of(context).pop();
                       _bloc.createOrder().then((value) {
                         if (value) {
-                          allowPop = true;
+                          _bloc.allowPop = true;
                           _bloc.getOrderHistory(context);
                         }
                       });
@@ -784,7 +783,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         if (Global.editJob != null) {
           var result = await Global.editJob!(item.manageWorkId ?? 0);
           if (result != null) {
-            allowPop = true;
+            _bloc.allowPop = true;
             await getData();
           }
         }
@@ -1313,7 +1312,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       onTap: () async {
         if (Global.navigateDetailOrder != null) {
            await Global.navigateDetailOrder!(item.orderId ?? 0);
-           allowPop = true;
+           _bloc.allowPop = true;
           _bloc.getOrderHistory(context);
         }
       },
@@ -1424,7 +1423,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
                         if (result != null) {
                           if (result) {
-                            allowPop = true;
+                            _bloc.allowPop = true;
                             getData();
                             ;
                           }
@@ -1513,7 +1512,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           if (result.errorCode == 0) {
                             await DealConnection.showMyDialog(
                                 context, result.errorDescription);
-                            allowPop = true;
+                            _bloc.allowPop = true;
                             CustomNavigator.pop(context, object: true);
                           } else {
                             DealConnection.showMyDialog(
@@ -1546,7 +1545,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 type: "revoke"))
                             .then((value) {
                           if (value) {
-                            allowPop = true;
+                            _bloc.allowPop = true;
                             getData();
                           }
                         });
@@ -1563,7 +1562,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                   type: "assign"))
                               .then((value) {
                             if (value) {
-                              allowPop = true;
+                              _bloc.allowPop = true;
                               getData();
                             }
                           });
@@ -1583,12 +1582,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (allowPop) {
-          Navigator.of(context).pop(allowPop);
+        if (_bloc.allowPop) {
+          Navigator.of(context).pop(_bloc.allowPop);
         } else {
           Navigator.of(context).pop();
         }
-        return allowPop;
+        return _bloc.allowPop;
       },
       child: Scaffold(
         appBar: AppBar(
