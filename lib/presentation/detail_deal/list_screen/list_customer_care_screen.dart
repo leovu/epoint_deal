@@ -1,6 +1,7 @@
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/detail_deal_bloc.dart';
@@ -24,19 +25,17 @@ class ListCustomerCareScreen extends StatefulWidget {
 }
 
 class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
-
   late ListCustomerCareBloc _bloc;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  _bloc = ListCustomerCareBloc(context);
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) {
-          _bloc.listCareDeal = widget.bloc.listCareDeal;
-           _bloc.setCareDeal(widget.bloc.listCareDeal);
-           _bloc.getStatusWork();
-        });
+    _bloc = ListCustomerCareBloc(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bloc.listCareDeal = widget.bloc.listCareDeal;
+      _bloc.setCareDeal(widget.bloc.listCareDeal);
+      _bloc.getStatusWork();
+    });
   }
 
   @override
@@ -150,7 +149,19 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
     final createTime = DateTime.parse(item.createdAt ?? "");
 
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+        if (Global.editJob != null) {
+          var result = await Global.editJob!(item.manageWorkId ?? 0);
+          if (result != null) {
+            widget.bloc.getCareDeal(context).then((value) {
+              if (value != null) {
+                _bloc.onRemove();
+                _bloc.setCareDeal(widget.bloc.listCareDeal);
+              }
+            });
+          }
+        }
+      },
       child: Container(
         child: Container(
           // margin: EdgeInsets.all(10),

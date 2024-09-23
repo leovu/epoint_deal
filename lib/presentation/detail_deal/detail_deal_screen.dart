@@ -578,18 +578,22 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 _bloc.listOrderHistory =
                     snapshot.data as List<OrderHistoryData>;
                 return CustomComboBox(
-                  isShowPlus: _bloc.listOrderHistory.length == 0,
+                  isShowPlus: _bloc.listOrderHistory.length == 0 &&
+                      (_bloc.detail?.productBuy?.length ?? 0) > 0,
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandOrderHistory = event),
                   onTapPlus: () async {
-                    if (Global.createOrder != null) {
-                      var result =
-                          await Global.createOrder!(_bloc.detail!.toJson());
-                      if (result != null) {
-                        allowPop = true;
-                        getData();
-                      }
-                    }
+                    DealConnection.showMyDialogWithFunction(context,
+                        "Bạn có chắc chắn muốn tạo đơn cho ${detail?.dealCode}",
+                        ontap: () async {
+                           Navigator.of(context).pop();
+                      _bloc.createOrder().then((value) {
+                        if (value) {
+                          allowPop = true;
+                          _bloc.getOrderHistory(context);
+                        }
+                      });
+                    });
                   },
                   onTapList: _bloc.onTapListOrDerHistory,
                   title: e.tabNameVi ?? "Lịch sử đơn hàng",
@@ -1299,84 +1303,96 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   }
 
   Widget orderHistoryItem(OrderHistoryData item) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      margin: EdgeInsets.only(bottom: 10.0),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 1),
-              blurRadius: 2,
-              color: Colors.black.withOpacity(0.3),
-            )
-          ]),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                  child: CustomInfoItem(
-                      icon: Assets.iconDeal,
-                      title: item.orderCode ?? NULL_VALUE)),
-              Container(
-                height: 24,
-                // width: 55,
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                // margin: EdgeInsets.only(right: 8.0),
-                decoration: BoxDecoration(
-                    color: Color(0xFF11B482),
-                    borderRadius: BorderRadius.circular(50.0)),
-                child: Center(
-                  child: Text(item.processStatusName ?? NULL_VALUE,
+    return GestureDetector(
+      onTap: () async {
+        if (Global.navigateDetailOrder != null) {
+          var result = await Global.navigateDetailOrder!(item.orderId ?? 0);
+          if (result != null) {
+            allowPop = true;
+            _bloc.getOrderHistory(context);
+          }
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.all(8.0),
+        margin: EdgeInsets.only(bottom: 10.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(0, 1),
+                blurRadius: 2,
+                color: Colors.black.withOpacity(0.3),
+              )
+            ]),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                    child: CustomInfoItem(
+                        icon: Assets.iconDeal,
+                        title: item.orderCode ?? NULL_VALUE)),
+                Container(
+                  height: 24,
+                  // width: 55,
+                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                  // margin: EdgeInsets.only(right: 8.0),
+                  decoration: BoxDecoration(
+                      color: Color(0xFF11B482),
+                      borderRadius: BorderRadius.circular(50.0)),
+                  child: Center(
+                    child: Text(item.processStatusName ?? NULL_VALUE,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                )
+              ],
+            ),
+            CustomInfoItem(
+                icon: Assets.iconTime, title: item.createdAt ?? NULL_VALUE),
+            CustomInfoItem(
+                icon: Assets.iconBranch, title: item.branchName ?? NULL_VALUE),
+            CustomInfoItem(
+                icon: Assets.iconShipper,
+                title:
+                    "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? NULL_VALUE}"),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: CustomInfoItem(
+                        icon: Assets.iconDeal,
+                        title: "${item.countProd ?? 0} sản phẩm")),
+                Row(
+                  children: [
+                    Image.asset(
+                      Assets.iconTag,
+                      scale: 2.5,
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Text(
+                      AppFormat.moneyFormatDot.format(item.amount ?? 0) +
+                          " VND",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500)),
-                ),
-              )
-            ],
-          ),
-          CustomInfoItem(
-              icon: Assets.iconTime, title: item.createdAt ?? NULL_VALUE),
-          CustomInfoItem(
-              icon: Assets.iconBranch, title: item.branchName ?? NULL_VALUE),
-          CustomInfoItem(
-              icon: Assets.iconShipper,
-              title:
-                  "${AppLocalizations.text(LangKey.ship)} - ${item.deliveryRequestDate ?? NULL_VALUE}"),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: CustomInfoItem(
-                      icon: Assets.iconDeal,
-                      title: "${item.countProd ?? 0} sản phẩm")),
-              Row(
-                children: [
-                  Image.asset(
-                    Assets.iconTag,
-                    scale: 2.5,
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    AppFormat.moneyFormatDot.format(item.amount ?? 0) + " VND",
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              )
-            ],
-          ),
-        ],
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

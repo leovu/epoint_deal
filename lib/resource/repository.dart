@@ -144,4 +144,9 @@ class Repository {
 
   addFile(BuildContext? context, UploadFileReqModel model) =>
       _paymentResource.addFile(context, model);
+
+   createOrder(BuildContext? context, CreateOrderReqModel model) =>
+      _paymentResource.createOrder(context, model);
+
+
 }

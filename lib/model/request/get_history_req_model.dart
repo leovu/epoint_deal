@@ -63,3 +63,19 @@ class CreateNoteReqModel {
     return data;
   }
 }
+
+class CreateOrderReqModel {
+  int? deal_id;
+
+  CreateOrderReqModel({this.deal_id});
+
+  CreateOrderReqModel.fromJson(Map<String, dynamic> json) {
+    deal_id = json['deal_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['deal_id'] = this.deal_id;
+    return data;
+  }
+}

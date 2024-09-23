@@ -207,6 +207,18 @@ class DetailDealBloc extends BaseBloc {
       onReload?.call();
     }
   }
+  
+  Future<bool> createOrder() async {
+     try {
+      CustomNavigator.showProgressDialog(context);
+       ResponseModel responseData = await repository.createOrder(
+        context, CreateOrderReqModel(deal_id: detail?.dealId));
+      CustomNavigator.hideProgressDialog();
+      return responseData.success ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
 
   onTapListCustomerCare() {
     CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));

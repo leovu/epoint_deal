@@ -63,21 +63,6 @@ class API {
   static getPaymentMethod() => "/order/payment-method";
   static payment() => "/order/order-payment-v2";
   static checkTransportCharge() => "/order/check-transport-charge";
-
-    // Warranty
-  // static warrantyCard() => "/warranty/warranty-card/get-warranty-card";
-  // static warrantyCardCustomer() => "/warranty/maintenance/get-warranty-card-customer";
-  // static warrantyPackage() => "/warranty/warranty-card/get-package";
-  // static warrantyStatus() => "/warranty/warranty-card/list-status";
-  // static warrantyQuickUpdate() => "/warranty/warranty-card/quick-update";
-  // static warrantyDetail() => "/warranty/warranty-card/detail";
-  // static warrantyUpdate() => "/warranty/warranty-card/update";
-  // static maintenance() => "/warranty/maintenance/get-maintenance";
-  // static maintenanceStatus() => "/warranty/maintenance/list-status";
-  // static maintenanceDetail() => "/warranty/maintenance/detail";
-  // static maintenanceCostType() => "/warranty/maintenance/get-cost-type";
-  // static maintenanceStore() => "/warranty/maintenance/store";
-  // static maintenanceUpdate() => "/warranty/maintenance/update";
   static maintenanceReceipt() => "/warranty/maintenance/receipt";
 
 
@@ -85,8 +70,11 @@ class API {
   static getOrderHistory() => "/customer-lead/customer-lead/order-history";
   static getCareDeal() => "/customer-lead/customer-lead/care-deal";
 
+// deal detail
   static getListNote() => "/customer-deals/list-note";
   static addNote() => "/customer-deals/add-note";
   static getListFile() => "/customer-deals/list-file";
   static addFile() => "/customer-deals/add-file";
+  static createOrder() => "/customer-deals/create-order";
+
 }

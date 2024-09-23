@@ -28,8 +28,8 @@ class EpointDealPlugin {
       Function? getListProduct,
       Function? createJob,
       Function(Map<String,dynamic>)?  createCare,
-      Function(int)?  editJob,
-      Function(Map<String,dynamic>)?  createOrder,
+      Function(int)? editJob,
+      Function(int)? navigateDetailOrder,
       Function(Map<String,dynamic>)? callHotline,
       Map<String,dynamic>? jsonDetail, // để tạo deal từ lead
       }) async {
@@ -60,8 +60,8 @@ class EpointDealPlugin {
       Global.createCare = createCare;
     }
 
-    if (createOrder != null) {
-      Global.createOrder = createOrder;
+    if (navigateDetailOrder != null) {
+      Global.navigateDetailOrder = navigateDetailOrder;
     }
 
     if (callHotline != null) {

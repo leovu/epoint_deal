@@ -21,7 +21,7 @@ class Global {
 
   static Function(int)? editJob;
 
-  static Function(Map<String,dynamic>)? createOrder;
+  static Function(int)? navigateDetailOrder;
 
   static String? branch_code;
 

@@ -68,6 +68,13 @@ class PaymentResource{
     param: model.toJson(),
   ).post();
 
+  createOrder(BuildContext? context, CreateOrderReqModel model) => Interaction(
+    context: context,
+    showError: true,
+    url: API.createOrder(),
+    param: model.toJson(),
+  ).post();
+
 
 
 
