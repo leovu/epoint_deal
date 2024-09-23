@@ -999,6 +999,41 @@ class _EditDealScreenState extends State<EditDealScreen>
               ],
             ),
           ),
+          (branchData != null)
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: RichText(
+                          text: TextSpan(
+                              text: "Chi nhánh",
+                              style: TextStyle(
+                                  fontSize: AppTextSizes.size15,
+                                  color: const Color(0xFF858080),
+                                  fontWeight: FontWeight.normal),
+                              children: [
+                            TextSpan(
+                                text: "*", style: TextStyle(color: Colors.red))
+                          ])),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        //  color: Colors.black,
+                      ),
+                      height: 170,
+                      child: SingleChildScrollView(
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: listBranch(),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Container(),
 
           MoreInfoEditDeal(
             detail: widget.detail,
@@ -1012,6 +1047,86 @@ class _EditDealScreenState extends State<EditDealScreen>
         ]),
       )
     ];
+  }
+
+  List<Widget> listBranch() {
+    return List.generate(
+        branchData!.length,
+        (index) => buildItemBranch(
+                branchData![index], branchData![index].selected!, () {
+              selectedItem(index);
+            }));
+  }
+
+  Widget buildItemBranch(
+      BranchData? item, bool selected, GestureTapCallback ontap) {
+    return InkWell(
+      onTap: ontap,
+      child: Container(
+        width: 200,
+        height: 150,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              padding: EdgeInsets.all(8.0),
+              margin: EdgeInsets.only(right: 20.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black,
+                  border: selected
+                      ? Border.all(
+                          width: 4.0,
+                          color: Color(0xFF0067AC),
+                          style: BorderStyle.solid)
+                      : Border.all(
+                          width: 3.0,
+                          color: Color.fromARGB(255, 227, 235, 241),
+                          style: BorderStyle.solid),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                    image: ((item?.avatar == null)
+                            ? AssetImage(Assets.imgEpoint)
+                            : NetworkImage(item?.avatar ?? ""))
+                        as ImageProvider<Object>,
+                  )),
+              child: Center(
+                child: Text(
+                  item?.address ?? "",
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            selected
+                ? Positioned(
+                    left: 160,
+                    bottom: 125,
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Color(0xFF0067AC)),
+                      child: Icon(Icons.check, color: Colors.white),
+                    ))
+                : Container()
+          ],
+        ),
+      ),
+    );
+  }
+
+  selectedItem(int index) async {
+    List<BranchData> models = branchData!;
+    for (int i = 0; i < models.length; i++) {
+      models[i].selected = false;
+    }
+    models[index].selected = true;
+    detailDeal!.branchCode = models[index].branchCode;
+    setState(() {});
   }
 
   _showClosingDueDate() {
@@ -1227,7 +1342,8 @@ class _EditDealScreenState extends State<EditDealScreen>
         detailDeal.journeyCode == "" ||
         customerItem.customerCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null) {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1278,15 +1394,15 @@ class _EditDealScreenState extends State<EditDealScreen>
                   ? parseMoney(e.controller.text)
                   : (int.tryParse(e.controller.text) ?? 0).toDouble();
               double totalValue = e.isMoney ? value : value / 100 * _bloc.total;
-              return  OrderFeeModel(
-                    otherFeeId: e.otherFeeId,
-                    otherFeeCode: e.otherFeeCode,
-                    otherFeeName: e.otherFeeName,
-                    otherFeeValue: value,
-                    feeType: e.isMoney
-                        ? otherFreeBranchTypeMoney
-                        : otherFreeBranchTypePercent,
-                    feeMoney: totalValue);
+              return OrderFeeModel(
+                  otherFeeId: e.otherFeeId,
+                  otherFeeCode: e.otherFeeCode,
+                  otherFeeName: e.otherFeeName,
+                  otherFeeValue: value,
+                  feeType: e.isMoney
+                      ? otherFreeBranchTypeMoney
+                      : otherFreeBranchTypePercent,
+                  feeMoney: totalValue);
             }).toList(),
             total: _bloc.total,
             totalOtherFee: _bloc.surcharge,
@@ -1318,7 +1434,8 @@ class _EditDealScreenState extends State<EditDealScreen>
         detailDeal.journeyCode == "" ||
         leadItem.customerLeadCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null) {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1351,23 +1468,24 @@ class _EditDealScreenState extends State<EditDealScreen>
               closingDate:
                   "${DateFormat("yyyy-MM-dd").format(selectedClosingDueDate!)}",
               branchCode: detailDeal.branchCode,
-            tag: detailDeal.tag,
-            orderSourceId: detailDeal.orderSourceId,
-            probability: detailDeal.probability,
-            dealDescription: detailDeal.dealDescription,
-            expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
-            amount: _bloc.amount,
-            product: _bloc.getListProductsRequest(),
-            otherFee: _bloc.surchargeModels
-                .where((element) =>
-                    element.isSelected && element.controller.text.isNotEmpty)
-                .toList()
-                .map((e) {
-              double value = e.isMoney
-                  ? parseMoney(e.controller.text)
-                  : (int.tryParse(e.controller.text) ?? 0).toDouble();
-              double totalValue = e.isMoney ? value : value / 100 * _bloc.total;
-              return OrderFeeModel(
+              tag: detailDeal.tag,
+              orderSourceId: detailDeal.orderSourceId,
+              probability: detailDeal.probability,
+              dealDescription: detailDeal.dealDescription,
+              expectedRevenue: parseMoney(_bloc.expectRevenueText.text),
+              amount: _bloc.amount,
+              product: _bloc.getListProductsRequest(),
+              otherFee: _bloc.surchargeModels
+                  .where((element) =>
+                      element.isSelected && element.controller.text.isNotEmpty)
+                  .toList()
+                  .map((e) {
+                double value = e.isMoney
+                    ? parseMoney(e.controller.text)
+                    : (int.tryParse(e.controller.text) ?? 0).toDouble();
+                double totalValue =
+                    e.isMoney ? value : value / 100 * _bloc.total;
+                return OrderFeeModel(
                     otherFeeId: e.otherFeeId,
                     otherFeeCode: e.otherFeeCode,
                     otherFeeName: e.otherFeeName,
@@ -1376,18 +1494,18 @@ class _EditDealScreenState extends State<EditDealScreen>
                         ? otherFreeBranchTypeMoney
                         : otherFreeBranchTypePercent,
                     feeMoney: totalValue);
-            }).toList(),
-            total: _bloc.total,
-            totalOtherFee: _bloc.surcharge,
-            vatValue: _bloc.vatModel?.id,
-            vatDeal: _bloc.vatModel == null
-                ? _bloc.vatDefault
-                : _bloc.vatModel?.data,
-            amountBeforeVat: _bloc.amountBeforeTax,
-            discount: _bloc.discount,
-            discountMember: _bloc.discountMember,
-            discountType: _bloc.discountType,
-            discountValue: _bloc.discountValue));
+              }).toList(),
+              total: _bloc.total,
+              totalOtherFee: _bloc.surcharge,
+              vatValue: _bloc.vatModel?.id,
+              vatDeal: _bloc.vatModel == null
+                  ? _bloc.vatDefault
+                  : _bloc.vatModel?.data,
+              amountBeforeVat: _bloc.amountBeforeTax,
+              discount: _bloc.discount,
+              discountMember: _bloc.discountMember,
+              discountType: _bloc.discountType,
+              discountValue: _bloc.discountValue));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {

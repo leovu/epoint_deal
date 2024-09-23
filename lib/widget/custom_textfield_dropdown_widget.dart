@@ -12,6 +12,7 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final bool? inputMoney;
   final Function()? ontap;
+  final double? bottom;
 
   CustomTextfieldDropdownWidget(
       {super.key,
@@ -25,12 +26,12 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
       this.fillText,
       this.focusNode,
       this.ontap,
-      this.inputMoney = false});
+      this.inputMoney = false,this.bottom = 15.0});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(bottom: bottom!),
       child: InkWell(
         onTap: (ontap != null) ? ontap : null,
         child: TextField(

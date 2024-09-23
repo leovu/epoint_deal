@@ -39,13 +39,15 @@ class MoreInfoCreateDealFromLead extends StatefulWidget {
       required this.bloc});
 
   @override
-  _MoreInfoCreateDealFromLeadState createState() => _MoreInfoCreateDealFromLeadState();
+  _MoreInfoCreateDealFromLeadState createState() =>
+      _MoreInfoCreateDealFromLeadState();
 }
 
-class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead> {
+class _MoreInfoCreateDealFromLeadState
+    extends State<MoreInfoCreateDealFromLead> {
   ScrollController _controller = ScrollController();
   bool showAdditionDeal = false;
-  
+
   TextEditingController _probabilityText = TextEditingController();
   FocusNode _probabilityFocusNode = FocusNode();
 
@@ -64,19 +66,17 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
       setState(() {});
     });
   }
 
-   @override
+  @override
   void didUpdateWidget(covariant MoreInfoCreateDealFromLead oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.bloc != oldWidget.bloc) {
       setState(() {});
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,6 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
       },
       child: Column(
         children: [
-
           // thông tin thêm
           (!showAdditionDeal)
               ? InkWell(
@@ -167,44 +166,11 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                   ],
                 )
               : Container(),
-          (widget.branchData != null)
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        AppLocalizations.text(LangKey.branch)!,
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: const Color(0xFF858080),
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        //  color: Colors.black,
-                      ),
-                      height: 170,
-                      child: SingleChildScrollView(
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: listBranch(),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
-          Container(
-            height: 15,
-          ),
+          Gaps.vGap16,
 
           _buildTextField(
               "Nguồn cơ hội bán hàng",
-             widget.orderSourceSelected?.orderSourceName ?? "",
+              widget.orderSourceSelected?.orderSourceName ?? "",
               Assets.iconTag,
               false,
               true,
@@ -269,18 +235,19 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               }
             }
           }),
-
+          Gaps.vGap4,
           CustomTextfieldDropdownWidget(
-          title: "Doanh thu kỳ vọng",
-          content: "",
-          textfield: true,
-          mandatory: false,
-          icon: Assets.iconItinerary,
-          fillText: widget.bloc.expectRevenueText,
-          focusNode: widget.bloc.expectRevenueFocusNode,
-          inputType: TextInputType.numberWithOptions(signed: false, decimal: false),
-          inputMoney: true,
-        ),
+            title: "Doanh thu kỳ vọng",
+            content: "",
+            textfield: true,
+            mandatory: false,
+            icon: Assets.iconItinerary,
+            fillText: widget.bloc.expectRevenueText,
+            focusNode: widget.bloc.expectRevenueFocusNode,
+            inputType:
+                TextInputType.numberWithOptions(signed: false, decimal: false),
+            inputMoney: true,
+          ),
 
           _buildTextField("Nhập xác suất thành công (%)", "",
               Assets.iconProbability, false, false, true,
@@ -288,6 +255,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               focusNode: _probabilityFocusNode,
               inputType: TextInputType.numberWithOptions(
                   signed: false, decimal: false)),
+          Gaps.vGap4,
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: CustomTextField(
@@ -307,86 +275,7 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
     );
   }
 
-  List<Widget> listBranch() {
-    return List.generate(
-        widget.branchData!.length,
-        (index) => buildItemBranch(
-                widget.branchData![index], widget.branchData![index].selected!,
-                () {
-              selectedItem(index);
-            }));
-  }
-
-  Widget buildItemBranch(BranchData? item, bool selected, GestureTapCallback ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        width: 200,
-        height: 150,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              padding: EdgeInsets.all(8.0),
-              margin: EdgeInsets.only(right: 20.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black,
-                  border: selected
-                      ? Border.all(
-                          width: 4.0,
-                          color: Color(0xFF0067AC),
-                          style: BorderStyle.solid)
-                      : Border.all(
-                          width: 3.0,
-                          color: Color.fromARGB(255, 227, 235, 241),
-                          style: BorderStyle.solid),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                    image: ((item?.avatar == null)
-                        ? AssetImage(Assets.imgEpoint)
-                        : NetworkImage(item?.avatar ?? "")) as ImageProvider<Object>,
-                  )),
-              child: Center(
-                child: Text(
-                  item?.address ?? "",
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            selected
-                ? Positioned(
-                    left: 160,
-                    bottom: 125,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Color(0xFF0067AC)),
-                      child: Icon(Icons.check, color: Colors.white),
-                    ))
-                : Container()
-          ],
-        ),
-      ),
-    );
-  }
-
-  selectedItem(int index) async {
-    List<BranchData> models = widget.branchData!;
-    for (int i = 0; i < models.length; i++) {
-      models[i].selected = false;
-    }
-    models[index].selected = true;
-    widget.detailDeal!.branchCode = models[index].branchCode;
-    setState(() {});
-  }
-
-     Widget _buildOrder() {
+  Widget _buildOrder() {
     return StreamBuilder(
         stream: Globals.cart!.outputValue,
         initialData: widget.bloc.total,
@@ -401,7 +290,8 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                 widget.bloc.discountMemberModel =
                     snapshot.data as MemberDiscountResponseModel?;
                 widget.bloc.discountMember = double.tryParse(
-                        widget.bloc.discountMemberModel?.discountMember ?? "0") ??
+                        widget.bloc.discountMemberModel?.discountMember ??
+                            "0") ??
                     0.0;
                 return StreamBuilder(
                     stream: widget.bloc.outputVATModel,
@@ -415,8 +305,8 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                                 stream: widget.bloc.outputSurchargeModels,
                                 initialData: widget.bloc.surchargeModels,
                                 builder: (_, snapshot) {
-                                  widget.bloc.surcharge =
-                                      widget.bloc.getSurcharge(widget.bloc.total);
+                                  widget.bloc.surcharge = widget.bloc
+                                      .getSurcharge(widget.bloc.total);
                                   return StreamBuilder(
                                       stream: widget.bloc.outputVoucherModel,
                                       initialData: widget.bloc.voucherModel,
@@ -430,7 +320,8 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                                         widget.bloc.amount = widget.bloc.total -
                                             widget.bloc.discount -
                                             widget.bloc.discountMember +
-                                            (widget.bloc.transportCharge ?? 0.0) +
+                                            (widget.bloc.transportCharge ??
+                                                0.0) +
                                             widget.bloc.surcharge;
 
                                         if (widget.bloc.amount < 0) {
@@ -438,22 +329,26 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
                                         }
 
                                         if (widget.bloc.vatModel != null) {
-                                          double vat = widget.bloc.vatModel == null
-                                              ? widget.bloc.vatDefault
-                                              : widget.bloc.vatModel!.data;
+                                          double vat =
+                                              widget.bloc.vatModel == null
+                                                  ? widget.bloc.vatDefault
+                                                  : widget.bloc.vatModel!.data;
                                           widget.bloc.totalTax =
                                               vat / 100 * widget.bloc.amount;
                                           if (widget.bloc.vatIncluded) {
                                             widget.bloc.amountBeforeTax =
-                                                widget.bloc.amount - widget.bloc.totalTax;
+                                                widget.bloc.amount -
+                                                    widget.bloc.totalTax;
                                           } else {
                                             widget.bloc.amountBeforeTax =
                                                 widget.bloc.amount;
-                                            widget.bloc.amount = widget.bloc.totalTax +
-                                                widget.bloc.amountBeforeTax;
+                                            widget.bloc.amount =
+                                                widget.bloc.totalTax +
+                                                    widget.bloc.amountBeforeTax;
                                           }
                                         } else {
-                                          widget.bloc.amountBeforeTax = widget.bloc.amount;
+                                          widget.bloc.amountBeforeTax =
+                                              widget.bloc.amount;
                                         }
 
                                         return _buildContent();
@@ -469,15 +364,15 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
     return Column(
       children: [
         _buildItems(),
-         Gaps.vGap10,
-          _buildTotal(),
-         Gaps.vGap10,
+        Gaps.vGap10,
+        _buildTotal(),
+        Gaps.vGap10,
         _buildDiscount(),
-         Gaps.vGap10,
+        Gaps.vGap10,
         _buildTotalPreTax(),
-         Gaps.vGap10,
+        Gaps.vGap10,
         _buildVAT(),
-         Gaps.vGap10,
+        Gaps.vGap10,
         _buildSurcharge(),
         Gaps.vGap10,
         _buildFinalMoney(),
@@ -551,7 +446,6 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
               });
         });
   }
-
 
   Widget _buildTitle(String? title, Widget child,
       {bool isRequired = false,
@@ -642,13 +536,12 @@ class _MoreInfoCreateDealFromLeadState extends State<MoreInfoCreateDealFromLead>
   }
 
   Widget _buildFinalMoney() {
-   return CustomRowInformation(
+    return CustomRowInformation(
       title: AppLocalizations.text(LangKey.final_money),
       content: formatMoney(widget.bloc.amount),
       contentStyle: AppTextStyles.style14BlackBold,
     );
   }
-
 
   Widget _buildTextField(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,

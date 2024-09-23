@@ -1,4 +1,3 @@
-
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -165,41 +164,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                   ],
                 )
               : Container(),
-          (widget.branchData != null)
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        AppLocalizations.text(LangKey.branch)!,
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: const Color(0xFF858080),
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        //  color: Colors.black,
-                      ),
-                      height: 170,
-                      child: SingleChildScrollView(
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: listBranch(),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
-          Container(
-            height: 15,
-          ),
-
+          Gaps.vGap16,
           _buildTextField(
               AppLocalizations.text(LangKey.deal_source),
               widget.detail?.orderSourceName ?? "",
@@ -268,6 +233,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               }
             }
           }),
+          Gaps.vGap4,
           CustomTextfieldDropdownWidget(
             title: "Doanh thu kỳ vọng",
             content: "",
@@ -286,6 +252,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
               focusNode: _probabilityFocusNode,
               inputType: TextInputType.numberWithOptions(
                   signed: false, decimal: false)),
+          Gaps.vGap4,
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: CustomTextField(
@@ -303,87 +270,6 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
         ],
       ),
     );
-  }
-
-  List<Widget> listBranch() {
-    return List.generate(
-        widget.branchData!.length,
-        (index) => buildItemBranch(
-                widget.branchData![index], widget.branchData![index].selected!,
-                () {
-              selectedItem(index);
-            }));
-  }
-
-  Widget buildItemBranch(
-      BranchData? item, bool selected, GestureTapCallback ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        width: 200,
-        height: 150,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              padding: EdgeInsets.all(8.0),
-              margin: EdgeInsets.only(right: 20.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black,
-                  border: selected
-                      ? Border.all(
-                          width: 4.0,
-                          color: Color(0xFF0067AC),
-                          style: BorderStyle.solid)
-                      : Border.all(
-                          width: 3.0,
-                          color: Color.fromARGB(255, 227, 235, 241),
-                          style: BorderStyle.solid),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                    image: ((item?.avatar == null)
-                            ? AssetImage(Assets.imgEpoint)
-                            : NetworkImage(item?.avatar ?? ""))
-                        as ImageProvider<Object>,
-                  )),
-              child: Center(
-                child: Text(
-                  item?.address ?? "",
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            selected
-                ? Positioned(
-                    left: 160,
-                    bottom: 125,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Color(0xFF0067AC)),
-                      child: Icon(Icons.check, color: Colors.white),
-                    ))
-                : Container()
-          ],
-        ),
-      ),
-    );
-  }
-
-  selectedItem(int index) async {
-    List<BranchData> models = widget.branchData!;
-    for (int i = 0; i < models.length; i++) {
-      models[i].selected = false;
-    }
-    models[index].selected = true;
-    widget.detailDeal!.branchCode = models[index].branchCode;
-    setState(() {});
   }
 
   Widget _buildOrder() {
