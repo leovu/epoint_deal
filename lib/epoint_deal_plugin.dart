@@ -69,7 +69,6 @@ class EpointDealPlugin {
     }
 
     Global.branch_code = brandCode;
-    // GlobalCart.shared.init();
 
     DealConnection.locale = locale;
     Global.locale = locale;

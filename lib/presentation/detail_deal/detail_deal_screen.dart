@@ -578,12 +578,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 _bloc.listOrderHistory =
                     snapshot.data as List<OrderHistoryData>;
                 return CustomComboBox(
-                  isShowPlus: _bloc.listOrderHistory.length == 0 &&
-                      (_bloc.detail?.productBuy?.length ?? 0) > 0,
+                  isShowPlus: _bloc.listOrderHistory.length == 0,
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandOrderHistory = event),
                   onTapPlus: () async {
-                    DealConnection.showMyDialogWithFunction(context,
+                    if ((_bloc.detail?.productBuy?.length ?? 0) > 0) {
+                      DealConnection.showMyDialogWithFunction(context,
                         "Bạn có chắc chắn muốn tạo đơn cho ${detail?.dealCode}",
                         ontap: () async {
                            Navigator.of(context).pop();
@@ -594,6 +594,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         }
                       });
                     });
+                    } else {
+                      DealConnection.showMyDialog(context,
+                          "Vui lòng thêm sản phẩm/ dịch vụ trước khi tạo đơn hàng");
+                    }
                   },
                   onTapList: _bloc.onTapListOrDerHistory,
                   title: e.tabNameVi ?? "Lịch sử đơn hàng",
