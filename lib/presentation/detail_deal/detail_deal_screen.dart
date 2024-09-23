@@ -430,9 +430,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         for (var e in model.tabConfigs!) {
                           switch (e.code) {
                             case dealConfigOrder:
-                              _bloc.children!.add(_buildListOrderHistory(e));
-                              _bloc.children!.add(
-                                  SizedBox(height: AppSizes.minPadding / 2));
+                              if (_bloc.detail?.typeCustomer == "customer") {
+                                _bloc.children!.add(_buildListOrderHistory(e));
+                                _bloc.children!.add(SizedBox(
+                                    height: AppSizes.minPadding / 2));
+                              }
                               break;
                             case dealConfigCustomerCare:
                               _bloc.children!.add(_buildListCustomerCare(e));
