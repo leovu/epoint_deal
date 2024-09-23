@@ -238,7 +238,7 @@ String? pathToImage(String paths) {
     return Assets.imagePPT;
   }
 
-  return null;
+  return Assets.imgFeatureDeveloping;
 }
 
 KeyboardActionsItem buildKeyboardAction(FocusNode node,

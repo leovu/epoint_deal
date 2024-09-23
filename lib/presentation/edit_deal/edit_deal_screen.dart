@@ -382,6 +382,7 @@ class _EditDealScreenState extends State<EditDealScreen>
             branchData![i].branchName!.toLowerCase()) {
           branchData![i].selected = true;
           branchSelected = branchData![i];
+          detailDeal.branchCode = branchSelected.branchCode;
         } else {
           branchData![i].selected = false;
         }

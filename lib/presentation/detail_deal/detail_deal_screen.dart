@@ -242,7 +242,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           CustomInformationDealWidget(
             name: detail?.dealName ?? "",
             type: detail!.typeCustomer == "customer"
-                ? AppLocalizations.text(LangKey.customer)
+                ? AppLocalizations.text(LangKey.customerVi)
                 : AppLocalizations.text(LangKey.sales_leads),
           ),
           Gaps.vGap4,
@@ -265,7 +265,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Gaps.vGap4,
           CustomRowImageContentWidget(
             icon: Assets.iconStyleCustomer,
-            title: detail!.dealName ?? NULL_VALUE,
+            title: "Tên deal: ${detail!.dealName ?? NULL_VALUE}",
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
@@ -1312,11 +1312,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return GestureDetector(
       onTap: () async {
         if (Global.navigateDetailOrder != null) {
-          var result = await Global.navigateDetailOrder!(item.orderId ?? 0);
-          if (result != null) {
-            allowPop = true;
-            _bloc.getOrderHistory(context);
-          }
+           await Global.navigateDetailOrder!(item.orderId ?? 0);
+           allowPop = true;
+          _bloc.getOrderHistory(context);
         }
       },
       child: Container(

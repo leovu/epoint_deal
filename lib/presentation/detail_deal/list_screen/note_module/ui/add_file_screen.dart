@@ -46,6 +46,8 @@ class _AddFileScreenState extends State<AddFileScreen>
 
   @override
   void dispose() {
+    noteController.dispose();
+    noteFocusNode.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -106,7 +108,9 @@ class _AddFileScreenState extends State<AddFileScreen>
                   onTap: () {
                     widget.bloc.uploadFile().then((value) {
                       setState(() {
-                        file = value;
+                        if (value != null) {
+                          file = value;
+                        }
                       });
                     });
                   },
