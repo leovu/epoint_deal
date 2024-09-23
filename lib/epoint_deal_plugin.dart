@@ -30,6 +30,7 @@ class EpointDealPlugin {
       Function(Map<String,dynamic>)?  createCare,
       Function(int)?  editJob,
       Function(Map<String,dynamic>)?  createOrder,
+      Function(Map<String,dynamic>)? callHotline,
       Map<String,dynamic>? jsonDetail, // để tạo deal từ lead
       }) async {
 
@@ -61,6 +62,10 @@ class EpointDealPlugin {
 
     if (createOrder != null) {
       Global.createOrder = createOrder;
+    }
+
+    if (callHotline != null) {
+      Global.callHotline = callHotline;
     }
 
     Global.branch_code = brandCode;

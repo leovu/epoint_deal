@@ -140,8 +140,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         : Stack(
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                    bottom: AppSizes.maxHeight * 0.1),
+                padding: EdgeInsets.only(bottom: AppSizes.maxHeight * 0.1),
                 child: Column(
                   children: [
                     buildListOption(),
@@ -328,7 +327,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Gaps.vGap4,
           CustomRowImageContentWidget(
             icon: Assets.iconMoneySquare,
-            title: "Số tiền: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
+            title:
+                "Số tiền: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
           ),
           Gaps.vGap4,
           CustomRowImageContentWidget(
@@ -345,7 +345,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
-             detail!.dealDescription ?? NULL_VALUE,
+              detail!.dealDescription ?? NULL_VALUE,
               style: AppTextStyles.style14BlackNormal,
             ),
           )
@@ -386,10 +386,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconCall,
-            title: hidePhone(
-                                detail?.phone ?? NULL_VALUE,
-                                checkVisibilityKey(
-                                    VisibilityWidgetName.CM000004)),
+            title: hidePhone(detail?.phone ?? NULL_VALUE,
+                checkVisibilityKey(VisibilityWidgetName.CM000004)),
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconInteraction,
@@ -541,7 +539,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       _bloc.onSetExpand(() => _bloc.expandCareDeal = event),
                   onTapPlus: () async {
                     if (Global.createCare != null) {
-                      var result = await Global.createCare!(_bloc.detail!.toJson());
+                      var result =
+                          await Global.createCare!(_bloc.detail!.toJson());
                       if (result != null) {
                         allowPop = true;
                         getData();
@@ -579,12 +578,13 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 _bloc.listOrderHistory =
                     snapshot.data as List<OrderHistoryData>;
                 return CustomComboBox(
-                  isShowPlus:_bloc.listOrderHistory.length == 0,
+                  isShowPlus: _bloc.listOrderHistory.length == 0,
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandOrderHistory = event),
                   onTapPlus: () async {
                     if (Global.createOrder != null) {
-                      var result = await Global.createOrder!(_bloc.detail!.toJson());
+                      var result =
+                          await Global.createOrder!(_bloc.detail!.toJson());
                       if (result != null) {
                         allowPop = true;
                         getData();
@@ -1320,7 +1320,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             children: [
               Expanded(
                   child: CustomInfoItem(
-                      icon: Assets.iconDeal, title: item.orderCode ?? NULL_VALUE)),
+                      icon: Assets.iconDeal,
+                      title: item.orderCode ?? NULL_VALUE)),
               Container(
                 height: 24,
                 // width: 55,
@@ -1339,7 +1340,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               )
             ],
           ),
-          CustomInfoItem(icon: Assets.iconTime, title: item.createdAt ?? NULL_VALUE),
+          CustomInfoItem(
+              icon: Assets.iconTime, title: item.createdAt ?? NULL_VALUE),
           CustomInfoItem(
               icon: Assets.iconBranch, title: item.branchName ?? NULL_VALUE),
           CustomInfoItem(
@@ -1436,7 +1438,24 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       .copyWith(fontWeight: FontWeight.bold),
                   height: AppSizes.sizeOnTap,
                   text: "Liên hệ",
-                  onTap: () {},
+                  onTap: () {
+                    if (detail?.phone != null && detail?.phone != "") {
+                      if (Global.callHotline != null) {
+                        Global.callHotline!({
+                          "id": detail?.dealId,
+                          "code": detail?.dealCode,
+                          "avatar": "",
+                          "name": detail?.dealName,
+                          "customer_name": detail?.customerName,
+                          "phone": detail?.phone,
+                          "type": detail?.typeCustomer,
+                        });
+                      }
+                    } else {
+                      DealConnection.showMyDialog(
+                          context, "Không có số điện thoại");
+                    }
+                  },
                 ),
               ),
             ],
@@ -1474,7 +1493,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           if (result.errorCode == 0) {
                             await DealConnection.showMyDialog(
                                 context, result.errorDescription);
-                                allowPop = true;
+                            allowPop = true;
                             CustomNavigator.pop(context, object: true);
                           } else {
                             DealConnection.showMyDialog(
@@ -1513,19 +1532,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         });
                       } else {
                         List<WorkListStaffModel>? models =
-                            await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        PickOneStaffScreen()));
+                            await Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PickOneStaffScreen()));
                         if (models != null && models.length > 0) {
                           await _bloc
-                              .assignRevokeDeal(
-                                  AssignRevokeDealModelRequest(
-                                      dealCode: detail?.dealCode,
-                                      saleId: models[0].staffId,
-                                      timeRevokeLead:
-                                          detail?.timeRevokeLead ?? 0,
-                                      type: "assign"))
+                              .assignRevokeDeal(AssignRevokeDealModelRequest(
+                                  dealCode: detail?.dealCode,
+                                  saleId: models[0].staffId,
+                                  timeRevokeLead: detail?.timeRevokeLead ?? 0,
+                                  type: "assign"))
                               .then((value) {
                             if (value) {
                               allowPop = true;
