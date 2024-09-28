@@ -232,126 +232,315 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return [(index == 0) ? listInfomationRelevant() : infomation()];
   }
 
-  Widget infomation() {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomInformationDealWidget(
-            name: detail?.dealName ?? "",
-            type: detail!.typeCustomer == "customer"
-                ? AppLocalizations.text(LangKey.customerVi)
-                : AppLocalizations.text(LangKey.sales_leads),
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconDeal,
-            title:
-                "${AppLocalizations.text(LangKey.dealCode)} : ${detail?.dealCode ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconPerson,
-            title:
-                "${AppLocalizations.text(LangKey.allottedPerson)} : ${detail?.staffName ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconCall,
-            title: detail?.phone,
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconStyleCustomer,
-            title: "Tên deal: ${detail!.dealName ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconPin,
-            title:
-                "${AppLocalizations.text(LangKey.pipeline)}: ${detail!.pipelineCode ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconStatus,
-            title:
-                "${AppLocalizations.text(LangKey.journeys)}: ${detail!.journeyName ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconTime,
-            title:
-                "${AppLocalizations.text(LangKey.expectedEndingDate)!}: ${detail!.closingDate ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconOrderSource,
-            title:
-                "${AppLocalizations.text(LangKey.deal_source)!}: ${detail!.orderSourceName ?? NULL_VALUE}",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconBranch,
-            title:
-                "${AppLocalizations.text(LangKey.branch)!}: ${detail!.branchName ?? NULL_VALUE}",
-          ),
-          if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  Assets.iconTag,
-                  scale: 3.0,
-                ),
-                SizedBox(width: AppSizes.minPadding),
-                Expanded(
-                  child: Container(
-                    child: Wrap(
-                      children: List.generate(detail!.tag!.length,
-                          (index) => _tagDetail(detail!.tag![index])),
-                      spacing: 10,
-                      runSpacing: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconProjectName,
-            title:
-                "Doanh thu kỳ vọng: ${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconMoneySquare,
-            title:
-                "Số tiền: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
-          ),
-          Gaps.vGap4,
-          CustomRowImageContentWidget(
-            icon: Assets.iconProbability,
-            title: "Tỉ lệ thành công: ${detail!.probability ?? NULL_VALUE}%",
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              "Ghi chú",
-              style: AppTextStyles.style14PrimaryBold,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              detail!.dealDescription ?? NULL_VALUE,
-              style: AppTextStyles.style14BlackNormal,
-            ),
-          )
-        ],
-      ),
+  Widget _buildRow(Widget child, Widget child1) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: child),
+        SizedBox(
+          width: AppSizes.minPadding,
+        ),
+        Expanded(child: child1)
+      ],
     );
   }
+
+  Widget _buildInfo(DetailDealData model) {
+    return Row(
+      children: [
+        CustomAvatar(
+          url: model.customerAvatar,
+          name: model.customerName,
+          size: 60.0,
+        ),
+        SizedBox(
+          width: AppSizes.minPadding,
+        ),
+        Expanded(
+            child: CustomListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          children: [
+            Text(
+              model.customerName ?? "",
+              style: AppTextStyles.style14PrimaryBold,
+            ),
+            if ((model.typeCustomer ?? "").isNotEmpty)
+              Text(
+                model.typeCustomer ?? "",
+                style: AppTextStyles.style14HintNormal,
+              ),
+            if ((model.phone ?? "").isNotEmpty)
+              Text(
+                hidePhone(model.phone,
+                    checkVisibilityKey(VisibilityWidgetName.CM000004)),
+                style: AppTextStyles.style14BlackNormal,
+              ),
+          ],
+        )),
+      ],
+    );
+  }
+
+    Widget _buildCode(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconDeal,
+        title: "Mã deal",
+        content: model.dealCode);
+  }
+
+   Widget _buildDealName(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconStyleCustomer,
+        title: "Tên deal",
+        content: model.dealName);
+  }
+
+   Widget _buildAllottedPerson(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconItinerary,
+        title: AppLocalizations.text(LangKey.allottedPerson),
+        content: model.staffName);
+  }
+  
+  Widget _buildPipeline(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconPin,
+        title: AppLocalizations.text(LangKey.pipeline),
+        content: model.pipelineCode);
+  }
+
+  Widget _buildJourney(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconItinerary,
+        title: AppLocalizations.text(LangKey.journeys),
+        content: model.journeyName);
+  }
+
+  Widget _buildClosingDate(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconTime,
+        title: AppLocalizations.text(LangKey.expectedEndingDate),
+        content: model.closingDate);
+  }
+
+  Widget _buildSource(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconOrderSource,
+        title: AppLocalizations.text(LangKey.deal_source),
+        content: model.orderSourceName);
+  }
+
+  Widget _buildBranch(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconBranch,
+        title: AppLocalizations.text(LangKey.branch),
+        content: model.branchName);
+  }
+
+  Widget _buildTag(DetailDealData model) {
+    return CustomColumnIconInformation(
+      icon: Assets.iconTagFill,
+      title: AppLocalizations.text(LangKey.tags),
+      child: (model.tag?.length ?? 0) > 0
+          ? SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                children: List.generate(detail!.tag!.length,
+                    (index) => _tagDetail(detail!.tag![index])),
+                spacing: 10,
+                runSpacing: 10,
+              ),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildExpectedRevenue(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconProjectName,
+        title: "Doanh thu kỳ vọng",
+        content: "${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ");
+  }
+
+  Widget _buildAmount(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconMoneySquare,
+        title: "Số tiền",
+        content:"${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ");
+  }
+
+
+  Widget _buildProbability(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconProbability,
+        title: "Tỉ lệ thành công",
+        content:"${detail!.probability ?? NULL_VALUE}%");
+  }
+
+  Widget _buildNote(DetailDealData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconEditNote,
+        title: AppLocalizations.text(LangKey.note),
+        content: model.dealDescription);
+  }
+
+  Widget infomation() {
+    return StreamBuilder(
+      stream: _bloc.outputModel,
+      initialData: null,
+      builder: (_, snapshot) {
+        DetailDealData? model = snapshot.data as DetailDealData?;
+        return ContainerDataBuilder(
+          data: model,
+          skeletonBuilder: _buildSkeleton(),
+          bodyBuilder: () {
+            bool isPersonal = model!.typeCustomer == customerTypePersonal;
+            return CustomListView(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              separatorPadding: AppSizes.maxPadding,
+              children: [
+                _buildInfo(model),
+                _buildCode(model),
+                _buildRow(_buildDealName(model), _buildAllottedPerson(model)),
+                _buildRow(_buildPipeline(model), _buildJourney(model)),
+                _buildRow(_buildClosingDate(model), _buildSource(model)),
+                _buildBranch(model),
+                _buildTag(model),
+                 _buildRow(_buildAmount(model), _buildExpectedRevenue(model)),
+                _buildProbability(model),
+                _buildNote(model)
+              ],
+              onRefresh: () => getData(),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // Widget infomation() {
+  //   return Container(
+  //     padding: EdgeInsets.all(8.0),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         CustomInformationDealWidget(
+  //           name: detail?.dealName ?? "",
+  //           type: detail!.typeCustomer == "customer"
+  //               ? AppLocalizations.text(LangKey.customerVi)
+  //               : AppLocalizations.text(LangKey.sales_leads),
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconDeal,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.dealCode)} : ${detail?.dealCode ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconPerson,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.allottedPerson)} : ${detail?.staffName ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconCall,
+  //           title: detail?.phone,
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconStyleCustomer,
+  //           title: "Tên deal: ${detail!.dealName ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconPin,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.pipeline)}: ${detail!.pipelineCode ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconStatus,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.journeys)}: ${detail!.journeyName ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconTime,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.expectedEndingDate)!}: ${detail!.closingDate ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconOrderSource,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.deal_source)!}: ${detail!.orderSourceName ?? NULL_VALUE}",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconBranch,
+  //           title:
+  //               "${AppLocalizations.text(LangKey.branch)!}: ${detail!.branchName ?? NULL_VALUE}",
+  //         ),
+  //         if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
+  //           Row(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Image.asset(
+  //                 Assets.iconTag,
+  //                 scale: 3.0,
+  //               ),
+  //               SizedBox(width: AppSizes.minPadding),
+  //               Expanded(
+  //                 child: Container(
+  //                   child: Wrap(
+  //                     children: List.generate(detail!.tag!.length,
+  //                         (index) => _tagDetail(detail!.tag![index])),
+  //                     spacing: 10,
+  //                     runSpacing: 10,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconProjectName,
+  //           title:
+  //               "Doanh thu kỳ vọng: ${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconMoneySquare,
+  //           title:
+  //               "Số tiền: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
+  //         ),
+  //         Gaps.vGap4,
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconProbability,
+  //           title: "Tỉ lệ thành công: ${detail!.probability ?? NULL_VALUE}%",
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 8.0),
+  //           child: Text(
+  //             "Ghi chú",
+  //             style: AppTextStyles.style14PrimaryBold,
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 8.0),
+  //           child: Text(
+  //             detail!.dealDescription ?? NULL_VALUE,
+  //             style: AppTextStyles.style14BlackNormal,
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget listInfomationRelevant() {
     return Padding(
