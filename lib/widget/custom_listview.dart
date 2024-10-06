@@ -1,8 +1,12 @@
 
+import 'package:epoint_deal_plugin/common/constant.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
+import 'package:epoint_deal_plugin/widget/custom_container_loadmore.dart';
 import 'package:flutter/material.dart';
 
 class CustomListView extends StatefulWidget {
+
   final ScrollController? controller;
   final List<Widget>? children;
   final EdgeInsetsGeometry? padding;
@@ -13,7 +17,8 @@ class CustomListView extends StatefulWidget {
   final Axis? scrollDirection;
   final bool? showLoadmore;
   final Function? onLoadmore;
-  final Future<void> Function()? onRefresh;
+  final CustomRefreshCallback? onRefresh;
+  final bool reverse;
 
   CustomListView({
     this.controller,
@@ -27,56 +32,56 @@ class CustomListView extends StatefulWidget {
     this.showLoadmore,
     this.onRefresh,
     this.onLoadmore,
-  });
+    this.reverse = false
+  }) : assert (onLoadmore == null || !(physics is NeverScrollableScrollPhysics));
 
   @override
   State<CustomListView> createState() => _CustomListViewState();
 }
 
 class _CustomListViewState extends State<CustomListView> {
+
   bool _isLoadmore = false;
 
   _loadmore() async {
-    if (!_isLoadmore) {
+    if(!_isLoadmore){
       _isLoadmore = true;
       await widget.onLoadmore!();
       _isLoadmore = false;
     }
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(){
     List<Widget> children = []..addAll(this.widget.children ?? []);
-    if ((widget.showLoadmore ?? false)) {
-      children.add(Container(
-        height: 40.0,
-        child: Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
-      ));
+    if((widget.showLoadmore ?? false)){
+      children.add(CustomContainerLoadmore());
     }
 
     return ListView.separated(
+        reverse: widget.reverse,
         scrollDirection: widget.scrollDirection ?? Axis.vertical,
         controller: widget.controller,
-        padding: widget.padding ?? EdgeInsets.all(20.0),
+        padding: widget.padding??EdgeInsets.all(AppSizes.maxPadding),
         physics: widget.physics ?? AlwaysScrollableScrollPhysics(),
-        shrinkWrap: widget.shrinkWrap ?? false,
+        shrinkWrap: widget.shrinkWrap??false,
         itemBuilder: (_, index) {
-          if (widget.onLoadmore != null && index > (children.length / 2)) {
+          if(widget.onLoadmore != null && index >= (children.length/2)){
             _loadmore();
           }
           return children[index];
         },
-        separatorBuilder: (_, index) => (widget.separator ??
-            Container(
-              height: widget.separatorPadding ?? 10.0,
-            )),
-        itemCount: children.length);
+        separatorBuilder: (_, index) => (widget.separator??Container(height: widget.separatorPadding??AppSizes.minPadding,)),
+        itemCount: children.length,
+        cacheExtent: AppSizes.maxHeight,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ContainerScrollable(
-        child: _buildBody(), onRefresh: widget.onRefresh);
+        child: _buildBody(),
+        onRefresh: widget.onRefresh
+    );
   }
 }

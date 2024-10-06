@@ -79,10 +79,10 @@ class DealConnection {
 
   static Future<ListDealModelResponse?> getList(
       BuildContext context, ListDealModelRequest model) async {
-    showLoading(context);
+    // showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/list-deal', model.toJson());
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
     if (responseData.isSuccess) {
       if (responseData.data != null) {
         ListDealModelResponse data =

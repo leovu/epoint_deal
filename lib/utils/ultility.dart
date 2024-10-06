@@ -21,6 +21,7 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_actions/keyboard_actions_item.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 import 'package:http/http.dart' as http;
 
@@ -42,6 +43,20 @@ extension IterableModifier<E> on Iterable<E> {
     }
     return null;
   }
+}
+
+extension BehaviorSubjectExtension<T> on BehaviorSubject<T> {
+  set(T event, {Function? function}){
+    function?.call();
+    if(!this.isClosed) this.sink.add(event);
+  }
+
+  setError(String event, {Function? function}){
+    function?.call();
+    if(!this.isClosed) this.sink.addError(event);
+  }
+
+  ValueStream<T> get output => this.stream;
 }
 
 

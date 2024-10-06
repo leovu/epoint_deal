@@ -14,10 +14,15 @@ import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_deal_screen.dart';
+import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
+import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
+import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui;
 
 class ListDealScreen extends StatefulWidget {
   const ListDealScreen({Key? key}) : super(key: key);
@@ -37,8 +42,10 @@ class _ListDealScreenState extends State<ListDealScreen> {
   List<BranchData> branchData = <BranchData>[];
   List<WorkListStaffModel> models = [];
 
-  int? currentPage = 1;
-  int? nextPage = 2;
+  final streamModel = BehaviorSubject<List<DealItems>?>();
+
+  int currentPage = 1;
+  int nextPage = 1;
 
   ListDealModelRequest? filterModel = ListDealModelRequest(
       search: "",
@@ -60,7 +67,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_scrollListener);
+    // _controller.addListener(_scrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       filterScreenModel = FilterScreenModel(
@@ -114,24 +121,23 @@ class _ListDealScreenState extends State<ListDealScreen> {
       } else {
         items!.addAll(model.data?.items! as Iterable<DealItems>);
       }
-      currentPage = model.data?.pageInfo?.currentPage;
-      nextPage = model.data?.pageInfo?.nextPage;
-      setState(() {});
+      currentPage = model.data?.pageInfo?.currentPage ?? 1;
+      nextPage = model.data?.pageInfo?.nextPage ?? 1;
+      streamModel.set(items);
     } else {
-      items = [];
-      setState(() {});
+      streamModel.set([]);
     }
   }
 
-  _scrollListener() async {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      if (this.currentPage! < this.nextPage!) {
-        filterModel!.page = currentPage! + 1;
-        getData(true);
-      }
-    }
-  }
+  // _scrollListener() async {
+  //   if (_controller.offset >= (_controller.position.maxScrollExtent - 500) &&
+  //       !_controller.position.outOfRange) {
+  //     if (this.currentPage! < this.nextPage!) {
+  //       filterModel!.page = currentPage! + 1;
+  //       getData(true);
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -208,25 +214,55 @@ class _ListDealScreenState extends State<ListDealScreen> {
         children: [
           _buildSearch(),
           Expanded(
-            child: CustomListView(
-              padding: EdgeInsets.all(20.0 / 2),
-              physics: const AlwaysScrollableScrollPhysics(),
-              controller: _controller,
-              // separator: const Divider(),
-              children: [
-                (items == null)
-                    ? Container()
-                    : (items!.length > 0)
-                        ? Column(
-                            children: items!.map((e) => _dealItemV2(e)).toList())
-                        : CustomDataNotFound(),
-                Container(height: 100)
-              ],
+            child: StreamBuilder(
+              stream: streamModel.output,
+              builder: (context, snapshot) {
+                items = snapshot.data as List<DealItems>?;
+                return CustomListView(
+                  onRefresh: () async {
+                    filterModel!.page = 1;
+                    getData(false);
+                  },
+                  onLoadmore: () async {
+                    if (currentPage < nextPage) {
+                      filterModel!.page = currentPage + 1;
+                      getData(true);
+                    }
+                  },
+                  padding: EdgeInsets.all(20.0 / 2),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _controller,
+                  children: [
+                    (items == null)
+                        ? _buildSkeleton()
+                        : (items!.length > 0)
+                            ? Column(
+                                children: items!.map((e) => _dealItemV2(e)).toList())
+                            : CustomDataNotFound(),
+                    Container(height: 100)
+                  ],
+                );
+              }
             ),
           ),
         ],
       ),
     );
+  }
+
+   Widget _buildSkeleton() {
+    return LoadingWidget(
+        padding: EdgeInsets.zero,
+        child: CustomListView(
+          padding: EdgeInsets.all(8),
+          shrinkWrap: true,
+          children: List.generate(
+              10,
+              (index) => CustomSkeleton(
+                    height: 200,
+                    radius: 4.0,
+                  )),
+        ));
   }
 
   Widget _buildSearch() {
@@ -321,39 +357,73 @@ class _ListDealScreenState extends State<ListDealScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(right: 10.0),
+                        margin: EdgeInsets.only(right: 10.0),
                         height: 20.0,
                         width: 20.0,
                         child: Image.asset(Assets.iconDeal),
                       ),
                       Expanded(
-                        child: Text(
-                          item.dealName!,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w500),
-                          // maxLines: 1,
-                        ),
+                        child: RichText(
+                              text: TextSpan(
+                                  text: item.dealName ?? "N/A",
+                                  style: TextStyle(
+                                      height: 1,
+                                      fontSize: 16.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                  children: [
+                                WidgetSpan(
+                                    child: SizedBox(
+                                  width: 5.0,
+                                )),
+                                WidgetSpan(
+                                    alignment: ui.PlaceholderAlignment.top,
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 8.0),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFF3AEDB6),
+                                          borderRadius:
+                                              BorderRadius.circular(4.0)),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(3.0),
+                                        child: Text(item.journeyName ?? "N/A",
+                                            style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 3, 68, 48),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal)),
+                                      ),
+                                    )),
+                              ])),
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                        decoration: BoxDecoration(
-                            color: HexColor(
-                                item.backgroundColorJourney ?? "#0067AC"),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        constraints:
-                            BoxConstraints(maxWidth: AppSizes.maxWidth! / 2.5),
-                        child: Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(item.journeyName!,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      )
+                      // Expanded(
+                      //   child: Text(
+                      //     item.dealName!,
+                      //     textAlign: TextAlign.start,
+                      //     style: TextStyle(
+                      //         fontSize: 16.0,
+                      //         color: AppColors.primaryColor,
+                      //         fontWeight: FontWeight.w500),
+                      //     // maxLines: 1,
+                      //   ),
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                      //   decoration: BoxDecoration(
+                      //       color: HexColor(
+                      //           item.backgroundColorJourney ?? "#0067AC"),
+                      //       borderRadius: BorderRadius.circular(10.0)),
+                      //   constraints:
+                      //       BoxConstraints(maxWidth: AppSizes.maxWidth! / 2.5),
+                      //   child: Padding(
+                      //     padding: EdgeInsets.all(5.0),
+                      //     child: Text(item.journeyName!,
+                      //         style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontSize: 14.0,
+                      //             fontWeight: FontWeight.w600)),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -693,12 +763,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
         ],
       ),
     );
-  }
-
-  Future<bool> callPhone(String phone) async {
-    final regSpace = RegExp(r"\s+");
-    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-    return await launch("tel:" + phone.replaceAll(regSpace, ""));
   }
 }
 
