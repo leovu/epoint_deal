@@ -743,7 +743,7 @@ class ContainerOrderDetail extends StatelessWidget {
                 width: AppSizes.minPadding,
               ),
               Text(
-                "(${hideMoney(discount, checkVisibilityKey(VisibilityWidgetName.LE000009))})",
+                "(${hideMoney(discount, checkVisibilityKey(VisibilityWidgetName.OD000009))})",
                 style: AppTextStyles.style12WhiteNormal
                     .copyWith(color: AppColors.orange500),
               )
