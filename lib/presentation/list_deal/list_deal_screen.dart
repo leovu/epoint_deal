@@ -1,6 +1,7 @@
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/filter_screen_model.dart';
@@ -15,6 +16,7 @@ import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_screen.d
 import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/filter_deal/filter_deal_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
@@ -215,42 +217,43 @@ class _ListDealScreenState extends State<ListDealScreen> {
           _buildSearch(),
           Expanded(
             child: StreamBuilder(
-              stream: streamModel.output,
-              builder: (context, snapshot) {
-                items = snapshot.data as List<DealItems>?;
-                return CustomListView(
-                  onRefresh: () async {
-                    filterModel!.page = 1;
-                    getData(false);
-                  },
-                  onLoadmore: () async {
-                    if (currentPage < nextPage) {
-                      filterModel!.page = currentPage + 1;
-                      getData(true);
-                    }
-                  },
-                  padding: EdgeInsets.all(20.0 / 2),
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  controller: _controller,
-                  children: [
-                    (items == null)
-                        ? _buildSkeleton()
-                        : (items!.length > 0)
-                            ? Column(
-                                children: items!.map((e) => _dealItemV2(e)).toList())
-                            : CustomDataNotFound(),
-                    Container(height: 100)
-                  ],
-                );
-              }
-            ),
+                stream: streamModel.output,
+                builder: (context, snapshot) {
+                  items = snapshot.data as List<DealItems>?;
+                  return CustomListView(
+                    onRefresh: () async {
+                      filterModel!.page = 1;
+                      getData(false);
+                    },
+                    onLoadmore: () async {
+                      if (currentPage < nextPage) {
+                        filterModel!.page = currentPage + 1;
+                        getData(true);
+                      }
+                    },
+                    padding: EdgeInsets.all(20.0 / 2),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    controller: _controller,
+                    children: [
+                      (items == null)
+                          ? _buildSkeleton()
+                          : (items!.length > 0)
+                              ? Column(
+                                  children: items!
+                                      .map((e) => _dealItemV2(e))
+                                      .toList())
+                              : CustomDataNotFound(),
+                      Container(height: 100)
+                    ],
+                  );
+                }),
           ),
         ],
       ),
     );
   }
 
-   Widget _buildSkeleton() {
+  Widget _buildSkeleton() {
     return LoadingWidget(
         padding: EdgeInsets.zero,
         child: CustomListView(
@@ -364,37 +367,37 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       ),
                       Expanded(
                         child: RichText(
-                              text: TextSpan(
-                                  text: item.dealName ?? "N/A",
-                                  style: TextStyle(
-                                      height: 1,
-                                      fontSize: 16.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                                  children: [
-                                WidgetSpan(
-                                    child: SizedBox(
-                                  width: 5.0,
-                                )),
-                                WidgetSpan(
-                                    alignment: ui.PlaceholderAlignment.top,
-                                    child: Container(
-                                      margin: EdgeInsets.only(right: 8.0),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFF3AEDB6),
-                                          borderRadius:
-                                              BorderRadius.circular(4.0)),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: Text(item.journeyName ?? "N/A",
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 3, 68, 48),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal)),
-                                      ),
-                                    )),
-                              ])),
+                            text: TextSpan(
+                                text: item.dealName ?? "N/A",
+                                style: TextStyle(
+                                    height: 1,
+                                    fontSize: 16.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                                children: [
+                              WidgetSpan(
+                                  child: SizedBox(
+                                width: 5.0,
+                              )),
+                              WidgetSpan(
+                                  alignment: ui.PlaceholderAlignment.top,
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 8.0),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF3AEDB6),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(3.0),
+                                      child: Text(item.journeyName ?? "N/A",
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 3, 68, 48),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                  )),
+                            ])),
                       ),
                       // Expanded(
                       //   child: Text(
@@ -550,30 +553,46 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 12.0),
-                            child: InkWell(
-                              onTap: () async {
-                                print(item.phone);
-                                await callPhone(item?.phone ?? "");
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(20.0 / 2),
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  color: Color.fromRGBO(6, 166, 5, 1),
-                                  borderRadius: BorderRadius.circular(50),
-                                  // border:  Border.all(color: AppColors.white,)
+                          if ((checkVisibilityKey(
+                                  VisibilityWidgetName.CM000008)))
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  if (item.phone != null && item.phone != "") {
+                                    if (Global.callHotline != null) {
+                                      Global.callHotline!({
+                                        "id": item.dealId,
+                                        "code": item.dealCode,
+                                        "avatar": "",
+                                        "name": item.dealName,
+                                        "customer_name": item.customerName,
+                                        "phone": item.phone,
+                                        "type": item.typeCustomer,
+                                      });
+                                    }
+                                  } else {
+                                    DealConnection.showMyDialog(
+                                        context, "Không có thông tin số điện thoại");
+                                  }
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(20.0 / 2),
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(6, 166, 5, 1),
+                                    borderRadius: BorderRadius.circular(50),
+                                    // border:  Border.all(color: AppColors.white,)
+                                  ),
+                                  child: Center(
+                                      child: Image.asset(
+                                    Assets.iconCall,
+                                    color: AppColors.white,
+                                  )),
                                 ),
-                                child: Center(
-                                    child: Image.asset(
-                                  Assets.iconCall,
-                                  color: AppColors.white,
-                                )),
                               ),
                             ),
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -690,7 +709,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap}) {
+  Widget _actionItem(String icon, Color color,
+      {required num number, GestureTapCallback? ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(

@@ -283,27 +283,25 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     );
   }
 
-    Widget _buildCode(DetailDealData model) {
+  Widget _buildCode(DetailDealData model) {
     return CustomColumnIconInformation(
-        icon: Assets.iconDeal,
-        title: "Mã deal",
-        content: model.dealCode);
+        icon: Assets.iconDeal, title: "Mã deal", content: model.dealCode);
   }
 
-   Widget _buildDealName(DetailDealData model) {
+  Widget _buildDealName(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconStyleCustomer,
         title: "Tên deal",
         content: model.dealName);
   }
 
-   Widget _buildAllottedPerson(DetailDealData model) {
+  Widget _buildAllottedPerson(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconItinerary,
         title: AppLocalizations.text(LangKey.allottedPerson),
         content: model.staffName);
   }
-  
+
   Widget _buildPipeline(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconPin,
@@ -361,22 +359,23 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return CustomColumnIconInformation(
         icon: Assets.iconProjectName,
         title: "Doanh thu kỳ vọng",
-        content: "${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ");
+        content:
+            "${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ");
   }
 
   Widget _buildAmount(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconMoneySquare,
         title: "Số tiền",
-        content:"${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ");
+        content:
+            "${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ");
   }
-
 
   Widget _buildProbability(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconProbability,
         title: "Tỉ lệ thành công",
-        content:"${detail!.probability ?? NULL_VALUE}%");
+        content: "${detail!.probability ?? NULL_VALUE}%");
   }
 
   Widget _buildNote(DetailDealData model) {
@@ -409,7 +408,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 _buildRow(_buildClosingDate(model), _buildSource(model)),
                 _buildBranch(model),
                 _buildTag(model),
-                 _buildRow(_buildAmount(model), _buildExpectedRevenue(model)),
+                _buildRow(_buildAmount(model), _buildExpectedRevenue(model)),
                 _buildProbability(model),
                 _buildNote(model)
               ],
@@ -620,8 +619,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                             case dealConfigOrder:
                               if (_bloc.detail?.typeCustomer == "customer") {
                                 _bloc.children!.add(_buildListOrderHistory(e));
-                                _bloc.children!.add(SizedBox(
-                                    height: AppSizes.minPadding / 2));
+                                _bloc.children!.add(
+                                    SizedBox(height: AppSizes.minPadding / 2));
                               }
                               break;
                             case dealConfigCustomerCare:
@@ -774,16 +773,16 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapPlus: () async {
                     if ((_bloc.detail?.productBuy?.length ?? 0) > 0) {
                       DealConnection.showMyDialogWithFunction(context,
-                        "Bạn có chắc chắn muốn tạo đơn cho ${detail?.dealCode}",
-                        ontap: () async {
-                           Navigator.of(context).pop();
-                      _bloc.createOrder().then((value) {
-                        if (value) {
-                          _bloc.allowPop = true;
-                          _bloc.getOrderHistory(context);
-                        }
+                          "Bạn có chắc chắn muốn tạo đơn cho ${detail?.dealCode}",
+                          ontap: () async {
+                        Navigator.of(context).pop();
+                        _bloc.createOrder().then((value) {
+                          if (value) {
+                            _bloc.allowPop = true;
+                            _bloc.getOrderHistory(context);
+                          }
+                        });
                       });
-                    });
                     } else {
                       DealConnection.showMyDialog(context,
                           "Vui lòng thêm sản phẩm/ dịch vụ trước khi tạo đơn hàng");
@@ -1500,8 +1499,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return GestureDetector(
       onTap: () async {
         if (Global.navigateDetailOrder != null) {
-           await Global.navigateDetailOrder!(item.orderId ?? 0);
-           _bloc.allowPop = true;
+          await Global.navigateDetailOrder!(item.orderId ?? 0);
+          _bloc.allowPop = true;
           _bloc.getOrderHistory(context);
         }
       },
@@ -1637,39 +1636,37 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   },
                 ),
               ),
-
               if (checkVisibilityKey(VisibilityWidgetName.CM000008)) ...[
                 SizedBox(
-                width: AppSizes.minPadding,
-              ),
-              Flexible(
-                child: CustomButton(
-                  style: AppTextStyles.style15WhiteNormal
-                      .copyWith(fontWeight: FontWeight.bold),
-                  height: AppSizes.sizeOnTap,
-                  text: "Liên hệ",
-                  onTap: () {
-                    if (detail?.phone != null && detail?.phone != "") {
-                      if (Global.callHotline != null) {
-                        Global.callHotline!({
-                          "id": detail?.dealId,
-                          "code": detail?.dealCode,
-                          "avatar": "",
-                          "name": detail?.dealName,
-                          "customer_name": detail?.customerName,
-                          "phone": detail?.phone,
-                          "type": detail?.typeCustomer,
-                        });
-                      }
-                    } else {
-                      DealConnection.showMyDialog(
-                          context, "Không có số điện thoại");
-                    }
-                  },
+                  width: AppSizes.minPadding,
                 ),
-              ),
+                Flexible(
+                  child: CustomButton(
+                    style: AppTextStyles.style15WhiteNormal
+                        .copyWith(fontWeight: FontWeight.bold),
+                    height: AppSizes.sizeOnTap,
+                    text: "Liên hệ",
+                    onTap: () {
+                      if (detail?.phone != null && detail?.phone != "") {
+                        if (Global.callHotline != null) {
+                          Global.callHotline!({
+                            "id": detail?.dealId,
+                            "code": detail?.dealCode,
+                            "avatar": detail?.customerAvatar,
+                            "name": detail?.dealName,
+                            "customer_name": detail?.customerName,
+                            "phone": detail?.phone,
+                            "type": detail?.typeCustomer,
+                          });
+                        }
+                      } else {
+                        DealConnection.showMyDialog(
+                            context, "Không có thông tin số điện thoại");
+                      }
+                    },
+                  ),
+                ),
               ]
-              
             ],
           ),
         ),
