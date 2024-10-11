@@ -96,5 +96,5 @@ class ConfigKey {
 }
 
 bool checkConfigKey(String key) {
-  return Globals.configModels?.firstWhereOrNull((element) => element.key == key && element.value == "1") != null;
+  return Global.configModels?.firstWhereOrNull((element) => element["key"] == key && element["value"] == "1") != null;
 }

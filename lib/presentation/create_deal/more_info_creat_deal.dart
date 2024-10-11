@@ -15,6 +15,7 @@ import 'package:epoint_deal_plugin/model/response/service_new_response_model.dar
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/modal/order_source_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield_lead.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
@@ -232,7 +233,6 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
       ],
     );
   }
-  
 
   Widget _buildOrder() {
     return StreamBuilder(
@@ -287,7 +287,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
                                           widget.bloc.amount = 0;
                                         }
 
-                                        if (widget.bloc.vatModel != null) {
+                                        if (checkConfigKey(ConfigKey.vat)) {
                                           double vat =
                                               widget.bloc.vatModel == null
                                                   ? widget.bloc.vatDefault
@@ -326,13 +326,20 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
         Gaps.vGap10,
         _buildTotal(),
         Gaps.vGap10,
-        _buildDiscount(),
-        Gaps.vGap10,
-        _buildTotalPreTax(),
-        Gaps.vGap10,
-        _buildVAT(),
-        Gaps.vGap10,
-        _buildSurcharge(),
+        if (checkConfigKey(ConfigKey.discount_order)) ...[
+          Gaps.vGap10,
+          _buildDiscount()
+        ],
+        if (checkConfigKey(ConfigKey.vat)) ...[
+          _buildTotalPreTax(),
+          Gaps.vGap10,
+          _buildVAT(),
+        ],
+
+        if (checkConfigKey(ConfigKey.receipt_other)) ...[
+          Gaps.vGap10,
+          _buildSurcharge()
+        ],
         Gaps.vGap10,
         _buildFinalMoney(),
         Gaps.vGap20,

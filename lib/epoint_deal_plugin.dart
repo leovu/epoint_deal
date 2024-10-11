@@ -32,12 +32,17 @@ class EpointDealPlugin {
       Function(int)? navigateDetailOrder,
       Function(Map<String,dynamic>)? callHotline,
       Map<String,dynamic>? jsonDetail, // để tạo deal từ lead
-      List<Map<String, dynamic>>? permission
+      List<Map<String, dynamic>>? permission,
+      List<Map<String, dynamic>>? configModels
 
       }) async {
 
     if (permission != null) {
         Global.permissionModels = permission;
+    }
+
+    if (configModels != null) {
+        Global.configModels = configModels;
     }
 
     if (domain != null) {

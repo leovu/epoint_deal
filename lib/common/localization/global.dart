@@ -31,9 +31,14 @@ class Global {
 
   static List<Map<String, dynamic>>? permissionModels = [];
 
+  static List<Map<String, dynamic>>? configModels = [];
+
   static String domain = '';
+
   static String brandCode = '';
+
   static String asscessToken = '';
+
   static Locale? locale;
 
   static http.Client client = http.Client();

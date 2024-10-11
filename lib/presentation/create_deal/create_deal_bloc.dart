@@ -247,9 +247,9 @@ class CreateDealBloc extends BaseBloc {
   Future onRefresh({bool isRefresh = true, bool isInit = false}) {
     final group = <Future>[];
     group.add(getMemberDiscount(isRefresh: isRefresh));
-    // if (checkConfigKey(ConfigKey.vat)) {
+    if (checkConfigKey(ConfigKey.vat)) {
       group.add(orderVAT());
-    // }
+    }
     return Future.wait(group);
   }
 
