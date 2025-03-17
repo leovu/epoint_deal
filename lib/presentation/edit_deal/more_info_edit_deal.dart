@@ -23,13 +23,13 @@ import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 
 class MoreInfoEditDeal extends StatefulWidget {
-  String? tagsString;
-  List<TagData>? tagsData;
-  DetailDealData? detail;
-  List<BranchData>? branchData;
+  final String? tagsString;
+  final List<TagData>? tagsData;
+  final DetailDealData? detail;
+  final List<BranchData>? branchData;
   OrderSourceData? orderSourceSelected;
-  UpdateDealModelRequest? detailDeal;
-  late EditDealBloc bloc;
+  final UpdateDealModelRequest? detailDeal;
+  final EditDealBloc bloc;
   MoreInfoEditDeal(
       {Key? key,
       this.branchData,
@@ -45,11 +45,7 @@ class MoreInfoEditDeal extends StatefulWidget {
 }
 
 class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
-  ScrollController _controller = ScrollController();
   bool showAdditionDeal = false;
-
-  TextEditingController _expectRevenueText = TextEditingController();
-  FocusNode _expectRevenueFocusNode = FocusNode();
 
   TextEditingController _probabilityText = TextEditingController();
   FocusNode _probabilityFocusNode = FocusNode();
@@ -617,19 +613,15 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             print(event.toLowerCase());
             if (fillText != null) {
               print(fillText.text);
-              if (fillText != null) {
-                print(fillText.text);
-                if (fillText == _probabilityText) {
-                  widget.detailDeal!.probability =
-                      double.tryParse(fillText.text) ?? 0;
-                  widget.detailDeal?.probability =
-                      num.tryParse(fillText.text ?? "0");
-                  if ((widget.detailDeal!.probability ?? 0) > 100) {
-                    _probabilityText.text = "100";
-                    widget.detailDeal?.probability = 100;
-                    _probabilityText.selection = TextSelection.fromPosition(
-                        TextPosition(offset: _probabilityText.text.length));
-                  }
+              if (fillText == _probabilityText) {
+                widget.detailDeal!.probability =
+                    double.tryParse(fillText.text) ?? 0;
+                widget.detailDeal?.probability = num.tryParse(fillText.text);
+                if ((widget.detailDeal!.probability ?? 0) > 100) {
+                  _probabilityText.text = "100";
+                  widget.detailDeal?.probability = 100;
+                  _probabilityText.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _probabilityText.text.length));
                 }
               }
             }
@@ -642,20 +634,12 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
 
 extension MoneyFormat on int {
   String getMoneyFormatInt() {
-    if (this == null) {
-      return "0 VND";
-    } else {
-      return AppFormat.moneyFormat.format(this);
-    }
+    return AppFormat.moneyFormat.format(this);
   }
 }
 
 extension MoneyFormatNum on num {
   String getMoneyFormatNum() {
-    if (this == null) {
-      return "0 VND";
-    } else {
-      return AppFormat.moneyFormat.format(this);
-    }
+    return AppFormat.moneyFormat.format(this);
   }
 }

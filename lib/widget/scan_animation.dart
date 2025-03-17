@@ -63,10 +63,10 @@ class ScanAnimationState extends State<ScanAnimation> with SingleTickerProviderS
                   1
                 ],
                 colors: [
-                  AppColors.primaryColor.withOpacity(0.0),
-                  AppColors.primaryColor.withOpacity(0.5),
-                  AppColors.primaryColor.withOpacity(0.5),
-                  AppColors.primaryColor.withOpacity(0.0),
+                  AppColors.primaryColor.withValues(alpha: 0.0),
+                  AppColors.primaryColor.withValues(alpha: 0.5),
+                  AppColors.primaryColor.withValues(alpha: 0.5),
+                  AppColors.primaryColor.withValues(alpha: 0.0),
                 ],
               ),
             ),

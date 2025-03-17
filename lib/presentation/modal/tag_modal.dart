@@ -14,7 +14,7 @@ import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsModal extends StatefulWidget {
-  List<TagData>? tagsData;
+  final List<TagData>? tagsData;
   TagsModal({Key? key, this.tagsData});
 
   @override

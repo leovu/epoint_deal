@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/network_connectivity.dart';
 import 'package:epoint_deal_plugin/model/response_model.dart';
+import 'package:path/path.dart';
 
 abstract class AWSConnection<T> {
   late AWSFileModel file;
@@ -25,9 +26,11 @@ abstract class AWSConnection<T> {
       file: file.file!,
       bucket: bucket,
       region: region,
+      destDir: "",
+      filename: basename(file.file!.path)
     );
 
-    if ((url ?? "").isEmpty) {
+    if (url.isEmpty) {
       return await handleError(getError(
         AppLocalizations.text(LangKey.server_error),
       ));

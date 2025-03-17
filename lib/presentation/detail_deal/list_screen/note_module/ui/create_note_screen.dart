@@ -1,7 +1,6 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
-import 'package:epoint_deal_plugin/model/request/create_order_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/get_history_req_model.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/list_screen/note_module/bloc/create_note_bloc.dart';
@@ -10,7 +9,6 @@ import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_textfield.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CreateNoteScreen extends StatefulWidget {

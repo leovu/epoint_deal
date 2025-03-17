@@ -2,9 +2,7 @@ import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
-import 'package:epoint_deal_plugin/model/discount_cart_model.dart';
 import 'package:epoint_deal_plugin/presentation/discount_screen/discount_bloc.dart';
-import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/widget/custom_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_radio_button.dart';
@@ -37,7 +35,6 @@ class DiscountScreenState extends State<DiscountScreen> {
   // final TextEditingController _controllerCode = TextEditingController();
 
   bool _isMoney = true;
-  late int _amount;
 
   late DiscountBloc _bloc;
 
@@ -188,7 +185,7 @@ class DiscountScreenState extends State<DiscountScreen> {
               type == _isMoney, (event) => _bloc.setIsMoney(type)),
           Expanded(
               child: Text(
-            text ?? "",
+            text,
             style: AppTextStyles.style14BlackNormal,
           ))
         ],

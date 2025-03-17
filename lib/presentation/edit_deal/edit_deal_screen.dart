@@ -8,7 +8,6 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/customer_type.dart';
 import 'package:epoint_deal_plugin/model/request/add_deal_model_request.dart';
-import 'package:epoint_deal_plugin/model/request/booking_store_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/get_journey_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
@@ -191,7 +190,7 @@ class _EditDealScreenState extends State<EditDealScreen>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -297,10 +296,8 @@ class _EditDealScreenState extends State<EditDealScreen>
     try {
       var item = _modelStaff.firstWhere(
           (element) => element.staffId == (widget.detail?.saleId ?? 0));
-      if (item != null) {
-        item.isSelected = true;
-        detailDeal.saleId = _modelStaffSelected![0].staffId;
-      }
+      item.isSelected = true;
+      detailDeal.saleId = _modelStaffSelected![0].staffId;
     } catch (e) {}
 
     detailDeal.saleId = _modelStaffSelected![0].staffId;
@@ -396,7 +393,7 @@ class _EditDealScreenState extends State<EditDealScreen>
           if (tag.tagId == tagSelected.tagId) {
             tagInt.add(tag.tagId);
             tag.selected = true;
-            tagsSelected?.add(tag);
+            tagsSelected.add(tag);
           }
         }
       }
@@ -535,7 +532,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                         BoxShadow(
                           offset: Offset(0, 1),
                           blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                         )
                       ]),
                   child: Center(
@@ -575,7 +572,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                         BoxShadow(
                           offset: Offset(0, 1),
                           blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                         )
                       ]),
                   child: Center(
@@ -602,8 +599,8 @@ class _EditDealScreenState extends State<EditDealScreen>
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
               selectedCustomer
-                  ? (customerItem?.customerName ?? "")
-                  : (leadItem?.leadFullName ?? ""),
+                  ? (customerItem.customerName ?? "")
+                  : (leadItem.leadFullName ?? ""),
               Assets.iconPerson,
               true,
               true,
@@ -778,7 +775,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 showMoreInfoDeal
                     ? _buildTextField(
                         AppLocalizations.text(LangKey.choosePipeline),
-                        pipelineSelected?.pipelineName ?? "",
+                        pipelineSelected.pipelineName ?? "",
                         Assets.iconChance,
                         true,
                         true,
@@ -804,7 +801,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                                   );
                                 });
                             if (pipeline != null) {
-                              if (pipelineSelected?.pipelineName !=
+                              if (pipelineSelected.pipelineName !=
                                   pipeline.pipelineName) {
                                 journeySelected = null;
                               }
@@ -838,7 +835,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 );
                               });
                           if (pipeline != null) {
-                            if (pipelineSelected?.pipelineName !=
+                            if (pipelineSelected.pipelineName !=
                                 pipeline.pipelineName) {
                               journeySelected = null;
                             }
@@ -897,7 +894,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
                     (_modelStaffSelected != null)
-                        ? _modelStaffSelected![0]?.staffName ?? ""
+                        ? _modelStaffSelected![0].staffName ?? ""
                         : "",
                     Assets.iconName,
                     true,
@@ -1087,7 +1084,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                        Colors.black.withValues(alpha: 0.3), BlendMode.dstATop),
                     image: ((item?.avatar == null)
                             ? AssetImage(Assets.imgEpoint)
                             : NetworkImage(item?.avatar ?? ""))
@@ -1126,7 +1123,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       models[i].selected = false;
     }
     models[index].selected = true;
-    detailDeal!.branchCode = models[index].branchCode;
+    detailDeal.branchCode = models[index].branchCode;
     setState(() {});
   }
 

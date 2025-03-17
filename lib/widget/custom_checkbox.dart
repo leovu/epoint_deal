@@ -13,7 +13,7 @@ class CustomCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Checkbox(
-      value: value ?? false,
+      value: value,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       activeColor: color ?? AppColors.primaryColor,
       onChanged: onChanged ?? (_){},

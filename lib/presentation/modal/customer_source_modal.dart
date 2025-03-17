@@ -16,7 +16,6 @@ class CustomerSourceModal extends StatefulWidget {
 }
 
 class _CustomerSourceModalState extends State<CustomerSourceModal> {
- final ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.sourceName ?? "",
+                          element.sourceName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.sources!.length - 1,
@@ -41,36 +40,6 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
                   ) : CustomDataNotFound(),
       haveBnConfirm: false,
       
-    );
-  }
-
-  List<Widget> _listWidget() {
-    return List.generate(
-        widget.sources!.length,
-        (index) => _buildItem(
-                widget.sources![index].sourceName!, widget.sources![index].selected!,
-                () {
-              selectedItem(index);
-            }));
-  }
-
-  Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        height: 40,
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: 17.0,
-                  color: selected ? Colors.orange : Colors.black,
-                  fontWeight: FontWeight.normal),
-            )
-          ],
-        ),
-      ),
     );
   }
 

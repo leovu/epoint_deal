@@ -21,7 +21,7 @@ class PickOneStaffScreen extends StatefulWidget {
   final List<WorkListStaffModel>? models;
   final List<WorkListStaffModel>? staffs;
   final int? projectId;
-  String? title;
+  final String? title;
   PickOneStaffScreen({this.models, this.staffs, this.projectId, this.title});
 
   @override

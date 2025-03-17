@@ -7,8 +7,8 @@ void main() async {
   // await PatchAllLocales.patchNumberSeperators(
   //   patchForSamsungKeyboards: true,
   // );
-  runApp(MaterialApp(
-    locale: const Locale('vi', 'VN'),
+  runApp(const MaterialApp(
+    locale: Locale('vi', 'VN'),
     title: 'Navigation Basics',
     debugShowCheckedModeBanner: false,
     home: MyApp(),
@@ -16,7 +16,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 // final Locale locale;
   @override
   State<MyApp> createState() => _MyAppState();
@@ -39,9 +39,9 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: InkWell(
-            child: Text("Open deal"),
-            onTap: () async {
-              var result = await EpointDealPlugin.open(
+            child: const Text("Open deal"),
+            onTap: () {
+              EpointDealPlugin.open(
                   context,
                   const Locale(LangKey.langVi, 'vi'),
                   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNzYyNjcwMSwiZXhwIjoxNzI3NjQ4MzAxLCJuYmYiOjE3Mjc2MjY3MDEsImp0aSI6IkVPRjNtWVVWbEVDRVF1akIiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.wOTi0kjqWzO4niSMzEN4YCxvZusxq-DPu9rf_A2vxVA',
@@ -49,10 +49,6 @@ class _MyAppState extends State<MyApp> {
                   {},
                   domain: 'https://staff-api.stag.epoints.vn',
                   brandCode: 'qc');
-
-              if (result != null) {
-                print(result);
-              }
             },
           ),
         ),

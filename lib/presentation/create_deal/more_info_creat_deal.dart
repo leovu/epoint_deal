@@ -23,9 +23,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MoreInfoCreatDeal extends StatefulWidget {
-  AddDealModelRequest? detailDeal;
-  List<BranchData>? branchData;
-  late CreateDealBloc bloc;
+  final AddDealModelRequest? detailDeal;
+  final List<BranchData>? branchData;
+  final CreateDealBloc bloc;
   MoreInfoCreatDeal({
     Key? key,
     this.branchData,
@@ -605,11 +605,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
 
 extension MoneyFormat on int {
   String getMoneyFormat() {
-    if (this == null) {
-      return "0";
-    } else {
-      return NumberFormat("#,###", "vi-VN").format(this);
-    }
+    return NumberFormat("#,###", "vi-VN").format(this);
   }
 }
 

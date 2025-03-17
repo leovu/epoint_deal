@@ -7,11 +7,9 @@ import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/request/work_create_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/interface/base_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/subjects.dart';
 
 class CommentBloc extends BaseBloc {
 

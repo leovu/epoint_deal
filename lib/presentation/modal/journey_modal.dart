@@ -18,8 +18,6 @@ class JourneyModal extends StatefulWidget {
 }
 
 class _JourneyModalState extends State<JourneyModal> {
-  final ScrollController _controller = ScrollController();
-
     @override
   void initState() {
     super.initState();
@@ -47,7 +45,7 @@ class _JourneyModalState extends State<JourneyModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.journeyName ?? "",
+                          element.journeyName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.journeys!.length - 1,

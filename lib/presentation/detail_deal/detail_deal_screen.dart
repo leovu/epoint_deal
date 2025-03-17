@@ -1,5 +1,4 @@
-import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -35,11 +34,11 @@ import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
 class DetailDealScreen extends StatefulWidget {
-  String? deal_code;
-  int? indexTab;
-  bool? customerCare;
-  int? id;
-  Function(int)? onCallback;
+  final String? deal_code;
+  final int? indexTab;
+  final bool? customerCare;
+  final int? id;
+  final Function(int)? onCallback;
   DetailDealScreen(
       {Key? key,
       this.deal_code,
@@ -122,8 +121,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     }
   }
 
-  String getNameFromPath(String path) {
-    String event = path ?? "";
+  String getNameFromPath(String event) {
     return event.contains("/") ? event.split("/").last : event;
   }
 
@@ -395,13 +393,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           data: model,
           skeletonBuilder: _buildSkeleton(),
           bodyBuilder: () {
-            bool isPersonal = model!.typeCustomer == customerTypePersonal;
             return CustomListView(
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               separatorPadding: AppSizes.maxPadding,
               children: [
-                _buildInfo(model),
+                _buildInfo(model!),
                 _buildCode(model),
                 _buildRow(_buildDealName(model), _buildAllottedPerson(model)),
                 _buildRow(_buildPipeline(model), _buildJourney(model)),
@@ -1063,7 +1060,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           BoxShadow(
                             offset: Offset(0, 1),
                             blurRadius: 2,
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.black.withValues(alpha: 0.3),
                           )
                         ], color: Colors.white),
                         child: Padding(
@@ -1074,7 +1071,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                               CustomNetworkImage(
                                 width: 15,
                                 height: 15,
-                                url: item?.manageTypeWorkIcon ??
+                                url: item.manageTypeWorkIcon ??
                                     "https://epoint-bucket.s3.ap-southeast-1.amazonaws.com/0f73a056d6c12b508a05eea29735e8a52022/07/14/3Ujo25165778317714072022.png",
                                 fit: BoxFit.fill,
                                 backgroundColor: Colors.transparent,
@@ -1229,7 +1226,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         BoxShadow(
           offset: Offset(0, 1),
           blurRadius: 2,
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
         )
       ], color: Colors.white),
       child: Row(
@@ -1337,7 +1334,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.1),
+                      color: AppColors.primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
@@ -1412,7 +1409,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
-                color: AppColors.black.withOpacity(0.1),
+                color: AppColors.black.withValues(alpha: 0.1),
                 blurRadius: 10.0,
                 offset: Offset(0, 2))
           ],
@@ -1514,7 +1511,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               BoxShadow(
                 offset: Offset(0, 1),
                 blurRadius: 2,
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
               )
             ]),
         child: Column(
@@ -1770,15 +1767,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_bloc.allowPop) {
-          Navigator.of(context).pop(_bloc.allowPop);
-        } else {
-          Navigator.of(context).pop();
-        }
-        return _bloc.allowPop;
-      },
+    return PopScope(
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(
@@ -1801,7 +1790,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         //   initialOpen: false,
         //   curveAnimation: Curves.easeOutSine,
         //   childrenBoxDecoration: BoxDecoration(
-        //       color: Colors.black.withOpacity(0.35),
+        //       color: Colors.black.withValues(alpha: 0.35),
         //       borderRadius: BorderRadius.circular(10.0)),
         //   childrenCount: 3,
         //   distance: 10,
@@ -1813,7 +1802,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         //         BoxShadow(
         //           offset: Offset(0, 1),
         //           blurRadius: 2,
-        //           color: Colors.black.withOpacity(0.3),
+        //           color: Colors.black.withValues(alpha: 0.3),
         //         )
         //       ], shape: BoxShape.circle, color: AppColors.primaryColor),
         //       width: 60,
@@ -1827,7 +1816,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         //         BoxShadow(
         //           offset: Offset(0, 1),
         //           blurRadius: 2,
-        //           color: Colors.black.withOpacity(0.3),
+        //           color: Colors.black.withValues(alpha: 0.3),
         //         )
         //       ], shape: BoxShape.circle, color: Color(0xFF5F5F5F)),
         //       width: 60,
@@ -1964,6 +1953,16 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         //   ],
         // ),
       ),
+      canPop: false,
+      onPopInvokedWithResult: (event, _) {
+        if (!event) {
+          if (_bloc.allowPop) {
+            Navigator.of(context).pop(_bloc.allowPop);
+          } else {
+            Navigator.of(context).pop();
+          };
+        }
+      },
     );
   }
 }

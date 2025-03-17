@@ -9,7 +9,7 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class FilterByBranch extends StatefulWidget {
-  List<BranchData>? branchData;
+  final List<BranchData>? branchData;
    FilterByBranch({ Key? key, this.branchData }) : super(key: key);
 
   @override
@@ -158,10 +158,6 @@ class _FilterByBranchState extends State<FilterByBranch> {
       ),
       onChanged: (event) {
         searchModel(event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

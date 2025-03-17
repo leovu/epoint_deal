@@ -14,7 +14,7 @@ class CustomSwitch extends StatelessWidget {
       onChanged: onChanged,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       activeColor: AppColors.primaryColor,
-      activeTrackColor: AppColors.primaryColor.withOpacity(0.2),
+      activeTrackColor: AppColors.primaryColor.withValues(alpha: 0.2),
     );
   }
 }

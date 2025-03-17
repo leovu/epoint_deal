@@ -40,7 +40,7 @@
 //                     BoxShadow(
 //                         offset: Offset(0.0, 0.0),
 //                         blurRadius: 1.0,
-//                         color: AppColors.blackColor.withOpacity(0.2))
+//                         color: AppColors.blackColor.withValues(alpha: 0.2))
 //                   ],
 //                   borderRadius: BorderRadius.circular(10.0)),
 //               padding: EdgeInsets.all(AppSizes.minPadding),
@@ -94,7 +94,7 @@
 //                                           padding: EdgeInsets.all(
 //                                               AppSizes.minPadding/ 2),
 //                                           name: model!.statusName ?? "",
-//                                           backgroundColor: AppColors.green300.withOpacity(0.2),
+//                                           backgroundColor: AppColors.green300.withValues(alpha: 0.2),
 //                                           indicatorColor: AppColors.green300,
 //                                           style: AppTextStyles.style12WhiteBold
 //                                               .copyWith(

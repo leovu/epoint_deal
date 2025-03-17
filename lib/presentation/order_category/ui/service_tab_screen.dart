@@ -1,4 +1,4 @@
-// import 'package:auto_size_text/auto_size_text.dart';
+// import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 // import 'package:auto_size_text_field/auto_size_text_field.dart';
 // import 'package:epoint_deal_plugin/common/localization/global.dart';
 // import 'package:epoint_deal_plugin/common/theme.dart';
@@ -148,7 +148,7 @@
 //                         BoxShadow(
 //                           offset: Offset(0, 1),
 //                           blurRadius: 2,
-//                           color: Colors.black.withOpacity(0.3),
+//                           color: Colors.black.withValues(alpha: 0.3),
 //                         )
 //                       ]),
 //         margin: EdgeInsets.symmetric(vertical: 4.0),

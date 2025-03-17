@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/connection/http_connection.dart';
-import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/interface/base_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';

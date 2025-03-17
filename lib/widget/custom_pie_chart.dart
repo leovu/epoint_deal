@@ -157,7 +157,7 @@
 //                       AutoSizeText(
 //                         AppLocalizations.text(LangKey.work)!,
 //                         style: AppTextStyles.style14DarkRedBold.copyWith(
-//                             color: AppColors.darkRedColor.withOpacity(0.5)
+//                             color: AppColors.darkRedColor.withValues(alpha: 0.5)
 //                         ),
 //                         maxLines: 1,
 //                         minFontSize: 1,
@@ -288,7 +288,7 @@
 //                   AutoSizeText(
 //                     title ?? "",
 //                     style: AppTextStyles.style14DarkRedBold.copyWith(
-//                         color: AppColors.darkRedColor.withOpacity(0.5)
+//                         color: AppColors.darkRedColor.withValues(alpha: 0.5)
 //                     ),
 //                     maxLines: 1,
 //                     minFontSize: 1,

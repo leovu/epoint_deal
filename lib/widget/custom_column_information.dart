@@ -305,7 +305,7 @@ class CustomColumnCenterInformation extends StatelessWidget {
         child ??
             Container(
               decoration: BoxDecoration(
-                  color: contentColor!.withOpacity(0.3),
+                  color: contentColor!.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(5.0)),
               padding: EdgeInsets.all(AppSizes.minPadding),
               alignment: Alignment.center,
@@ -515,7 +515,7 @@ class CustomColumnListInformation extends StatelessWidget {
         child ??
             Container(
               decoration: BoxDecoration(
-                  color: contentColor!.withOpacity(0.3),
+                  color: contentColor!.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(5.0)),
               padding: EdgeInsets.all(AppSizes.minPadding),
               alignment: Alignment.center,

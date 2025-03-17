@@ -8,7 +8,7 @@ import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class TypeOfWorkModal extends StatefulWidget {
-  List<GetTypeWorkData>? typeOfWorkData;
+  final List<GetTypeWorkData>? typeOfWorkData;
   TypeOfWorkModal({ Key? key, this.typeOfWorkData }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _TypeOfWorkModalState extends State<TypeOfWorkModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.manageTypeWorkName ?? "",
+                          element.manageTypeWorkName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.typeOfWorkData!.length - 1,

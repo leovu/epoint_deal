@@ -1,4 +1,3 @@
-import 'package:epoint_deal_plugin/model/request/booking_store_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/other_free_branch_response_model.dart';
 
 class AddDealModelRequest {

@@ -56,7 +56,7 @@ class _ListProductsDetailDealScreenState
                             physics: ClampingScrollPhysics(),
                             children: _listProductBuy
                                 .map((e) => _productItem(
-                                    e!, widget.detail!.productBuy!.indexOf(e)))
+                                    e, widget.detail!.productBuy!.indexOf(e)))
                                 .toList(),
                           )
                         : CustomEmpty(
@@ -230,7 +230,7 @@ class _ListProductsDetailDealScreenState
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
-                color: AppColors.black.withOpacity(0.1),
+                color: AppColors.black.withValues(alpha: 0.1),
                 blurRadius: 10.0,
                 offset: Offset(0, 2))
           ],

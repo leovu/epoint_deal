@@ -18,9 +18,6 @@ OrderSourceData? orderSourceSelected;
 }
 
 class _OrderSourcesModalState extends State<OrderSourcesModal> {
- final ScrollController _controller = ScrollController();
-
-
 @override
   void initState() {
     super.initState();
@@ -48,7 +45,7 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.orderSourceName ?? "",
+                          element.orderSourceName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.orderSourceData!.length - 1,

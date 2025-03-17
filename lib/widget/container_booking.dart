@@ -23,7 +23,7 @@ class ContainerBooking extends StatelessWidget {
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.blackColor.withOpacity(0.25),
+                      color: AppColors.blackColor.withValues(alpha: 0.25),
                       blurRadius: 2.0,
                       offset: Offset.zero,
                     )
@@ -793,7 +793,7 @@ class CustomTypeBooking extends StatelessWidget {
             BoxShadow(
                 offset: Offset(0, 0),
                 blurRadius: 4.0,
-                color: AppColors.blackColor.withOpacity(0.25))
+                color: AppColors.blackColor.withValues(alpha: 0.25))
           ],
         ),
         child: Row(

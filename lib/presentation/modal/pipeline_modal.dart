@@ -9,86 +9,52 @@ import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class PipelineModal extends StatefulWidget {
-  List<PipelineData>? pipeLineData = <PipelineData>[];
+  final List<PipelineData>? pipeLineData;
   PipelineData? pipelineSelected;
- PipelineModal({ Key? key, this.pipeLineData, this.pipelineSelected });
+  PipelineModal({Key? key, this.pipeLineData, this.pipelineSelected});
 
   @override
   _PipelineModalState createState() => _PipelineModalState();
 }
 
 class _PipelineModalState extends State<PipelineModal> {
-  final ScrollController _controller = ScrollController();
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        PipelineData? result = widget.pipeLineData!.firstWhereOrNull((element) => element.pipelineCode == widget.pipelineSelected?.pipelineCode);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      PipelineData? result = widget.pipeLineData?.firstWhereOrNull((element) =>
+          element.pipelineCode == widget.pipelineSelected?.pipelineCode);
       if (result != null) {
-         widget.pipelineSelected = result;
-         result.selected = true;
+        widget.pipelineSelected = result;
+        result.selected = true;
       }
-         setState(() {
-           
-         });
+      setState(() {});
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.choosePipeline),
-      widget: (widget.pipeLineData!.length > 0) ? CustomListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(0.0),
-                    children: (widget.pipeLineData ?? [])
-                        .asMap()
-                        .map((index, element) => MapEntry(
-                        index,
-                        CustomItemBottomSheet(
-                          element?.pipelineName ?? "",
-                              () => selectedItem( index),
-                          isBorder:
-                          index < widget.pipeLineData!.length - 1,
-                          isSelected: element.selected,
-                        )))
-                        .values
-                        .toList(),
-                  ) : CustomDataNotFound(),
-      haveBnConfirm: false,
-      
-    );
-  }
-
-  List<Widget> _listWidget() {
-    return (widget.pipeLineData != null) ? List.generate(
-        widget.pipeLineData!.length,
-        (index) => _buildItem(
-                widget.pipeLineData![index].pipelineName!, widget.pipeLineData![index].selected!,
-                () {
-              selectedItem(index);
-            })) : [CustomDataNotFound()];
-  }
-
-  Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        height: 40,
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: 17.0,
-                  color: selected ? Colors.orange : Colors.black,
-                  fontWeight: FontWeight.normal),
+      widget: (widget.pipeLineData!.length > 0)
+          ? CustomListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(0.0),
+              children: (widget.pipeLineData ?? [])
+                  .asMap()
+                  .map((index, element) => MapEntry(
+                      index,
+                      CustomItemBottomSheet(
+                        element.pipelineName ?? "",
+                        () => selectedItem(index),
+                        isBorder: index < widget.pipeLineData!.length - 1,
+                        isSelected: element.selected,
+                      )))
+                  .values
+                  .toList(),
             )
-          ],
-        ),
-      ),
+          : CustomDataNotFound(),
+      haveBnConfirm: false,
     );
   }
 

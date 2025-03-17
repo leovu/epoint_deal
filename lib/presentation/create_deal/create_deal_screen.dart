@@ -155,7 +155,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -308,7 +308,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         BoxShadow(
                           offset: Offset(0, 1),
                           blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                         )
                       ]),
                   child: Center(
@@ -348,7 +348,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         BoxShadow(
                           offset: Offset(0, 1),
                           blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                         )
                       ]),
                   child: Center(
@@ -558,7 +558,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                             pipelineSelected: pipelineSelected);
                       });
                   if (pipeline != null) {
-                    if (pipelineSelected?.pipelineName !=
+                    if (pipelineSelected.pipelineName !=
                         pipeline.pipelineName) {
                       journeySelected = null;
                     }
@@ -614,7 +614,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
                     ((_modelStaffSelected?.length ?? 0) > 0 &&
                             _modelStaffSelected != null)
-                        ? _modelStaffSelected![0]?.staffName ?? ""
+                        ? _modelStaffSelected![0].staffName ?? ""
                         : "",
                     Assets.iconName,
                     true,
@@ -802,7 +802,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                        Colors.black.withValues(alpha: 0.3), BlendMode.dstATop),
                     image: ((item?.avatar == null)
                             ? AssetImage(Assets.imgEpoint)
                             : NetworkImage(item?.avatar ?? ""))

@@ -286,10 +286,6 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
       ),
       onChanged: (event) {
         searchModel(event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

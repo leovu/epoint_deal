@@ -32,7 +32,7 @@ class CustomPickerColor extends StatelessWidget {
                   BoxShadow(
                       offset: Offset(0.0, 0.0),
                       blurRadius: 1,
-                      color: AppColors.blackColor.withOpacity(0.25))
+                      color: AppColors.blackColor.withValues(alpha: 0.25))
             ],
             border:
                 borderColor == null ? null : Border.all(color: borderColor!)),

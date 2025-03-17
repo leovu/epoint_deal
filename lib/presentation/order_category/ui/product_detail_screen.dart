@@ -1,6 +1,6 @@
 // import 'dart:io';
 
-// import 'package:auto_size_text/auto_size_text.dart';
+// import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 // import 'package:epoint_deal_plugin/common/lang_key.dart';
 // import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 // import 'package:epoint_deal_plugin/common/theme.dart';
@@ -324,7 +324,7 @@
 
 //   BoxShadow _buildBoxShadow() {
 //     return BoxShadow(
-//         color: AppColors.black.withOpacity(0.1),
+//         color: AppColors.black.withValues(alpha: 0.1),
 //         offset: Offset(0.0, -2),
 //         blurRadius: 4.0);
 //   }
@@ -476,8 +476,8 @@
 //                                   begin: FractionalOffset.topCenter,
 //                                   end: FractionalOffset.bottomCenter,
 //                                   colors: [
-//                                     Colors.grey.withOpacity(0.0),
-//                                     Colors.white.withOpacity(0.5),
+//                                     Colors.grey.withValues(alpha: 0.0),
+//                                     Colors.white.withValues(alpha: 0.5),
 //                                     Colors.white,
 //                                   ],
 //                                   stops: [

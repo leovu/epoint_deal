@@ -24,12 +24,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MoreInfoCreateDealFromLead extends StatefulWidget {
-  String? tagsString;
-  List<TagData>? tagsData;
-  List<BranchData>? branchData;
+  final String? tagsString;
+  final List<TagData>? tagsData;
+  final List<BranchData>? branchData;
   OrderSourceData? orderSourceSelected;
-  UpdateDealModelRequest? detailDeal;
-  late CreateDealBloc bloc;
+  final UpdateDealModelRequest? detailDeal;
+  final CreateDealBloc bloc;
   MoreInfoCreateDealFromLead(
       {Key? key,
       this.branchData,
@@ -46,7 +46,6 @@ class MoreInfoCreateDealFromLead extends StatefulWidget {
 
 class _MoreInfoCreateDealFromLeadState
     extends State<MoreInfoCreateDealFromLead> {
-  ScrollController _controller = ScrollController();
   bool showAdditionDeal = false;
 
   TextEditingController _probabilityText = TextEditingController();
@@ -377,7 +376,6 @@ class _MoreInfoCreateDealFromLeadState
           Gaps.vGap10,
           _buildVAT(),
         ],
-
         if (checkConfigKey(ConfigKey.receipt_other)) ...[
           Gaps.vGap10,
           _buildSurcharge()
@@ -647,10 +645,6 @@ class _MoreInfoCreateDealFromLeadState
 
 extension MoneyFormat on int {
   String getMoneyFormat() {
-    if (this == null) {
-      return "0";
-    } else {
-      return NumberFormat("#,###", "vi-VN").format(this);
-    }
+    return NumberFormat("#,###", "vi-VN").format(this);
   }
 }

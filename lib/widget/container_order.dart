@@ -672,7 +672,7 @@ class CustomTransportMethod extends StatelessWidget {
             ],
           ),
           selected
-              ? AppColors.primaryColor.withOpacity(0.1)
+              ? AppColors.primaryColor.withValues(alpha: 0.1)
               : Colors.transparent,
           selected ? AppColors.primaryColor : AppColors.greyC4Color),
       onTap: onTap,

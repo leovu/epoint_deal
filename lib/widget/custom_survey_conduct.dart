@@ -201,9 +201,9 @@ class CustomSurveyConductSingleChoice extends StatelessWidget {
             color: e.isSelected!
                 ? isHistory
                 ? model!.resultAnswer == surveyResultAnswerSuccess
-                ? AppColors.surveySuccess.withOpacity(0.2)
-                : AppColors.surveyWrong.withOpacity(0.2)
-                : AppColors.primaryColor.withOpacity(0.2)
+                ? AppColors.surveySuccess.withValues(alpha: 0.2)
+                : AppColors.surveyWrong.withValues(alpha: 0.2)
+                : AppColors.primaryColor.withValues(alpha: 0.2)
                 : Colors.transparent
         ),
         padding: EdgeInsets.all(AppSizes.minPadding),
@@ -305,7 +305,7 @@ class CustomSurveyConductMultiChoice extends StatelessWidget {
                 border: Border.all(
                     color: e.isSelected!? AppColors.primaryColor: AppColors.gray50
                 ),
-                color: e.isSelected!? AppColors.primaryColor.withOpacity(0.2): Colors.transparent
+                color: e.isSelected!? AppColors.primaryColor.withValues(alpha: 0.2): Colors.transparent
             ),
             padding: EdgeInsets.all(AppSizes.minPadding),
             child: Row(
@@ -709,7 +709,7 @@ class CustomSurveyConductPhoto extends StatelessWidget {
                 height: AppSizes.sizeOnTap,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.black.withOpacity(0.6),
+                  color: AppColors.black.withValues(alpha: 0.6),
                 ),
                 alignment: Alignment.center,
                 child: CustomImageIcon(

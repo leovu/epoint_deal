@@ -146,7 +146,7 @@
 //                 height: countPointSize,
 //                 decoration: BoxDecoration(
 //                   shape: BoxShape.circle,
-//                   color: AppColors.orange300.withOpacity(0.2)
+//                   color: AppColors.orange300.withValues(alpha: 0.2)
 //                 ),
 //                 alignment: Alignment.center,
 //                 child: Image.asset(

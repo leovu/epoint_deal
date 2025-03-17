@@ -6,7 +6,6 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/connection/http_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_work_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
@@ -14,12 +13,9 @@ import 'package:epoint_deal_plugin/model/response/get_list_staff_responese_model
 import 'package:epoint_deal_plugin/model/response/get_status_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/get_type_work_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/model/response/list_project_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
 import 'package:epoint_deal_plugin/model/type_card_model.dart';
 import 'package:epoint_deal_plugin/presentation/customer_care_deal/customer_care_bloc.dart';
-import 'package:epoint_deal_plugin/presentation/detail_deal/detail_deal_screen.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_projects_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/status_work_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
@@ -27,7 +23,6 @@ import 'package:epoint_deal_plugin/presentation/modal/type_of_work_modal.dart';
 import 'package:epoint_deal_plugin/presentation/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:epoint_deal_plugin/utils/custom_document_picker.dart';
-import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -41,7 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomerCareDeal extends StatefulWidget {
-  DetailDealData? detail;
+  final DetailDealData? detail;
 
   CustomerCareDeal({Key? key, this.detail}) : super(key: key);
 
@@ -167,7 +162,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -197,25 +192,9 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
       _bloc.workUploadFile(file);
     }
   }
-
-  static Future<List<File>?> openMultiDocument(
-    BuildContext context, {
-    List<String>? params,
-  }) async {
-    try {
-      bool permission = true;
-      permission = await CustomPermissionRequest.request(
-          context, PermissionRequestType.STORAGE);
-
-      if (!permission) return null;
-    } catch (_) {
-      return null;
-    }
-  }
-
+  
   String getNameFromPath(String path) {
-    String event = path ?? "";
-    return event.contains("/") ? event.split("/").last : event;
+    return path.contains("/") ? path.split("/").last : path;
   }
 
   @override
@@ -279,7 +258,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               focusNode: _titleFocusNode),
           _buildTextField(
               AppLocalizations.text(LangKey.chooseTypeOfWork),
-              typeOfWorkSelected?.manageTypeWorkName ?? "",
+              typeOfWorkSelected.manageTypeWorkName ?? "",
               Assets.iconMenu,
               false,
               true,
@@ -296,7 +275,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               if (types != null) {
                 typeOfWorkData = types.data;
 
-                GetTypeWorkData typeSelected =
+                GetTypeWorkData? typeSelected =
                     await CustomNavigator.showCustomBottomDialog(
                   context,
                   TypeOfWorkModal(typeOfWorkData: typeOfWorkData),
@@ -310,7 +289,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                 }
               }
             } else {
-              GetTypeWorkData typeSelected =
+              GetTypeWorkData? typeSelected =
                   await CustomNavigator.showCustomBottomDialog(
                 context,
                 TypeOfWorkModal(typeOfWorkData: typeOfWorkData),
@@ -324,7 +303,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseStartDay),
-              _fromDateText.text ?? "",
+              _fromDateText.text,
               Assets.iconEstablish,
               false,
               true,
@@ -335,7 +314,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseCompleteDay),
-              _toDateText.text ?? "",
+              _toDateText.text,
               Assets.iconEstablish,
               true,
               true,
@@ -346,7 +325,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseStatus),
-              statusWorkSelected?.manageStatusName ?? "",
+              statusWorkSelected.manageStatusName ?? "",
               Assets.iconStatus,
               true,
               true,
@@ -361,7 +340,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               if (statusWorkModel != null) {
                 statusWorkData = statusWorkModel.data;
 
-                GetStatusWorkData status =
+                GetStatusWorkData? status =
                     await CustomNavigator.showCustomBottomDialog(
                   context,
                   StatusWorkModal(statusWorkData: statusWorkData),
@@ -374,7 +353,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                 }
               }
             } else {
-              GetStatusWorkData status =
+              GetStatusWorkData? status =
                   await CustomNavigator.showCustomBottomDialog(
                 context,
                 StatusWorkModal(statusWorkData: statusWorkData),
@@ -391,7 +370,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           _buildTextField(
               AppLocalizations.text(LangKey.chooseExecutor),
               (_modelStaffSelected != null && _modelStaffSelected!.length > 0)
-                  ? _modelStaffSelected![0]?.staffName ?? ""
+                  ? _modelStaffSelected![0].staffName ?? ""
                   : "",
               Assets.iconPerson,
               true,
@@ -639,7 +618,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               //           BoxShadow(
                               //             offset: Offset(0, 1),
                               //             blurRadius: 2,
-                              //             color: Colors.black.withOpacity(0.3),
+                              //             color: Colors.black.withValues(alpha: 0.3),
                               //           )
                               //         ],
                               //         borderRadius: BorderRadius.circular(5.0)),
@@ -890,10 +869,6 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
   _showToDate() {
     DateTime selectedDate = _toDate ?? _fromDate ?? _now;
-    DateTime? maximumTime = _now;
-    if (_toDate?.year == _now.year &&
-        _toDate?.month == _now.month &&
-        (_toDate?.day ?? 0) > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -926,27 +901,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           );
         });
   }
-
-  Widget _richTextTitle(String title, bool madantory) {
-    return RichText(
-        text: TextSpan(
-            text: title + ":",
-            style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-            children: [
-          madantory
-              ? TextSpan(
-                  text: "*",
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold))
-              : TextSpan(text: "")
-        ]));
-  }
-
+  
   Widget typeOfWorkItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
@@ -1016,18 +971,18 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             DescriptionModelResponse? result = await DealConnection.addWork(
                 context,
                 AddWorkRequestModel(
-                    manageWorkTitle: _titleText.text ?? "",
+                    manageWorkTitle: _titleText.text,
                     manageWorkCustomerType: "deal",
                     manageTypeWorkId: addWorkModel.manageTypeWorkId,
-                    from_date: _fromDateText.text ?? "",
-                    to_date: _toDateText.text ?? "",
+                    from_date: _fromDateText.text,
+                    to_date: _toDateText.text,
                     time: null,
                     timeType: null,
                     processorId: addWorkModel.processorId,
                     approveId: null,
                     remindWork: _switchValue
                         ? RemindWork(
-                            dateRemind: _toDateText.text ?? "",
+                            dateRemind: _toDateText.text,
                             timeType: "m",
                             time: 15,
                             description: "Nhắc nhở " + _enterWorkDescText.text)
@@ -1035,7 +990,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     progress: null,
                     staffSupport: addWorkModel.staffSupport,
                     parentId: null,
-                    description: _enterWorkDescText.text ?? "",
+                    description: _enterWorkDescText.text,
                     manageProjectId: addWorkModel.manageProjectId,
                     customerId: widget.detail!.dealId,
                     listTag: addWorkModel.listTag,

@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
@@ -17,13 +16,12 @@ import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_actions/keyboard_actions_item.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
-import 'package:http/http.dart' as http;
 
 void keyboardDismissOnTap(BuildContext context) {
   final currentFocus = FocusScope.of(context);
@@ -124,7 +122,7 @@ launch(String? url) {
 }
 
 callPhone(String? phone) {
-  FlutterPhoneDirectCaller.callNumber(phone ?? "");
+  FlutterDirectCall.makeDirectCall(phone ?? "");
 }
 
 sendSMS(String? phone) {

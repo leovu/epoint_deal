@@ -84,7 +84,7 @@ class CustomProject extends StatelessWidget {
                   ? Container(
                       margin: EdgeInsets.only(left: 3.0),
                       decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.5),
+                          color: AppColors.primaryColor.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(2.0)),
                       padding: EdgeInsets.all(4.0),
                       child: Text(

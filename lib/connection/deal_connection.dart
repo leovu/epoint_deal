@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -16,10 +16,6 @@ import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.da
 import 'package:epoint_deal_plugin/model/request/list_customer_lead_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/list_project_model_request.dart';
-import 'package:epoint_deal_plugin/model/request/product_detail_request_model.dart';
-import 'package:epoint_deal_plugin/model/request/product_request_model.dart';
-import 'package:epoint_deal_plugin/model/request/service_detail_request_model.dart';
-import 'package:epoint_deal_plugin/model/request/service_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/update_deal_model_request.dart';
 import 'package:epoint_deal_plugin/model/request/work_create_comment_request_model.dart';
 import 'package:epoint_deal_plugin/model/request/work_list_comment_request_model.dart';
@@ -43,14 +39,9 @@ import 'package:epoint_deal_plugin/model/response/list_project_model_response.da
 import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/order_source_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/product_detail_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/product_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/service_detail_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/service_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/update_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_branch_responese_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_list_comment_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/work_list_department_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/work_upload_file_model_response.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
@@ -58,6 +49,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 class DealConnection {
   
@@ -502,7 +494,7 @@ class DealConnection {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/care-deal',{"deal_id" : deal_id});
         Navigator.of(context).pop();
-    if (responseData.isSuccess && responseData != null) {
+    if (responseData.isSuccess && responseData.data != null) {
       CareDealResponseModel data =
           CareDealResponseModel.fromJson(responseData.data!);
       return data;
@@ -573,10 +565,12 @@ class DealConnection {
         file: file,
         bucket: "epoint-bucket",
         region: "ap-southeast-1",
+        destDir: "",
+        filename: basename(file.path),
         contentType: mimeType
     );
 
-    if((url ?? "").isEmpty){
+    if(url.isEmpty){
       handleError(context!,AppLocalizations.text(LangKey.server_error));
       return null;
     } else {

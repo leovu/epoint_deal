@@ -32,8 +32,7 @@ class CustomAlertDialog extends StatelessWidget {
         this.isTicket = false,
         this.showSubmitted = true,
         this.child
-      })
-      : assert(enableCancel != null);
+      });
 
   @override
   Widget build(BuildContext context) {

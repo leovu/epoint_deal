@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:epoint_deal_plugin/model/request/product_detail_request_model.dart';
 import 'package:epoint_deal_plugin/model/response/product_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/product_new_response_model.dart';
@@ -273,7 +273,7 @@ class ProductDetailNewScreenState extends State<ProductDetailNewScreen> {
 
   BoxShadow _buildBoxShadow() {
     return BoxShadow(
-        color: AppColors.blackColor.withOpacity(0.1),
+        color: AppColors.blackColor.withValues(alpha: 0.1),
         offset: Offset(0.0, -2),
         blurRadius: 4.0);
   }
@@ -424,8 +424,8 @@ class ProductDetailNewScreenState extends State<ProductDetailNewScreen> {
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                         colors: [
-                          Colors.grey.withOpacity(0.0),
-                          Colors.white.withOpacity(0.5),
+                          Colors.grey.withValues(alpha: 0.0),
+                          Colors.white.withValues(alpha: 0.5),
                           Colors.white,
                         ],
                         stops: [

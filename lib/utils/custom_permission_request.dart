@@ -1,14 +1,12 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
-import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomPermissionRequest {
   static Future<bool> request(BuildContext context, PermissionRequestType type) async {
     return PermissionRequest.request(type, (){
-      assert (context != null);
       String? permission;
       if(type == PermissionRequestType.CAMERA){
         permission = AppLocalizations.text(LangKey.camera);

@@ -41,7 +41,7 @@ class CustomAvatars extends StatelessWidget {
                     height: _size,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.blackColor.withOpacity(0.3)
+                        color: AppColors.blackColor.withValues(alpha: 0.3)
                     ),
                     alignment: Alignment.center,
                     child: Text(

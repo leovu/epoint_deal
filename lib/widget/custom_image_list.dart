@@ -101,7 +101,7 @@ class CustomImageList extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
-                          color: AppColors.blackColor.withOpacity(0.5)),
+                          color: AppColors.blackColor.withValues(alpha: 0.5)),
                       padding: EdgeInsets.all(5.0),
                       child: CustomImageIcon(
                         icon: Assets.iconTrash,
@@ -119,7 +119,7 @@ class CustomImageList extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.vertical(bottom: Radius.circular(_radius)),
-                      color: AppColors.blackColor.withOpacity(0.5)
+                      color: AppColors.blackColor.withValues(alpha: 0.5)
                   ),
                   padding: EdgeInsets.all(2.0),
                   child: Text(

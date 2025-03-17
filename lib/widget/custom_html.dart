@@ -16,7 +16,7 @@ class CustomHtml extends StatelessWidget {
         physics: physics??AlwaysScrollableScrollPhysics(),
         child: HtmlWidget(
           html!,
-          onTapUrl: (url) => launch(url),
+          onTapUrl: (url) => launchUrl(Uri.parse(url)),
         )
     );
   }

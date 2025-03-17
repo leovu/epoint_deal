@@ -1,7 +1,6 @@
 
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/widget/decimal_number_input_formatter.dart';
 import 'package:flutter/material.dart';
 
 class OtherFreeBranchResponseModel {

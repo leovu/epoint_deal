@@ -10,7 +10,6 @@ import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as img;
 
 class CustomImagePicker {
   static showPicker(BuildContext context, Function(File) onConfirm, {bool isSelfie = false}){
@@ -70,8 +69,6 @@ class CustomImagePicker {
   }
 
   static Future<File?> pickImage(BuildContext context, ImageSource source, {bool isSelfie = false}) async {
-    if (source == null)
-      return null;
     try {
       bool permission = false;
       if (source == ImageSource.camera) {
@@ -119,8 +116,6 @@ class CustomImagePicker {
       return null;
     }
     List<XFile> pickedFile = await ImagePicker().pickMultiImage();
-    if (pickedFile == null)
-      return null;
     return pickedFile.map((e) => File(e.path)).toList();
   }
 }

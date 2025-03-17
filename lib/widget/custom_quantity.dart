@@ -67,7 +67,7 @@ class CustomPrice extends StatelessWidget {
       backgroundColor: Colors.transparent,
       borderColor: AppColors.borderColor,
       inputFormatters: [
-        if((Global.decimalNumber ?? 0) == 0)
+        if(Global.decimalNumber == 0)
           ...[
             FilteringTextInputFormatter.digitsOnly,
             FormatNumberInputFormatter(AppFormat.quantityFormat),

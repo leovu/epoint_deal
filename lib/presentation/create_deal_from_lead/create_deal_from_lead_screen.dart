@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
@@ -164,7 +162,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -336,7 +334,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       BoxShadow(
                         offset: Offset(0, 1),
                         blurRadius: 2,
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                       )
                     ]),
                 child: Center(
@@ -364,7 +362,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       BoxShadow(
                         offset: Offset(0, 1),
                         blurRadius: 2,
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                       )
                     ]),
                 child: Center(
@@ -509,7 +507,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 showMoreInfoDeal
                     ? _buildTextField(
                         AppLocalizations.text(LangKey.choosePipeline),
-                        pipelineSelected?.pipelineName ?? "",
+                        pipelineSelected.pipelineName ?? "",
                         Assets.iconChance,
                         true,
                         true,
@@ -535,7 +533,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                                   );
                                 });
                             if (pipeline != null) {
-                              if (pipelineSelected?.pipelineName !=
+                              if (pipelineSelected.pipelineName !=
                                   pipeline.pipelineName) {
                                 journeySelected = null;
                               }
@@ -569,7 +567,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                                 );
                               });
                           if (pipeline != null) {
-                            if (pipelineSelected?.pipelineName !=
+                            if (pipelineSelected.pipelineName !=
                                 pipeline.pipelineName) {
                               journeySelected = null;
                             }
@@ -627,8 +625,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 // chọn người được phân bổ
                 _buildTextField(
                     AppLocalizations.text(LangKey.chooseAllottedPerson),
-                    (_modelStaffSelected != null)
-                        ? _modelStaffSelected[0]?.staffName ?? ""
+                    (_modelStaffSelected.isNotEmpty)
+                        ? _modelStaffSelected[0].staffName ?? ""
                         : "",
                     Assets.iconName,
                     true,
@@ -852,7 +850,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                        Colors.black.withValues(alpha: 0.3), BlendMode.dstATop),
                     image: ((item?.avatar == null)
                         ? AssetImage(Assets.imgEpoint)
                         : NetworkImage(item?.avatar ?? "")) as ImageProvider<Object>,

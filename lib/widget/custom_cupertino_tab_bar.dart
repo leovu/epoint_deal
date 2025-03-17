@@ -79,7 +79,7 @@ class CustomCupertinoTabBar extends StatelessWidget
   bool opaque(BuildContext context) {
     final Color backgroundColor =
         this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor;
-    return CupertinoDynamicColor.resolve(backgroundColor, context).alpha ==
+    return CupertinoDynamicColor.resolve(backgroundColor, context).a ==
         0xFF;
   }
 

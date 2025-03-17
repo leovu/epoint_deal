@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/presentation/detail_deal/bloc/detail_deal_bloc.dart';
@@ -28,7 +27,7 @@ class _AddFileScreenState extends State<AddFileScreen>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -136,7 +135,7 @@ class _AddFileScreenState extends State<AddFileScreen>
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColor.withOpacity(0.1),
+                  color: AppColors.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 2.0),

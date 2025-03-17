@@ -136,7 +136,7 @@ class PickOneStaffBloc extends BaseBloc {
   }
 
   selectAll(List<WorkListStaffModel> models) {
-    for (var e in models ?? <WorkListStaffModel>[]) {
+    for (var e in models) {
       e.isSelected = true;
     }
     setModels(models);
@@ -145,10 +145,8 @@ class PickOneStaffBloc extends BaseBloc {
   delete(String event) {
     try {
       var results = _models!.where((element) => element.isSelected!).toList();
-      if (results != null) {
-        for (var e in results) {
-          e.isSelected = false;
-        }
+      for (var e in results) {
+        e.isSelected = false;
       }
     } catch (_) {}
 
@@ -159,9 +157,7 @@ class PickOneStaffBloc extends BaseBloc {
     List<WorkListStaffModel> models = [];
     try {
       var results = events.where((element) => element.isSelected!).toList();
-      if (results != null) {
-        models = results;
-      }
+      models = results;
     } catch (_) {}
 
     Navigator.of(context!).pop(models);
@@ -172,7 +168,7 @@ class PickOneStaffBloc extends BaseBloc {
       models = [];
       try {
         var results = _models!.where((element) => element.isSelected!).toList();
-        if ((results?.length ?? 0) != 0) {
+        if (results.length != 0) {
           models = results;
         }
       } catch (_) {}
@@ -233,9 +229,7 @@ class PickOneStaffBloc extends BaseBloc {
         try {
           var result =
               staffs!.firstWhere((element) => element.staffId == e.staffId);
-          if (result != null) {
-            result.isSelected = true;
-          }
+          result.isSelected = true;
         } catch (_) {}
       }
     }
@@ -243,7 +237,7 @@ class PickOneStaffBloc extends BaseBloc {
 
    // search chi nhánh
   searchAgency(String event) {
-    if (_branchModels == null || event.isEmpty) {
+    if (_branchModels.isEmpty || event.isEmpty) {
       setBranchModels(_branchModels);
     } else {
       List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
@@ -259,7 +253,7 @@ class PickOneStaffBloc extends BaseBloc {
           }
           return result;
         }).toList();
-        listModel = models ?? [];
+        listModel = models;
         setBranchModels(listModel);
       } catch (_) {
         setBranchModels(_branchModels);
@@ -269,7 +263,7 @@ class PickOneStaffBloc extends BaseBloc {
 
     // search department
   searchDepartment(String event) {
-    if (_departmentModels == null || event.isEmpty) {
+    if (_departmentModels.isEmpty || event.isEmpty) {
       setDepartmentModels(_departmentModels);
     } else {
       List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
@@ -285,7 +279,7 @@ class PickOneStaffBloc extends BaseBloc {
           }
           return result;
         }).toList();
-        listModel = models ?? [];
+        listModel = models;
         setDepartmentModels(listModel);
       } catch (_) {
         setDepartmentModels(_departmentModels);

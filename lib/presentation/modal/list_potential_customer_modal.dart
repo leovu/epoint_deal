@@ -269,11 +269,6 @@ ListCustomLeadData? _model ;
       ),
       onChanged: (event) {
         searchModel(widget.items,event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-          
-        }
       },
     );
   }

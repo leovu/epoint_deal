@@ -25,9 +25,9 @@ class CustomSearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:padding ?? EdgeInsets.only(
-        top: AppSizes.maxPadding ?? 0.0,
-        right: AppSizes.maxPadding ?? 0.0,
-        left: AppSizes.maxPadding ?? 0.0),
+        top: AppSizes.maxPadding,
+        right: AppSizes.maxPadding,
+        left: AppSizes.maxPadding),
       child: CustomTextField(
         focusNode: focusNode,
         controller: controller,

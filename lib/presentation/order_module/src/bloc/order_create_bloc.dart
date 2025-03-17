@@ -14,9 +14,7 @@ import 'package:epoint_deal_plugin/model/response/booking_detail_response_model.
 import 'package:epoint_deal_plugin/model/response/booking_list_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/booking_staff_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/create_order_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/customer_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/customer_response_model.dart';
-import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
 import 'package:epoint_deal_plugin/model/response/member_discount_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_detail_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_service_card_response_model.dart';

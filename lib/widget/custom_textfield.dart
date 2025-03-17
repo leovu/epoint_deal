@@ -1,7 +1,6 @@
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
-import 'package:epoint_deal_plugin/widget/custom_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -83,7 +82,7 @@ class CustomTextField extends StatelessWidget {
                   BoxShadow(
                       offset: Offset(0.0, 0.0),
                       blurRadius: 0,
-                      color: AppColors.black.withOpacity(0))
+                      color: AppColors.black.withValues(alpha: 0))
             ],
             border:
                 borderColor == null ? null : Border.all(color: borderColor!)),

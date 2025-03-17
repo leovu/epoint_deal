@@ -15,8 +15,6 @@ class CustomFileViewState extends State<CustomFileView> {
 
   late WebViewController _controller;
 
-  bool _isStarted = false;
-
   @override
   void initState() {
     // TODO: implement initState

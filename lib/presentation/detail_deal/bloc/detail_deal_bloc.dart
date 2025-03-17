@@ -8,7 +8,6 @@ import 'package:epoint_deal_plugin/model/request/get_history_req_model.dart';
 import 'package:epoint_deal_plugin/model/request/upload_file_req_model.dart';
 import 'package:epoint_deal_plugin/model/response/care_deal_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/detail_deal_model_response.dart';
-import 'package:epoint_deal_plugin/model/response/get_status_work_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/list_deal_file_response_model.dart';
 import 'package:epoint_deal_plugin/model/response/list_note_res_model.dart';
 import 'package:epoint_deal_plugin/model/response/order_history_model_response.dart';
@@ -24,7 +23,6 @@ import 'package:epoint_deal_plugin/presentation/list_product_detail/list_product
 import 'package:epoint_deal_plugin/utils/custom_document_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 

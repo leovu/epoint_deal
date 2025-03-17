@@ -24,7 +24,7 @@ class CustomMenu extends StatelessWidget {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.borderColor.withOpacity(0.2),
+            color: AppColors.borderColor.withValues(alpha: 0.2),
             border: Border.all(color: AppColors.borderColor),
             borderRadius: BorderRadius.circular(10.0)
         ),

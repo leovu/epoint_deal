@@ -10,7 +10,7 @@ class CustomInformationDealWidget extends StatelessWidget {
     print(name);
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: AppSizes.minPadding!, vertical: AppSizes.minPadding!/2),
+          horizontal: AppSizes.minPadding, vertical: AppSizes.minPadding/2),
       decoration: BoxDecoration(
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(6.0)),

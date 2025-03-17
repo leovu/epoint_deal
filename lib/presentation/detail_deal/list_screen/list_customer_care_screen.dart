@@ -249,7 +249,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                           BoxShadow(
                             offset: Offset(0, 1),
                             blurRadius: 2,
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.black.withValues(alpha: 0.3),
                           )
                         ], color: Colors.white),
                         child: Padding(
@@ -416,7 +416,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
         BoxShadow(
           offset: Offset(0, 1),
           blurRadius: 2,
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
         )
       ], color: Colors.white),
       child: Row(

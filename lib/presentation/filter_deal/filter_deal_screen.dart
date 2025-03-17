@@ -571,46 +571,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (allowPop) {
-          widget.filterScreenModel = FilterScreenModel(
-            filterModel: ListDealModelRequest(
-                search: "",
-                page: 1,
-                orderSourceName: "",
-                createdAt: "",
-                closingDate: "",
-                closingDueDate: "",
-                branchId: [],
-                staffId: [],
-                pipelineId: [],
-                journey_id: [],
-                manageStatusId: [],
-                careHistory: ""),
-            fromDate_closing_date: null,
-            fromDate_closing_due_date: null,
-            fromDate_created_at: null,
-            toDate_created_at: null,
-            id_created_at: "",
-            id_closing_date: "",
-            toDate_closing_date: null,
-            toDate_closing_due_date: null,
-            id_closing_due_date: "",
-            fromDate_history_care_date: null,
-            toDate_history_care_date: null,
-            fromDate_work_schedule_date: null,
-            toDate_work_schedule_date: null,
-            id_history_care_date: "",
-            id_work_schedule_date: "",
-          );
-
-          Navigator.of(context).pop(widget.filterScreenModel);
-        } else {
-          Navigator.of(context).pop();
-        }
-        return allowPop;
-      },
+    return PopScope(
       child: Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(
@@ -625,6 +586,47 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),
               child: _buildBody())),
+      canPop: false,
+      onPopInvokedWithResult: (event, _) {
+        if (!event) {
+          if (allowPop) {
+            widget.filterScreenModel = FilterScreenModel(
+              filterModel: ListDealModelRequest(
+                  search: "",
+                  page: 1,
+                  orderSourceName: "",
+                  createdAt: "",
+                  closingDate: "",
+                  closingDueDate: "",
+                  branchId: [],
+                  staffId: [],
+                  pipelineId: [],
+                  journey_id: [],
+                  manageStatusId: [],
+                  careHistory: ""),
+              fromDate_closing_date: null,
+              fromDate_closing_due_date: null,
+              fromDate_created_at: null,
+              toDate_created_at: null,
+              id_created_at: "",
+              id_closing_date: "",
+              toDate_closing_date: null,
+              toDate_closing_due_date: null,
+              id_closing_due_date: "",
+              fromDate_history_care_date: null,
+              toDate_history_care_date: null,
+              fromDate_work_schedule_date: null,
+              toDate_work_schedule_date: null,
+              id_history_care_date: "",
+              id_work_schedule_date: "",
+            );
+
+            Navigator.of(context).pop(widget.filterScreenModel);
+          } else {
+            Navigator.of(context).pop();
+          }
+        }
+      },
     );
   }
 

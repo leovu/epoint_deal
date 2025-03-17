@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:badges/badges.dart' as bgd;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';

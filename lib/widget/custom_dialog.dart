@@ -1,6 +1,5 @@
 
 import 'package:epoint_deal_plugin/common/theme.dart';
-import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -17,13 +16,13 @@ class CustomDialog extends StatelessWidget {
     this.bottom = false,
     this.cancelable = true,
     this.actions
-  }):assert(screen != null && cancelable != null);
+  });
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return CustomScaffold(
-      backgroundColor: Colors.black.withOpacity(0.3),
+      backgroundColor: Colors.black.withValues(alpha: 0.3),
       body: SingleChildScrollView(
         child: Container(
           height: AppSizes.screenHeight,

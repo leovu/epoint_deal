@@ -102,7 +102,7 @@ class _State extends State<CustomerOrderPhotoScreen> with SingleTickerProviderSt
           height: AppSizes.sizeOnTap,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppSizes.sizeOnTap!),
-              color: AppColors.hintColor.withOpacity(0.7)
+              color: AppColors.hintColor.withValues(alpha: 0.7)
           ),
           alignment: Alignment.center,
           child: Icon(
@@ -144,7 +144,7 @@ class _State extends State<CustomerOrderPhotoScreen> with SingleTickerProviderSt
           Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color: AppColors.blackColor.withOpacity(0.5)
+                color: AppColors.blackColor.withValues(alpha: 0.5)
             ),
             child: CustomListView(
               shrinkWrap: true,

@@ -34,7 +34,7 @@ class CustomAvatarWithURL extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.primaryColor.withOpacity(0.5)
+            color: AppColors.primaryColor.withValues(alpha: 0.5)
           ),
           padding: EdgeInsets.all(size! / 5),
           alignment: Alignment.center,
@@ -138,7 +138,7 @@ class CustomAvatarWithURL extends StatelessWidget {
 //           height: size,
 //           decoration: BoxDecoration(
 //             shape: BoxShape.circle,
-//             color: AppColors.primaryColor.withOpacity(0.5)
+//             color: AppColors.primaryColor.withValues(alpha: 0.5)
 //           ),
 //           padding: EdgeInsets.all(size! / 5),
 //           alignment: Alignment.center,

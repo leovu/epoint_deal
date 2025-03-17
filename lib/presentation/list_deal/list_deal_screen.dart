@@ -23,7 +23,6 @@ import 'package:epoint_deal_plugin/widget/custom_skeleton.dart';
 import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
 class ListDealScreen extends StatefulWidget {
@@ -306,12 +305,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
                 BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
             isDense: true,
           ),
-          onChanged: (event) {
-            // print(event.toLowerCase());
-            if (_searchtext != null) {
-              // print(_searchext.text);
-            }
-          },
           onSubmitted: (event) async {
             filterModel!.page = 1;
             getData(false);
@@ -344,7 +337,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                   BoxShadow(
                     offset: Offset(0, 1),
                     blurRadius: 2,
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                   )
                 ],
                 color: Colors.white,
@@ -438,13 +431,13 @@ class _ListDealScreenState extends State<ListDealScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          infoItem(Assets.iconPerson, item?.customerName ?? "",
+                          infoItem(Assets.iconPerson, item.customerName ?? "",
                               false),
-                          infoItem(Assets.iconCall, item?.phone ?? "", false),
+                          infoItem(Assets.iconCall, item.phone ?? "", false),
                           infoItem(
-                              Assets.iconTime, item?.createdAt ?? "", false),
+                              Assets.iconTime, item.createdAt ?? "", false),
                           infoItem(
-                              Assets.iconName, item?.staffFullName ?? "", true),
+                              Assets.iconName, item.staffFullName ?? "", true),
                           Container(
                             padding:
                                 const EdgeInsets.only(left: 8, bottom: 8.0),
@@ -598,7 +591,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                             children: [
                               _actionItem(
                                   Assets.iconCalendar, Color(0xFF26A7AD),
-                                  number: item?.relatedWork ?? 0,
+                                  number: item.relatedWork ?? 0,
                                   ontap: () async {
                                 bool? result = await Navigator.of(context)
                                     .push(MaterialPageRoute(
@@ -745,7 +738,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFF45E38)),
                         child: Center(
-                            child: Text((number > 10) ? "9+" : "${number ?? 0}",
+                            child: Text((number > 10) ? "9+" : "${number}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14.0,

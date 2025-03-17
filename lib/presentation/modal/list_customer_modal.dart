@@ -152,7 +152,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
               child: Container(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  item?.fullName ?? "",
+                  item.fullName ?? "",
                   style: TextStyle(
                       fontSize: 16.0,
                       color:
@@ -213,10 +213,6 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
       ),
       onChanged: (event) {
         searchModel(_model!.data, event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }
@@ -249,7 +245,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
 
 extension NumberParsing on String {
   double? tryParseDouble({bool isRound = false}) {
-    if (this == null || this == "null") {
+    if (this == "null") {
       return 0.0;
     }
     String param = this.toString().replaceAll(",", "");

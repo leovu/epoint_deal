@@ -1,0 +1,2 @@
+/Users/trungnt110/Documents/Project/Flutter/Projects/epoint_deal/example/android/app/.cxx/RelWithDebInfo/1p6y3s1u/x86/CMakeFiles/edit_cache.dir
+/Users/trungnt110/Documents/Project/Flutter/Projects/epoint_deal/example/android/app/.cxx/RelWithDebInfo/1p6y3s1u/x86/CMakeFiles/rebuild_cache.dir

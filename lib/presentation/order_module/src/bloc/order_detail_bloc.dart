@@ -18,7 +18,6 @@ import 'package:epoint_deal_plugin/model/response/service_card_response_model.da
 import 'package:epoint_deal_plugin/model/response/service_new_response_model.dart';
 import 'package:epoint_deal_plugin/model/response_model.dart';
 import 'package:epoint_deal_plugin/presentation/interface/base_bloc.dart';
-import 'package:epoint_deal_plugin/presentation/order_module/src/ui/list_printer_screen.dart';
 import 'package:epoint_deal_plugin/presentation/order_module/src/ui/order_payment_new_screen.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_appbar.dart';
@@ -30,7 +29,6 @@ import 'package:rxdart/rxdart.dart';
 // import 'package:printing/printing.dart';
 
 import '../ui/order_create_screen.dart';
-import '../ui/order_photo_upload_screen.dart';
 
 class OrderDetailBloc extends BaseBloc {
   OrderDetailBloc(BuildContext context) {

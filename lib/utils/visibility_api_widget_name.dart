@@ -1,5 +1,4 @@
 
-import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
 import 'package:collection/collection.dart';
 
@@ -66,13 +65,10 @@ class VisibilityWidgetName {
 bool checkVisibilityKey(String key) {
 
   bool returnCheck = false;
-  try{
-    final model = Global.permissionModels!.firstWhere((element) => element['widget_id'] == key);
-    if(model != null){
-      returnCheck = true;
-    }
+  final model = Global.permissionModels!.firstWhereOrNull((element) => element['widget_id'] == key);
+  if(model != null){
+    returnCheck = true;
   }
-  catch(_){}
   return returnCheck;
 }
 

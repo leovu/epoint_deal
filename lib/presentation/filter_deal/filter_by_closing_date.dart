@@ -10,8 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class FilterByClosingDate extends StatefulWidget {
-
-    FilterScreenModel? filterScreenModel = FilterScreenModel();
+  FilterScreenModel? filterScreenModel = FilterScreenModel();
   List<ClosingDateModel>? closingDateOptions = <ClosingDateModel>[];
   String? id_closing_date;
   FilterByClosingDate({Key? key, this.closingDateOptions, this.filterScreenModel, this.id_closing_date});

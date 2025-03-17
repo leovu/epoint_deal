@@ -10,7 +10,6 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/discount_cart_model.dart';
 import 'package:epoint_deal_plugin/model/response/branch_response_model.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
-import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
@@ -196,99 +195,6 @@ class OrderedServiceScreenState extends State<OrderedServiceScreen> {
               onChoose: _bloc.chooseVoucher,
               onRemove: _bloc.removeVoucher);
         });
-  }
-
-  Widget _buildSurcharge() {
-    return CustomRowInformation(
-      icon: Assets.iconTagAdd,
-      title: AppLocalizations.text(LangKey.surcharge),
-      child: CustomPrice(
-        focusNode: _bloc.focusSurcharge,
-        controller: _bloc.controllerSurcharge,
-        hint: AppLocalizations.text(LangKey.enter_amount),
-        onChanged: (_) => _bloc.setVoucherModel(_bloc.voucherModel),
-      ),
-    );
-  }
-
-  Widget _buildStaffs() {
-    return CustomColumnInformation(
-        title: AppLocalizations.text(LangKey.staff_1),
-        child: Column(
-          children: [
-            CustomTextField(
-              backgroundColor: Colors.transparent,
-              borderColor: AppColors.borderColor,
-              readOnly: true,
-              hintText:
-                  "${AppLocalizations.text(LangKey.choose)} ${AppLocalizations.text(LangKey.staff)!.toLowerCase()}",
-              suffixIconData: Icons.navigate_next,
-              onTap: _bloc.pushStaff,
-            ),
-            StreamBuilder(
-                stream: _bloc.outputStaffModels,
-                initialData: _bloc.staffModels,
-                builder: (_, snapshot) {
-                  if ((_bloc.staffModels?.length ?? 0) == 0) {
-                    return Container();
-                  }
-                  return Container(
-                    padding: EdgeInsets.only(top: AppSizes.minPadding),
-                    alignment: Alignment.centerLeft,
-                    child: Wrap(
-                      spacing: AppSizes.minPadding,
-                      runSpacing: AppSizes.minPadding,
-                      children: _bloc.staffModels!
-                          .map((e) => Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomChip(
-                                    radius: 5.0,
-                                    backgroundColor: AppColors.greyC4Color,
-                                    text: e.fullName,
-                                    style: AppTextStyles.style13WhiteNormal,
-                                    onClose: () => _bloc.deleteStaff(e),
-                                  )
-                                ],
-                              ))
-                          .toList(),
-                    ),
-                  );
-                })
-          ],
-        ));
-  }
-
-  Widget _buildRoom() {
-    return CustomColumnInformation(
-      title: AppLocalizations.text(LangKey.room),
-      child: StreamBuilder(
-          stream: _bloc.outputRoomModels,
-          initialData: _bloc.roomModel,
-          builder: (_, snapshot) {
-            if (snapshot.hasError) {
-              return CustomErrorText(snapshot.error as String?);
-            }
-
-            List<CustomDropdownModel>? models =
-            snapshot.data as List<CustomDropdownModel>?;
-
-            return StreamBuilder(
-                stream: _bloc.outputRoomModel,
-                initialData: null,
-                builder: (_, snapshot) {
-                  CustomDropdownModel? model =
-                  snapshot.data as CustomDropdownModel?;
-                  return CustomDropdown(
-                    value: model,
-                    menus: models,
-                    hint: AppLocalizations.text(LangKey.room),
-                    icon: Assets.iconRoom,
-                    onChanged: (event) => _bloc.selectRoom(event),
-                  );
-                });
-          }),
-    );
   }
 
   Widget _buildNote() {

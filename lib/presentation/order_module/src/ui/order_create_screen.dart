@@ -18,7 +18,6 @@ import 'package:epoint_deal_plugin/presentation/order_module/src/bloc/order_crea
 import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/utils/visibility_api_widget_name.dart';
-import 'package:epoint_deal_plugin/widget/custom_bottom.dart';
 import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
@@ -500,27 +499,6 @@ class OrderCreateScreenState extends State<OrderCreateScreen> {
             onRefresh: _bloc.onRefresh,
           );
         });
-  }
-
-  Widget _buildTotal() {
-    return Row(
-      children: [
-        Text(
-          AppLocalizations.text(LangKey.need_to_pay)!,
-          style: AppTextStyles.style12HintNormal,
-          textAlign: TextAlign.right,
-        ),
-        SizedBox(
-          width: AppSizes.minPadding,
-        ),
-        Expanded(
-            child: Text(
-          formatMoney(_bloc.amount),
-          style: AppTextStyles.style14PrimaryBold,
-          textAlign: TextAlign.right,
-        ))
-      ],
-    );
   }
 
   Widget _buildBottom() {

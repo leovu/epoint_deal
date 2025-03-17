@@ -16,7 +16,6 @@ class CustomerTypeModal extends StatefulWidget {
 }
 
 class _CustomerTypeModalState extends State<CustomerTypeModal> {
- final ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class _CustomerTypeModalState extends State<CustomerTypeModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.customerTypeName ?? "",
+                          element.customerTypeName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.customerTypeData!.length - 1,
