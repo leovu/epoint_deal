@@ -20,24 +20,27 @@ abstract class AWSConnection<T> {
       return await handleError(data);
     }
 
-    final url = await AwsS3.uploadFile(
-      accessKey: accessKey,
-      secretKey: secretKey,
-      file: file.file!,
-      bucket: bucket,
-      region: region,
-      destDir: "",
-      filename: basename(file.file!.path)
-    );
+    final destDir = "directory";
+    final filename = basename(file.file!.path);
+    final code = await AwsS3.uploadFile(
+        accessKey: accessKey,
+        secretKey: secretKey,
+        file: file.file!,
+        bucket: bucket,
+        region: region,
+        destDir: destDir,
+        filename: filename);
 
-    if (url.isEmpty) {
+    if (code != "200" && code != "204") {
       return await handleError(getError(
         AppLocalizations.text(LangKey.server_error),
       ));
     }
 
-    return await handleResponse(
-        ResponseModel(url: url, success: true));
+    return await handleResponse(ResponseModel(
+        url: "https://$bucket.s3.$region.amazonaws.com/$destDir/$filename",
+        success: true));
+
   }
 
   Future<T?> _checkConnectivity() async {

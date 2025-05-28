@@ -559,23 +559,27 @@ class DealConnection {
 
     final mimeType = lookupMimeType(file.path)!;
 
-    final url = await AwsS3.uploadFile(
+    final destDir = "directory";
+    final filename = basename(file.path);
+    final bucket = "epoint-bucket";
+    final region = "ap-southeast-1";
+    final code = await AwsS3.uploadFile(
         accessKey: "AKIAUO66DKWUKVBVJCJK",
         secretKey: "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",
         file: file,
-        bucket: "epoint-bucket",
-        region: "ap-southeast-1",
-        destDir: "",
-        filename: basename(file.path),
+        bucket: bucket,
+        region: region,
+        destDir: destDir,
+        filename: filename,
         contentType: mimeType
     );
 
-    if(url.isEmpty){
+    if (code != "200" && code != "204") {
       handleError(context!,AppLocalizations.text(LangKey.server_error));
       return null;
-    } else {
-      return url;
     }
+
+    return "https://$bucket.s3.$region.amazonaws.com/$destDir/$filename";
   }
 
    static Future _checkConnectivity(BuildContext? context) async {
