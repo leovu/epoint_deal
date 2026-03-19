@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';

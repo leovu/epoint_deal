@@ -7,6 +7,8 @@ import 'package:epoint_deal_plugin/presentation/interface/base_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../connection/http_connection.dart';
+
 class CustomerCareBloc extends BaseBloc {
 
   CustomerCareBloc(BuildContext context){
@@ -31,14 +33,14 @@ class CustomerCareBloc extends BaseBloc {
     DealConnection.showLoading(context!);
 
     
-    String? result = await DealConnection.uploadFileAWS(context, model);
+    ResponseData? result = await DealConnection.uploadFile(context, MultipartFileModel(file: model));
 
 
     Navigator.of(context!).pop();
     if(result != null){
       // WorkUploadFileResponse response = result.url;
 
-      _files.add(result);
+      _files.add(result.data?['Data']['link']);
       setFiles(_files);
     } else {
       DealConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));

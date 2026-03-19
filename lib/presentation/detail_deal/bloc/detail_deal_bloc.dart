@@ -26,6 +26,8 @@ import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../connection/http_connection.dart';
+
 class DetailDealBloc extends BaseBloc {
   DetailDealBloc(BuildContext context) {
     setContext(context);
@@ -206,12 +208,12 @@ class DetailDealBloc extends BaseBloc {
       onReload?.call();
     }
   }
-  
+
   Future<bool> createOrder() async {
-     try {
+    try {
       CustomNavigator.showProgressDialog(context);
-       ResponseModel responseData = await repository.createOrder(
-        context, CreateOrderReqModel(deal_id: detail?.dealId));
+      ResponseModel responseData = await repository.createOrder(
+          context, CreateOrderReqModel(deal_id: detail?.dealId));
       CustomNavigator.hideProgressDialog();
       return responseData.success ?? false;
     } catch (e) {
@@ -225,8 +227,8 @@ class DetailDealBloc extends BaseBloc {
   }
 
   onTapListOrDerHistory() async {
-   await CustomNavigator.push(context!, ListOrderHistoryScreen(bloc: this));
-   allowPop = true;
+    await CustomNavigator.push(context!, ListOrderHistoryScreen(bloc: this));
+    allowPop = true;
   }
 
   onTapListNote() {
@@ -281,12 +283,13 @@ class DetailDealBloc extends BaseBloc {
 
   Future<bool> uploadFileAWS(File model, {String content = ""}) async {
     CustomNavigator.showProgressDialog(context);
-    String? result = await DealConnection.uploadFileAWS(context, model);
+    ResponseData? result = await DealConnection.uploadFile(
+        context, MultipartFileModel(file: model));
     CustomNavigator.hideProgressDialog();
     if (result != null) {
       bool value = await addFile(UploadFileReqModel(
           dealId: detail?.dealId,
-          path: result,
+          path: result.data?['Data']['link'],
           content: content,
           fileName: model.path.split("/").last));
       return value;

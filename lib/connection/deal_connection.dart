@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -48,22 +47,19 @@ import 'package:epoint_deal_plugin/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart';
 
 class DealConnection {
-  
-  static  late BuildContext buildContext;
+  static late BuildContext buildContext;
   static HTTPConnection connection = HTTPConnection();
   static Account? account;
   // static Locale locale = Locale('vi', 'VN');
-  static  Locale? locale;
+  static Locale? locale;
 
   static Future<bool> init(String token, {String? domain}) async {
     if (domain != null) {
       HTTPConnection.domain = domain;
       HTTPConnection.asscessToken = token;
-       return true;
+      return true;
     } else {
       return false;
     }
@@ -86,12 +82,12 @@ class DealConnection {
     return null;
   }
 
-    static Future<ListCustomLeadModelReponse?> getListPotentialCustomer(
+  static Future<ListCustomLeadModelReponse?> getListPotentialCustomer(
       BuildContext context, ListCustomLeadModelRequest model) async {
-        showLoading(context);
+    showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/list-customer-lead', model.toJson());
-        Navigator.of(context).pop();
+    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       if (responseData.data != null) {
         ListCustomLeadModelReponse data =
@@ -103,18 +99,17 @@ class DealConnection {
     return null;
   }
 
-   static Future<GetCustomerModelResponse?> getCustomer(
+  static Future<GetCustomerModelResponse?> getCustomer(
       BuildContext context) async {
-        showLoading(context);
-    ResponseData responseData = await connection
-        .post('/customer-lead/customer-lead/get-customer', {});
-        Navigator.of(context).pop();
+    showLoading(context);
+    ResponseData responseData =
+        await connection.post('/customer-lead/customer-lead/get-customer', {});
+    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       GetCustomerModelResponse data =
           GetCustomerModelResponse.fromJson(responseData.data!);
-          print(data.toJson());
+      print(data.toJson());
       return data;
-      
     }
     return null;
   }
@@ -123,8 +118,7 @@ class DealConnection {
       BuildContext context, String? deal_code) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/detail-deal',
-        {"deal_code": deal_code});
+        '/customer-lead/customer-lead/detail-deal', {"deal_code": deal_code});
     Navigator.of(context).pop();
     if (responseData.isSuccess && responseData.data != null) {
       DetailDealModelResponse data =
@@ -134,12 +128,11 @@ class DealConnection {
     return null;
   }
 
-    static Future<OrderHistoryResponseModel?> getOrderHistory(
+  static Future<OrderHistoryResponseModel?> getOrderHistory(
       BuildContext context, String? deal_code) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/order-history',
-        {"deal_code": deal_code});
+        '/customer-lead/customer-lead/order-history', {"deal_code": deal_code});
     Navigator.of(context).pop();
     if (responseData.isSuccess && responseData.data != null) {
       OrderHistoryResponseModel data =
@@ -149,11 +142,9 @@ class DealConnection {
     return null;
   }
 
-
-  static Future<BranchModelResponse?> getBranch(
-      BuildContext context) async {
-    ResponseData responseData = await connection
-        .post('/customer-lead/customer-lead/get-branch', {});
+  static Future<BranchModelResponse?> getBranch(BuildContext context) async {
+    ResponseData responseData =
+        await connection.post('/customer-lead/customer-lead/get-branch', {});
     if (responseData.isSuccess) {
       BranchModelResponse data =
           BranchModelResponse.fromJson(responseData.data!);
@@ -162,7 +153,7 @@ class DealConnection {
     return null;
   }
 
-   static Future<GetCustomerOptionModelReponse?> getCustomerOption(
+  static Future<GetCustomerOptionModelReponse?> getCustomerOption(
       BuildContext context) async {
     ResponseData responseData = await connection
         .post('/customer-lead/customer-lead/get-customer-option', {});
@@ -173,9 +164,8 @@ class DealConnection {
     }
     return null;
   }
-  
 
-    static Future<OrderSourceModelResponse?> getOrderSource(
+  static Future<OrderSourceModelResponse?> getOrderSource(
       BuildContext context) async {
     ResponseData responseData = await connection
         .post('/customer-lead/customer-lead/get-order-source', {});
@@ -186,7 +176,6 @@ class DealConnection {
     }
     return null;
   }
-
 
   static Future<GetPipelineModelReponse?> getPipeline(
       BuildContext context) async {
@@ -214,7 +203,6 @@ class DealConnection {
     return null;
   }
 
-
   static Future<GetAllocatorModelReponse?> getAllocator(
       BuildContext context) async {
     ResponseData responseData =
@@ -229,13 +217,11 @@ class DealConnection {
 
   static Future<AddDealModelResponse?> addDeal(
       BuildContext context, AddDealModelRequest model) async {
-
-        print(model);
+    print(model);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/add-deals', model.toJson());
     if (responseData.isSuccess) {
-      var data =
-          AddDealModelResponse.fromJson(responseData.data!);
+      var data = AddDealModelResponse.fromJson(responseData.data!);
       // print("Thanh conmg");
       return data;
     }
@@ -244,12 +230,11 @@ class DealConnection {
 
   static Future<UpdateDealModelResponse?> updateDeal(
       BuildContext context, UpdateDealModelRequest model) async {
-        print(model);
+    print(model);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/update-deal', model.toJson());
     if (responseData.isSuccess) {
-      var data =
-          UpdateDealModelResponse.fromJson(responseData.data!);
+      var data = UpdateDealModelResponse.fromJson(responseData.data!);
       // print("Thanh conmg");
       return data;
     }
@@ -271,7 +256,7 @@ class DealConnection {
     return null;
   }
 
-    static Future<DescriptionModelResponse?> assignRevokeDeal(
+  static Future<DescriptionModelResponse?> assignRevokeDeal(
       BuildContext context, AssignRevokeDealModelRequest model) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
@@ -284,7 +269,6 @@ class DealConnection {
     }
     return null;
   }
-    
 
   static Future<GetTagModelReponse?> getTag(BuildContext context) async {
     ResponseData responseData =
@@ -296,11 +280,11 @@ class DealConnection {
     return null;
   }
 
-   static Future<WorkListBranchResponseModel?> workListBranch(
+  static Future<WorkListBranchResponseModel?> workListBranch(
       BuildContext? context) async {
     // showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/manage-work/list-branch',{});
+    ResponseData responseData =
+        await connection.post('/manage-work/list-branch', {});
     if (responseData.isSuccess) {
       WorkListBranchResponseModel data =
           WorkListBranchResponseModel.fromJson(responseData.data!);
@@ -312,8 +296,8 @@ class DealConnection {
   static Future<WorkListStaffResponseModel?> workListStaff(
       BuildContext? context, WorkListStaffRequestModel model) async {
     // showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/manage-work/list-staff',model.toJson());
+    ResponseData responseData =
+        await connection.post('/manage-work/list-staff', model.toJson());
     if (responseData.isSuccess) {
       WorkListStaffResponseModel data =
           WorkListStaffResponseModel.fromJson(responseData.data!);
@@ -334,10 +318,10 @@ class DealConnection {
   //   return null;
   // }
 
-       static Future<GetTypeWorkModelResponse?> getTypeWork(
+  static Future<GetTypeWorkModelResponse?> getTypeWork(
       BuildContext context) async {
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/get-type-work',{});
+    ResponseData responseData =
+        await connection.post('/customer-lead/customer-lead/get-type-work', {});
     if (responseData.isSuccess) {
       GetTypeWorkModelResponse data =
           GetTypeWorkModelResponse.fromJson(responseData.data!);
@@ -345,13 +329,13 @@ class DealConnection {
     }
     return null;
   }
-    static Future<ListBusinessAreasModelResponse?> getListBusinessAreas(
+
+  static Future<ListBusinessAreasModelResponse?> getListBusinessAreas(
       BuildContext context) async {
     // showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/list-business-areas',{});
+    ResponseData responseData = await connection
+        .post('/customer-lead/customer-lead/list-business-areas', {});
     if (responseData.isSuccess) {
-      
       ListBusinessAreasModelResponse data =
           ListBusinessAreasModelResponse.fromJson(responseData.data!);
       return data;
@@ -359,10 +343,10 @@ class DealConnection {
     return null;
   }
 
-       static Future<DescriptionModelResponse?> addBusinessAreas(
+  static Future<DescriptionModelResponse?> addBusinessAreas(
       BuildContext context, AddBusinessAreasModelRequest model) async {
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/add-business-areas',model.toJson());
+        '/customer-lead/customer-lead/add-business-areas', model.toJson());
     if (responseData.isSuccess) {
       DescriptionModelResponse data =
           DescriptionModelResponse.fromJson(responseData.data!);
@@ -371,7 +355,7 @@ class DealConnection {
     return null;
   }
 
-    static Future<DescriptionModelResponse?> addTag(
+  static Future<DescriptionModelResponse?> addTag(
       BuildContext context, AddTagModelRequest model) async {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/add-tag', model.toJson());
@@ -383,7 +367,7 @@ class DealConnection {
     return null;
   }
 
-    static Future<ListProjectModelResponse?> getListProject(
+  static Future<ListProjectModelResponse?> getListProject(
       BuildContext context, ListProjectModelRequest model) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
@@ -400,7 +384,7 @@ class DealConnection {
     return null;
   }
 
-   static Future<GetStatusWorkResponseModel?> getStatusWork(
+  static Future<GetStatusWorkResponseModel?> getStatusWork(
       BuildContext context) async {
     ResponseData responseData = await connection
         .post('/customer-lead/customer-lead/get-status-work', {});
@@ -412,7 +396,7 @@ class DealConnection {
     return null;
   }
 
-    static Future<DescriptionModelResponse?> addWork(
+  static Future<DescriptionModelResponse?> addWork(
       BuildContext context, AddWorkRequestModel model) async {
     // showLoading(context);
     ResponseData responseData =
@@ -476,7 +460,8 @@ class DealConnection {
 
   static Future<WorkUploadFileResponseModel?> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
-    ResponseData response =  await connection.upload('/manage-work/upload-file', model);
+    ResponseData response =
+        await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
       WorkUploadFileResponseModel responseModel =
           WorkUploadFileResponseModel.fromJson(response.data!);
@@ -488,12 +473,12 @@ class DealConnection {
     return null;
   }
 
-      static Future<CareDealResponseModel?> getCareDeal(
+  static Future<CareDealResponseModel?> getCareDeal(
       BuildContext context, int? deal_id) async {
-        showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/care-deal',{"deal_id" : deal_id});
-        Navigator.of(context).pop();
+    showLoading(context);
+    ResponseData responseData = await connection
+        .post('/customer-lead/customer-lead/care-deal', {"deal_id": deal_id});
+    Navigator.of(context).pop();
     if (responseData.isSuccess && responseData.data != null) {
       CareDealResponseModel data =
           CareDealResponseModel.fromJson(responseData.data!);
@@ -521,11 +506,11 @@ class DealConnection {
         });
   }
 
-    static Future<WorkListCommentResponseModel?> workListComment(
+  static Future<WorkListCommentResponseModel?> workListComment(
       BuildContext? context, WorkListCommentRequestModel model) async {
     // showLoading(context);
-    ResponseData responseData = await connection
-        .post('/customer-deals/list-comment', model.toJson());
+    ResponseData responseData =
+        await connection.post('/customer-deals/list-comment', model.toJson());
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
           WorkListCommentResponseModel.fromJson(responseData.data!);
@@ -535,11 +520,11 @@ class DealConnection {
     return null;
   }
 
-   static Future<WorkListCommentResponseModel?> workCreatedComment(
+  static Future<WorkListCommentResponseModel?> workCreatedComment(
       BuildContext context, WorkCreateCommentRequestModel model) async {
     showLoading(context);
-    ResponseData responseData =
-        await connection.post('/customer-deals/created-comment', model.toJson());
+    ResponseData responseData = await connection.post(
+        '/customer-deals/created-comment', model.toJson());
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
@@ -549,55 +534,64 @@ class DealConnection {
     return null;
   }
 
-  static Future<String?> uploadFileAWS(
-      BuildContext? context, File file) async {
-    // showLoading(context);
+  static uploadFile(BuildContext? context, MultipartFileModel model) async {
     var data = await _checkConnectivity(context);
     if (data != null) {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
-
-    final mimeType = lookupMimeType(file.path)!;
-
-    final destDir = "directory";
-    final filename = basename(file.path);
-    final bucket = "epoint-bucket";
-    final region = "ap-southeast-1";
-    final code = await AwsS3.uploadFile(
-        accessKey: "AKIAUO66DKWUKVBVJCJK",
-        secretKey: "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",
-        file: file,
-        bucket: bucket,
-        region: region,
-        destDir: destDir,
-        filename: filename,
-        contentType: mimeType
-    );
-
-    if (code != "200" && code != "204") {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
-      return null;
-    }
-
-    return "https://$bucket.s3.$region.amazonaws.com/$destDir/$filename";
+    model.name = "file_name";
+    return await connection.upload('/user/upload-file', model);
   }
 
-   static Future _checkConnectivity(BuildContext? context) async {
+  // static Future<String?> uploadFileAWS(
+  //     BuildContext? context, File file) async {
+  //   // showLoading(context);
+  //   var data = await _checkConnectivity(context);
+  //   if (data != null) {
+  //     handleError(context!,AppLocalizations.text(LangKey.server_error));
+  //   }
+
+  //   final mimeType = lookupMimeType(file.path)!;
+
+  //   final destDir = "directory";
+  //   final filename = basename(file.path);
+  //   final bucket = "epoint-bucket";
+  //   final region = "ap-southeast-1";
+  //   final code = await AwsS3.uploadFile(
+  //       accessKey: "AKIAUO66DKWUKVBVJCJK",
+  //       secretKey: "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",
+  //       file: file,
+  //       bucket: bucket,
+  //       region: region,
+  //       destDir: destDir,
+  //       filename: filename,
+  //       contentType: mimeType
+  //   );
+
+  //   if (code != "200" && code != "204") {
+  //     handleError(context!,AppLocalizations.text(LangKey.server_error));
+  //     return null;
+  //   }
+
+  //   return "https://$bucket.s3.$region.amazonaws.com/$destDir/$filename";
+  // }
+
+  static Future _checkConnectivity(BuildContext? context) async {
     if (!(await NetworkConnectivity.isConnected())) {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
     return null;
   }
-
 
   static Future handleError(BuildContext context, String? title) async {
     await showMyDialog(context, AppLocalizations.text(LangKey.server_error));
   }
 
- static Future showMyDialog(BuildContext context, String? title, {bool warning = false}) async {
+  static Future showMyDialog(BuildContext context, String? title,
+      {bool warning = false}) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           content: SingleChildScrollView(
@@ -605,11 +599,15 @@ class DealConnection {
               children: <Widget>[
                 Center(
                     child: Text(
-                  warning ? AppLocalizations.text(LangKey.warning)! : AppLocalizations.text(LangKey.notify)! + "\n",
+                  warning
+                      ? AppLocalizations.text(LangKey.warning)!
+                      : AppLocalizations.text(LangKey.notify)! + "\n",
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black),
                 )),
-                Container(height: 10,),
+                Container(
+                  height: 10,
+                ),
                 Center(
                     child: Text(
                   title!,
@@ -656,8 +654,8 @@ class DealConnection {
             child: ListBody(
               children: <Widget>[
                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(),
                     Center(
@@ -666,9 +664,11 @@ class DealConnection {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     )),
-
                     InkWell(
-                      child: Icon(Icons.clear,size: 20,),
+                      child: Icon(
+                        Icons.clear,
+                        size: 20,
+                      ),
                       onTap: () {
                         Navigator.of(context).pop();
                       },
@@ -707,8 +707,9 @@ class DealConnection {
                     child: CustomButton(
                       backgroundColor: AppColors.white,
                       borderColor: AppColors.darkGrey,
-                      child:
-                          Center(child: Text(AppLocalizations.text(LangKey.yes)!, style: TextStyle(color: AppColors.primaryColor))),
+                      child: Center(
+                          child: Text(AppLocalizations.text(LangKey.yes)!,
+                              style: TextStyle(color: AppColors.primaryColor))),
                       onTap: ontap,
                     ),
                   ),

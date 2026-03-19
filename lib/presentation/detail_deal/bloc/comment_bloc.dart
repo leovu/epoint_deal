@@ -73,14 +73,14 @@ class CommentBloc extends BaseBloc {
     DealConnection.showLoading(context!);
 
     
-    String? result = await DealConnection.uploadFileAWS(context, model);
+     ResponseData? result = await DealConnection.uploadFile(context, MultipartFileModel(file: model));
 
 
     Navigator.of(context!).pop();
     if(result != null){
       // WorkUploadFileResponse response = result.url;
 
-      setFile(result);
+      setFile(result.data?['Data']['link']);
     } else {
       DealConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
