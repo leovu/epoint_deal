@@ -303,7 +303,7 @@ class CustomProjectResource extends StatelessWidget {
       _current = total!;
     }
     return CustomColumnCenterInformation(
-      titleContentRight: "$total ngày",
+      titleContentRight: "$total ${AppLocalizations.text(LangKey.day)?.toLowerCase()}",
       isContentRight: true,
       title: AppLocalizations.text(LangKey.resource),
       child: Container(
@@ -322,7 +322,7 @@ class CustomProjectResource extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(AppSizes.minPadding / 2),
                 child: Text(
-                  "$_current ngày",
+                  "$_current ${AppLocalizations.text(LangKey.day)?.toLowerCase()}",
                   style: AppTextStyles.style16WhiteBold,
                 ),
               ),

@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _bloc = CommentBloc(context);
     _bloc.workListComment(
-        WorkListCommentRequestModel(manageWorkId: widget.detail!.dealId));
+        WorkListCommentRequestModel(dealId: widget.detail!.dealId));
   }
 
  _send() {
@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future _onRefresh() {
     return _bloc
-        .workListComment(WorkListCommentRequestModel(manageWorkId: widget.detail!.dealId));
+        .workListComment(WorkListCommentRequestModel(dealId: widget.detail!.dealId));
   }
 
   _showOption() {

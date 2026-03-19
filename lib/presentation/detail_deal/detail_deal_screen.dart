@@ -283,13 +283,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
 
   Widget _buildCode(DetailDealData model) {
     return CustomColumnIconInformation(
-        icon: Assets.iconDeal, title: "Mã deal", content: model.dealCode);
+        icon: Assets.iconDeal,
+        title: AppLocalizations.text(LangKey.dealCode),
+        content: model.dealCode);
   }
 
   Widget _buildDealName(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconStyleCustomer,
-        title: "Tên deal",
+        title: AppLocalizations.text(LangKey.dealName),
         content: model.dealName);
   }
 
@@ -358,7 +360,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         icon: Assets.iconProjectName,
         title: AppLocalizations.text(LangKey.expected_revenue),
         content:
-            "${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ");
+            "${NumberFormat('#,###', 'en_AU').format(detail!.expectedRevenue ?? 0)} $moneyUnit");
   }
 
   Widget _buildAmount(DetailDealData model) {
@@ -366,7 +368,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         icon: Assets.iconMoneySquare,
         title: AppLocalizations.text(LangKey.amount),
         content:
-            "${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ");
+            "${NumberFormat('#,###', 'en_AU').format(detail!.amount ?? 0)} $moneyUnit");
   }
 
   Widget _buildProbability(DetailDealData model) {
@@ -506,13 +508,13 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   //         CustomRowImageContentWidget(
   //           icon: Assets.iconProjectName,
   //           title:
-  //               "Doanh thu kỳ vọng: ${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ",
+  //               "Doanh thu kỳ vọng: ${NumberFormat('#,###', 'en_AU').format(detail!.expectedRevenue ?? 0)} moneyUnit",
   //         ),
   //         Gaps.vGap4,
   //         CustomRowImageContentWidget(
   //           icon: Assets.iconMoneySquare,
   //           title:
-  //               "Số tiền: ${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ",
+  //               "Số tiền: ${NumberFormat('#,###', 'en_AU').format(detail!.amount ?? 0)} moneyUnit",
   //         ),
   //         Gaps.vGap4,
   //         CustomRowImageContentWidget(
@@ -584,7 +586,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         fontWeight: FontWeight.normal),
                     children: [
                   TextSpan(
-                      text: "(${detail?.diffDay ?? NULL_VALUE} ngày)",
+                      text:
+                          "(${detail?.diffDay ?? NULL_VALUE} ${AppLocalizations.text(LangKey.day)?.toLowerCase()})",
                       style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 14.0,
@@ -659,6 +662,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return LoadingWidget(
         padding: EdgeInsets.zero,
         child: CustomListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           children: List.generate(
               3,
               (index) => CustomSkeleton(
@@ -682,7 +687,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 return CustomComboBox(
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandListNote = event),
-                  title: e.tabNameVi ?? "Ghi chú",
+                  title: e.tabNameVi ?? AppLocalizations.text(LangKey.note)!,
                   isExpand: _bloc.expandListNote,
                   onTapList: _bloc.onTapListNote,
                   onTapPlus: () {
@@ -734,7 +739,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     }
                   },
                   onTapList: _bloc.onTapListCustomerCare,
-                  title: e.tabNameVi ?? "Chăm sóc khách hàng",
+                  title: e.tabNameVi ??
+                      AppLocalizations.text(LangKey.customerCare)!,
                   isExpand: _bloc.expandCareDeal,
                   quantity: _bloc.listCareDeal.length,
                   child: CustomListView(
@@ -770,7 +776,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapPlus: () async {
                     if ((_bloc.detail?.productBuy?.length ?? 0) > 0) {
                       DealConnection.showMyDialogWithFunction(context,
-                          "Bạn có chắc chắn muốn tạo đơn cho ${detail?.dealCode}",
+                          "${AppLocalizations.text(LangKey.confirmCreateOrderFor)} ${detail?.dealCode}",
                           ontap: () async {
                         Navigator.of(context).pop();
                         _bloc.createOrder().then((value) {
@@ -781,12 +787,15 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         });
                       });
                     } else {
-                      DealConnection.showMyDialog(context,
-                          "Vui lòng thêm sản phẩm/ dịch vụ trước khi tạo đơn hàng");
+                      DealConnection.showMyDialog(
+                          context,
+                          AppLocalizations.text(LangKey
+                              .pleaseAddProductServiceBeforeCreatingOrder));
                     }
                   },
                   onTapList: _bloc.onTapListOrDerHistory,
-                  title: e.tabNameVi ?? "Lịch sử đơn hàng",
+                  title: e.tabNameVi ??
+                      AppLocalizations.text(LangKey.orderHistory)!,
                   isExpand: _bloc.expandOrderHistory,
                   quantity: _bloc.listOrderHistory.length,
                   child: CustomListView(
@@ -824,7 +833,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapList: () {
                     _bloc.onTapListFile();
                   },
-                  title: e.tabNameVi ?? "Tập tin",
+                  title: e.tabNameVi ?? AppLocalizations.text(LangKey.file)!,
                   isExpand: _bloc.expandListFile,
                   quantity: _bloc.listDealFiles.length,
                   child: CustomListView(
@@ -866,7 +875,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   onTapList: () {
                     _bloc.onTapListProduct();
                   },
-                  title: e.tabNameVi ?? "Sản phẩm",
+                  title: e.tabNameVi ?? AppLocalizations.text(LangKey.product)!,
                   isExpand: _bloc.expandListProduct,
                   quantity: _listProduct.length,
                   child: CustomListView(
@@ -997,7 +1006,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                         style: TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
+                        '${createTime.day},\n${AppLocalizations.text(LangKey.month)?.toLowerCase()} ${createTime.month},\n${AppLocalizations.text(LangKey.year)?.toLowerCase()} ${createTime.year}',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
@@ -1460,7 +1469,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Gaps.vGap8,
           CustomRowInformation(
             title: formatMoney(model.price!.toDouble()),
-            content: "${model.quantity}x",
+            content: "x ${model.quantity}",
           ),
           Gaps.vGap8,
           Row(
@@ -1557,7 +1566,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 Expanded(
                     child: CustomInfoItem(
                         icon: Assets.iconDeal,
-                        title: "${item.countProd ?? 0} sản phẩm")),
+                        title:
+                            "${item.countProd ?? 0} ${AppLocalizations.text(LangKey.product)?.toLowerCase()}")),
                 Row(
                   children: [
                     Image.asset(
@@ -1569,7 +1579,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     ),
                     Text(
                       AppFormat.moneyFormatDot.format(item.amount ?? 0) +
-                          " VND",
+                          " AUD",
                       style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 14,
@@ -1598,7 +1608,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     style: AppTextStyles.style15WhiteNormal
                         .copyWith(fontWeight: FontWeight.bold),
                     height: AppSizes.sizeOnTap,
-                    text: "Chỉnh sửa",
+                    text: AppLocalizations.text(LangKey.edit),
                     onTap: () async {
                       if (detail?.journeyCode != "PJD_DEAL_END") {
                         bool? result = await Navigator.of(context).push(
@@ -1642,7 +1652,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     style: AppTextStyles.style15WhiteNormal
                         .copyWith(fontWeight: FontWeight.bold),
                     height: AppSizes.sizeOnTap,
-                    text: "Liên hệ",
+                    text: AppLocalizations.text(LangKey.contact),
                     onTap: () {
                       if (detail?.phone != null && detail?.phone != "") {
                         if (Global.callHotline != null) {
@@ -1657,8 +1667,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                           });
                         }
                       } else {
-                        DealConnection.showMyDialog(
-                            context, "Không có thông tin số điện thoại");
+                        DealConnection.showMyDialog(context,
+                            AppLocalizations.text(LangKey.noPhoneNumber));
                       }
                     },
                   ),
@@ -1686,7 +1696,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     style: AppTextStyles.style15WhiteNormal
                         .copyWith(fontWeight: FontWeight.bold),
                     height: AppSizes.sizeOnTap,
-                    text: "XÓA DEAL",
+                    text: AppLocalizations.text(LangKey.deleteDeal),
                     onTap: () {
                       DealConnection.showMyDialogWithFunction(context,
                           "${AppLocalizations.text(LangKey.warningDeleteDeal)} ${detail?.dealCode}",
@@ -1720,8 +1730,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     height: AppSizes.sizeOnTap,
                     text: (_bloc.detail?.saleId != null &&
                             _bloc.detail?.saleId != 0)
-                        ? "THU HỒI"
-                        : "PHÂN CÔNG",
+                        ? AppLocalizations.text(LangKey.recall)
+                        : AppLocalizations.text(LangKey.assignment),
                     onTap: () async {
                       if (detail?.saleId != null && detail?.saleId != 0) {
                         await _bloc
@@ -1960,7 +1970,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             Navigator.of(context).pop(_bloc.allowPop);
           } else {
             Navigator.of(context).pop();
-          };
+          }
+          ;
         }
       },
     );

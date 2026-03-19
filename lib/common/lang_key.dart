@@ -1231,5 +1231,24 @@ class LangKey {
 
 
 
+  static const String pleaseSelectEmployeeBefore = "pleaseSelectEmployeeBefore";
+  static const String dealName = "dealName";
+  static const String confirmCreateOrderFor = "confirmCreateOrderFor";
+  static const String pleaseAddProductServiceBeforeCreatingOrder = "pleaseAddProductServiceBeforeCreatingOrder";
+  static const String orderHistory = "orderHistory";
+  static const String year = "year";
+  static const String noPhoneNumber = "noPhoneNumber";
+  static const String deleteDeal = "deleteDeal";
+  static const String pleaseUploadFile = "pleaseUploadFile";
+  static const String chooseFile = "chooseFile";
+  static const String attachmentContent = "attachmentContent";
+  static const String thisIsAttachmentContent = "thisIsAttachmentContent";
+  static const String uploadFile = "uploadFile";
+  static const String noProducts = "noProducts";
+  static const String chooseProductType = "chooseProductType";
+  static const String listOfProducts = "listOfProducts";
+  static const String pleaseEnterBusinessAreaName = "pleaseEnterBusinessAreaName";
+  static const String pleaseEnterTagName = "pleaseEnterTagName";
+  static const String coordinates = "coordinates";
 }
 

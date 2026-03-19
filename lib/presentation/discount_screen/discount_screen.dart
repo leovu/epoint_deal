@@ -72,7 +72,7 @@ class DiscountScreenState extends State<DiscountScreen> {
               return Column(
                 children: [
                   _buildType(
-                      "${AppLocalizations.text(LangKey.cash)} (VNĐ)", true),
+                      "${AppLocalizations.text(LangKey.cash)} (AUD)", true),
                   _buildType(
                       "${AppLocalizations.text(LangKey.percent)} (%)", false),
                   _isMoney

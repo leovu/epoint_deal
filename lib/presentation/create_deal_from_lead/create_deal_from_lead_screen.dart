@@ -210,7 +210,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
   void bindingData() async {
     detailLead = DetailPotentialData.fromJson(widget.jsonDetailLead!);
     detailDeal.phone = detailLead!.phone ?? "";
-   _dealNameText.text = "Deal của ${detailLead?.fullName ?? ""}";
+   _dealNameText.text = "${AppLocalizations.text(LangKey.dealOf)} ${detailLead?.fullName ?? ""}";
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((detailLead?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
@@ -542,13 +542,13 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                               detailDeal.pipelineCode =
                                   pipelineSelected.pipelineCode;
                               detailDeal.journeyCode = "";
-                              DealConnection.showLoading(context);
+                              // DealConnection.showLoading(context);
                               var journeys = await DealConnection.getJourney(
                                   context,
                                   GetJourneyModelRequest(pipelineCode: [
                                     pipelineSelected.pipelineCode
                                   ]));
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                               if (journeys != null) {
                                 journeysData = journeys.data;
                               }
@@ -576,13 +576,13 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                             detailDeal.pipelineCode =
                                 pipelineSelected.pipelineCode;
                             detailDeal.journeyCode = "";
-                            DealConnection.showLoading(context);
+                            // DealConnection.showLoading(context);
                             var journeys = await DealConnection.getJourney(
                                 context,
                                 GetJourneyModelRequest(pipelineCode: [
                                   pipelineSelected.pipelineCode
                                 ]));
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                             if (journeys != null) {
                               journeysData = journeys.data;
                             }

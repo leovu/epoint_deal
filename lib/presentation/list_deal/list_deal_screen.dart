@@ -25,6 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:ui' as ui;
 
+import '../../common/constant.dart';
+
 class ListDealScreen extends StatefulWidget {
   const ListDealScreen({Key? key}) : super(key: key);
 
@@ -460,7 +462,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                               fontWeight: FontWeight.normal),
                                           children: [
                                         TextSpan(
-                                            text: "(${item.diffDay ?? 0} ngày)",
+                                            text: "(${item.diffDay ?? 0} day)",
                                             style: TextStyle(
                                                 color: AppColors.primaryColor,
                                                 fontSize: 14.0,
@@ -487,7 +489,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                   child: Text(
                                     AppFormat.moneyFormatDot
                                             .format(item.amount ?? 0) +
-                                        " VND",
+                                        " ${formatMoneyString}",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: AppColors.primaryColor,
@@ -566,7 +568,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                     }
                                   } else {
                                     DealConnection.showMyDialog(
-                                        context, "Không có thông tin số điện thoại");
+                                        context, AppLocalizations.text(LangKey.noPhoneNumber));
                                   }
                                 },
                                 child: Container(

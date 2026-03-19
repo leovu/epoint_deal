@@ -740,7 +740,7 @@ class AppFormat {
   static DateFormat formatDateTime = DateFormat("dd/MM/yyyy HH:mm");
   static DateFormat formatDateMonth = DateFormat("dd/MM");
   static DateFormat formatTime = DateFormat("HH:mm");
-  static NumberFormat moneyFormatDot = NumberFormat("#,###", "vi-VN");
+  static NumberFormat moneyFormatDot = NumberFormat('#,###', 'en_AU');
   static NumberFormat moneyFormat = NumberFormat("#,###");
   static DateFormat formatDateTimeEn = DateFormat("dd MMMM, yyyy", "en_US");
   static DateFormat formatDateTimeVn = DateFormat("dd MMMM, yyyy", "vi_VN");
@@ -768,13 +768,13 @@ class AppSizeWebConfig {
 extension MoneyFormat on double? {
   String getMoneyFormat() {
     if (this == null) {
-      return "0 VND";
+      return "0 AUD";
     } else {
-      return AppFormat.moneyFormat.format(this) + " VND";
+      return AppFormat.moneyFormat.format(this) + " AUD";
     }
   }
 
-  String getMoneyFormatWithoutVND() {
+  String getMoneyFormatWithoutAUD() {
     if (this == null) {
       return "0";
     } else {

@@ -42,9 +42,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealScreen extends StatefulWidget {
-  const CreateDealScreen(
-      {Key? key,})
-      : super(key: key);
+  const CreateDealScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CreateDealScreenState createState() => _CreateDealScreenState();
@@ -172,7 +172,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     _bloc = CreateDealBloc(context);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      DealConnection.showLoading(context);
+      // DealConnection.showLoading(context);
       _bloc.onRefresh(isRefresh: false, isInit: true);
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
@@ -191,12 +191,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       if (journeys != null) {
         journeysData = journeys.data;
 
-        journeySelected = journeysData![0];
-        detailDeal.journeyCode = journeySelected!.journeyCode;
+        journeySelected = journeysData?[0];
+        detailDeal.journeyCode = journeySelected?.journeyCode;
       }
 
       // GlobalCart.shared.clearCart();
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       setState(() {});
     });
   }
@@ -371,7 +371,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             height: 15.0,
           ),
 
-        // chọn khách hàng
+          // chọn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.choose_customer),
               selectedCustomer
@@ -565,12 +565,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 
                     pipelineSelected = pipeline;
                     detailDeal.pipelineCode = pipelineSelected.pipelineCode;
-                    DealConnection.showLoading(context);
+                    // DealConnection.showLoading(context);
                     var journeys = await DealConnection.getJourney(
                         context,
                         GetJourneyModelRequest(
                             pipelineCode: [pipelineSelected.pipelineCode]));
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                     if (journeys != null) {
                       journeysData = journeys.data;
                     }
@@ -601,11 +601,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                   if (journey != null) {
                     journeySelected = journey;
                     detailDeal.journeyCode = journeySelected!.journeyCode;
-                    setState(() {
-                    });
+                    setState(() {});
                   }
-                })
-                ,
+                }),
 
                 // chọn người được phân bổ
 
@@ -720,39 +718,40 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           ),
 
           (branchData != null)
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: RichText(
-              text: TextSpan(
-                  text: "Chi nhánh",
-                  style: TextStyle(
-                      fontSize: AppTextSizes.size15,
-                      color: const Color(0xFF858080),
-                      fontWeight: FontWeight.normal),
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                TextSpan(text: "*", style: TextStyle(color: Colors.red))
-              ])),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      //  color: Colors.black,
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: RichText(
+                          text: TextSpan(
+                              text: AppLocalizations.text(LangKey.branch),
+                              style: TextStyle(
+                                  fontSize: AppTextSizes.size15,
+                                  color: const Color(0xFF858080),
+                                  fontWeight: FontWeight.normal),
+                              children: [
+                            TextSpan(
+                                text: "*", style: TextStyle(color: Colors.red))
+                          ])),
                     ),
-                    height: 170,
-                    child: SingleChildScrollView(
-                      physics: ClampingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: listBranch(),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        //  color: Colors.black,
+                      ),
+                      height: 170,
+                      child: SingleChildScrollView(
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: listBranch(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            : Container(),
+                  ],
+                )
+              : Container(),
 
           MoreInfoCreatDeal(
             branchData: branchData,
@@ -766,10 +765,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
 
   List<Widget> listBranch() {
     return List.generate(
-       branchData!.length,
+        branchData!.length,
         (index) => buildItemBranch(
-                branchData![index], branchData![index].selected!,
-                () {
+                branchData![index], branchData![index].selected!, () {
               selectedItem(index);
             }));
   }
@@ -1061,7 +1059,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.journeyCode == "" ||
         customerSelected.customerCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null || detailDeal.branchCode == "") {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1154,7 +1153,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.journeyCode == "" ||
         leadItem.customerLeadCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null || detailDeal.branchCode == "") {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);

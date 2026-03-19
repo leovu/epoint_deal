@@ -693,7 +693,7 @@ class CustomSurveyConductPhoto extends StatelessWidget {
                   ),
                   Container(width: AppSizes.minPadding,),
                   Text(
-                    "Tọa độ",
+                    AppLocalizations.text(LangKey.coordinates)!,
                     style: AppTextStyles.style12WhiteNormal,
                   )
                 ],

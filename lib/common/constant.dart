@@ -7,7 +7,7 @@ final imageTypeAfter = "after";
 final DateTime minDateTime = DateTime(1900, 1, 1);
 
 final String decimalSymbol = ".";
-final String moneyUnit = "VND";
+final String moneyUnit = "AUD";
 
 // typedef
 typedef CustomBodyBuilder = Widget Function();
@@ -283,3 +283,5 @@ const String dealConfigNote = "note";
 const String dealConfigFile = "file";
 const String dealConfigCustomerCare = "care";
 const String dealConfigProduct = "product";
+
+const String formatMoneyString = 'AUD';

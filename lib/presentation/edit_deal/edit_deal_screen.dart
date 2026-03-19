@@ -810,13 +810,13 @@ class _EditDealScreenState extends State<EditDealScreen>
                               detailDeal.pipelineCode =
                                   pipelineSelected.pipelineCode;
                               detailDeal.journeyCode = "";
-                              DealConnection.showLoading(context);
+                              // DealConnection.showLoading(context);
                               var journeys = await DealConnection.getJourney(
                                   context,
                                   GetJourneyModelRequest(pipelineCode: [
                                     pipelineSelected.pipelineCode
                                   ]));
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                               if (journeys != null) {
                                 journeysData = journeys.data;
                               }
@@ -844,13 +844,13 @@ class _EditDealScreenState extends State<EditDealScreen>
                             detailDeal.pipelineCode =
                                 pipelineSelected.pipelineCode;
                             detailDeal.journeyCode = "";
-                            DealConnection.showLoading(context);
+                            // DealConnection.showLoading(context);
                             var journeys = await DealConnection.getJourney(
                                 context,
                                 GetJourneyModelRequest(pipelineCode: [
                                   pipelineSelected.pipelineCode
                                 ]));
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                             if (journeys != null) {
                               journeysData = journeys.data;
                             }
@@ -1005,7 +1005,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       padding: const EdgeInsets.all(8),
                       child: RichText(
                           text: TextSpan(
-                              text: "Chi nhánh",
+                              text: AppLocalizations.text(LangKey.branch),
                               style: TextStyle(
                                   fontSize: AppTextSizes.size15,
                                   color: const Color(0xFF858080),

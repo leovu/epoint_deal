@@ -654,7 +654,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
                     if (_modelStaffSelected!.length == 0) {
                       await DealConnection.showMyDialog(
-                          context, "Vui lòng chọn trước nhân viên thực hiện!");
+                          context, AppLocalizations.text(LangKey.pleaseSelectEmployeeBefore));
                     } else {
                       _modelStaffSSupportSelected = await Navigator.of(context)
                           .push(MaterialPageRoute(
@@ -985,7 +985,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                             dateRemind: _toDateText.text,
                             timeType: "m",
                             time: 15,
-                            description: "Nhắc nhở " + _enterWorkDescText.text)
+                            description: "${AppLocalizations.text(LangKey.remind)} " + _enterWorkDescText.text)
                         : null,
                     progress: null,
                     staffSupport: addWorkModel.staffSupport,

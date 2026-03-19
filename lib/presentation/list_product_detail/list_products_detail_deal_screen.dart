@@ -60,7 +60,7 @@ class _ListProductsDetailDealScreenState
                                 .toList(),
                           )
                         : CustomEmpty(
-                            text: "Không có sản phẩm nào",
+                            text: AppLocalizations.text(LangKey.noProducts),
                           );
                   }))
         ],
@@ -211,7 +211,7 @@ class _ListProductsDetailDealScreenState
               return CustomDropdown(
                 value: _bloc.selectedProductType,
                 menus: _bloc.listProductType,
-                hint: "Chọn loại sản phẩm",
+                hint: AppLocalizations.text(LangKey.chooseProductType),
                 onChanged: (p0) {
                   _bloc.onChange(p0!);
                 },
@@ -316,7 +316,7 @@ class _ListProductsDetailDealScreenState
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: 'Danh sách sản phẩm',
+      title: AppLocalizations.text(LangKey.listOfProducts),
       body: _buildBody(),
     );
   }

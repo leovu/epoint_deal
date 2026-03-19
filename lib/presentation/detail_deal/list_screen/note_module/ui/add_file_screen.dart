@@ -9,6 +9,9 @@ import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../common/lang_key.dart';
+import '../../../../../common/localization/app_localizations.dart';
+
 class AddFileScreen extends StatefulWidget {
   final DetailDealBloc bloc;
 
@@ -53,7 +56,7 @@ class _AddFileScreenState extends State<AddFileScreen>
 
   bool validateAllow() {
     if (file == null) {
-      DealConnection.showMyDialog(context, "Vui lòng tải lên tập tin",
+      DealConnection.showMyDialog(context, AppLocalizations.text(LangKey.pleaseUploadFile),
           warning: true);
       return false;
     }
@@ -92,7 +95,7 @@ class _AddFileScreenState extends State<AddFileScreen>
                           });
                         },
                         child: Text(
-                          "Thay đổi",
+                          AppLocalizations.text(LangKey.change)!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryColor),
@@ -113,7 +116,7 @@ class _AddFileScreenState extends State<AddFileScreen>
                       });
                     });
                   },
-                  text: "Chọn tập tin",
+                  text: AppLocalizations.text(LangKey.chooseFile),
                   style: AppTextStyles.style14PrimaryBold,
                 ),
           SizedBox(height: 10),
@@ -173,7 +176,7 @@ class _AddFileScreenState extends State<AddFileScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Nội dung đính kèm",
+          AppLocalizations.text(LangKey.attachmentContent)!,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
@@ -185,7 +188,7 @@ class _AddFileScreenState extends State<AddFileScreen>
           maxLength: 500,
           decoration: InputDecoration(
             counterText: "",
-            hintText: "Đây là một nội dung đính kèm",
+            hintText: AppLocalizations.text(LangKey.thisIsAttachmentContent),
             hintStyle: AppTextStyles.style13GrayWeight400,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
@@ -226,7 +229,7 @@ class _AddFileScreenState extends State<AddFileScreen>
         },
         child: Center(
           child: Text(
-            "LƯU",
+            AppLocalizations.text(LangKey.save)!,
             style: AppTextStyles.style14WhiteWeight600,
             maxLines: 1,
           ),
@@ -238,7 +241,7 @@ class _AddFileScreenState extends State<AddFileScreen>
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: "Tải tập tin",
+      title: AppLocalizations.text(LangKey.uploadFile),
       body: _buildBody(),
     );
   }

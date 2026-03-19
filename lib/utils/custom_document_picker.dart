@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -9,18 +8,6 @@ class CustomDocumentPicker {
       BuildContext context, {
         List<String>? params,
       }) async {
-    try {
-      if (Platform.isAndroid) {
-        bool permission = false;
-        permission = await CustomPermissionRequest.request(
-            context, PermissionRequestType.STORAGE);
-
-        if (!permission) return null;
-      }
-    } catch (_) {
-      return null;
-    }
-
     FilePickerResult? file = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: params,
@@ -33,16 +20,6 @@ class CustomDocumentPicker {
       BuildContext context, {
         List<String>? params,
       }) async {
-    try {
-      bool permission = false;
-      permission = await CustomPermissionRequest.request(
-          context, PermissionRequestType.STORAGE);
-
-      if (!permission) return null;
-    } catch (_) {
-      return null;
-    }
-
     FilePickerResult? files = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: params,

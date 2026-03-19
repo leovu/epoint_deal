@@ -149,7 +149,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
                 Expanded(
                     child: CustomInfoItem(
                         icon: Assets.iconDeal,
-                        title: "${item.countProd ?? 0} sản phẩm")),
+                        title: "${item.countProd ?? 0} ${AppLocalizations.text(LangKey.product)?.toLowerCase()}")),
                 Row(
                   children: [
                     Image.asset(
@@ -161,7 +161,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
                     ),
                     Text(
                       AppFormat.moneyFormatDot.format(item.amount ?? 0) +
-                          " VND",
+                          " AUD",
                       style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 14,

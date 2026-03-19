@@ -111,7 +111,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
             }
           }
         } else {
-          DealConnection.showMyDialog(context, "Vui lòng nhập tên nhãn");
+          DealConnection.showMyDialog(context, AppLocalizations.text(LangKey.pleaseEnterTagName));
         }
       },
       child: Container(

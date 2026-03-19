@@ -17,32 +17,27 @@ class EpointDealPlugin {
     return EpointDealPluginPlatform.instance.getPlatformVersion();
   }
 
-  
-
-  static Future<dynamic> open(
-      BuildContext context, Locale locale, String token, int type,Map<String,dynamic>? loginResponseModel,
+  static Future<dynamic> open(BuildContext context, Locale locale, String token,
+      int type, Map<String, dynamic>? loginResponseModel,
       {String? domain,
       String? brandCode,
       String? deal_code,
       int? indexTabDetail,
       Function? getListProduct,
       Function? createJob,
-      Function(Map<String,dynamic>)?  createCare,
+      Function(Map<String, dynamic>)? createCare,
       Function(int)? editJob,
       Function(int)? navigateDetailOrder,
-      Function(Map<String,dynamic>)? callHotline,
-      Map<String,dynamic>? jsonDetail, // để tạo deal từ lead
+      Function(Map<String, dynamic>)? callHotline,
+      Map<String, dynamic>? jsonDetail, // để tạo deal từ lead
       List<Map<String, dynamic>>? permission,
-      List<Map<String, dynamic>>? configModels
-
-      }) async {
-
+      List<Map<String, dynamic>>? configModels}) async {
     if (permission != null) {
-        Global.permissionModels = permission;
+      Global.permissionModels = permission;
     }
 
     if (configModels != null) {
-        Global.configModels = configModels;
+      Global.configModels = configModels;
     }
 
     if (domain != null) {
@@ -86,7 +81,6 @@ class EpointDealPlugin {
 
     Globals.model = LoginResponseModel.fromJson(loginResponseModel!);
 
-
     DealConnection.buildContext = context;
     AppSizes.init(context);
     await AppLocalizations(DealConnection.locale).load();
@@ -97,7 +91,7 @@ class EpointDealPlugin {
             .push(MaterialPageRoute(builder: (context) => CreateDealScreen()));
         return event;
       } else if (type == 1) {
-       bool? result = await Navigator.of(context).push(MaterialPageRoute(
+        bool? result = await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailDealScreen(
                   deal_code: deal_code,
                   indexTab: indexTabDetail ?? 0,
@@ -107,10 +101,12 @@ class EpointDealPlugin {
         await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => ListDealScreen()));
       } else {
-        bool? result = await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CreateDealFromLeadScreen(jsonDetailLead: jsonDetail,)));
-          print("result: $result");
-          return result;
+        bool? result = await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CreateDealFromLeadScreen(
+                  jsonDetailLead: jsonDetail,
+                )));
+        print("result: $result");
+        return result;
       }
     } else {
       loginError(DealConnection.buildContext, 'Fail');
@@ -130,7 +126,7 @@ class EpointDealPlugin {
               children: <Widget>[
                 Center(
                     child: Text(
-                  'Cảnh báo\n',
+                  'Warning\n',
                   style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
                 )),
@@ -140,7 +136,7 @@ class EpointDealPlugin {
           ),
           actions: <Widget>[
             TextButton(
-              child: Center(child: Text('Đồng ý')),
+              child: Center(child: Text('Agree')),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -101,7 +101,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
               return CustomDropdown(
                 value: _bloc.statusWorkDataSelected,
                 menus: _bloc.statusWorkData,
-                hint: "Chọn trạng thái",
+                hint: AppLocalizations.text(LangKey.chooseStatus),
                 onChanged: (p0) {
                   _bloc.onChange(p0!);
                 },
@@ -186,7 +186,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                         style: TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
+                        '${createTime.day},\n${AppLocalizations.text(LangKey.month)?.toLowerCase()} ${createTime.month},\n${AppLocalizations.text(LangKey.year)?.toLowerCase()} ${createTime.year}',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,

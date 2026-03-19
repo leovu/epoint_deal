@@ -605,7 +605,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
 
 extension MoneyFormat on int {
   String getMoneyFormat() {
-    return NumberFormat("#,###", "vi-VN").format(this);
+    return NumberFormat('#,###', 'en_AU').format(this);
   }
 }
 
