@@ -1176,5 +1176,11 @@
     "submit_review": "Submit review",
     "submit_review_success_message": "Submit service review to customer successfully",
     "purpose_of_appointment": "Purpose of appointment",
-    "create_order_from_booking_message": "Confirm creation of order from this appointment?"
+    "create_order_from_booking_message": "Confirm creation of order from this appointment?",
+    "expected_revenue": "Expected revenue",
+    "amount": "Amount",
+    "success_rate": "Success rate",
+    "lead_source": "Lead source",
+    "enter_success_probability": "Enter success probability (%)",
+    "enter_opportunity_description": "Enter detailed opportunity description"
 }

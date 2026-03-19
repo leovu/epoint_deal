@@ -1175,5 +1175,11 @@
   "submit_review": "Gửi đánh giá",
   "submit_review_success_message": "Gửi đánh giá dịch vụ cho khách hàng thành công",
   "purpose_of_appointment": "Mục đích lịch hẹn",
-  "create_order_from_booking_message": "Xác nhận tạo đơn hàng từ lịch hẹn này?"
+  "create_order_from_booking_message": "Xác nhận tạo đơn hàng từ lịch hẹn này?",
+    "expected_revenue": "Doanh thu kỳ vọng",
+  "amount": "Số tiền",
+  "success_rate": "Tỉ lệ thành công",
+  "lead_source": "Nguồn cơ hội bán hàng",
+  "enter_success_probability": "Nhập xác suất thành công (%)",
+  "enter_opportunity_description": "Nhập mô tả chi tiết cơ hội bán hàng"
 }

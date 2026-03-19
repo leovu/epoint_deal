@@ -196,7 +196,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
         }),
         Gaps.vGap4,
         CustomTextfieldDropdownWidget(
-          title: "Doanh thu kỳ vọng",
+          title: AppLocalizations.text(LangKey.expected_revenue),
           content: "",
           textfield: true,
           mandatory: false,
@@ -208,7 +208,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
           inputMoney: true,
           bottom: 8,
         ),
-        _buildTextField("Nhập xác suất thành công (%)", "",
+        _buildTextField(AppLocalizations.text(LangKey.enter_success_probability), "",
             Assets.iconProbability, false, false, true,
             fillText: _probabilityText,
             focusNode: _probabilityFocusNode,
@@ -222,7 +222,7 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             maxLines: 4,
             backgroundColor: Colors.transparent,
             borderColor: AppColors.borderColor,
-            hintText: "Nhập mô tả chi tiết cơ hội bán hàng",
+            hintText: AppLocalizations.text(LangKey.enter_opportunity_description),
             controller: _detailDealText,
             focusNode: _detailDealFocusNode,
             onChanged: (event) {

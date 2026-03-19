@@ -1221,6 +1221,13 @@ class LangKey {
   static const String submit_review_success_message = "submit_review_success_message";
   static const String purpose_of_appointment = "purpose_of_appointment";
   static const String create_order_from_booking_message = "create_order_from_booking_message";
+  
+  static const String expected_revenue = "expected_revenue";
+  static const String amount = "amount";
+  static const String success_rate = "success_rate";
+  static const String lead_source = "lead_source";
+  static const String enter_success_probability = "enter_success_probability";
+  static const String enter_opportunity_description = "enter_opportunity_description";
 
 
 

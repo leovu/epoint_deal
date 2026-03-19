@@ -356,7 +356,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget _buildExpectedRevenue(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconProjectName,
-        title: "Doanh thu kỳ vọng",
+        title: AppLocalizations.text(LangKey.expected_revenue),
         content:
             "${NumberFormat("#,###", "vi-VN").format(detail!.expectedRevenue ?? 0)} VNĐ");
   }
@@ -364,7 +364,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget _buildAmount(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconMoneySquare,
-        title: "Số tiền",
+        title: AppLocalizations.text(LangKey.amount),
         content:
             "${NumberFormat("#,###", "vi-VN").format(detail!.amount ?? 0)} VNĐ");
   }
@@ -372,7 +372,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget _buildProbability(DetailDealData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconProbability,
-        title: "Tỉ lệ thành công",
+        title: AppLocalizations.text(LangKey.success_rate),
         content: "${detail!.probability ?? NULL_VALUE}%");
   }
 

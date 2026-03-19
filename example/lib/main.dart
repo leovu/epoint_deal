@@ -43,12 +43,12 @@ class _MyAppState extends State<MyApp> {
             onTap: () {
               EpointDealPlugin.open(
                   context,
-                  const Locale(LangKey.langVi, 'vi'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNzYyNjcwMSwiZXhwIjoxNzI3NjQ4MzAxLCJuYmYiOjE3Mjc2MjY3MDEsImp0aSI6IkVPRjNtWVVWbEVDRVF1akIiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.wOTi0kjqWzO4niSMzEN4YCxvZusxq-DPu9rf_A2vxVA',
+                  const Locale(LangKey.langEn, 'en'),
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1L3VzZXIvbG9naW4iLCJpYXQiOjE3NzM4MTYxNjEsImV4cCI6MTc3MzgzNzc2MSwibmJmIjoxNzczODE2MTYxLCJqdGkiOiJpcndGVjJiaml3dHJBVVJGIiwic3ViIjoyOTQsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJ0cmluZCIsInBob25lIjoidHJpbmQiLCJicmFuZF9jb2RlIjoibWF0dGhld3NsaXF1b3IiLCJpbWVpIjoicG9ydGFsMTIzIn0.9nVsRWVHyP8FqsY_hl6SbgxWARys_v7lzSZwyNzwL4k',
                   2,
                   {},
-                  domain: 'https://staff-api.stag.epoints.vn',
-                  brandCode: 'qc');
+                  domain: 'https://staff-api.dev.matthewsliquor.com.au',
+                  brandCode: 'matthewsliquor');
             },
           ),
         ),

@@ -25,17 +25,32 @@ class CustomDatePicker extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final DateTime now = DateTime.now();
+    DateTime maxDate = (maximumTime ??
+        DateTime(now.year, now.month, now.day, 23, 59, 0)).toLocal();
+    DateTime minDate = (minimumTime ?? DateTime(1800, 12, 31)).toLocal();
+    
+    if (minDate.isAfter(maxDate)) {
+      maxDate = DateTime(minDate.year + 100); 
+    }
+
+    DateTime initial = (initTime ?? now).toLocal();
+    if (initial.isAfter(maxDate)) {
+      initial = maxDate;
+    }
+    if (initial.isBefore(minDate)) {
+      initial = minDate;
+    }
+
     return Column(
       children: [
         Expanded(child: Container(
           child:  CupertinoDatePicker(
-            maximumDate: maximumTime ??
-                DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day, 23, 59, 0),
-            initialDateTime: initTime ?? DateTime.now(), //subtract
-            minimumYear: minimumTime?.year ?? 1800,
-            minimumDate: minimumTime ?? DateTime(1800, 12, 31),
-            maximumYear: maximumTime?.year ?? DateTime.now().year,
+            maximumDate: maxDate,
+            initialDateTime: initial,
+            minimumYear: minDate.year,
+            minimumDate: minDate,
+            maximumYear: maxDate.year,
             onDateTimeChanged: onChange,
             mode: CupertinoDatePickerMode.date,
             dateOrder: dateOrder,
