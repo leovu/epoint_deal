@@ -2,104 +2,82 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+enum PermissionRequestType {
+  CAMERA,
+  LOCATION,
+  STORAGE,
+  NOTIFICATION,
+  MICROPHONE,
+}
 
 class CustomPermissionRequest {
-  static Future<bool> request(BuildContext context, PermissionRequestType type) async {
-    return PermissionRequest.request(type, (){
-      String? permission;
-      if(type == PermissionRequestType.CAMERA){
-        permission = AppLocalizations.text(LangKey.camera);
+  static Future<bool> request(
+      BuildContext context, PermissionRequestType type) async {
+    final permission = _toPermission(type);
+    final status = await permission.request();
+
+    if (status.isGranted) return true;
+
+    if (status.isPermanentlyDenied) {
+      String? permissionName;
+      if (type == PermissionRequestType.CAMERA) {
+        permissionName = AppLocalizations.text(LangKey.camera);
+      } else if (type == PermissionRequestType.LOCATION) {
+        permissionName = AppLocalizations.text(LangKey.location);
+      } else if (type == PermissionRequestType.STORAGE) {
+        permissionName = AppLocalizations.text(LangKey.storage);
+      } else if (type == PermissionRequestType.NOTIFICATION) {
+        permissionName = AppLocalizations.text(LangKey.notification);
       }
-      else if(type == PermissionRequestType.LOCATION){
-        permission = AppLocalizations.text(LangKey.location);
-      }
-      else if(type == PermissionRequestType.STORAGE){
-        permission = AppLocalizations.text(LangKey.storage);
-      }
-      else if(type == PermissionRequestType.NOTIFICATION){
-        permission = AppLocalizations.text(LangKey.notification);
-      }
-      return DealConnection.showMyDialogWithFunction(
-          context,
-          // "${AppLocalizations.text(LangKey.request_permissions)} $permission",
-          "${AppLocalizations.text(LangKey.message_permission)} $permission",
-          // enableCancel: true,
-          // textSubmitted: AppLocalizations.text(LangKey.allow),
-          ontap: (){
-            Navigator.pop(context);
-            PermissionRequest.openSetting();
-          }
+      DealConnection.showMyDialogWithFunction(
+        context,
+        "${AppLocalizations.text(LangKey.message_permission)} $permissionName",
+        ontap: () {
+          Navigator.pop(context);
+          openAppSettings();
+        },
       );
-    });
-  }
-
-  static Future<bool> check(PermissionRequestType type) => PermissionRequest.check(type);
-}
-
-enum PermissionRequestType{
-  CAMERA, LOCATION, STORAGE, NOTIFICATION, MICROPHONE
-}
-
-class PermissionRequest {
-  static openSetting() {
-    MethodChannel("flutter.permission/requestPermission").invokeMethod('open_screen');
-  }
-
-  static Future<bool> request(PermissionRequestType type, Function onDontAskAgain) async {
-    final channel = MethodChannel("flutter.permission/requestPermission");
-    bool event = false;
-    int? result = 0;
-
-    try{
-      if(type == PermissionRequestType.CAMERA){
-        result = (await channel.invokeMethod<int>('camera',{'isRequest':true}))!;
-      }
-      else if(type == PermissionRequestType.LOCATION){
-        result = (await channel.invokeMethod<int>('location',{'isRequest':true}))!;
-      }
-      else if(type == PermissionRequestType.STORAGE){
-        result = (await channel.invokeMethod<int>('storage',{'isRequest':true}))!;
-      }
-      else if(type == PermissionRequestType.NOTIFICATION){
-        result = (await channel.invokeMethod<int>('notification',{'isRequest':true}))!;
-      }
-      else if(type == PermissionRequestType.MICROPHONE){
-        result = (await channel.invokeMethod<int>('microphone',{'isRequest':true}))!;
-      }
     }
-    catch(_){}
 
-    if(result == -1)
-      onDontAskAgain();
-    else if(result == 1)
-      event = true;
-
-    return event;
+    return false;
   }
 
   static Future<bool> check(PermissionRequestType type) async {
-    final channel = MethodChannel("flutter.permission/checkPermission");
-    int? result = 0;
-    try{
-      if(type == PermissionRequestType.CAMERA){
-        result = (await channel.invokeMethod<int>('camera',{'isRequest':false}))!;
-      }
-      else if(type == PermissionRequestType.LOCATION){
-        result = (await channel.invokeMethod<int>('location',{'isRequest':false}))!;
-      }
-      else if(type == PermissionRequestType.STORAGE){
-        result = (await channel.invokeMethod<int>('storage',{'isRequest':false}))!;
-      }
-      else if(type == PermissionRequestType.NOTIFICATION){
-        result = (await channel.invokeMethod<int>('notification',{'isRequest':false}))!;
-      }
-      else if(type == PermissionRequestType.MICROPHONE){
-        result = (await channel.invokeMethod<int>('microphone',{'isRequest':false}))!;
-      }
-    }
-    catch(_){}
+    return (await _toPermission(type).status).isGranted;
+  }
 
-    return result == 1?true:false;
+  static Permission _toPermission(PermissionRequestType type) {
+    switch (type) {
+      case PermissionRequestType.CAMERA:
+        return Permission.camera;
+      case PermissionRequestType.LOCATION:
+        return Permission.location;
+      case PermissionRequestType.STORAGE:
+        return Permission.storage;
+      case PermissionRequestType.NOTIFICATION:
+        return Permission.notification;
+      case PermissionRequestType.MICROPHONE:
+        return Permission.microphone;
+    }
+  }
+}
+
+/// Kept for backward compatibility with any direct usages in host apps.
+class PermissionRequest {
+  static void openSetting() => openAppSettings();
+
+  static Future<bool> request(
+      PermissionRequestType type, Function onDontAskAgain) async {
+    final permission = CustomPermissionRequest._toPermission(type);
+    final status = await permission.request();
+    if (status.isGranted) return true;
+    if (status.isPermanentlyDenied) onDontAskAgain();
+    return false;
+  }
+
+  static Future<bool> check(PermissionRequestType type) async {
+    return (await CustomPermissionRequest._toPermission(type).status).isGranted;
   }
 }
