@@ -48,10 +48,10 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>aaaa</string>
+    <string>Ứng dụng cần quyền truy cập thư viện ảnh để lưu ảnh.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>photo</string>
+    <string>Ứng dụng cần quyền truy cập thư viện ảnh để chọn ảnh.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>APPNAME requires access to your phone camera.</string>
+	<string>Ứng dụng cần quyền truy cập camera để chụp ảnh.</string>
 </dict>
 </plist>

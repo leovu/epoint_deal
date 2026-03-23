@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
               EpointDealPlugin.open(
                   context,
                   const Locale(LangKey.langEn, 'en'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1L3VzZXIvbG9naW4iLCJpYXQiOjE3NzM5MDU2OTQsImV4cCI6MTc3MzkyNzI5NCwibmJmIjoxNzczOTA1Njk0LCJqdGkiOiJ1UVd3aTM3UWR0R3JyUWlsIiwic3ViIjoyMDcsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBtYXR0aGV3c2xpcXVvci5jb20iLCJwaG9uZSI6ImFkbWluQG1hdHRoZXdzbGlxdW9yLmNvbSIsImJyYW5kX2NvZGUiOiJtYXR0aGV3c2xpcXVvciIsImltZWkiOiI0MjY3OGQzZGQ2MGUzZmJjIn0.km3AZ8v08L3g3H4mPueDbihewbl71VcHBB1qJy76XcU',
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1L3VzZXIvbG9naW4iLCJpYXQiOjE3NzQyMzkwMTksImV4cCI6MTc3NDI2MDYxOSwibmJmIjoxNzc0MjM5MDE5LCJqdGkiOiJPOWhCWDE1N0JFRkg3QWIwIiwic3ViIjoyMDcsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBtYXR0aGV3c2xpcXVvci5jb20iLCJwaG9uZSI6ImFkbWluQG1hdHRoZXdzbGlxdW9yLmNvbSIsImJyYW5kX2NvZGUiOiJtYXR0aGV3c2xpcXVvciIsImltZWkiOiI0MjY3OGQzZGQ2MGUzZmJjIn0.YY4v7sTNT1ZiQEWZJSXR0ICpHhtmEy_rqF_nLnoUM7U',
                   2,
                   {},
                   jsonDetail: jsonDetail,

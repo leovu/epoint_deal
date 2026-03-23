@@ -19,9 +19,9 @@ class CustomImagePicker {
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
                 onTap: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
                   File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
-                    Navigator.of(context).pop();
                     onConfirm(file);
                   }
                 }
@@ -29,9 +29,9 @@ class CustomImagePicker {
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
                 onTap: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
                   File? file = await pickImage(context, ImageSource.gallery);
                   if(file != null){
-                     Navigator.of(context).pop();
                     onConfirm(file);
                   }
                 }
