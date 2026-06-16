@@ -25,26 +25,27 @@ import 'package:epoint_deal_plugin/model/response/other_free_branch_response_mod
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/create_deal_bloc.dart';
 import 'package:epoint_deal_plugin/presentation/create_deal/more_info_creat_deal.dart';
+import 'package:epoint_deal_plugin/presentation/modal/customer_picker_sheet.dart';
 import 'package:epoint_deal_plugin/presentation/modal/journey_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
-import 'package:epoint_deal_plugin/presentation/modal/list_potential_customer_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/pipeline_modal.dart';
+import 'package:epoint_deal_plugin/presentation/modal/staff_picker_sheet.dart';
 import 'package:epoint_deal_plugin/presentation/modal/tag_modal.dart';
-import 'package:epoint_deal_plugin/presentation/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
+import 'package:epoint_deal_plugin/model/request/get_list_staff_request_model.dart';
+import 'package:epoint_deal_plugin/widget/custom_item_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/utils/global_cart.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_date_picker.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_meni_bottom_sheet.dart';
+import 'package:epoint_deal_plugin/widget/custom_bottom_sheet_widget.dart';
 import 'package:epoint_deal_plugin/widget/custom_size_transaction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateDealScreen extends StatefulWidget {
-  const CreateDealScreen(
-      {Key? key,})
-      : super(key: key);
+  const CreateDealScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CreateDealScreenState createState() => _CreateDealScreenState();
@@ -103,6 +104,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
   ];
 
   List<WorkListStaffModel>? _modelStaffSelected = [];
+  List<WorkListStaffModel>? _allStaffData = [];
 
   DateTime? selectedClosingDueDate;
 
@@ -174,30 +176,74 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       DealConnection.showLoading(context);
       _bloc.onRefresh(isRefresh: false, isInit: true);
+
       var branchs = await DealConnection.getBranch(context);
       if (branchs != null) {
         branchData = branchs.data;
+        if (branchData != null && branchData!.isNotEmpty) {
+          bool found = false;
+          if (Global.branchId != 0) {
+            for (var b in branchData!) {
+              b.selected = b.branchId == Global.branchId;
+              if (b.selected == true) {
+                detailDeal.branchCode = b.branchCode;
+                found = true;
+              }
+            }
+          }
+          if (!found) {
+            branchData![0].selected = true;
+            detailDeal.branchCode = branchData![0].branchCode;
+          }
+        }
       }
+
       var pipelines = await DealConnection.getPipeline(context);
       if (pipelines != null) {
         pipeLineData = pipelines.data;
         pipelineSelected = pipeLineData![0];
         detailDeal.pipelineCode = pipelineSelected.pipelineCode;
       }
+
       var journeys = await DealConnection.getJourney(
           context,
           GetJourneyModelRequest(
               pipelineCode: [pipelineSelected.pipelineCode]));
       if (journeys != null) {
         journeysData = journeys.data;
-
         journeySelected = journeysData![0];
         detailDeal.journeyCode = journeySelected!.journeyCode;
       }
 
-      // GlobalCart.shared.clearCart();
+      var staffResponse = await DealConnection.workListStaff(
+          context, WorkListStaffRequestModel());
+      if (staffResponse != null) {
+        _allStaffData = staffResponse.data ?? [];
+        final targetId = int.tryParse(Global.staffId ?? "");
+        if (targetId != null) {
+          for (var s in _allStaffData!) {
+            s.isSelected = s.staffId == targetId;
+          }
+          final preSelected =
+              _allStaffData!.where((s) => s.isSelected == true).toList();
+          if (preSelected.isNotEmpty) {
+            _modelStaffSelected = preSelected;
+            detailDeal.saleId = preSelected[0].staffId;
+          }
+        }
+      }
+
+      final now = DateTime.now();
+      selectedClosingDueDate = DateTime(now.year, now.month + 1, now.day);
+      _closingDueDateText.text =
+          DateFormat("dd/MM/yyyy").format(selectedClosingDueDate!);
+
       Navigator.of(context).pop();
       setState(() {});
+
+      Future.delayed(Duration.zero, () {
+        if (mounted) _openCustomerPicker();
+      });
     });
   }
 
@@ -249,511 +295,28 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       CustomSizeTransaction(
         open: true,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.text(LangKey.dealInfomation)!,
-                style: TextStyle(
-                    fontSize: AppTextSizes.size16,
-                    color: const Color(0xFF0067AC),
-                    fontWeight: FontWeight.normal),
-              ),
-              showMoreInfoDeal
-                  ? InkWell(
-                      onTap: () {
-                        showMoreInfoDeal = !showMoreInfoDeal;
-                        setState(() {});
-                      },
-                      child: Text(
-                        AppLocalizations.text(LangKey.collapse)!,
-                        style: TextStyle(
-                            fontSize: AppTextSizes.size16,
-                            color: const Color(0xFF0067AC),
-                            fontWeight: FontWeight.normal),
-                      ),
-                    )
-                  : Container()
-            ],
-          ),
-
-          Container(
-            height: 10,
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                  if (!selectedCustomer) {
-                    return;
-                  }
-                  customerTypeSelected = customerTypeData[1];
-                  _dealNameText.text = "";
-                  selectedCustomer = false;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 42.0,
-                  width: MediaQuery.of(context).size.width / 2 - 19,
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: !selectedCustomer
-                          ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withValues(alpha: 0.3),
-                        )
-                      ]),
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.text(LangKey.potentialCustomer)!,
-                      style: TextStyle(
-                          color: !selectedCustomer
-                              ? Colors.white
-                              : Color(0xFF8E8E8E),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                  if (selectedCustomer) {
-                    return;
-                  }
-                  customerTypeSelected = customerTypeData[0];
-                  _dealNameText.text = "";
-                  selectedCustomer = true;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 42.0,
-                  width: AppSizes.maxWidth! / 2 - 19,
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: selectedCustomer
-                          ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withValues(alpha: 0.3),
-                        )
-                      ]),
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.text(LangKey.customerVi)!,
-                      style: TextStyle(
-                          color: selectedCustomer
-                              ? Colors.white
-                              : Color(0xFF8E8E8E),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-
-          SizedBox(
-            height: 15.0,
-          ),
-
-        // chọn khách hàng
-          _buildTextField(
-              AppLocalizations.text(LangKey.choose_customer),
-              selectedCustomer
-                  ? (customerSelected.customerName ?? "")
-                  : (leadItem.leadFullName ?? ""),
-              Assets.iconPerson,
-              true,
-              true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-            if (customerTypeSelected.customerTypeNameEn ==
-                AppLocalizations.text(LangKey.customer)) {
-              CustomerData? customer =
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ListCustomerModal(
-                            listCustomer: listCustomer,
-                            dealItem: customerSelected,
-                          )));
-
-              if (customer != null) {
-                customerSelected.customerCode = customer.customerCode;
-                customerSelected.customerName = customer.fullName;
-                customerSelected.phone = customer.phone1;
-                _phoneNumberText.text = customer.phone1!;
-                setState(() {});
-              }
-            } else if (customerTypeSelected.customerTypeNameEn == "lead") {
-              ListCustomLeadItems? result =
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ListCustomerPotentialModal(
-                            items: items,
-                            leadItem: leadItem,
-                          )));
-
-              if (result != null) {
-                leadItem.customerLeadCode = result.customerLeadCode;
-                leadItem.customerType = result.customerType;
-                leadItem.phone = result.phone;
-                leadItem.leadFullName = result.leadFullName;
-
-                setState(() {});
-              }
-            } else {
-              DealConnection.showMyDialog(context,
-                  AppLocalizations.text(LangKey.warningChooseCustomerType),
-                  warning: true);
-            }
-          }),
-
-          (!selectedCustomer)
-              ? (leadItem.customerLeadCode != "")
-                  ? Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 15.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.text(LangKey.customerStyle)! +
-                                    ": ",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                width: 20.0,
-                              ),
-                              Text(
-                                (leadItem.customerType != "")
-                                    ? (leadItem.customerType!.toLowerCase() ==
-                                            AppLocalizations.text(
-                                                    LangKey.personal)!
-                                                .toLowerCase())
-                                        ? AppLocalizations.text(
-                                            LangKey.personal)!
-                                        : AppLocalizations.text(
-                                            LangKey.business)!
-                                    : "",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 15.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.text(LangKey.phoneNumber)! +
-                                    ": ",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                width: 20.0,
-                              ),
-                              Text(
-                                leadItem.phone ?? "N/A",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container()
-              : Container(),
-
-          // phone
-          selectedCustomer
-              ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber),
-                  "", Assets.iconCall, false, false, true,
-                  fillText: _phoneNumberText,
-                  focusNode: _phoneNumberFocusNode,
-                  inputType: TextInputType.number)
-              : Container(),
-
-// nhập tên deal
-          _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
-              Assets.iconDealName, true, false, true,
-              fillText: _dealNameText,
-              focusNode: _dealNameFocusNode,
-              inputType: TextInputType.text),
-
-          !showMoreInfoDeal
-              ? InkWell(
-                  onTap: () {
-                    showMoreInfoDeal = !showMoreInfoDeal;
-                    setState(() {});
-                  },
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Divider(),
-                        Text(
-                          AppLocalizations.text(LangKey.showMore)!,
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              color: const Color(0xFF0067AC),
-                              fontWeight: FontWeight.normal),
-                        ),
-                        Container(
-                          height: 6.0,
-                        ),
-                        Image.asset(
-                          Assets.iconDropDown,
-                          width: 16.0,
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              : Container(),
-
+          _buildDealInfoHeader(),
+          Container(height: 10),
+          _buildCustomerTypeSelection(),
+          SizedBox(height: 15.0),
+          _buildCustomerSelection(),
+          _buildLeadInfo(),
+          _buildPhoneNumberInput(),
+          _buildDealNameInput(),
+          _buildShowMoreInfoToggle(),
           CustomSizeTransaction(
             open: showMoreInfoDeal,
             child: Column(
               children: [
-                _buildTextField(
-                    AppLocalizations.text(LangKey.choosePipeline),
-                    pipelineSelected.pipelineName ?? "",
-                    Assets.iconChance,
-                    true,
-                    true,
-                    false, ontap: () async {
-                  FocusScope.of(context).unfocus();
-                  PipelineData? pipeline = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return PipelineModal(
-                            pipeLineData: pipeLineData,
-                            pipelineSelected: pipelineSelected);
-                      });
-                  if (pipeline != null) {
-                    if (pipelineSelected.pipelineName !=
-                        pipeline.pipelineName) {
-                      journeySelected = null;
-                    }
-
-                    pipelineSelected = pipeline;
-                    detailDeal.pipelineCode = pipelineSelected.pipelineCode;
-                    DealConnection.showLoading(context);
-                    var journeys = await DealConnection.getJourney(
-                        context,
-                        GetJourneyModelRequest(
-                            pipelineCode: [pipelineSelected.pipelineCode]));
-                    Navigator.of(context).pop();
-                    if (journeys != null) {
-                      journeysData = journeys.data;
-                    }
-                    setState(() {});
-                  }
-                }),
-                _buildTextField(
-                    AppLocalizations.text(LangKey.chooseItinerary),
-                    journeySelected?.journeyName ?? "",
-                    Assets.iconItinerary,
-                    true,
-                    true,
-                    false, ontap: () async {
-                  print("Chọn hành trình");
-
-                  FocusScope.of(context).unfocus();
-
-                  JourneyData? journey = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return JourneyModal(
-                            journeys: journeysData,
-                            journeySelected: journeySelected);
-                      });
-                  if (journey != null) {
-                    journeySelected = journey;
-                    detailDeal.journeyCode = journeySelected!.journeyCode;
-                    setState(() {
-                    });
-                  }
-                })
-                ,
-
-                // chọn người được phân bổ
-
-                // showMoreInfoDeal ?
-                _buildTextField(
-                    AppLocalizations.text(LangKey.chooseAllottedPerson),
-                    ((_modelStaffSelected?.length ?? 0) > 0 &&
-                            _modelStaffSelected != null)
-                        ? _modelStaffSelected![0].staffName ?? ""
-                        : "",
-                    Assets.iconName,
-                    true,
-                    true,
-                    false, ontap: () async {
-                  FocusScope.of(context).unfocus();
-                  print("Chọn người được phân bổ");
-
-                  _modelStaffSelected =
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PickOneStaffScreen(
-                                models: _modelStaffSelected,
-                              )));
-
-                  if (_modelStaffSelected != null &&
-                      _modelStaffSelected!.length > 0) {
-                    detailDeal.saleId = _modelStaffSelected![0].staffId;
-                    print(_modelStaffSelected);
-                    setState(() {});
-                  }
-                }),
-
-// chọn ngày kết thúc thực tế
-                showMoreInfoDeal
-                    ? Container(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        child: _buildDatePicker(
-                            AppLocalizations.text(LangKey.expectedEndingDate),
-                            _closingDueDateText, () {
-                          FocusScope.of(context).unfocus();
-                          _showClosingDueDate();
-                        }))
-                    : Container(),
-
-                _buildTextField(
-                    AppLocalizations.text(LangKey.chooseCards),
-                    tagsString,
-                    Assets.iconTag,
-                    false,
-                    true,
-                    false, ontap: () async {
-                  print("Tag");
-                  FocusScope.of(context).unfocus();
-                  if (tagsData == null || tagsData!.length == 0) {
-                    DealConnection.showLoading(context);
-                    var tags = await DealConnection.getTag(context);
-                    Navigator.of(context).pop();
-                    if (tags != null) {
-                      tagsData = tags.data;
-
-                      var listTagsSelected = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  TagsModal(tagsData: tagsData)));
-
-                      if (listTagsSelected != null) {
-                        List<int?> tagsSeletecd = [];
-                        tagsString = "";
-                        tagsData = listTagsSelected;
-
-                        for (int i = 0; i < tagsData!.length; i++) {
-                          if (tagsData![i].selected!) {
-                            tagsSeletecd.add(tagsData![i].tagId);
-                            if (tagsString == "") {
-                              tagsString = tagsData![i].name ?? "";
-                            } else {
-                              tagsString += ", ${tagsData![i].name}";
-                            }
-                          }
-                        }
-
-                        detailDeal.tag = tagsSeletecd;
-                        setState(() {});
-                      }
-                    }
-                  } else {
-                    var listTagsSelected = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                TagsModal(tagsData: tagsData)));
-                    if (listTagsSelected != null) {
-                      List<int?> tagsSeletecd = [];
-                      tagsString = "";
-                      tagsData = listTagsSelected;
-
-                      for (int i = 0; i < tagsData!.length; i++) {
-                        if (tagsData![i].selected!) {
-                          tagsSeletecd.add(tagsData![i].tagId);
-                          if (tagsString == "") {
-                            tagsString = tagsData![i].name ?? "";
-                          } else {
-                            tagsString += ", ${tagsData![i].name}";
-                          }
-                        }
-                      }
-                      detailDeal.tag = tagsSeletecd;
-                      setState(() {});
-                    }
-                  }
-                }),
+                _buildPipelineSelection(),
+                _buildJourneySelection(),
+                _buildStaffSelection(),
+                _buildClosingDateSelection(),
+                _buildTagsSelection(),
               ],
             ),
           ),
-
-          (branchData != null)
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: RichText(
-              text: TextSpan(
-                  text: "Chi nhánh",
-                  style: TextStyle(
-                      fontSize: AppTextSizes.size15,
-                      color: const Color(0xFF858080),
-                      fontWeight: FontWeight.normal),
-                  children: [
-                TextSpan(text: "*", style: TextStyle(color: Colors.red))
-              ])),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      //  color: Colors.black,
-                    ),
-                    height: 170,
-                    child: SingleChildScrollView(
-                      physics: ClampingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: listBranch(),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : Container(),
-
+          _buildBranchSelection(),
           MoreInfoCreatDeal(
             branchData: branchData,
             detailDeal: detailDeal,
@@ -764,85 +327,483 @@ class _CreateDealScreenState extends State<CreateDealScreen>
     ];
   }
 
-  List<Widget> listBranch() {
-    return List.generate(
-       branchData!.length,
-        (index) => buildItemBranch(
-                branchData![index], branchData![index].selected!,
-                () {
-              selectedItem(index);
-            }));
-  }
-
-  Widget buildItemBranch(
-      BranchData? item, bool selected, GestureTapCallback ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        width: 200,
-        height: 150,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              padding: EdgeInsets.all(8.0),
-              margin: EdgeInsets.only(right: 20.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black,
-                  border: selected
-                      ? Border.all(
-                          width: 4.0,
-                          color: Color(0xFF0067AC),
-                          style: BorderStyle.solid)
-                      : Border.all(
-                          width: 3.0,
-                          color: Color.fromARGB(255, 227, 235, 241),
-                          style: BorderStyle.solid),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withValues(alpha: 0.3), BlendMode.dstATop),
-                    image: ((item?.avatar == null)
-                            ? AssetImage(Assets.imgEpoint)
-                            : NetworkImage(item?.avatar ?? ""))
-                        as ImageProvider<Object>,
-                  )),
-              child: Center(
-                child: Text(
-                  item?.address ?? "",
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            selected
-                ? Positioned(
-                    left: 160,
-                    bottom: 125,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Color(0xFF0067AC)),
-                      child: Icon(Icons.check, color: Colors.white),
-                    ))
-                : Container()
-          ],
+  Widget _buildDealInfoHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          AppLocalizations.text(LangKey.dealInfomation)!,
+          style: TextStyle(
+              fontSize: AppTextSizes.size16,
+              color: const Color(0xFF0067AC),
+              fontWeight: FontWeight.normal),
         ),
-      ),
+        showMoreInfoDeal
+            ? InkWell(
+                onTap: () {
+                  showMoreInfoDeal = !showMoreInfoDeal;
+                  setState(() {});
+                },
+                child: Text(
+                  AppLocalizations.text(LangKey.collapse)!,
+                  style: TextStyle(
+                      fontSize: AppTextSizes.size16,
+                      color: const Color(0xFF0067AC),
+                      fontWeight: FontWeight.normal),
+                ),
+              )
+            : Container()
+      ],
     );
   }
 
-  selectedItem(int index) async {
-    List<BranchData> models = branchData!;
-    for (int i = 0; i < models.length; i++) {
-      models[i].selected = false;
+  Widget _buildCustomerTypeSelection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            if (!selectedCustomer) {
+              return;
+            }
+            customerTypeSelected = customerTypeData[1];
+            _dealNameText.text = "";
+            selectedCustomer = false;
+            setState(() {});
+          },
+          child: Container(
+            height: 42.0,
+            width: MediaQuery.of(context).size.width / 2 - 19,
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: !selectedCustomer
+                    ? AppColors.primaryColor
+                    : Color(0xFFF2F2F2),
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 1),
+                    blurRadius: 2,
+                    color: Colors.black.withValues(alpha: 0.3),
+                  )
+                ]),
+            child: Center(
+              child: Text(
+                AppLocalizations.text(LangKey.potentialCustomer)!,
+                style: TextStyle(
+                    color: !selectedCustomer ? Colors.white : Color(0xFF8E8E8E),
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            if (selectedCustomer) {
+              return;
+            }
+            customerTypeSelected = customerTypeData[0];
+            _dealNameText.text = "";
+            selectedCustomer = true;
+            setState(() {});
+          },
+          child: Container(
+            height: 42.0,
+            width: AppSizes.maxWidth! / 2 - 19,
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: selectedCustomer
+                    ? AppColors.primaryColor
+                    : Color(0xFFF2F2F2),
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 1),
+                    blurRadius: 2,
+                    color: Colors.black.withValues(alpha: 0.3),
+                  )
+                ]),
+            child: Center(
+              child: Text(
+                AppLocalizations.text(LangKey.customerVi)!,
+                style: TextStyle(
+                    color: selectedCustomer ? Colors.white : Color(0xFF8E8E8E),
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCustomerSelection() {
+    return _buildTextField(
+        AppLocalizations.text(LangKey.choose_customer),
+        selectedCustomer
+            ? (customerSelected.customerName ?? "")
+            : (leadItem.leadFullName ?? ""),
+        Assets.iconPerson,
+        true,
+        true,
+        false, ontap: () async {
+      FocusScope.of(context).unfocus();
+      await _openCustomerPicker();
+    });
+  }
+
+  Widget _buildLeadInfo() {
+    return (!selectedCustomer)
+        ? (leadItem.customerLeadCode != "")
+            ? Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 15.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          AppLocalizations.text(LangKey.customerStyle)! + ": ",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(width: 20.0),
+                        Text(
+                          (leadItem.customerType != "")
+                              ? (leadItem.customerType!.toLowerCase() ==
+                                      AppLocalizations.text(LangKey.personal)!
+                                          .toLowerCase())
+                                  ? AppLocalizations.text(LangKey.personal)!
+                                  : AppLocalizations.text(LangKey.business)!
+                              : "",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 15.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          AppLocalizations.text(LangKey.phoneNumber)! + ": ",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(width: 20.0),
+                        Text(
+                          leadItem.phone ?? "N/A",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Container()
+        : Container();
+  }
+
+  Widget _buildPhoneNumberInput() {
+    return selectedCustomer
+        ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
+            Assets.iconCall, false, false, true,
+            fillText: _phoneNumberText,
+            focusNode: _phoneNumberFocusNode,
+            inputType: TextInputType.number)
+        : Container();
+  }
+
+  Widget _buildDealNameInput() {
+    return _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
+        Assets.iconDealName, true, false, true,
+        fillText: _dealNameText,
+        focusNode: _dealNameFocusNode,
+        inputType: TextInputType.text);
+  }
+
+  Widget _buildShowMoreInfoToggle() {
+    return !showMoreInfoDeal
+        ? InkWell(
+            onTap: () {
+              showMoreInfoDeal = !showMoreInfoDeal;
+              setState(() {});
+            },
+            child: Center(
+              child: Column(
+                children: [
+                  Divider(),
+                  Text(
+                    AppLocalizations.text(LangKey.showMore)!,
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        color: const Color(0xFF0067AC),
+                        fontWeight: FontWeight.normal),
+                  ),
+                  Container(height: 6.0),
+                  Image.asset(
+                    Assets.iconDropDown,
+                    width: 16.0,
+                  )
+                ],
+              ),
+            ),
+          )
+        : Container();
+  }
+
+  Widget _buildPipelineSelection() {
+    return _buildTextField(
+        AppLocalizations.text(LangKey.deal),
+        pipelineSelected.pipelineName ?? "",
+        Assets.iconChance,
+        true,
+        true,
+        false, ontap: () async {
+      FocusScope.of(context).unfocus();
+      PipelineData? pipeline = await showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) {
+            return PipelineModal(
+                pipeLineData: pipeLineData, pipelineSelected: pipelineSelected);
+          });
+      if (pipeline != null) {
+        if (pipelineSelected.pipelineName != pipeline.pipelineName) {
+          journeySelected = null;
+        }
+
+        pipelineSelected = pipeline;
+        detailDeal.pipelineCode = pipelineSelected.pipelineCode;
+        DealConnection.showLoading(context);
+        var journeys = await DealConnection.getJourney(
+            context,
+            GetJourneyModelRequest(
+                pipelineCode: [pipelineSelected.pipelineCode]));
+        Navigator.of(context).pop();
+        if (journeys != null) {
+          journeysData = journeys.data;
+        }
+        setState(() {});
+      }
+    });
+  }
+
+  Widget _buildJourneySelection() {
+    return _buildTextField(
+        AppLocalizations.text(LangKey.chooseItinerary),
+        journeySelected?.journeyName ?? "",
+        Assets.iconItinerary,
+        true,
+        true,
+        false, ontap: () async {
+      FocusScope.of(context).unfocus();
+
+      JourneyData? journey = await showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) {
+            return JourneyModal(
+                journeys: journeysData, journeySelected: journeySelected);
+          });
+      if (journey != null) {
+        journeySelected = journey;
+        detailDeal.journeyCode = journeySelected!.journeyCode;
+        setState(() {});
+      }
+    });
+  }
+
+  Widget _buildStaffSelection() {
+    return _buildTextField(
+        AppLocalizations.text(LangKey.chooseAllottedPerson),
+        ((_modelStaffSelected?.length ?? 0) > 0 && _modelStaffSelected != null)
+            ? _modelStaffSelected![0].staffName ?? ""
+            : "",
+        Assets.iconName,
+        true,
+        true,
+        false, ontap: () async {
+      FocusScope.of(context).unfocus();
+      final result = await showModalBottomSheet<List<WorkListStaffModel>>(
+        context: context,
+        useRootNavigator: true,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => StaffPickerSheet(
+          models: _modelStaffSelected,
+          allStaffs: _allStaffData,
+        ),
+      );
+      if (result != null && result.isNotEmpty) {
+        _modelStaffSelected = result;
+        detailDeal.saleId = result[0].staffId;
+        setState(() {});
+      }
+    });
+  }
+
+  Widget _buildClosingDateSelection() {
+    return showMoreInfoDeal
+        ? Container(
+            margin: const EdgeInsets.only(bottom: 10.0),
+            child: _buildDatePicker(
+                AppLocalizations.text(LangKey.expectedEndingDate),
+                _closingDueDateText, () {
+              FocusScope.of(context).unfocus();
+              _showClosingDueDate();
+            }))
+        : Container();
+  }
+
+  Widget _buildTagsSelection() {
+    return _buildTextField(AppLocalizations.text(LangKey.chooseCards),
+        tagsString, Assets.iconTag, false, true, false, ontap: () async {
+      FocusScope.of(context).unfocus();
+      Future<void> _openTagsSheet() async {
+        var listTagsSelected = await showModalBottomSheet<List<TagData>>(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => TagsModal(tagsData: tagsData),
+        );
+        if (listTagsSelected != null) {
+          List<int?> tagsSeletecd = [];
+          tagsString = "";
+          tagsData = listTagsSelected;
+          for (int i = 0; i < tagsData!.length; i++) {
+            if (tagsData![i].selected!) {
+              tagsSeletecd.add(tagsData![i].tagId);
+              tagsString = tagsString.isEmpty
+                  ? tagsData![i].name ?? ""
+                  : "$tagsString, ${tagsData![i].name}";
+            }
+          }
+          detailDeal.tag = tagsSeletecd;
+          setState(() {});
+        }
+      }
+
+      if (tagsData == null || tagsData!.isEmpty) {
+        DealConnection.showLoading(context);
+        var tags = await DealConnection.getTag(context);
+        Navigator.of(context).pop();
+        if (tags != null) {
+          tagsData = tags.data;
+          await _openTagsSheet();
+        }
+      } else {
+        await _openTagsSheet();
+      }
+    });
+  }
+
+  Widget _buildBranchSelection() {
+    return _buildTextField(
+        "Chi nhánh", _selectedBranchName, Assets.iconName, true, true, false,
+        ontap: () async {
+      FocusScope.of(context).unfocus();
+      if (branchData == null || branchData!.isEmpty) return;
+      final selected = await showModalBottomSheet<BranchData>(
+        context: context,
+        useRootNavigator: true,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => CustomBottomSheet(
+          title: "Chi nhánh",
+          body: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: branchData!.length,
+            itemBuilder: (_, i) => CustomItemBottomSheet(
+              branchData![i].branchName ?? "",
+              () => Navigator.of(context).pop(branchData![i]),
+            ),
+          ),
+        ),
+      );
+      if (selected != null) {
+        for (var b in branchData!) {
+          b.selected = b.branchId == selected.branchId;
+        }
+        detailDeal.branchCode = selected.branchCode;
+        setState(() {});
+      }
+    });
+  }
+
+  String get _selectedBranchName {
+    if (branchData == null) return "";
+    try {
+      return branchData!.firstWhere((b) => b.selected == true).branchName ?? "";
+    } catch (_) {
+      return "";
     }
-    models[index].selected = true;
-    detailDeal.branchCode = models[index].branchCode;
-    setState(() {});
+  }
+
+  Future<void> _openCustomerPicker() async {
+    if (customerTypeSelected.customerTypeNameEn ==
+        AppLocalizations.text(LangKey.customer)) {
+      final customer = await showModalBottomSheet<CustomerData>(
+        context: context,
+        useRootNavigator: true,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => CustomerPickerSheet(
+          listCustomer: listCustomer,
+          dealItem: customerSelected,
+        ),
+      );
+      if (customer != null) {
+        customerSelected.customerCode = customer.customerCode;
+        customerSelected.customerName = customer.fullName;
+        customerSelected.phone = customer.phone1;
+        _phoneNumberText.text = customer.phone1 ?? "";
+        _dealNameText.text = customer.fullName ?? "";
+        setState(() {});
+      }
+    } else if (customerTypeSelected.customerTypeNameEn == "lead") {
+      final result = await showModalBottomSheet<ListCustomLeadItems>(
+        context: context,
+        useRootNavigator: true,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => LeadPickerSheet(
+          items: items,
+          leadItem: leadItem,
+        ),
+      );
+      if (result != null) {
+        leadItem.customerLeadCode = result.customerLeadCode;
+        leadItem.customerType = result.customerType;
+        leadItem.phone = result.phone;
+        leadItem.leadFullName = result.leadFullName;
+        _dealNameText.text = result.leadFullName ?? "";
+        setState(() {});
+      }
+    } else {
+      DealConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.warningChooseCustomerType),
+          warning: true);
+    }
   }
 
   _showClosingDueDate() {
@@ -853,33 +814,28 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         useRootNavigator: true,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        isDismissible: false,
         builder: (context) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: CustomMenuBottomSheet(
-              title: AppLocalizations.text(LangKey.expectedEndingDate),
-              widget: CustomDatePicker(
+          return CustomBottomSheet(
+            title: AppLocalizations.text(LangKey.expectedEndingDate),
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: CustomDatePicker(
                 minimumTime: DateTime(DateTime.now().year, DateTime.now().month,
                     DateTime.now().day, 0, 0, 0),
                 initTime: selectedDate,
-                maximumTime: DateTime(2025, 12, 31),
+                maximumTime: DateTime(DateTime.now().year + 10, 12, 31),
                 dateOrder: DatePickerDateOrder.dmy,
                 onChange: (DateTime date) {
                   selectedDate = date;
                 },
               ),
-              onTapConfirm: () {
-                selectedClosingDueDate = selectedDate;
-                _closingDueDateText.text = DateFormat("dd/MM/yyyy")
-                    .format(selectedClosingDueDate!)
-                    .toString();
-                // widget.filterScreenModel.fromDate_created_at = selectedDate;
-
-                Navigator.of(context).pop();
-              },
-              haveBnConfirm: true,
             ),
+            onConfirm: () {
+              selectedClosingDueDate = selectedDate;
+              _closingDueDateText.text =
+                  DateFormat("dd/MM/yyyy").format(selectedClosingDueDate!);
+              Navigator.of(context).pop();
+            },
           );
         });
   }
@@ -1061,7 +1017,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.journeyCode == "" ||
         customerSelected.customerCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null || detailDeal.branchCode == "") {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1154,7 +1111,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         detailDeal.journeyCode == "" ||
         leadItem.customerLeadCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null || detailDeal.branchCode == "") {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);

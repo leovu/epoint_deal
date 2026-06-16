@@ -1421,46 +1421,62 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           Row(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                    CustomRowImageContentWidget(
-                      paddingBottom: 8.0,
-                      icon: Assets.iconDeal,
-                      title: model.objectCode ?? NULL_VALUE,
-                      titleStyle: AppTextStyles.style14PrimaryBold,
-                    ),
-                    CustomRowImageContentWidget(
-                      paddingBottom: 0.0,
-                      icon: Assets.iconTag,
-                      title: formatMoney(model.amount!.toDouble()),
-                      titleStyle: AppTextStyles.style14PrimaryBold,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(16.0)),
-                padding: EdgeInsets.symmetric(
-                    horizontal: AppSizes.minPadding * 1.5,
-                    vertical: AppSizes.minPadding / 2),
-                child:
-                    Text("${index + 1}", style: AppTextStyles.style14WhiteBold),
-              )
+                  child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomRowImageContentWidget(
+                          paddingBottom: 8.0,
+                          icon: Assets.iconDeal,
+                          title: model.objectCode ?? NULL_VALUE,
+                          titleStyle: AppTextStyles.style14PrimaryBold,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSizes.minPadding * 1.2,
+                          vertical: AppSizes.minPadding / 4,
+                        ),
+                        child: Text(
+                          "${index + 1}",
+                          style: AppTextStyles.style14WhiteBold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  CustomRowImageContentWidget(
+                    paddingBottom: 0.0,
+                    icon: Assets.iconTag,
+                    title: formatMoney(model.amount!.toDouble()),
+                    titleStyle: AppTextStyles.style14PrimaryBold,
+                  ),
+                ],
+              )),
             ],
           ),
           Gaps.vGap8,
-          Text(
-            model.objectName ?? NULL_VALUE,
-            textAlign: TextAlign.start,
-            style: AppTextStyles.style12BlackNormal,
-            // maxLines: 1,
-          ),
-          Gaps.vGap8,
-          CustomRowInformation(
-            title: formatMoney(model.price!.toDouble()),
-            content: "${model.quantity}x",
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "${model.quantity}x ${model.objectName ?? NULL_VALUE}",
+                  style: AppTextStyles.style12BlackNormal,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(width: 8),
+              Text(
+                formatMoney(model.price!.toDouble()),
+                style: AppTextStyles.style14PrimaryBold,
+              ),
+            ],
           ),
           Gaps.vGap8,
           Row(
@@ -1481,11 +1497,14 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               ),
             ],
           ),
-          Text(
-            model.objectDescription ?? NULL_VALUE,
-            textAlign: TextAlign.start,
-            style: AppTextStyles.style12grey500Normal,
-            // maxLines: 1,
+          Padding(
+            padding: EdgeInsets.only(left: AppSizes.minPadding/2),
+            child: Text(
+              model.objectDescription ?? NULL_VALUE,
+              textAlign: TextAlign.start,
+              style: AppTextStyles.style12grey500Normal,
+              // maxLines: 1,
+            ),
           ),
         ],
       ),
@@ -1960,7 +1979,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             Navigator.of(context).pop(_bloc.allowPop);
           } else {
             Navigator.of(context).pop();
-          };
+          }
+          ;
         }
       },
     );

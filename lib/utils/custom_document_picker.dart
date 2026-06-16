@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:epoint_deal_plugin/utils/custom_permission_request.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -10,23 +9,22 @@ class CustomDocumentPicker {
         List<String>? params,
       }) async {
     try {
-      if (Platform.isAndroid) {
-        bool permission = false;
-        permission = await CustomPermissionRequest.request(
-            context, PermissionRequestType.STORAGE);
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: params,
+        withData: false,
+        withReadStream: false,
+      );
 
-        if (!permission) return null;
-      }
+      if (file == null || file.files.isEmpty) return null;
+
+      final path = file.files.single.path;
+      if (path == null) return null;
+
+      return File(path);
     } catch (_) {
       return null;
     }
-
-    FilePickerResult? file = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: params,
-    );
-
-    return file == null ? null : File(file.files.single.path!);
   }
 
   static Future<List<File>?> openMultiDocument(
@@ -34,21 +32,22 @@ class CustomDocumentPicker {
         List<String>? params,
       }) async {
     try {
-      bool permission = false;
-      permission = await CustomPermissionRequest.request(
-          context, PermissionRequestType.STORAGE);
+      FilePickerResult? files = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: params,
+        allowMultiple: true,
+        withData: false,
+        withReadStream: false,
+      );
 
-      if (!permission) return null;
+      if (files == null) return null;
+
+      return files.files
+          .where((e) => e.path != null)
+          .map((e) => File(e.path!))
+          .toList();
     } catch (_) {
       return null;
     }
-
-    FilePickerResult? files = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: params,
-        allowMultiple: true
-    );
-
-    return files == null ? null : files.files.map((e) => File(e.path!)).toList();
   }
 }

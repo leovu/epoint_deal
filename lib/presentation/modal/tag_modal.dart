@@ -6,6 +6,7 @@ import 'package:epoint_deal_plugin/model/response/get_tag_model_response.dart';
 import 'package:epoint_deal_plugin/presentation/modal/create_new_tag_modal.dart';
 import 'package:epoint_deal_plugin/presentation/modal/list_customer_modal.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/widget/custom_bottom_sheet_widget.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
@@ -64,81 +65,62 @@ class _TagsModalState extends State<TagsModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Color(0xFF0067AC),
-          title: Text(
-            AppLocalizations.text(LangKey.chooseCards)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          actions: [
-            Container(
-              margin: EdgeInsets.only(right: 10.0),
-              child: InkWell(
-                onTap: () async {
-                  var result = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: CreateNewTagModal());
-                      });
-                  if (result != null && result) {
-                    getData();
-                  }
-                },
-                child: Icon(
-                  Icons.add,
-                  size: 30,
-                ),
+    final bodyHeight = MediaQuery.of(context).size.height * 0.75;
+    return CustomBottomSheet(
+      title: AppLocalizations.text(LangKey.chooseCards),
+      body: SizedBox(
+        height: bodyHeight,
+        child: Container(
+          padding:
+              EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: _buildSearch()),
+                  IconButton(
+                    icon: Icon(Icons.add, size: 28),
+                    onPressed: () async {
+                      var result = await showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: CreateNewTagModal(),
+                        ),
+                      );
+                      if (result != null && result) getData();
+                    },
+                  ),
+                ],
               ),
-            )
-          ],
-          // leadingWidth: 20.0,
+              (tagsDataDisplay != null)
+                  ? (tagsDataDisplay!.isNotEmpty)
+                      ? Expanded(
+                          child: CustomListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(
+                              top: 16.0,
+                              bottom: 16.0,
+                              left: 8.0,
+                              right: 8.0),
+                          physics: AlwaysScrollableScrollPhysics(),
+                          controller: _controller,
+                          separator: Divider(),
+                          children: _listWidget(),
+                        ))
+                      : Expanded(child: CustomDataNotFound())
+                  : Expanded(child: Container()),
+              CustomButton(
+                text: AppLocalizations.text(LangKey.confirm),
+                onTap: () => Navigator.of(context).pop(tagsData),
+              ),
+              SizedBox(height: 20.0),
+            ],
+          ),
         ),
-        body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildBody()));
-  }
-
-  Widget _buildBody() {
-    return Container(
-      padding: EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-      child: Column(
-        children: [
-          _buildSearch(),
-          (tagsDataDisplay != null)
-              ? (tagsDataDisplay!.length > 0)
-                  ? Expanded(
-                      child: CustomListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                      physics: AlwaysScrollableScrollPhysics(),
-                      controller: _controller,
-                      separator: Divider(),
-                      children: _listWidget(),
-                    ))
-                  : Expanded(child: CustomDataNotFound())
-              : Expanded(child: Container()),
-          CustomButton(
-            text: AppLocalizations.text(LangKey.confirm),
-            onTap: () {
-              Navigator.of(context).pop(tagsData);
-            },
-          ),
-          Container(
-            height: 20.0,
-          ),
-        ],
       ),
     );
   }

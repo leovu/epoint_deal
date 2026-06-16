@@ -24,14 +24,15 @@ class CustomMenuBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.transparent,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+    return Material(
+      type: MaterialType.transparency,
+      child: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => Navigator.of(context).pop(),
+            ),
           ),
           Flexible(
               fit: FlexFit.loose,

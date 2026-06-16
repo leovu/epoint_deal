@@ -1,9 +1,22 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:flutter/material.dart';
 import 'package:epoint_deal_plugin/epoint_deal_plugin.dart';
+import 'dart:io';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  HttpOverrides.global = MyHttpOverrides();
+
   // await PatchAllLocales.patchNumberSeperators(
   //   patchForSamsungKeyboards: true,
   // );
@@ -44,7 +57,7 @@ class _MyAppState extends State<MyApp> {
               EpointDealPlugin.open(
                   context,
                   const Locale(LangKey.langVi, 'vi'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNzYyNjcwMSwiZXhwIjoxNzI3NjQ4MzAxLCJuYmYiOjE3Mjc2MjY3MDEsImp0aSI6IkVPRjNtWVVWbEVDRVF1akIiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.wOTi0kjqWzO4niSMzEN4YCxvZusxq-DPu9rf_A2vxVA',
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3dvcmtzcGFjZS5lcG9pbnRzLnZuL3VzZXIvbG9naW4iLCJpYXQiOjE3ODE1ODMwOTQsImV4cCI6MTc4MTYwNDY5NCwibmJmIjoxNzgxNTgzMDk0LCJqdGkiOiJUZ2lEVGZzNjhxQ0hoNTF3Iiwic3ViIjoxLCJwcnYiOiJhMGYzZTc0YmVkZjUxMmM0Nzc4Mjk3ZGU1ZjkyMDg2ZGFkMzljYTlmIiwic2lkIjoiYWRtaW5AcGlvYXBwcy52biIsImJyYW5kX2NvZGUiOiJzYWxlIn0.Fu9Np4QIvhmw6BBWoEqmE4rJULvMYJgqFLZRFGyub6g',
                   2,
                   {},
                   domain: 'https://staff-api.stag.epoints.vn',

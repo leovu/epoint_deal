@@ -33,8 +33,9 @@ class EpointDealPlugin {
       Function(Map<String,dynamic>)? callHotline,
       Map<String,dynamic>? jsonDetail, // để tạo deal từ lead
       List<Map<String, dynamic>>? permission,
-      List<Map<String, dynamic>>? configModels
-
+      List<Map<String, dynamic>>? configModels,
+      String? staffId,
+      String? branchId
       }) async {
 
     if (permission != null) {
@@ -80,6 +81,14 @@ class EpointDealPlugin {
     }
 
     Global.branch_code = brandCode;
+
+    if (staffId != null) {
+      Global.staffId = staffId;
+    }
+
+    if (branchId != null) {
+      Global.branchId = int.tryParse(branchId) ?? 0;
+    }
 
     DealConnection.locale = locale;
     Global.locale = locale;

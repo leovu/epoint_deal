@@ -158,7 +158,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
           AppLocalizations.text(LangKey.list_deal)!,
           style: const TextStyle(color: Colors.white, fontSize: 16.0),
         ),
-        // leadingWidth: 20.0,
         actions: [
           InkWell(
             onTap: () async {
@@ -348,7 +347,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(5.0),
-                  margin: EdgeInsets.only(bottom: 8.0, left: 5.0, top: 5.0),
+                  margin: EdgeInsets.only(bottom: 2.0, left: 5.0, top: 5.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -392,34 +391,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                   )),
                             ])),
                       ),
-                      // Expanded(
-                      //   child: Text(
-                      //     item.dealName!,
-                      //     textAlign: TextAlign.start,
-                      //     style: TextStyle(
-                      //         fontSize: 16.0,
-                      //         color: AppColors.primaryColor,
-                      //         fontWeight: FontWeight.w500),
-                      //     // maxLines: 1,
-                      //   ),
-                      // ),
-                      // Container(
-                      //   padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                      //   decoration: BoxDecoration(
-                      //       color: HexColor(
-                      //           item.backgroundColorJourney ?? "#0067AC"),
-                      //       borderRadius: BorderRadius.circular(10.0)),
-                      //   constraints:
-                      //       BoxConstraints(maxWidth: AppSizes.maxWidth! / 2.5),
-                      //   child: Padding(
-                      //     padding: EdgeInsets.all(5.0),
-                      //     child: Text(item.journeyName!,
-                      //         style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontSize: 14.0,
-                      //             fontWeight: FontWeight.w600)),
-                      //   ),
-                      // )
+                      _buildIconNoti(notiCount: item.relatedWork),
                     ],
                   ),
                 ),
@@ -440,8 +412,9 @@ class _ListDealScreenState extends State<ListDealScreen> {
                               Assets.iconName, item.staffFullName ?? "", true),
                           Container(
                             padding:
-                                const EdgeInsets.only(left: 8, bottom: 8.0),
-                            margin: EdgeInsets.only(bottom: 8.0, left: 5.0),
+                                const EdgeInsets.only(left: 5.0, bottom: 4.0),
+                            margin:
+                                const EdgeInsets.only(left: 15.0 / 2, bottom: 2.0),
                             child: Row(
                               children: [
                                 Container(
@@ -472,8 +445,9 @@ class _ListDealScreenState extends State<ListDealScreen> {
                           ),
                           Container(
                             padding:
-                                const EdgeInsets.only(left: 6.0, bottom: 6.0),
-                            margin: EdgeInsets.only(left: 5.0),
+                                const EdgeInsets.only(left: 5.0, bottom: 4.0),
+                            margin:
+                                const EdgeInsets.only(left: 15.0 / 2, bottom: 2.0),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -502,43 +476,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         ],
                       ),
                     )),
-
-                    //     Container(
-                    //   margin: EdgeInsets.only(bottom: 13.0, right: 10.0, top: 21.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.end,
-                    //     children: [
-                    //       _actionItem(Assets.iconCalendar, Color(0xFF26A7AD), number: item?.relatedWork ?? 0, ontap: () async {
-                    //         bool result =
-                    //             await Navigator.of(context).push(MaterialPageRoute(
-                    //                 builder: (context) => DetailDealScreen(
-                    //                       deal_code: item.dealCode,
-                    //                       indexTab: 1,
-                    //                       id: 667,
-                    //                     )));
-
-                    //         if (result != null && result) {
-                    //           getData(false);
-                    //         }
-                    //         print("1");
-                    //       }),
-                    //       _actionItem(Assets.iconOutdate, Color(0xFFDD2C00), number: item.appointment ?? 0, ontap: () async {
-                    //         bool result =
-                    //             await Navigator.of(context).push(MaterialPageRoute(
-                    //                 builder: (context) => DetailDealScreen(
-                    //                       deal_code: item.dealCode,
-                    //                       indexTab: 1,
-                    //                       id: 667,
-                    //                     )));
-
-                    //         if (result != null && result) {
-                    //           getData(false);
-                    //         }
-                    //         print("2");
-                    //       }),
-                    //     ],
-                    //   ),
-                    // )
                     Container(
                       margin: EdgeInsets.only(right: 10.0),
                       padding: EdgeInsets.only(bottom: 8.0),
@@ -547,7 +484,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           if ((checkVisibilityKey(
-                                  VisibilityWidgetName.CM000008)))
+                              VisibilityWidgetName.CM000008)))
                             Container(
                               margin: EdgeInsets.only(bottom: 12.0),
                               child: InkWell(
@@ -565,8 +502,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                       });
                                     }
                                   } else {
-                                    DealConnection.showMyDialog(
-                                        context, "Không có thông tin số điện thoại");
+                                    DealConnection.showMyDialog(context,
+                                        "Không có thông tin số điện thoại");
                                   }
                                 },
                                 child: Container(
@@ -586,44 +523,44 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 ),
                               ),
                             ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              _actionItem(
-                                  Assets.iconCalendar, Color(0xFF26A7AD),
-                                  number: item.relatedWork ?? 0,
-                                  ontap: () async {
-                                bool? result = await Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) => DetailDealScreen(
-                                              deal_code: item.dealCode,
-                                              indexTab: 1,
-                                              id: 667,
-                                            )));
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     _actionItem(
+                          //         Assets.iconCalendar, Color(0xFF26A7AD),
+                          //         number: item.relatedWork ?? 0,
+                          //         ontap: () async {
+                          //       bool? result = await Navigator.of(context)
+                          //           .push(MaterialPageRoute(
+                          //               builder: (context) => DetailDealScreen(
+                          //                     deal_code: item.dealCode,
+                          //                     indexTab: 1,
+                          //                     id: 667,
+                          //                   )));
 
-                                if (result != null && result) {
-                                  getData(false);
-                                }
-                                print("1");
-                              }),
-                              _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                                  number: item.appointment ?? 0,
-                                  ontap: () async {
-                                bool? result = await Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) => DetailDealScreen(
-                                              deal_code: item.dealCode,
-                                              indexTab: 1,
-                                              id: 667,
-                                            )));
+                          //       if (result != null && result) {
+                          //         getData(false);
+                          //       }
+                          //       print("1");
+                          //     }),
+                          //     _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
+                          //         number: item.appointment ?? 0,
+                          //         ontap: () async {
+                          //       bool? result = await Navigator.of(context)
+                          //           .push(MaterialPageRoute(
+                          //               builder: (context) => DetailDealScreen(
+                          //                     deal_code: item.dealCode,
+                          //                     indexTab: 1,
+                          //                     id: 667,
+                          //                   )));
 
-                                if (result != null && result) {
-                                  getData(false);
-                                }
-                                print("2");
-                              }),
-                            ],
-                          ),
+                          //       if (result != null && result) {
+                          //         getData(false);
+                          //       }
+                          //       print("2");
+                          //     }),
+                          //   ],
+                          // ),
                         ],
                       ),
                     )
@@ -755,9 +692,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
       width: minWidth
           ? MediaQuery.of(context).size.width - 80
           : MediaQuery.of(context).size.width - 40,
-      // height: 40,
-      padding: const EdgeInsets.only(left: 5, bottom: 8.0),
-      margin: EdgeInsets.only(left: 15.0 / 2, bottom: 8.0),
+      padding: const EdgeInsets.only(left: 5, bottom: 4.0),
+      margin: EdgeInsets.only(left: 15.0 / 2, bottom: 2.0),
       child: Row(
         children: [
           Container(
@@ -775,6 +711,34 @@ class _ListDealScreenState extends State<ListDealScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildIconNoti({int? notiCount}) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.notifications,
+            color: AppColors.ash,
+            size: 30,
+          ),
+        ),
+        if ((notiCount ?? 0) > 0)
+          Positioned(
+              right: 5,
+              top: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: AppColors.darkRedColor, shape: BoxShape.circle),
+                padding: EdgeInsets.all(AppSizes.minPadding / 4),
+                child: Center(
+                  child: Text('$notiCount',
+                      style: TextStyle(color: AppColors.white, fontSize: 10)),
+                ),
+              ))
+      ],
     );
   }
 }

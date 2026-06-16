@@ -5,7 +5,7 @@ import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_item_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
+import 'package:epoint_deal_plugin/widget/custom_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
 
 class OrderSourcesModal extends StatefulWidget {
@@ -35,27 +35,26 @@ class _OrderSourcesModalState extends State<OrderSourcesModal> {
   }
   @override
   Widget build(BuildContext context) {
-    return CustomMenuBottomSheet(
+    return CustomBottomSheet(
       title: AppLocalizations.text(LangKey.orderSource),
-      widget: (widget.orderSourceData!.length > 0) ? CustomListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(0.0),
-                    children: (widget.orderSourceData ?? [])
-                        .asMap()
-                        .map((index, element) => MapEntry(
-                        index,
-                        CustomItemBottomSheet(
-                          element.orderSourceName ?? "",
-                              () => selectedItem( index),
-                          isBorder:
-                          index < widget.orderSourceData!.length - 1,
-                          isSelected: element.selected,
-                        )))
-                        .values
-                        .toList(),
-                  ) : CustomDataNotFound(),
-      haveBnConfirm: false,
-      
+      body: (widget.orderSourceData!.isNotEmpty)
+          ? CustomListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              children: (widget.orderSourceData ?? [])
+                  .asMap()
+                  .map((index, element) => MapEntry(
+                      index,
+                      CustomItemBottomSheet(
+                        element.orderSourceName ?? "",
+                        () => selectedItem(index),
+                        isBorder: index < widget.orderSourceData!.length - 1,
+                        isSelected: element.selected,
+                      )))
+                  .values
+                  .toList(),
+            )
+          : CustomDataNotFound(),
     );
   }
 

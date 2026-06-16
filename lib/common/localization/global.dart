@@ -49,7 +49,8 @@ class Global {
 
   static int branchId = 0;
 
-  static Function(Map<String,dynamic>)? callHotline; 
+  static Function(Map<String,dynamic>)? callHotline;
 
+  static String? staffId;
 
 }

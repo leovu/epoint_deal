@@ -2,10 +2,10 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/model/response/pipeline_model_response.dart';
 import 'package:epoint_deal_plugin/utils/ultility.dart';
+import 'package:epoint_deal_plugin/widget/custom_bottom_sheet_widget.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_item_bottom_sheet.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
-import 'package:epoint_deal_plugin/widget/custom_menu_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class PipelineModal extends StatefulWidget {
@@ -34,12 +34,12 @@ class _PipelineModalState extends State<PipelineModal> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomMenuBottomSheet(
+    return CustomBottomSheet(
       title: AppLocalizations.text(LangKey.choosePipeline),
-      widget: (widget.pipeLineData!.length > 0)
+      body: (widget.pipeLineData?.isNotEmpty == true)
           ? CustomListView(
               shrinkWrap: true,
-              padding: EdgeInsets.all(0.0),
+              padding: EdgeInsets.zero,
               children: (widget.pipeLineData ?? [])
                   .asMap()
                   .map((index, element) => MapEntry(
@@ -54,11 +54,10 @@ class _PipelineModalState extends State<PipelineModal> {
                   .toList(),
             )
           : CustomDataNotFound(),
-      haveBnConfirm: false,
     );
   }
 
-  selectedItem(int index) async {
+  void selectedItem(int index) {
     List<PipelineData> models = widget.pipeLineData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;

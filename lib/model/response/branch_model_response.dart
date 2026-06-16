@@ -34,6 +34,7 @@ class BranchData {
   String? branchCode;
   String? avatar;
   bool? selected;
+  int? isDefault;
 
   BranchData({this.branchId, this.branchName, this.address, this.branchCode,this.selected});
 
@@ -44,6 +45,7 @@ class BranchData {
     branchCode = json['branch_code'];
     avatar = json['avatar'];
     selected = json['selected'] ?? false;
+    isDefault=json['is_default'];
   }
 
   Map<String, dynamic> toJson() {

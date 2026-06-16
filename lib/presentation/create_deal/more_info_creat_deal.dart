@@ -151,7 +151,6 @@ class _MoreInfoCreatDealState extends State<MoreInfoCreatDeal> {
             false,
             true,
             false, ontap: () async {
-          print("nguon don hang");
           FocusScope.of(context).unfocus();
           if (orderSourceData == null || orderSourceData!.length == 0) {
             DealConnection.showLoading(context);
