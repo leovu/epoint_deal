@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
@@ -40,7 +41,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     horizontal: 15.0 * 1.5, vertical: 15.0 * 1.5),
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    gradient: AppGlass.sheetGradient,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16.0),
                       topRight: Radius.circular(16.0),

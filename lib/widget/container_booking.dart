@@ -15,19 +15,11 @@ class ContainerBooking extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            color: AppColors.whiteColor,
+            gradient: AppGlass.cardGradient,
             border: Border.all(
                 color:
                     isSelected ? AppColors.primaryColor : AppColors.whiteColor),
-            boxShadow: isSelected
-                ? null
-                : [
-                    BoxShadow(
-                      color: AppColors.blackColor.withValues(alpha: 0.25),
-                      blurRadius: 2.0,
-                      offset: Offset.zero,
-                    )
-                  ]),
+            boxShadow: AppGlass.shadow),
         child: child,
       ),
       onTap: onTap,
@@ -788,13 +780,9 @@ class CustomTypeBooking extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          color: AppColors.whiteColor,
-          boxShadow: [
-            BoxShadow(
-                offset: Offset(0, 0),
-                blurRadius: 4.0,
-                color: AppColors.blackColor.withValues(alpha: 0.25))
-          ],
+          gradient: AppGlass.cardGradient,
+          border: Border.all(color: AppGlass.borderColor),
+          boxShadow: AppGlass.shadow,
         ),
         child: Row(
           children: [

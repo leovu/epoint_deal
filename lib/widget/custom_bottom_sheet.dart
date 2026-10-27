@@ -32,7 +32,8 @@ class CustomBottomSheet extends StatelessWidget {
             Flexible(
               child: InkWell(
                 child: Container(
-                  color: Colors.white,
+                  decoration: AppGlass.sheet(),
+                  clipBehavior: Clip.antiAlias,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -43,7 +44,7 @@ class CustomBottomSheet extends StatelessWidget {
                           width: 40.0,
                           height: 4.0,
                           decoration: BoxDecoration(
-                              color: Color(0xFFC4C4C4),
+                              color: AppColors.primaryDarkColor.withValues(alpha: 0.18),
                               borderRadius: BorderRadius.circular(100.0)),
                         ),
                       ),

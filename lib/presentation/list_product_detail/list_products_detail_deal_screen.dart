@@ -226,14 +226,9 @@ class _ListProductsDetailDealScreenState
     return Container(
       padding: EdgeInsets.all(AppSizes.minPadding),
       decoration: BoxDecoration(
-          color: AppColors.white,
+          gradient: AppGlass.cardGradient,
           borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.1),
-                blurRadius: 10.0,
-                offset: Offset(0, 2))
-          ],
+          boxShadow: AppGlass.shadow,
           border: Border.all(color: AppColors.grey100)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

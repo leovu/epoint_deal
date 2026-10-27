@@ -154,6 +154,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
           color: Colors.white,
         ),
         backgroundColor: AppColors.primaryColor,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
         title: Text(
           AppLocalizations.text(LangKey.list_deal)!,
           style: const TextStyle(color: Colors.white, fontSize: 16.0),
@@ -332,14 +334,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
           child: Container(
             margin: EdgeInsets.only(bottom: 10.0),
             decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
-                    color: Colors.black.withValues(alpha: 0.3),
-                  )
-                ],
-                color: Colors.white,
+                boxShadow: AppGlass.shadow,
+                gradient: AppGlass.cardGradient,
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
             child: Column(

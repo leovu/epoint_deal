@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/model/response/get_allocator_model_response.dart';
@@ -38,7 +39,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
     return Container(
       padding: EdgeInsets.only(top: 10.0,bottom: 50),
       decoration: BoxDecoration(
-          color: Colors.white,
+          gradient: AppGlass.sheetGradient,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       height: MediaQuery.of(context).size.height * 0.8,

@@ -1405,14 +1405,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return Container(
       padding: EdgeInsets.all(AppSizes.minPadding),
       decoration: BoxDecoration(
-          color: AppColors.white,
+          gradient: AppGlass.cardGradient,
           borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.1),
-                blurRadius: 10.0,
-                offset: Offset(0, 2))
-          ],
+          boxShadow: AppGlass.shadow,
           border: Border.all(color: AppColors.grey100)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1524,15 +1519,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         padding: EdgeInsets.all(8.0),
         margin: EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
-            color: Colors.white,
+            gradient: AppGlass.cardGradient,
+            border: Border.all(color: AppGlass.borderColor),
             borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 1),
-                blurRadius: 2,
-                color: Colors.black.withValues(alpha: 0.3),
-              )
-            ]),
+            boxShadow: AppGlass.shadow),
         child: Column(
           children: [
             Row(
@@ -1793,6 +1783,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             color: Colors.white,
           ),
           backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             AppLocalizations.text(LangKey.detail_deal)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

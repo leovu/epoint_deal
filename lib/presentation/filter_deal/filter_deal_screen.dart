@@ -578,6 +578,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
               color: Colors.white,
             ),
             backgroundColor: AppColors.primaryColor,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
             title: Text(
               AppLocalizations.text(LangKey.filter)!,
               style: const TextStyle(color: Colors.white, fontSize: 20.0),

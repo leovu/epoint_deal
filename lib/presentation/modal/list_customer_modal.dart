@@ -77,7 +77,9 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: Color(0xFF0067AC),
+          backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             AppLocalizations.text(LangKey.listCustomer)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

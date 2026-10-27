@@ -139,7 +139,7 @@ class _CustomerPickerSheetState extends State<CustomerPickerSheet> {
             child: Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
-        color: Colors.white,
+        gradient: AppGlass.sheetGradient,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
       ),
       child: Column(
@@ -368,7 +368,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
             child: Container(
               height: MediaQuery.of(context).size.height * 0.85,
               decoration: BoxDecoration(
-                color: Colors.white,
+                gradient: AppGlass.sheetGradient,
                 borderRadius:
                     BorderRadius.vertical(top: Radius.circular(16.0)),
               ),
@@ -378,7 +378,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      gradient: AppGlass.sheetGradient,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(16.0)),
                     ),

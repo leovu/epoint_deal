@@ -209,6 +209,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               color: Colors.white,
             ),
             backgroundColor: AppColors.primaryColor,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
             title: Text(
               AppLocalizations.text(LangKey.customerCareUpcase)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),

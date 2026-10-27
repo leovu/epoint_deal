@@ -97,15 +97,10 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
         padding: EdgeInsets.all(8.0),
         margin: EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
-            color: Colors.white,
+            gradient: AppGlass.cardGradient,
+            border: Border.all(color: AppGlass.borderColor),
             borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 1),
-                blurRadius: 2,
-                color: Colors.black.withValues(alpha: 0.3),
-              )
-            ]),
+            boxShadow: AppGlass.shadow),
         child: Column(
           children: [
             Row(

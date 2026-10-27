@@ -252,6 +252,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
               color: Colors.white,
             ),
             backgroundColor: AppColors.primaryColor,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
             title: Text(
               AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
