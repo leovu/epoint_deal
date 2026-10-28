@@ -8,7 +8,7 @@ class AppColors {
   static const primaryLightColor = Color(0xFF9CCFF0);
   static const secondaryColor = Color(0xFF1A6497);
   static const secondaryColorMix = Color(0xFFD3E8F7);
-  static const surfaceColor = Color(0xFFF2F7FB);
+  static const surfaceColor = Color(0xFFF5F7F9);
   static const primary50Color = primaryColorMix;
   static const white = Color(0xFFFFFFFF);
   static const white50 = Color(0xFFFAFAFA);
@@ -30,7 +30,7 @@ class AppColors {
   static const colorLine = primaryColorMix;
   static const colorLineImage = Color(0xFFE4E4E4);
   static const headerColorBackground = primaryColor;
-  static const headerColorLinearTop = Color(0xFFE3F0FA);
+  static const headerColorLinearTop = Color(0xFFEDF2F6);
   static const headerColorLinearBottom = primaryColorMix;
   static const colorSelectedService = primaryColorMix;
   static const colorUnSelectedService = Color(0xFFF4F6F8);
@@ -819,7 +819,7 @@ class AppGlass {
 
   static const double sheetRadius = AppRadius.sheet;
 
-  static const Color backgroundColor = Color(0xFFE3F0FA);
+  static const Color backgroundColor = Color(0xFFEDF2F6);
 
   static const LinearGradient headerGradient = LinearGradient(
     begin: Alignment.centerLeft,
@@ -836,7 +836,7 @@ class AppGlass {
   static const LinearGradient backgroundGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [backgroundColor, AppColors.surfaceColor, Color(0xFFEDF3F8)],
+    colors: [backgroundColor, AppColors.surfaceColor, Color(0xFFF2F4F6)],
     stops: [0.0, 0.45, 1.0],
   );
 
@@ -902,7 +902,7 @@ class AppGlass {
         end: Alignment.bottomRight,
         colors: [
           Colors.white.withValues(alpha: 0.92),
-          Color.lerp(Colors.white, AppColors.primaryColor, 0.05)!
+          Color.lerp(Colors.white, AppColors.primaryColor, 0.02)!
               .withValues(alpha: 0.74),
         ],
       );
@@ -912,7 +912,7 @@ class AppGlass {
         end: Alignment.bottomCenter,
         colors: [
           Color(0xFFFDFEFF),
-          Color.lerp(Colors.white, AppColors.primaryColor, 0.03)!,
+          Color.lerp(Colors.white, AppColors.primaryColor, 0.012)!,
           AppColors.surfaceColor,
         ],
         stops: [0.0, 0.3, 1.0],
