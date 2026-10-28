@@ -12,8 +12,8 @@ class CustomInformationDealWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(
           horizontal: AppSizes.minPadding, vertical: AppSizes.minPadding/2),
       decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(6.0)),
+          gradient: AppGlass.activeGradient,
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

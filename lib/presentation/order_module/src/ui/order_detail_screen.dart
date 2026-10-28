@@ -92,7 +92,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
               CustomChip(
                 text: AppLocalizations.text(LangKey.payment),
                 style: AppTextStyles.style12WhiteBold,
-                radius: 5.0,
+                radius: AppRadius.sm,
                 onTap: _bloc.onPayment,
               )
           ],
@@ -308,9 +308,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
                     Expanded(
                         child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.borderColor),
-                          borderRadius: BorderRadius.circular(5.0)),
+                      decoration: AppGlass.tile(radius: AppRadius.sm),
                       padding: EdgeInsets.all(AppSizes.minPadding),
                       child: Row(
                         children: [

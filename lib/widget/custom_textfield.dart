@@ -75,8 +75,13 @@ class CustomTextField extends StatelessWidget {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: backgroundColor ?? AppColors.grey50Color,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            color: backgroundColor == null ||
+                    backgroundColor == Colors.transparent ||
+                    backgroundColor == AppColors.white ||
+                    backgroundColor == AppColors.grey50Color
+                ? AppGlass.surface
+                : backgroundColor,
             boxShadow: [
               shadow ??
                   BoxShadow(
@@ -84,8 +89,12 @@ class CustomTextField extends StatelessWidget {
                       blurRadius: 0,
                       color: AppColors.black.withValues(alpha: 0))
             ],
-            border:
-                borderColor == null ? null : Border.all(color: borderColor!)),
+            border: Border.all(
+                color: borderColor == null ||
+                        borderColor == AppColors.borderColor ||
+                        borderColor == AppColors.grey200Color
+                    ? AppColors.primaryColorMix
+                    : borderColor!)),
         child: Row(
           children: [
             (titleImage == null && titleIcon == null && titleIconData == null)
@@ -104,12 +113,12 @@ class CustomTextField extends StatelessWidget {
                               ? CustomImageIcon(
                                   icon: titleIcon,
                                   size: 18.0,
-                                  color: prefixIconColor ?? colorIcons ?? AppColors.grey500Color,
+                                  color: prefixIconColor ?? colorIcons ?? AppColors.textMutedColor,
                                 )
                               : Icon(
                                   titleIconData,
                                   size: 18.0,
-                                  color: prefixIconColor ?? colorIcons ?? AppColors.grey500Color,
+                                  color: prefixIconColor ?? colorIcons ?? AppColors.textMutedColor,
                                 ),
                     ),
                   ),
@@ -148,7 +157,7 @@ class CustomTextField extends StatelessWidget {
                         child: Text(
                           suffixText!,
                           style: AppTextStyles.style14WhiteNormal
-                              .copyWith(color: AppColors.grey500Color),
+                              .copyWith(color: AppColors.textMutedColor),
                         ))),
             (suffixIcon == null && suffixIconData == null)
                 ? Container()
@@ -160,12 +169,12 @@ class CustomTextField extends StatelessWidget {
                           ? CustomImageIcon(
                               icon: suffixIcon,
                               size: suffixIconSize ?? 20.0,
-                              color: colorIcons ?? AppColors.grey500Color,
+                              color: colorIcons ?? AppColors.textMutedColor,
                             )
                           : Icon(
                               suffixIconData,
                               size: suffixIconSize ?? 20.0,
-                              color: colorIcons ?? AppColors.grey500Color,
+                              color: colorIcons ?? AppColors.textMutedColor,
                             ),
                     ),
                     onTap: onSuffixTap,
@@ -220,7 +229,7 @@ class CustomQuantityTextField extends StatelessWidget {
             controller: controller,
             style: TextStyle(
                 fontSize: AppTextSizes.size13,
-                color: Colors.black,
+                color: AppColors.textTitleColor,
                 fontWeight: FontWeight.normal),
             readOnly: true,
             decoration: InputDecoration(

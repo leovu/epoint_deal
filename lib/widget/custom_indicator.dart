@@ -63,7 +63,7 @@ class CustomTextIndicator extends StatelessWidget {
             height: size,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.all(Radius.circular(5.0))
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm))
             ),
           ),
         ),

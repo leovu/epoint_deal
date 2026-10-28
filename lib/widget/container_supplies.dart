@@ -63,7 +63,7 @@ class ContainerSuppliesContent extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             border: Border.all(color: AppColors.borderColor),
-            borderRadius: BorderRadius.circular(10.0)
+            borderRadius: BorderRadius.circular(AppRadius.md)
         ),
         alignment: Alignment.topCenter,
         child: CustomListView(
@@ -93,7 +93,7 @@ class ContainerSuppliesContent extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(color: AppColors.borderColor),
-            borderRadius: BorderRadius.circular(10.0)
+            borderRadius: BorderRadius.circular(AppRadius.md)
         ),
         child: CustomListView(
           physics: NeverScrollableScrollPhysics(),

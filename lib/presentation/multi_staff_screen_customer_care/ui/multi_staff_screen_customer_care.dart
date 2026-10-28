@@ -113,7 +113,7 @@ class _MultipleStaffScreenCustomerCareState
                                 return CustomShimmer(
                                   child: CustomSkeleton(
                                     height: 40.0,
-                                    radius: 5.0,
+                                    radius: AppRadius.sm,
                                   ),
                                 );
                               } else
@@ -124,8 +124,8 @@ class _MultipleStaffScreenCustomerCareState
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             width: 1.0,
-                                            color: Color(0xFFE5E5E5)),
-                                        borderRadius: BorderRadius.circular(5)),
+                                            color: AppColors.primaryColorMix),
+                                        borderRadius: BorderRadius.circular(AppRadius.sm)),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -147,7 +147,7 @@ class _MultipleStaffScreenCustomerCareState
                                         Padding(
                                           padding: EdgeInsets.only(right: 15.0),
                                           child: CustomImageIcon(
-                                            color: AppColors.grey500Color,
+                                            color: AppColors.textMutedColor,
                                             icon: Assets.iconDropDown,
                                             size: 10.0,
                                           ),
@@ -172,7 +172,7 @@ class _MultipleStaffScreenCustomerCareState
                                 return CustomShimmer(
                                   child: CustomSkeleton(
                                     height: 40.0,
-                                    radius: 5.0,
+                                    radius: AppRadius.sm,
                                   ),
                                 );
                               } else
@@ -183,8 +183,8 @@ class _MultipleStaffScreenCustomerCareState
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             width: 1.0,
-                                            color: Color(0xFFE5E5E5)),
-                                        borderRadius: BorderRadius.circular(5)),
+                                            color: AppColors.primaryColorMix),
+                                        borderRadius: BorderRadius.circular(AppRadius.sm)),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -206,7 +206,7 @@ class _MultipleStaffScreenCustomerCareState
                                         Padding(
                                           padding: EdgeInsets.only(right: 15.0),
                                           child: CustomImageIcon(
-                                            color: AppColors.grey500Color,
+                                            color: AppColors.textMutedColor,
                                             icon: Assets.iconDropDown,
                                             size: 10.0,
                                           ),
@@ -352,7 +352,7 @@ class _MultipleStaffScreenCustomerCareState
                         model.staffName ?? "",
                         style: TextStyle(
                             fontSize: 16.0,
-                            color: AppColors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                       Text(
@@ -376,7 +376,7 @@ class _MultipleStaffScreenCustomerCareState
                           padding: EdgeInsets.only(left: 10.0),
                           child: Icon(
                             Icons.check_box_outline_blank,
-                            color: Color.fromARGB(255, 108, 102, 94),
+                            color: AppColors.textMutedColor,
                           ),
                         )
                 ],
@@ -435,16 +435,23 @@ class _MultipleStaffScreenCustomerCareState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppGlass.backgroundColor,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.appBarShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
         title: Text(
           AppLocalizations.text(LangKey.chooseSupporterUpcase)!,
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),

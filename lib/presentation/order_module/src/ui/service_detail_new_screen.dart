@@ -183,8 +183,8 @@ class ServiceDetailNewScreenState extends State<ServiceDetailNewScreen> {
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.horizontal(
-                                    right: Radius.circular(50.0)),
-                                color: Colors.red),
+                                    right: Radius.circular(AppRadius.pill)),
+                                color: AppColors.dangerColor),
                             padding: EdgeInsets.all(AppSizes.minPadding),
                             child: AutoSizeText(
                               model.promotion == null
@@ -255,7 +255,7 @@ class ServiceDetailNewScreenState extends State<ServiceDetailNewScreen> {
 
   BoxShadow _buildBoxShadow() {
     return BoxShadow(
-        color: AppColors.blackColor.withValues(alpha: 0.1),
+        color: AppColors.primaryDarkColor.withValues(alpha: 0.1),
         offset: Offset(0.0, -2),
         blurRadius: 4.0);
   }
@@ -335,7 +335,7 @@ class ServiceDetailNewScreenState extends State<ServiceDetailNewScreen> {
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                         colors: [
-                          Colors.grey.withValues(alpha: 0.0),
+                          Colors.white.withValues(alpha: 0.0),
                           Colors.white.withValues(alpha: 0.5),
                           Colors.white,
                         ],
@@ -362,8 +362,10 @@ class ServiceDetailNewScreenState extends State<ServiceDetailNewScreen> {
 
   Widget _buildServiceInfo(ServiceDetailResponseModel? model) {
     return Container(
-      decoration:
-      BoxDecoration(boxShadow: [_buildBoxShadow()], color: Colors.white),
+      decoration: BoxDecoration(
+          boxShadow: [_buildBoxShadow()],
+          color: AppGlass.surface,
+          border: Border(top: BorderSide(color: AppGlass.borderColor))),
       child: CustomListView(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

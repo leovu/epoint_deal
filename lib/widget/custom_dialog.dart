@@ -22,7 +22,7 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return CustomScaffold(
-      backgroundColor: Colors.black.withValues(alpha: 0.3),
+      backgroundColor: AppGlass.barrierColor,
       body: SingleChildScrollView(
         child: Container(
           height: AppSizes.screenHeight,

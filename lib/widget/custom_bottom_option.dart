@@ -93,7 +93,7 @@ class CustomBottomOptionState extends State<CustomBottomOption> {
                         icon: e.icon,
                         size: _iconSize,
                         color:
-                        e.textColor ?? AppColors.grey200Color,
+                        e.textColor ?? AppColors.textSecondaryColor,
                       )
                           : Image.asset(
                         e.image!,
@@ -104,7 +104,7 @@ class CustomBottomOptionState extends State<CustomBottomOption> {
                     child: Text(
                       e.text ?? "",
                       style: AppTextStyles.style15BlackNormal.copyWith(
-                          color: e.textColor ?? AppColors.blackColor),
+                          color: e.textColor ?? AppColors.textTitleColor),
                     ),
                   ),
                   if (e.isSelected != null && e.isSelected!)

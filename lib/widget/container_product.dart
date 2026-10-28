@@ -105,7 +105,7 @@ class CustomProduct extends StatelessWidget {
 
     return InkWell(
       child: Container(
-        color: AppColors.whiteColor,
+        decoration: AppGlass.card(radius: AppRadius.md),
         child: _buildContainer(
             CustomNetworkImage(
               width: double.infinity,

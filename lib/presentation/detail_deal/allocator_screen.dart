@@ -57,21 +57,28 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppGlass.backgroundColor,
         appBar: AppBar(
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.appBarShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             AppLocalizations.text(LangKey.staff)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
           // leadingWidth: 20.0,
         ),
         body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: AppGlass.background(),
             child: _buildBody()));
   }
 
@@ -89,7 +96,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
                       top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                   physics: AlwaysScrollableScrollPhysics(),
                   controller: _controller,
-                  separator: Divider(),
+                  separator: Divider(color: AppColors.primaryColorMix),
                   children: (_model != null) ? (_model!.data!.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
                 ))
               : Container(),
@@ -135,7 +142,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
                   item.fullName!,
                   style: TextStyle(
                       fontSize: 18.0,
-                      color: item.selected! ? Colors.orange : Colors.black,
+                      color: item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
                       fontWeight: FontWeight.normal),
                   maxLines: 1,
                 ),
@@ -157,14 +164,12 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
       decoration: InputDecoration(
         isCollapsed: true,
         contentPadding: EdgeInsets.all(12.0),
-        border: OutlineInputBorder(
-          // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-        ),
+        filled: true,
+        fillColor: AppGlass.surface,
+        border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
         isDense: true,
@@ -186,7 +191,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         // color: Color.fromARGB(255, 243, 245, 247),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         child: CustomAvatar(
           color: Color.fromARGB(255, 117, 176, 215),
           name: name,

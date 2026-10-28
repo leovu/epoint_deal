@@ -100,7 +100,7 @@ class CustomImageList extends StatelessWidget {
                   child: InkWell(
                     child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
                           color: AppColors.blackColor.withValues(alpha: 0.5)),
                       padding: EdgeInsets.all(5.0),
                       child: CustomImageIcon(

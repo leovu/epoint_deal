@@ -149,16 +149,23 @@ class _ListDealScreenState extends State<ListDealScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppGlass.backgroundColor,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.appBarShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
         title: Text(
           AppLocalizations.text(LangKey.list_deal)!,
-          style: const TextStyle(color: Colors.white, fontSize: 16.0),
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600),
         ),
         actions: [
           InkWell(
@@ -189,6 +196,9 @@ class _ListDealScreenState extends State<ListDealScreen> {
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
+        elevation: 4.0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.card)),
         onPressed: () async {
           var result = await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CreateDealScreen()));
@@ -203,7 +213,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
         child: const Icon(
           Icons.add,
           color: AppColors.white,
-          size: 40,
+          size: 32,
         ),
       ),
     );
@@ -263,14 +273,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
               10,
               (index) => CustomSkeleton(
                     height: 200,
-                    radius: 4.0,
+                    radius: AppRadius.card,
                   )),
         ));
   }
 
   Widget _buildSearch() {
     return Container(
-      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      padding: EdgeInsets.only(left: 12.0, right: 12.0),
       child: TextField(
           enabled: true,
           controller: _searchtext,
@@ -280,15 +290,16 @@ class _ListDealScreenState extends State<ListDealScreen> {
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              // borderSide:
-              //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
+            hintStyle: TextStyle(
+                fontSize: AppTextSizes.size14,
+                color: AppColors.textMutedColor),
             suffixIcon: InkWell(
               splashColor: Colors.white,
               onTap: () async {
@@ -318,7 +329,14 @@ class _ListDealScreenState extends State<ListDealScreen> {
   Widget _dealItemV2(DealItems item) {
     return Stack(
       children: [
-        InkWell(
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
+          decoration: AppGlass.card(),
+          child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.card),
           onTap: () async {
             bool? result = await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => DetailDealScreen(
@@ -332,12 +350,6 @@ class _ListDealScreenState extends State<ListDealScreen> {
             }
           },
           child: Container(
-            margin: EdgeInsets.only(bottom: 10.0),
-            decoration: BoxDecoration(
-                boxShadow: AppGlass.shadow,
-                gradient: AppGlass.cardGradient,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -360,8 +372,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 style: TextStyle(
                                     height: 1,
                                     fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
+                                    color: AppColors.textTitleColor,
+                                    fontWeight: FontWeight.w600),
                                 children: [
                               WidgetSpan(
                                   child: SizedBox(
@@ -372,17 +384,18 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                   child: Container(
                                     margin: EdgeInsets.only(right: 8.0),
                                     decoration: BoxDecoration(
-                                        color: Color(0xFF3AEDB6),
+                                        color: AppColors.successColor
+                                            .withValues(alpha: 0.14),
                                         borderRadius:
-                                            BorderRadius.circular(4.0)),
+                                            BorderRadius.circular(AppRadius.pill)),
                                     child: Padding(
-                                      padding: EdgeInsets.all(3.0),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 3.0),
                                       child: Text(item.journeyName ?? "N/A",
                                           style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 3, 68, 48),
+                                              color: AppColors.darkGreenColor,
                                               fontSize: 12,
-                                              fontWeight: FontWeight.normal)),
+                                              fontWeight: FontWeight.w600)),
                                     ),
                                   )),
                             ])),
@@ -425,7 +438,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                           text: item.createdAt! + " ",
                                           style: TextStyle(
                                               fontSize: 14.0,
-                                              color: Colors.black,
+                                              color: AppColors.textTitleColor,
                                               fontWeight: FontWeight.normal),
                                           children: [
                                         TextSpan(
@@ -507,8 +520,16 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                   height: 45,
                                   width: 45,
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(6, 166, 5, 1),
-                                    borderRadius: BorderRadius.circular(50),
+                                    color: AppColors.successColor,
+                                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: Offset(0.0, 4.0),
+                                        blurRadius: 10.0,
+                                        color: AppColors.successColor
+                                            .withValues(alpha: 0.3),
+                                      ),
+                                    ],
                                     // border:  Border.all(color: AppColors.white,)
                                   ),
                                   child: Center(
@@ -579,6 +600,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
             ),
           ),
         ),
+        ),
+        ),
         // Positioned(
         //   right: 10,
         //   top: 50,
@@ -613,7 +636,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
       padding: EdgeInsets.only(left: 4.0, right: 4.0),
       height: 24,
       decoration: BoxDecoration(
-          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
+          color: AppColors.primaryColorMix,
+          borderRadius: BorderRadius.circular(AppRadius.pill)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -623,12 +647,12 @@ class _ListDealScreenState extends State<ListDealScreen> {
               width: 8.0,
               margin: EdgeInsets.only(right: 5.0),
               decoration: BoxDecoration(
-                  color: Color(0x790067AC),
-                  borderRadius: BorderRadius.circular(1000.0))),
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(AppRadius.pill))),
           Text(item.name!,
               style: TextStyle(
-                  color: Color(0xFF0067AC),
-                  fontSize: 14.0,
+                  color: AppColors.secondaryColor,
+                  fontSize: 12.0,
                   fontWeight: FontWeight.w600))
         ],
       ),
@@ -648,7 +672,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
                 height: 45,
                 width: 45,
                 decoration: BoxDecoration(
-                    color: color, borderRadius: BorderRadius.circular(1000.0)),
+                    color: color, borderRadius: BorderRadius.circular(AppRadius.pill)),
                 child: Center(
                   child: Image.asset(
                     icon,
@@ -668,8 +692,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
                                 : 22,
                         height: 20,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Color(0xFFF45E38)),
+                            borderRadius: BorderRadius.circular(AppRadius.pill),
+                            color: AppColors.dangerColor),
                         child: Center(
                             child: Text((number > 10) ? "9+" : "${number}",
                                 style: TextStyle(
@@ -701,7 +725,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
           Expanded(
             child: Text(
               title,
-              style: AppTextStyles.style14BlackWeight500,
+              style: AppTextStyles.style14BlackWeight500
+                  .copyWith(color: AppColors.textBodyColor),
               // maxLines: 1,
             ),
           ),
@@ -717,8 +742,8 @@ class _ListDealScreenState extends State<ListDealScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Icon(
             Icons.notifications,
-            color: AppColors.ash,
-            size: 30,
+            color: AppColors.textMutedColor,
+            size: 26,
           ),
         ),
         if ((notiCount ?? 0) > 0)
@@ -727,7 +752,7 @@ class _ListDealScreenState extends State<ListDealScreen> {
               top: 3,
               child: Container(
                 decoration: BoxDecoration(
-                    color: AppColors.darkRedColor, shape: BoxShape.circle),
+                    color: AppColors.dangerColor, shape: BoxShape.circle),
                 padding: EdgeInsets.all(AppSizes.minPadding / 4),
                 child: Center(
                   child: Text('$notiCount',

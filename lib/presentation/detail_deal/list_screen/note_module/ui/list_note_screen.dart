@@ -73,7 +73,7 @@ class ListNoteScreenState extends State<ListNoteScreen> {
               10,
               (index) => CustomSkeleton(
                     height: 100,
-                    radius: 4.0,
+                    radius: AppRadius.md,
                   )),
         ));
   }

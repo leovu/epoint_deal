@@ -155,6 +155,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                     height: AppSizes.maxHeight * 0.1,
+                    decoration: BoxDecoration(
+                      color: AppGlass.surface,
+                      border: Border(
+                          top: BorderSide(color: AppGlass.borderColor)),
+                    ),
                     child: (index == 0)
                         ? _listButtonRelevant()
                         : _listButtonInfo()),
@@ -204,12 +209,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 style: show
                     ? TextStyle(
                         fontSize: AppTextSizes.size16,
-                        color: AppColors.blueColor,
-                        fontWeight: FontWeight.bold)
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.w700)
                     : TextStyle(
                         fontSize: AppTextSizes.size16,
-                        color: AppColors.colorTabUnselected,
-                        fontWeight: FontWeight.bold),
+                        color: AppColors.textSecondaryColor,
+                        fontWeight: FontWeight.w500),
                 maxLines: 1,
               ),
             ),
@@ -217,7 +222,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         ),
         show
             ? Container(
-                decoration: const BoxDecoration(color: AppColors.blueColor),
+                decoration: BoxDecoration(
+                    gradient: AppGlass.activeGradient,
+                    borderRadius: BorderRadius.circular(AppRadius.pill)),
                 width: width,
                 height: 3.0,
               )
@@ -267,7 +274,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             if ((model.typeCustomer ?? "").isNotEmpty)
               Text(
                 model.typeCustomer ?? "",
-                style: AppTextStyles.style14HintNormal,
+                style: AppTextStyles.style14HintNormal
+                  .copyWith(color: AppColors.textSecondaryColor),
               ),
             if ((model.phone ?? "").isNotEmpty)
               Text(
@@ -555,7 +563,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       : "${AppLocalizations.text(LangKey.sales_leads)} - ",
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: Colors.grey,
+                      color: AppColors.textMutedColor,
                       fontWeight: FontWeight.normal),
                   children: [
                 TextSpan(
@@ -580,7 +588,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     text: detail?.dateLastCare ?? NULL_VALUE,
                     style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                     children: [
                   TextSpan(
@@ -663,7 +671,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               3,
               (index) => CustomSkeleton(
                     height: 60,
-                    radius: 4.0,
+                    radius: AppRadius.card,
                   )),
         ));
   }
@@ -899,15 +907,16 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   child: Container(
                     // margin: EdgeInsets.only(right: 12.0),
                     decoration: BoxDecoration(
-                        color: Color(0xFF3AEDB6),
-                        borderRadius: BorderRadius.circular(4.0)),
+                        color: AppColors.successColor.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(AppRadius.pill)),
                     child: Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
                       child: Text(detail!.journeyName ?? "",
                           style: TextStyle(
-                              color: Color.fromARGB(255, 8, 88, 64),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal)),
+                              color: AppColors.darkGreenColor,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600)),
                     ),
                   )),
               WidgetSpan(
@@ -928,7 +937,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       padding: EdgeInsets.only(left: 4.0, right: 4.0),
       height: 24,
       decoration: BoxDecoration(
-          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
+          color: AppColors.primaryColorMix,
+          borderRadius: BorderRadius.circular(AppRadius.pill)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -938,11 +948,11 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               width: 8.0,
               margin: EdgeInsets.only(right: 5.0),
               decoration: BoxDecoration(
-                  color: Color(0x790067AC),
-                  borderRadius: BorderRadius.circular(1000.0))),
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(AppRadius.pill))),
           Text(item.name!,
               style: TextStyle(
-                  color: Color(0xFF0067AC),
+                  color: AppColors.secondaryColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.w600))
         ],
@@ -978,10 +988,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
           margin: EdgeInsets.all(10),
           width: MediaQuery.of(context).size.width,
           // height: 300,
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.grey, width: 1, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.tile(),
           child: Row(
             children: [
               Container(
@@ -994,12 +1001,12 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     children: [
                       Text(
                         "${createTime.hour}:${createTime.minute}",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: AppColors.textMutedColor),
                       ),
                       Text(
                         '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: AppColors.textTitleColor, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -1013,7 +1020,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   decoration: BoxDecoration(
                       border: Border(
                     left: BorderSide(
-                      color: Colors.grey,
+                      color: AppColors.primaryColorMix,
                       width: 1.0,
                     ),
                   )),
@@ -1031,7 +1038,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                   text:
                                       "[${item.manageWorkCode}] ${item.manageWorkTitle}",
                                   style: TextStyle(
-                                    color: Color(0xFF0067AC),
+                                    color: AppColors.secondaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
@@ -1042,7 +1049,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                     WidgetSpan(
                                         child: Icon(
                                       Icons.check_circle_outline_sharp,
-                                      color: Colors.green,
+                                      color: AppColors.successColor,
                                       size: 16,
                                     )),
                                   ],
@@ -1056,13 +1063,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       Container(
                         margin: EdgeInsets.only(top: 10.0),
                         padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 2,
-                            color: Colors.black.withValues(alpha: 0.3),
-                          )
-                        ], color: Colors.white),
+                        decoration: AppGlass.pill(),
                         child: Padding(
                           padding: EdgeInsets.all(6.0),
                           child: Row(
@@ -1102,7 +1103,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 Text(
                                   "${item.countFile ?? 0}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -1124,7 +1125,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 Text(
                                   "${item.countComment ?? 0}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -1146,7 +1147,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                                 Text(
                                   "${item.daysLate ?? 0}",
                                   style: TextStyle(
-                                      color: Colors.red,
+                                      color: AppColors.dangerColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -1222,13 +1223,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
       padding: EdgeInsets.only(left: 5.0, right: 5.0),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 1),
-          blurRadius: 2,
-          color: Colors.black.withValues(alpha: 0.3),
-        )
-      ], color: Colors.white),
+      decoration: AppGlass.pill(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1335,7 +1330,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
                     child: Row(
@@ -1406,9 +1401,9 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
       padding: EdgeInsets.all(AppSizes.minPadding),
       decoration: BoxDecoration(
           gradient: AppGlass.cardGradient,
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           boxShadow: AppGlass.shadow,
-          border: Border.all(color: AppColors.grey100)),
+          border: Border.all(color: AppGlass.borderColor)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -1431,8 +1426,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(16.0),
+                          gradient: AppGlass.activeGradient,
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
                         ),
                         padding: EdgeInsets.symmetric(
                           horizontal: AppSizes.minPadding * 1.2,
@@ -1480,10 +1475,10 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               Expanded(
                 child: CustomRowImageContentWidget(
                   icon: Assets.iconTag,
-                  iconColor: Colors.orange,
+                  iconColor: AppColors.tertiaryColor,
                   title: formatMoney(model.discount!.toDouble()),
                   titleStyle: AppTextStyles.style14BlackNormal
-                      .copyWith(color: Colors.orange),
+                      .copyWith(color: AppColors.tertiaryColor),
                 ),
               ),
               Text(
@@ -1521,7 +1516,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
         decoration: BoxDecoration(
             gradient: AppGlass.cardGradient,
             border: Border.all(color: AppGlass.borderColor),
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(AppRadius.card),
             boxShadow: AppGlass.shadow),
         child: Column(
           children: [
@@ -1539,8 +1534,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   padding: EdgeInsets.only(left: 10.0, right: 10.0),
                   // margin: EdgeInsets.only(right: 8.0),
                   decoration: BoxDecoration(
-                      color: Color(0xFF11B482),
-                      borderRadius: BorderRadius.circular(50.0)),
+                      color: AppColors.successColor,
+                      borderRadius: BorderRadius.circular(AppRadius.pill)),
                   child: Center(
                     child: Text(item.processStatusName ?? NULL_VALUE,
                         style: TextStyle(
@@ -1676,7 +1671,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             ],
           ),
         ),
-        Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1)),
       ],
     );
   }
@@ -1769,7 +1763,6 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                 ),
               ],
             )),
-        Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
       ],
     );
   }
@@ -1778,21 +1771,28 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       child: Scaffold(
+        backgroundColor: AppGlass.backgroundColor,
         appBar: AppBar(
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.appBarShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             AppLocalizations.text(LangKey.detail_deal)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
           // leadingWidth: 20.0,
         ),
         body: Container(
-            decoration: const BoxDecoration(color: AppColors.white),
+            decoration: AppGlass.background(),
             child: buildBody()),
         floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
         // floatingActionButton: ExpandableDraggableFab(

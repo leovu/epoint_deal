@@ -77,7 +77,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
       text: model == null ? AppLocalizations.text(LangKey.all) : model.categoryName,
       backgroundColor: isSelected ? null : Colors.transparent,
       style: AppTextStyles.style12WhiteNormal.copyWith(
-          color: isSelected ? AppColors.whiteColor : AppColors.blackColor),
+          color: isSelected ? AppColors.whiteColor : AppColors.textTitleColor),
       onTap: () => widget.bloc.onSelectedCategoryProduct(model),
     );
   }
@@ -87,7 +87,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
         child: CustomSkeleton(
           width: double.infinity,
           height: AppSizes.sizeOnTap,
-          radius: 5.0,
+          radius: AppRadius.sm,
         ));
   }
 

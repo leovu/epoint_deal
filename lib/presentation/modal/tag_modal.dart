@@ -108,7 +108,7 @@ class _TagsModalState extends State<TagsModal> {
                               right: 8.0),
                           physics: AlwaysScrollableScrollPhysics(),
                           controller: _controller,
-                          separator: Divider(),
+                          separator: Divider(color: AppColors.primaryColorMix),
                           children: _listWidget(),
                         ))
                       : Expanded(child: CustomDataNotFound())
@@ -150,7 +150,7 @@ class _TagsModalState extends State<TagsModal> {
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected! ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
                       fontWeight:
                           item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
@@ -164,7 +164,7 @@ class _TagsModalState extends State<TagsModal> {
                 )
               : Icon(
                   Icons.check_box_outline_blank,
-                  color: Color.fromARGB(255, 108, 102, 94),
+                  color: AppColors.textMutedColor,
                 )
         ],
       ),
@@ -177,13 +177,13 @@ class _TagsModalState extends State<TagsModal> {
         padding:
             EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
         physics: NeverScrollableScrollPhysics(),
-        separator: Divider(),
+        separator: Divider(color: AppColors.primaryColorMix),
         children: List.generate(
           5,
           (index) => Container(
             margin: EdgeInsets.only(top: 15.0),
             child: CustomShimmer(
-              child: CustomSkeleton(height: 50, radius: 5.0),
+              child: CustomSkeleton(height: 50, radius: AppRadius.sm),
             ),
           ),
         ));
@@ -198,14 +198,12 @@ class _TagsModalState extends State<TagsModal> {
       decoration: InputDecoration(
         isCollapsed: true,
         contentPadding: EdgeInsets.all(12.0),
-        border: OutlineInputBorder(
-          // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-        ),
+        filled: true,
+        fillColor: AppGlass.surface,
+        border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
         isDense: true,

@@ -60,17 +60,15 @@ class CustomComboBoxState extends State<CustomComboBox> {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            gradient: AppGlass.cardGradient,
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: AppColors.grey200)),
+            borderRadius: BorderRadius.circular(AppRadius.card)),
         child: Padding(
-          padding: EdgeInsets.all(AppSizes.minPadding),
+          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
           child: Row(
             children: [
               if (widget.icon != null)
                 CustomImageIcon(
                   icon: widget.icon,
-                  color: AppColors.black,
+                  color: AppColors.textSecondaryColor,
                   size: 20.0,
                 ),
               SizedBox(width: 16),
@@ -81,9 +79,10 @@ class CustomComboBoxState extends State<CustomComboBox> {
                       widget.title,
                       style: TextStyle(
                         fontSize: AppTextSizes.size14,
+                        color: AppColors.textTitleColor,
                         fontWeight: (widget.child != null && _expand)
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                            ? FontWeight.w700
+                            : FontWeight.w600,
                       ),
                     ),
                     if (widget.quantity > 0) ...[
@@ -105,7 +104,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
                   child: Icon(
                     Icons.keyboard_arrow_down,
                     size: 20,
-                    color: AppColors.black,
+                    color: AppColors.textSecondaryColor,
                   ),
                   open: _expand,
                 ),
@@ -154,8 +153,9 @@ class CustomComboBoxState extends State<CustomComboBox> {
 
   Widget _buildBody() {
     return Container(
-      decoration: BoxDecoration(
-          color: AppColors.white, borderRadius: BorderRadius.circular(4.0)),
+      margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 3.0),
+      decoration: AppGlass.card(),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [_buildHeader(), if (widget.child != null) _buildContent()],
       ),

@@ -221,7 +221,9 @@ class _CupertinoTabScaffoldState extends State<CustomCupertinoTabScaffold> {
       decoration: BoxDecoration(
         color: widget.backgroundColor != null
             ? CupertinoDynamicColor.resolve(widget.backgroundColor!, context)
-            : CupertinoTheme.of(context).scaffoldBackgroundColor,
+            : null,
+        gradient:
+            widget.backgroundColor != null ? null : AppGlass.backgroundGradient,
       ),
       child: Stack(
         children: <Widget>[

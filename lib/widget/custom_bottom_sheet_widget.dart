@@ -1,4 +1,5 @@
 import 'package:epoint_deal_plugin/common/lang_key.dart';
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -33,21 +34,20 @@ class CustomBottomSheet extends StatelessWidget {
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.9,
               ),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-              ),
+              decoration: AppGlass.sheet(),
+              clipBehavior: Clip.antiAlias,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Container(
-                      width: 40.0,
-                      height: 4.0,
+                      width: 38.0,
+                      height: 5.0,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFCCCCCC),
-                        borderRadius: BorderRadius.circular(2.0),
+                        color:
+                            AppColors.primaryDarkColor.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(AppRadius.pill),
                       ),
                     ),
                   ),
@@ -63,7 +63,7 @@ class CustomBottomSheet extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black,
+                                color: AppColors.textTitleColor,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -75,14 +75,15 @@ class CustomBottomSheet extends StatelessWidget {
                               child: const Padding(
                                 padding: EdgeInsets.all(4.0),
                                 child: Icon(Icons.close,
-                                    color: Colors.black, size: 20.0),
+                                    color: AppColors.textSecondaryColor,
+                                    size: 20.0),
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const Divider(height: 1.0),
+                    const Divider(height: 1.0, color: AppColors.primaryColorMix),
                   ],
                   Flexible(
                     fit: FlexFit.loose,

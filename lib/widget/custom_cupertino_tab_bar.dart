@@ -97,8 +97,8 @@ class CustomCupertinoTabBar extends StatelessWidget
       decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.0),
-              topRight: Radius.circular(10.0)
+              topLeft: Radius.circular(AppRadius.md),
+              topRight: Radius.circular(AppRadius.md)
           ),
           border: Border.all(color: AppColors.borderColor)
       ),

@@ -169,8 +169,8 @@ class ActivatedServiceCardScreenState
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   CustomChip(
-                                    radius: 5.0,
-                                    backgroundColor: AppColors.greyC4Color,
+                                    radius: AppRadius.sm,
+                                    backgroundColor: AppColors.primaryColor,
                                     text: e.fullName,
                                     style: AppTextStyles.style13WhiteNormal,
                                     onClose: () => _bloc.deleteStaff(e),

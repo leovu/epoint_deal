@@ -57,7 +57,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
               10,
               (index) => CustomSkeleton(
                     height: 100,
-                    radius: 4.0,
+                    radius: AppRadius.md,
                   )),
         ));
   }
@@ -99,7 +99,7 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
         decoration: BoxDecoration(
             gradient: AppGlass.cardGradient,
             border: Border.all(color: AppGlass.borderColor),
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             boxShadow: AppGlass.shadow),
         child: Column(
           children: [
@@ -117,8 +117,8 @@ class ListOrderHistoryScreenState extends State<ListOrderHistoryScreen> {
                   padding: EdgeInsets.only(left: 10.0, right: 10.0),
                   // margin: EdgeInsets.only(right: 8.0),
                   decoration: BoxDecoration(
-                      color: Color(0xFF11B482),
-                      borderRadius: BorderRadius.circular(50.0)),
+                      color: AppColors.successColor,
+                      borderRadius: BorderRadius.circular(AppRadius.pill)),
                   child: Center(
                     child: Text(item.processStatusName ?? NULL_VALUE,
                         style: TextStyle(

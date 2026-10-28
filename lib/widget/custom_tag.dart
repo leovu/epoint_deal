@@ -25,7 +25,7 @@ class CustomTag extends StatelessWidget {
             color: textColor ?? AppColors.white
           ),
           borderColor: borderColor ?? null,
-          radius: 5.0,
+          radius: AppRadius.sm,
           backgroundColor: backgroundColor ?? AppColors.primaryColor,
           padding: padding ?? EdgeInsets.symmetric(
               vertical: 2.0,
@@ -99,7 +99,7 @@ class CustomTagIndicator extends StatelessWidget {
                 color:Colors.transparent,
                 width: 1.0,
                 style: BorderStyle.solid),
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
             color:backgroundColor ?? AppColors.primaryColor),
       padding: padding ?? EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
       child: Row(

@@ -58,7 +58,7 @@ class CustomButtonIconText extends StatelessWidget {
               width: 1.0,
               style: BorderStyle.solid),
           borderRadius:
-          BorderRadius.circular(5.0),
+          BorderRadius.circular(AppRadius.sm),
           color:backgroundColor ?? AppColors.functionFrequentlyAskedQuestions ),
       padding:padding ?? EdgeInsets.symmetric(vertical: AppSizes.minPadding, horizontal: AppSizes.minPadding),
       child: Center(

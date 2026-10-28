@@ -14,7 +14,7 @@ class ContainerBooking extends StatelessWidget {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             gradient: AppGlass.cardGradient,
             border: Border.all(
                 color:
@@ -509,7 +509,7 @@ class CustomBookingStatus extends StatelessWidget {
                 padding: EdgeInsets.only(left: AppSizes.minPadding),
                 child: Icon(
                   Icons.keyboard_arrow_down,
-                  color: AppColors.blackColor,
+                  color: AppColors.textSecondaryColor,
                 ),
               )
           ],
@@ -582,7 +582,7 @@ class CustomBookingWeek extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
             color: AppColors.hintColor),
         alignment: Alignment.center,
         child: AutoSizeText(
@@ -610,7 +610,7 @@ class CustomBookingWeek extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
                 color: model.colorPrimary,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(5.0))),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.sm))),
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(vertical: 2.0),
             child: AutoSizeText(
@@ -626,7 +626,7 @@ class CustomBookingWeek extends StatelessWidget {
             decoration: BoxDecoration(
                 color: model.colorSub,
                 borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(5.0))),
+                    BorderRadius.vertical(bottom: Radius.circular(AppRadius.sm))),
             alignment: Alignment.center,
             child: AutoSizeText(
               model.customerName ?? "",
@@ -754,7 +754,7 @@ class CustomTypeBooking extends StatelessWidget {
         child: InkWell(
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             color: selected ? AppColors.primaryColor : null),
         padding: EdgeInsets.all(AppSizes.maxPadding),
         child: Center(
@@ -779,7 +779,7 @@ class CustomTypeBooking extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: AppSizes.maxPadding * 2),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           gradient: AppGlass.cardGradient,
           border: Border.all(color: AppGlass.borderColor),
           boxShadow: AppGlass.shadow,

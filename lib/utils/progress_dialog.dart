@@ -2,6 +2,7 @@ library progress_dialog;
 
 import 'dart:io';
 
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -34,7 +35,7 @@ class ProgressDialog {
         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
           return PopScope(
             child: Scaffold(
-              backgroundColor: Colors.black.withValues(alpha: 0.3),
+              backgroundColor: AppGlass.barrierColor,
               body: Container(
                 height: MediaQuery.of(context).size.height,
                 child: Center(

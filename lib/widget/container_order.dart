@@ -230,7 +230,7 @@ class CustomOrderStatus extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0), color: model!.color),
+              borderRadius: BorderRadius.circular(AppRadius.sm), color: model!.color),
           padding: EdgeInsets.all(AppSizes.minPadding),
           child: Row(
             children: [
@@ -597,7 +597,7 @@ class CustomTransportMethod extends StatelessWidget {
     return Container(
       width: width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: borderColor),
           color: backgroundColor),
       padding: EdgeInsets.all(AppSizes.minPadding),

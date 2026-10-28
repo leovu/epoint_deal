@@ -101,7 +101,7 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                         builder: (_, snapshot) {
                           if (snapshot.data == null) {
                             return CustomShimmer(
-                                child: CustomSkeleton(height: 40.0, radius: 5.0));
+                                child: CustomSkeleton(height: 40.0, radius: AppRadius.sm));
                           }
                           return InkWell(
                             onTap: _showAgency,
@@ -110,8 +110,8 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                               height: 50,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    width: 1.0, color: Color(0xFFE5E5E5)),
-                                borderRadius: BorderRadius.circular(5),
+                                    width: 1.0, color: AppColors.primaryColorMix),
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -128,7 +128,7 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                                   Padding(
                                     padding: EdgeInsets.only(right: 15.0),
                                     child: CustomImageIcon(
-                                      color: AppColors.grey500Color,
+                                      color: AppColors.textMutedColor,
                                       icon: Assets.iconDropDown,
                                       size: 10.0,
                                     ),
@@ -148,7 +148,7 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                         builder: (_, snapshot) {
                           if (snapshot.data == null) {
                             return CustomShimmer(
-                                child: CustomSkeleton(height: 40.0, radius: 5.0));
+                                child: CustomSkeleton(height: 40.0, radius: AppRadius.sm));
                           }
                           return InkWell(
                             onTap: _showDepartment,
@@ -157,8 +157,8 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                               height: 50,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    width: 1.0, color: Color(0xFFE5E5E5)),
-                                borderRadius: BorderRadius.circular(5),
+                                    width: 1.0, color: AppColors.primaryColorMix),
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -175,7 +175,7 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                                   Padding(
                                     padding: EdgeInsets.only(right: 15.0),
                                     child: CustomImageIcon(
-                                      color: AppColors.grey500Color,
+                                      color: AppColors.textMutedColor,
                                       icon: Assets.iconDropDown,
                                       size: 10.0,
                                     ),
@@ -308,7 +308,7 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                           model.staffName ?? "",
                           style: TextStyle(
                               fontSize: 16.0,
-                              color: AppColors.black,
+                              color: AppColors.textTitleColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Text(
@@ -330,7 +330,7 @@ class _StaffPickerSheetState extends State<StaffPickerSheet> {
                       : Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Icon(Icons.radio_button_unchecked,
-                              color: Color.fromARGB(255, 108, 102, 94)),
+                              color: AppColors.textMutedColor),
                         ),
                 ],
               ),

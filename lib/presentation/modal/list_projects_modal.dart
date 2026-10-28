@@ -102,21 +102,28 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppGlass.backgroundColor,
         appBar: AppBar(
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.appBarShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             AppLocalizations.text(LangKey.chooseProject)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
           // leadingWidth: 20.0,
         ),
         body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: AppGlass.background(),
             child: _buildBody()));
   }
 
@@ -133,7 +140,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
                       top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                   physics: AlwaysScrollableScrollPhysics(),
                   controller: _controller,
-                  separator: Divider(),
+                  separator: Divider(color: AppColors.primaryColorMix),
                   children: _listWidget(),
                 ) : Container() )
               ,
@@ -198,7 +205,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
           margin: EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
               color: AppColors.primaryColor,
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(AppRadius.md)),
           child: Center(
             child: Text(
               // AppLocalizations.text(LangKey.convertCustomers),
@@ -240,7 +247,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
                   fontSize: 15.0,
                   color: item.selected!
                       ? AppColors.primaryColor
-                      : Color(0xFF040C21),
+                      : AppColors.textTitleColor,
                   fontWeight:
                       item.selected! ? FontWeight.w700 : FontWeight.w400),
             ),
@@ -270,20 +277,18 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
       decoration: InputDecoration(
         isCollapsed: true,
         contentPadding: EdgeInsets.all(12.0),
-        border: OutlineInputBorder(
-          // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-        ),
+        filled: true,
+        fillColor: AppGlass.surface,
+        border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
         hintStyle: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF8E8E8E)),
+            color: AppColors.textSecondaryColor),
         isDense: true,
       ),
       onChanged: (event) {

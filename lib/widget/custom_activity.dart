@@ -62,7 +62,7 @@ class CustomActivity extends StatelessWidget {
           margin: EdgeInsets.only(left: _pointSize / 2),
           decoration: BoxDecoration(
               border: Border(
-                  left: BorderSide(color: AppColors.grey500Color)
+                  left: BorderSide(color: AppColors.textMutedColor)
               )
           ),
           padding: EdgeInsets.only(

@@ -133,6 +133,10 @@ class EpointDealPlugin {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: AppColors.surfaceColor,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card)),
           // title:  Text(''),
           content: SingleChildScrollView(
             child: ListBody(
@@ -141,7 +145,7 @@ class EpointDealPlugin {
                     child: Text(
                   'Cảnh báo\n',
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                      TextStyle(fontWeight: FontWeight.bold, color: AppColors.dangerColor),
                 )),
                 Center(child: Text(title)),
               ],

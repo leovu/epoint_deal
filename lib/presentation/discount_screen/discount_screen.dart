@@ -207,7 +207,7 @@ class DiscountScreenState extends State<DiscountScreen> {
           CustomBottomOptionModel(
               image: Assets.imageDiscountVoucher,
               text: AppLocalizations.text(LangKey.discount_by_code),
-              textColor: AppColors.grey700Color
+              textColor: AppColors.textMutedColor
               // onTap: _discountByCode
               ),
         ],

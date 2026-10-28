@@ -47,26 +47,24 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
                         text: title,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory ?? false)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*", style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content ?? "",
@@ -74,7 +72,7 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

@@ -38,10 +38,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10.0,bottom: 50),
-      decoration: BoxDecoration(
-          gradient: AppGlass.sheetGradient,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -51,7 +48,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
               Container(width: 30,),
               Text(AppLocalizations.text(LangKey.chooseAllottedPerson)!,style: TextStyle(
                   fontSize: 18.0,
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
@@ -71,7 +68,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
                       EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                   physics: ClampingScrollPhysics(),
                   controller: _controller,
-                  separator: Divider(),
+                  separator: Divider(color: AppColors.primaryColorMix),
                   children: _listWidget(),
                 ),
           ),
@@ -101,7 +98,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
               title,
               style: TextStyle(
                   fontSize: 17.0,
-                  color: selected ? Colors.orange : Colors.black,
+                  color: selected ? AppColors.primaryColor : AppColors.textTitleColor,
                   fontWeight: FontWeight.normal),
             )
           ],

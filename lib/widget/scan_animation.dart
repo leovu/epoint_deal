@@ -52,7 +52,7 @@ class ScanAnimationState extends State<ScanAnimation> with SingleTickerProviderS
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.card)),
               gradient: LinearGradient(
                 end: Alignment.topCenter,
                 begin: Alignment.bottomCenter,

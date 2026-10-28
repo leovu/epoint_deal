@@ -120,7 +120,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
               10,
               (index) => CustomSkeleton(
                     height: 100,
-                    radius: 4.0,
+                    radius: AppRadius.md,
                   )),
         ));
   }
@@ -133,7 +133,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                 : "${AppLocalizations.text(LangKey.sales_leads)} - ",
             style: TextStyle(
                 fontSize: 16.0,
-                color: Colors.grey,
+                color: AppColors.textMutedColor,
                 fontWeight: FontWeight.normal),
             children: [
           TextSpan(
@@ -167,10 +167,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
           // margin: EdgeInsets.all(10),
           width: MediaQuery.of(context).size.width,
           // height: 300,
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.grey, width: 1, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.card(radius: AppRadius.md),
           child: Row(
             children: [
               Container(
@@ -183,12 +180,12 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                     children: [
                       Text(
                         "${createTime.hour}:${createTime.minute}",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: AppColors.textMutedColor),
                       ),
                       Text(
                         '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: AppColors.textTitleColor, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -202,7 +199,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                   decoration: BoxDecoration(
                       border: Border(
                     left: BorderSide(
-                      color: Colors.grey,
+                      color: AppColors.primaryColorMix,
                       width: 1.0,
                     ),
                   )),
@@ -220,7 +217,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                                   text:
                                       "[${item.manageWorkCode}] ${item.manageWorkTitle}",
                                   style: TextStyle(
-                                    color: Color(0xFF0067AC),
+                                    color: AppColors.secondaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
@@ -231,7 +228,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                                     WidgetSpan(
                                         child: Icon(
                                       Icons.check_circle_outline_sharp,
-                                      color: Colors.green,
+                                      color: AppColors.successColor,
                                       size: 16,
                                     )),
                                   ],
@@ -245,13 +242,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                       Container(
                         margin: EdgeInsets.only(top: 10.0),
                         padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 2,
-                            color: Colors.black.withValues(alpha: 0.3),
-                          )
-                        ], color: Colors.white),
+                        decoration: AppGlass.tile(radius: AppRadius.sm),
                         child: Padding(
                           padding: EdgeInsets.all(6.0),
                           child: Row(
@@ -291,7 +282,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                                 Text(
                                   "${item.countFile}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -313,7 +304,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                                 Text(
                                   "${item.countComment}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -335,7 +326,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                                 Text(
                                   "${item.daysLate}",
                                   style: TextStyle(
-                                      color: Colors.red,
+                                      color: AppColors.dangerColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -412,13 +403,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
       padding: EdgeInsets.only(left: 5.0, right: 5.0),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 1),
-          blurRadius: 2,
-          color: Colors.black.withValues(alpha: 0.3),
-        )
-      ], color: Colors.white),
+      decoration: AppGlass.tile(radius: AppRadius.sm),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -46,7 +46,7 @@ class ListFileScreenState extends State<ListFileScreen> {
               10,
               (index) => CustomSkeleton(
                     height: 100,
-                    radius: 4.0,
+                    radius: AppRadius.md,
                   )),
         ));
   }
@@ -59,7 +59,7 @@ class ListFileScreenState extends State<ListFileScreen> {
                       : "${AppLocalizations.text(LangKey.sales_leads)} - ",
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: Colors.grey,
+                      color: AppColors.textMutedColor,
                       fontWeight: FontWeight.normal),
                   children: [
                 TextSpan(
@@ -132,7 +132,7 @@ class ListFileScreenState extends State<ListFileScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
                     child: Row(

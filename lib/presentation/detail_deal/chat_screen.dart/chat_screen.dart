@@ -244,7 +244,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildChatBox() {
     return Container(
       decoration:
-          BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+          BoxDecoration(border: Border(top: BorderSide(color: AppColors.textMutedColor))),
       padding:
           EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
       child: Column(
@@ -278,7 +278,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         Icon(
                           Icons.close,
-                          color: AppColors.grey200Color,
+                          color: AppColors.textMutedColor,
                           size: 12.0,
                         )
                       ],
@@ -302,7 +302,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       InkWell(
                         child: CustomNetworkImage(
-                          radius: 10.0,
+                          radius: AppRadius.md,
                           width: _fileSize,
                           url: _file,
                         ),
@@ -369,17 +369,24 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppGlass.backgroundColor,
       appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.appBarShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             AppLocalizations.text(LangKey.discuss)!,
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
         ),
       body: Column(

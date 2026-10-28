@@ -75,7 +75,7 @@ class CategoryServiceScreenState extends State<CategoryServiceScreen>
       text: model == null ? AppLocalizations.text(LangKey.all) : model.name,
       backgroundColor: isSelected ? null : Colors.transparent,
       style: AppTextStyles.style12WhiteNormal.copyWith(
-          color: isSelected ? AppColors.whiteColor : AppColors.blackColor),
+          color: isSelected ? AppColors.whiteColor : AppColors.textTitleColor),
       onTap: () => widget.bloc.onSelectedCategoryService(model),
     );
   }
@@ -85,7 +85,7 @@ class CategoryServiceScreenState extends State<CategoryServiceScreen>
         child: CustomSkeleton(
       width: double.infinity,
       height: AppSizes.sizeOnTap,
-      radius: 5.0,
+      radius: AppRadius.sm,
     ));
   }
 

@@ -40,9 +40,7 @@ class CustomAlertDialog extends StatelessWidget {
       alignment: Alignment.topRight,
       children: [
         Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              color: Colors.white),
+          decoration: AppGlass.dialog(),
           child: Column(
             children: [
               Container(

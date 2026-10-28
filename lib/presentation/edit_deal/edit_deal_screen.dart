@@ -433,21 +433,28 @@ class _EditDealScreenState extends State<EditDealScreen>
         keyboardDismissOnTap(context);
       },
       child: Scaffold(
+          backgroundColor: AppGlass.backgroundColor,
           appBar: AppBar(
             iconTheme: const IconThemeData(
               color: Colors.white,
             ),
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            shape: AppGlass.appBarShape,
+            flexibleSpace: Container(decoration: AppGlass.header()),
             title: Text(
               AppLocalizations.text(LangKey.edit_deal)!,
-              style: const TextStyle(color: Colors.white, fontSize: 18.0),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600),
             ),
             // leadingWidth: 20.0,
           ),
           body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
+              decoration: AppGlass.background(),
               child: _buildBody())),
     );
   }
@@ -484,7 +491,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                 AppLocalizations.text(LangKey.dealInfomation)!,
                 style: TextStyle(
                     fontSize: AppTextSizes.size16,
-                    color: const Color(0xFF0067AC),
+                    color: AppColors.secondaryColor,
                     fontWeight: FontWeight.normal),
               ),
               showMoreInfoDeal
@@ -497,7 +504,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                         AppLocalizations.text(LangKey.collapse)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size16,
-                            color: const Color(0xFF0067AC),
+                            color: AppColors.secondaryColor,
                             fontWeight: FontWeight.normal),
                       ),
                     )
@@ -528,22 +535,16 @@ class _EditDealScreenState extends State<EditDealScreen>
                   decoration: BoxDecoration(
                       color: !selectedCustomer
                           ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withValues(alpha: 0.3),
-                        )
-                      ]),
+                          : AppColors.primaryColorMix,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      boxShadow: AppGlass.shadow),
                   child: Center(
                     child: Text(
                       AppLocalizations.text(LangKey.potentialCustomer)!,
                       style: TextStyle(
                           color: !selectedCustomer
                               ? Colors.white
-                              : Color(0xFF8E8E8E),
+                              : AppColors.textSecondaryColor,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w400),
                     ),
@@ -568,22 +569,16 @@ class _EditDealScreenState extends State<EditDealScreen>
                   decoration: BoxDecoration(
                       color: selectedCustomer
                           ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withValues(alpha: 0.3),
-                        )
-                      ]),
+                          : AppColors.primaryColorMix,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      boxShadow: AppGlass.shadow),
                   child: Center(
                     child: Text(
                       AppLocalizations.text(LangKey.customerVi)!,
                       style: TextStyle(
                           color: selectedCustomer
                               ? Colors.white
-                              : Color(0xFF8E8E8E),
+                              : AppColors.textSecondaryColor,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w400),
                     ),
@@ -662,7 +657,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 AppLocalizations.text(LangKey.customerStyle)! +
                                     ": ",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: AppColors.textTitleColor,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w400),
                               ),
@@ -681,7 +676,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                                             LangKey.business)!
                                     : "",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: AppColors.textTitleColor,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w500),
                               ),
@@ -696,7 +691,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                                 AppLocalizations.text(LangKey.phoneNumber)! +
                                     ": ",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: AppColors.textTitleColor,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w400),
                               ),
@@ -706,7 +701,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                               Text(
                                 leadItem.phone ?? "",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: AppColors.textTitleColor,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w500),
                               ),
@@ -749,12 +744,12 @@ class _EditDealScreenState extends State<EditDealScreen>
                   child: Center(
                     child: Column(
                       children: [
-                        Divider(),
+                        Divider(color: AppColors.primaryColorMix),
                         Text(
                           AppLocalizations.text(LangKey.showMore)!,
                           style: TextStyle(
                               fontSize: 16.0,
-                              color: const Color(0xFF0067AC),
+                              color: AppColors.secondaryColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Container(
@@ -1010,16 +1005,16 @@ class _EditDealScreenState extends State<EditDealScreen>
                               text: "Chi nhánh",
                               style: TextStyle(
                                   fontSize: AppTextSizes.size15,
-                                  color: const Color(0xFF858080),
+                                  color: AppColors.textMutedColor,
                                   fontWeight: FontWeight.normal),
                               children: [
                             TextSpan(
-                                text: "*", style: TextStyle(color: Colors.red))
+                                text: "*", style: TextStyle(color: AppColors.dangerColor))
                           ])),
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
                         //  color: Colors.black,
                       ),
                       height: 170,
@@ -1072,16 +1067,16 @@ class _EditDealScreenState extends State<EditDealScreen>
               padding: EdgeInsets.all(8.0),
               margin: EdgeInsets.only(right: 20.0),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  color: AppColors.textTitleColor,
                   border: selected
                       ? Border.all(
                           width: 4.0,
-                          color: Color(0xFF0067AC),
+                          color: AppColors.secondaryColor,
                           style: BorderStyle.solid)
                       : Border.all(
                           width: 3.0,
-                          color: Color.fromARGB(255, 227, 235, 241),
+                          color: AppColors.primaryColorMix,
                           style: BorderStyle.solid),
                   image: DecorationImage(
                     fit: BoxFit.cover,
@@ -1095,7 +1090,10 @@ class _EditDealScreenState extends State<EditDealScreen>
               child: Center(
                 child: Text(
                   item?.address ?? "",
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -1108,8 +1106,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                       width: 35,
                       height: 35,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Color(0xFF0067AC)),
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
+                          color: AppColors.secondaryColor),
                       child: Icon(Icons.check, color: Colors.white),
                     ))
                 : Container()
@@ -1186,33 +1184,31 @@ class _EditDealScreenState extends State<EditDealScreen>
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
                         text: title,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*", style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(
@@ -1252,7 +1248,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       onTap: ontap,
       child: TextField(
         style: TextStyle(
-          color: Colors.black,
+          color: AppColors.textTitleColor,
         ),
         enabled: false,
         controller: fillText,
@@ -1260,24 +1256,27 @@ class _EditDealScreenState extends State<EditDealScreen>
         decoration: InputDecoration(
           isCollapsed: true,
           contentPadding: EdgeInsets.all(12.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          filled: true,
+          fillColor: AppGlass.surface,
+          border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
           // hintText: hintText,
           label: RichText(
               text: TextSpan(
                   text: hintText,
                   style: TextStyle(
                       fontSize: AppTextSizes.size15,
-                      color: const Color(0xFF858080),
+                      color: AppColors.textMutedColor,
                       fontWeight: FontWeight.normal),
                   children: [
-                TextSpan(text: "*", style: TextStyle(color: Colors.red))
+                TextSpan(text: "*", style: TextStyle(color: AppColors.dangerColor))
               ])),
 
           hintStyle: TextStyle(
               fontSize: 14.0,
-              color: Color(0xFF8E8E8E),
+              color: AppColors.textSecondaryColor,
               fontWeight: FontWeight.normal),
           isDense: true,
           suffixIcon: Padding(
@@ -1301,7 +1300,7 @@ class _EditDealScreenState extends State<EditDealScreen>
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       child: InkWell(
         onTap: () async {
           if (selectedCustomer) {

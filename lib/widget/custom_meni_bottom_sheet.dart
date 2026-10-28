@@ -40,12 +40,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(
                     horizontal: 15.0 * 1.5, vertical: 15.0 * 1.5),
-                decoration: BoxDecoration(
-                    gradient: AppGlass.sheetGradient,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0),
-                    )),
+                decoration: AppGlass.sheet(),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -64,7 +59,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                                 padding: EdgeInsets.only(left: 20.0),
                                 child: Icon(
                                   Icons.clear,
-                                  color: Colors.black,
+                                  color: AppColors.textSecondaryColor,
                                   size: 15.0,
                                 ),
                               ),
@@ -76,8 +71,8 @@ class CustomMenuBottomSheet extends StatelessWidget {
                             title ?? "",
                             style: TextStyle(
                                 fontSize: 16.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
+                                color: AppColors.textTitleColor,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -87,7 +82,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                       ],
                     ),
                     // CustomLine(),
-                    if ((title ?? "") != "") Divider(),
+                    if ((title ?? "") != "") Divider(color: AppColors.primaryColorMix),
                     if (haveBnConfirm)
                       Expanded(
                           child: Column(

@@ -58,9 +58,9 @@ class CustomChip extends StatelessWidget {
             color: backgroundColor??AppColors.primaryColor,
             borderRadius: BorderRadius.all(Radius.circular(radius??(onClose == null
                 ? topIcon != null
-                ? 5.0
-                : 100.0
-                : 5.0))),
+                ? AppRadius.sm
+                : AppRadius.pill
+                : AppRadius.sm))),
             border: borderColor == null?null:Border.all(
                 color: borderColor!,
                 width: 1.0,

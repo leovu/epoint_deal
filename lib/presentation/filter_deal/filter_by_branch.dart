@@ -40,20 +40,27 @@ class _FilterByBranchState extends State<FilterByBranch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppGlass.backgroundColor,
         appBar: AppBar(
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.appBarShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             AppLocalizations.text(LangKey.chooseBranch)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
         ),
         body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: AppGlass.background(),
             child: _buildBody()));
   }
 
@@ -72,7 +79,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
                           top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                       physics: AlwaysScrollableScrollPhysics(),
                       controller: _controller,
-                      separator: Divider(),
+                      separator: Divider(color: AppColors.primaryColorMix),
                       children: _listWidget(),
                     ))
                   : Expanded(child: CustomDataNotFound())
@@ -116,7 +123,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected! ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
                       fontWeight:
                           item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
@@ -130,7 +137,7 @@ class _FilterByBranchState extends State<FilterByBranch> {
                 )
               : Icon(
                   Icons.check_box_outline_blank,
-                  color: Color.fromARGB(255, 108, 102, 94),
+                  color: AppColors.textMutedColor,
                 )
         ],
       ),
@@ -146,14 +153,12 @@ class _FilterByBranchState extends State<FilterByBranch> {
       decoration: InputDecoration(
         isCollapsed: true,
         contentPadding: EdgeInsets.all(12.0),
-        border: OutlineInputBorder(
-          // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-        ),
+        filled: true,
+        fillColor: AppGlass.surface,
+        border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+        focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
         isDense: true,

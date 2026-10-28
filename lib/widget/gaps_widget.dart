@@ -45,14 +45,14 @@ class Gaps {
   }
 
   static Widget listLine =  Divider(
-    color: Colors.grey[300],
+    color: AppColors.primaryColorMix,
     height: 1.4,
     thickness: 1,
   );
 
   static Widget line(double size) {
     return Container(
-      color: Colors.grey[300],
+      color: AppColors.primaryColorMix,
       height: size,
     );
   }

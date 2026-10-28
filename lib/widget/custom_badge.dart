@@ -28,7 +28,7 @@ class CustomBadge extends StatelessWidget {
       ),
       child: child,
       badgeStyle: bgd.BadgeStyle(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       badgeAnimation: bgd.BadgeAnimation.slide(
         toAnimate: toAnimate,

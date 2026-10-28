@@ -23,23 +23,37 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return tabs == null?Container():TabBar(
-      labelColor: AppColors.primaryColor,
-      indicatorWeight: 2.0,
+    return tabs == null?Container():Container(
+      margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      padding: EdgeInsets.all(3.0),
+      decoration: AppGlass.pill(color: AppGlass.surfaceLight),
+      child: TabBar(
+      labelColor: AppColors.whiteColor,
+      unselectedLabelColor: AppColors.textSecondaryColor,
       indicatorSize: TabBarIndicatorSize.tab,
-      indicatorColor: AppColors.primaryColor,
+      indicator: BoxDecoration(
+        gradient: AppGlass.activeGradient,
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        boxShadow: AppGlass.buttonShadow,
+      ),
+      dividerColor: Colors.transparent,
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
+      tabAlignment: TabAlignment.start,
       unselectedLabelStyle: TextStyle(
-      fontSize: AppTextSizes.size16,
-      color: AppColors.primaryColor,
-      fontWeight: FontWeight.bold),
-      labelStyle: AppTextStyles.style16PrimaryBold,
+      fontSize: AppTextSizes.size14,
+      color: AppColors.textSecondaryColor,
+      fontWeight: FontWeight.w500),
+      labelStyle: TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.whiteColor,
+      fontWeight: FontWeight.w600),
       labelPadding: EdgeInsets.symmetric(horizontal: isExpanded?0.0:20.0),
       isScrollable: true,
       tabs: tabs!.map((model){
         return Tab(
             child: Container(
               width: isExpanded
-                  ? (MediaQuery.of(context).size.width - 20.0 * 2) / tabs!.length
+                  ? (MediaQuery.of(context).size.width - 30.0) / tabs!.length
                   : null,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,6 +75,7 @@ class CustomTabBar extends StatelessWidget {
         );
       }).toList(),
       controller: controller,
+    ),
     );
   }
 }

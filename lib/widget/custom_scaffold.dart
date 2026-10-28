@@ -55,12 +55,7 @@ class CustomScaffold extends StatelessWidget {
         (title == null && customTitle == null)?Container():Container(
           height: 90,
           width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: AppGlass.headerGradient,
-            border: Border(
-              bottom: BorderSide(color: Colors.white.withValues(alpha: 0.25)),
-            ),
-          ),
+          decoration: AppGlass.header(),
           padding: EdgeInsets.only(top: 30.0),
           child: CustomAppBar(
             title: title,
@@ -91,7 +86,7 @@ class CustomScaffold extends StatelessWidget {
 
   Widget _buildBody(){
     return Scaffold(
-        backgroundColor: backgroundColor??AppColors.surfaceColor,
+        backgroundColor: backgroundColor??AppGlass.backgroundColor,
         body: SafeArea(
           top: false,
           left: false,
@@ -99,6 +94,9 @@ class CustomScaffold extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: double.infinity,
+            decoration: backgroundColor == null && backgroundImage == null
+                ? AppGlass.background()
+                : null,
             child: backgroundImage == null
                 ? _buildContent()
                 : Stack(
@@ -144,6 +142,6 @@ class CustomScaffold extends StatelessWidget {
 configKeyboardActions(List<KeyboardActionsItem> actions) {
   return KeyboardActionsConfig(
       // keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
-      keyboardBarColor: Colors.grey[200],
+      keyboardBarColor: AppColors.surfaceColor,
       actions: actions);
 }

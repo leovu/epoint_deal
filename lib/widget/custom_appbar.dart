@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget {
             ? null
             : Text(
           options![index].text!,
-          style: AppTextStyles.style15PrimaryNormal,
+          style: AppTextStyles.style15WhiteNormal,
         ));
   }
 
@@ -42,7 +42,8 @@ class CustomAppBar extends StatelessWidget {
           child: customTitle ?? Center(
             child: Text(
               title!,
-              style: AppTextStyles.style17WhiteNormal,
+              style: AppTextStyles.style17WhiteNormal
+                  .copyWith(fontWeight: FontWeight.w600),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -56,13 +57,18 @@ class CustomAppBar extends StatelessWidget {
                     ? (onWillPop ?? () => Navigator.pop(context))
                     : null,
                 child: Container(
-                  width: 40.0,
-                  height: 40.0,
-                  padding: EdgeInsets.only(left: 20.0),
+                  width: 36.0,
+                  height: 36.0,
+                  margin: EdgeInsets.only(left: 12.0),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppGlass.headerIconBackground,
+                    shape: BoxShape.circle,
+                  ),
                   child: Icon(
-                    icon ?? Icons.arrow_back_ios,
+                    icon ?? Icons.arrow_back_ios_new,
                     color: Colors.white,
-                    size: 24.0,
+                    size: 18.0,
                   ),
                 ),
               ),

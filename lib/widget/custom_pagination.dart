@@ -47,7 +47,7 @@ class CustomActivePagination extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
             color: active!?_activeColor:AppColors.whiteColor,
-            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
             border: active! ? null : Border.all(color: _inactiveColor)
         ),
       ),

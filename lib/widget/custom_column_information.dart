@@ -57,7 +57,7 @@ class CustomColumnInformation extends StatelessWidget {
           ),
           CustomSkeleton(
             height: AppSizes.maxPadding * 2,
-            radius: 5.0,
+            radius: AppRadius.sm,
           )
         ],
       ),
@@ -103,7 +103,7 @@ class CustomColumnInformation extends StatelessWidget {
                                 text: isRequired ? " *" : "",
                                 style: (titleStyle ??
                                         AppTextStyles.style14BlackBold)
-                                    .copyWith(color: Colors.red),
+                                    .copyWith(color: AppColors.dangerColor),
                               ),
                             ]),
                       ),
@@ -133,11 +133,14 @@ class CustomColumnInformation extends StatelessWidget {
               ? child
               : Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: backgroundColor ?? AppColors.grey50Color,
-                      border: borderColor == null
-                          ? null
-                          : Border.all(color: borderColor!)),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      color: backgroundColor == null ||
+                              backgroundColor == AppColors.grey50Color ||
+                              backgroundColor == AppColors.white
+                          ? AppGlass.surface
+                          : backgroundColor,
+                      border: Border.all(
+                          color: borderColor ?? AppColors.primaryColorMix)),
                   padding: EdgeInsets.all(AppSizes.minPadding),
                   child: Row(
                     children: [
@@ -161,12 +164,12 @@ class CustomColumnInformation extends StatelessWidget {
                                     ? CustomImageIcon(
                                         icon: suffixIcon,
                                         size: 20.0,
-                                        color: AppColors.grey500Color,
+                                        color: AppColors.textMutedColor,
                                       )
                                     : Icon(
                                         suffixIconData,
                                         size: 20.0,
-                                        color: AppColors.grey500Color,
+                                        color: AppColors.textMutedColor,
                                       ),
                               ),
                               onTap: onSuffixTap,
@@ -238,7 +241,7 @@ class CustomColumnIconInformation extends StatelessWidget {
                     ? styleContent ??
                         AppTextStyles.style14BlackNormal.copyWith(
                             color: onTap == null
-                                ? AppColors.blackColor
+                                ? AppColors.textTitleColor
                                 : AppColors.primaryColor,
                             decoration:
                                 onTap == null ? null : TextDecoration.underline)
@@ -306,7 +309,7 @@ class CustomColumnCenterInformation extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                   color: contentColor!.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(5.0)),
+                  borderRadius: BorderRadius.circular(AppRadius.sm)),
               padding: EdgeInsets.all(AppSizes.minPadding),
               alignment: Alignment.center,
               child: Text(
@@ -344,8 +347,9 @@ class CustomColumnContainerInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: color ?? AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          gradient: color == null ? AppGlass.activeGradient : null,
+          color: color),
       padding: EdgeInsets.symmetric(vertical: AppSizes.ultraPadding!),
       child: Stack(
         children: [
@@ -415,8 +419,9 @@ class CustomColumnStackInformation extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: color ?? AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          gradient: color == null ? AppGlass.activeGradient : null,
+          color: color),
       padding: padding ?? EdgeInsets.symmetric(vertical: AppSizes.minPadding),
       child: Stack(
         children: [
@@ -516,7 +521,7 @@ class CustomColumnListInformation extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                   color: contentColor!.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(5.0)),
+                  borderRadius: BorderRadius.circular(AppRadius.sm)),
               padding: EdgeInsets.all(AppSizes.minPadding),
               alignment: Alignment.center,
               child: Text(

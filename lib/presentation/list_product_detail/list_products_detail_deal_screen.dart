@@ -108,7 +108,7 @@ class _ListProductsDetailDealScreenState
                 : "${AppLocalizations.text(LangKey.sales_leads)} - ",
             style: TextStyle(
                 fontSize: 16.0,
-                color: Colors.grey,
+                color: AppColors.textMutedColor,
                 fontWeight: FontWeight.normal),
             children: [
           TextSpan(
@@ -144,7 +144,7 @@ class _ListProductsDetailDealScreenState
       titleStyle: AppTextStyles.style14BlackNormal,
       content: formatMoney(widget.detail?.totalOtherFee?.toDouble() ?? 0),
       contentStyle:
-          AppTextStyles.style14PrimaryBold.copyWith(color: Colors.red),
+          AppTextStyles.style14PrimaryBold.copyWith(color: AppColors.dangerColor),
     );
   }
 
@@ -164,7 +164,7 @@ class _ListProductsDetailDealScreenState
                         widget.detail?.otherFee![index].feeMoney?.toDouble() ??
                             0),
                     contentStyle: AppTextStyles.style14PrimaryBold
-                        .copyWith(color: Colors.red),
+                        .copyWith(color: AppColors.dangerColor),
                   ),
                 )),
       ),
@@ -227,9 +227,9 @@ class _ListProductsDetailDealScreenState
       padding: EdgeInsets.all(AppSizes.minPadding),
       decoration: BoxDecoration(
           gradient: AppGlass.cardGradient,
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           boxShadow: AppGlass.shadow,
-          border: Border.all(color: AppColors.grey100)),
+          border: Border.all(color: AppGlass.borderColor)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -257,7 +257,7 @@ class _ListProductsDetailDealScreenState
               Container(
                 decoration: BoxDecoration(
                     color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(16.0)),
+                    borderRadius: BorderRadius.circular(AppRadius.card)),
                 padding: EdgeInsets.symmetric(
                     horizontal: AppSizes.minPadding * 1.5,
                     vertical: AppSizes.minPadding / 2),
@@ -285,10 +285,10 @@ class _ListProductsDetailDealScreenState
               Expanded(
                 child: CustomRowImageContentWidget(
                   icon: Assets.iconTag,
-                  iconColor: Colors.orange,
+                  iconColor: AppColors.tertiaryColor,
                   title: formatMoney(model.discount!.toDouble()),
                   titleStyle: AppTextStyles.style14BlackNormal
-                      .copyWith(color: Colors.orange),
+                      .copyWith(color: AppColors.tertiaryColor),
                 ),
               ),
               Text(

@@ -14,7 +14,7 @@ class CustomStarRating extends StatelessWidget {
       size: 20.0,
       starCount: 5,
       color: Colors.yellow,
-      borderColor: Colors.orange,
+      borderColor: AppColors.tertiaryColor,
       // isReadOnly: isReadOnly,
       // onRated: onRating,
     );

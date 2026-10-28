@@ -205,8 +205,8 @@ class CustomProjectProgress extends StatelessWidget {
       title: AppLocalizations.text(LangKey.work_completion_progress),
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.grey500Color,
-            borderRadius: BorderRadius.circular(5.0)),
+            color: AppColors.textMutedColor,
+            borderRadius: BorderRadius.circular(AppRadius.sm)),
         child: Row(
           children: [
             Expanded(
@@ -223,7 +223,7 @@ class CustomProjectProgress extends StatelessWidget {
                             ? AppColors.yellow
                             : AppColors.darkRedColor),
                     borderRadius:
-                        BorderRadius.horizontal(left: Radius.circular(5.0))),
+                        BorderRadius.horizontal(left: Radius.circular(AppRadius.sm))),
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(AppSizes.minPadding / 2),
                 child: Text(
@@ -308,8 +308,8 @@ class CustomProjectResource extends StatelessWidget {
       title: AppLocalizations.text(LangKey.resource),
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.grey500Color,
-            borderRadius: BorderRadius.circular(5.0)),
+            color: AppColors.textMutedColor,
+            borderRadius: BorderRadius.circular(AppRadius.sm)),
         child: Row(
           children: [
             Expanded(
@@ -318,7 +318,7 @@ class CustomProjectResource extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: AppColors.blueColor,
                     borderRadius:
-                        BorderRadius.horizontal(left: Radius.circular(5.0))),
+                        BorderRadius.horizontal(left: Radius.circular(AppRadius.sm))),
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(AppSizes.minPadding / 2),
                 child: Text(

@@ -41,11 +41,11 @@ class CustomBottomSheet extends StatelessWidget {
                         padding: EdgeInsets.all(10.0),
                         alignment: Alignment.center,
                         child: Container(
-                          width: 40.0,
-                          height: 4.0,
+                          width: 38.0,
+                          height: 5.0,
                           decoration: BoxDecoration(
                               color: AppColors.primaryDarkColor.withValues(alpha: 0.18),
-                              borderRadius: BorderRadius.circular(100.0)),
+                              borderRadius: BorderRadius.circular(AppRadius.pill)),
                         ),
                       ),
                       title == null
@@ -56,7 +56,7 @@ class CustomBottomSheet extends StatelessWidget {
                               decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
-                                          color: Color(0xFFECECEC)))),
+                                          color: AppColors.primaryColorMix))),
                               child: Row(
                                 children: [
                                   InkWell(
@@ -68,7 +68,7 @@ class CustomBottomSheet extends StatelessWidget {
                                       alignment: Alignment.center,
                                       child: Icon(
                                         Icons.close,
-                                        color: Colors.black,
+                                        color: AppColors.textSecondaryColor,
                                         size: 20.0,
                                       ),
                                     ),
@@ -79,8 +79,8 @@ class CustomBottomSheet extends StatelessWidget {
                                       title!,
                                       style: TextStyle(
                                           fontSize: AppTextSizes.size17,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
+                                          color: AppColors.textTitleColor,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),

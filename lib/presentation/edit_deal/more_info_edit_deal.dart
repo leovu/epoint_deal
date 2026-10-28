@@ -92,17 +92,17 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                     padding: EdgeInsets.all(8.0),
                     height: 45,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                         border: Border.all(
                             width: 1.0,
-                            color: Colors.blue,
+                            color: AppColors.primaryColor,
                             style: BorderStyle.solid)),
                     child: Center(
                       child: Text(
                         "+ ${AppLocalizations.text(LangKey.moreInformation)}",
                         style: TextStyle(
                             fontSize: 16.0,
-                            color: const Color(0xFF0067AC),
+                            color: AppColors.secondaryColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ),
@@ -138,7 +138,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                           AppLocalizations.text(LangKey.moreInformation)!,
                           style: TextStyle(
                               fontSize: 16.0,
-                              color: const Color(0xFF0067AC),
+                              color: AppColors.secondaryColor,
                               fontWeight: FontWeight.normal),
                         ),
                         InkWell(
@@ -150,7 +150,7 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
                             AppLocalizations.text(LangKey.collapse)!,
                             style: TextStyle(
                                 fontSize: 16.0,
-                                color: const Color(0xFF0067AC),
+                                color: AppColors.secondaryColor,
                                 fontWeight: FontWeight.normal),
                           ),
                         )
@@ -560,33 +560,31 @@ class _MoreInfoEditDealState extends State<MoreInfoEditDeal> {
             counter: Container(),
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
                         text: title,
                         style: TextStyle(
                             fontSize: 15.0,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*", style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

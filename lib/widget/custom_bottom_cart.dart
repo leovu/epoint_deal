@@ -23,7 +23,7 @@ class CustomBottomBooking extends StatelessWidget {
               Container(
                 margin: EdgeInsets.symmetric(vertical: AppSizes.minPadding),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.0),
+                    borderRadius: BorderRadius.circular(AppRadius.xs),
                     border: Border.all(color: AppColors.whiteColor)),
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSizes.minPadding / 2),

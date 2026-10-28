@@ -600,6 +600,10 @@ class DealConnection {
       barrierDismissible: false, 
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: AppColors.surfaceColor,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -607,14 +611,14 @@ class DealConnection {
                     child: Text(
                   warning ? AppLocalizations.text(LangKey.warning)! : AppLocalizations.text(LangKey.notify)! + "\n",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black),
+                      fontWeight: FontWeight.bold, color: AppColors.textTitleColor),
                 )),
                 Container(height: 10,),
                 Center(
                     child: Text(
                   title!,
                   textAlign: TextAlign.start,
-                  style: TextStyle(color: Colors.grey[700]),
+                  style: TextStyle(color: AppColors.textBodyColor),
                 )),
               ],
             ),
@@ -624,9 +628,7 @@ class DealConnection {
               margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
               height: 40,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: AppGlass.button(),
               child: TextButton(
                 child: Center(
                     child: Text(
@@ -651,6 +653,10 @@ class DealConnection {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: AppColors.surfaceColor,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card)),
           // title:  Text(''),
           content: SingleChildScrollView(
             child: ListBody(
@@ -664,7 +670,7 @@ class DealConnection {
                         child: Text(
                       AppLocalizations.text(LangKey.notify)! + "\n",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
+                          fontWeight: FontWeight.bold, color: AppColors.textTitleColor),
                     )),
 
                     InkWell(
@@ -679,7 +685,7 @@ class DealConnection {
                     child: Text(
                   title!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[700]),
+                  style: TextStyle(color: AppColors.textBodyColor),
                 )),
               ],
             ),
@@ -706,7 +712,7 @@ class DealConnection {
                   Flexible(
                     child: CustomButton(
                       backgroundColor: AppColors.white,
-                      borderColor: AppColors.darkGrey,
+                      borderColor: AppColors.borderColor,
                       child:
                           Center(child: Text(AppLocalizations.text(LangKey.yes)!, style: TextStyle(color: AppColors.primaryColor))),
                       onTap: ontap,

@@ -204,21 +204,28 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
         keyboardDismissOnTap(context);
       },
       child: Scaffold(
+          backgroundColor: AppGlass.backgroundColor,
           appBar: AppBar(
             iconTheme: const IconThemeData(
               color: Colors.white,
             ),
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            shape: AppGlass.appBarShape,
+            flexibleSpace: Container(decoration: AppGlass.header()),
             title: Text(
               AppLocalizations.text(LangKey.customerCareUpcase)!,
-              style: const TextStyle(color: Colors.white, fontSize: 18.0),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600),
             ),
             // leadingWidth: 20.0,
           ),
           body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
+              decoration: AppGlass.background(),
               child: _buildBody())),
     );
   }
@@ -446,9 +453,9 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                             Flexible(
                                               child: CustomChip(
                                                 isExpand: true,
-                                                radius: 5.0,
+                                                radius: AppRadius.sm,
                                                 backgroundColor:
-                                                    Color(0xFFC4C4C4),
+                                                    AppColors.textMutedColor,
                                                 text: getNameFromPath(e),
                                                 style: AppTextStyles
                                                     .style13WhiteNormal,
@@ -471,10 +478,10 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     child: DottedBorder(
                       color: AppColors.borderColor,
                       borderType: BorderType.RRect,
-                      radius: Radius.circular(10),
+                      radius: Radius.circular(AppRadius.md),
                       padding: EdgeInsets.all(6),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
                         child: Container(
                           height: 40.0,
                           width: MediaQuery.of(context).size.width,
@@ -483,7 +490,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                 AppLocalizations.text(
                                     LangKey.pressUploadPhotosAndVideos)!,
                                 style: TextStyle(
-                                    color: Color(0xFF9E9E9E),
+                                    color: AppColors.textMutedColor,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w400)),
                           ),
@@ -502,7 +509,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               Text(
                 AppLocalizations.text(LangKey.setReminderSchedule)!,
                 style: TextStyle(
-                    color: Color(0xFF0067AC),
+                    color: AppColors.secondaryColor,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w700),
               ),
@@ -527,17 +534,17 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                     margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                     height: 45,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                         border: Border.all(
                             width: 1.0,
-                            color: Colors.blue,
+                            color: AppColors.primaryColor,
                             style: BorderStyle.solid)),
                     child: Center(
                       child: Text(
                         "+ ${AppLocalizations.text(LangKey.moreInformation)}",
                         style: TextStyle(
                             fontSize: AppTextSizes.size16,
-                            color: const Color(0xFF0067AC),
+                            color: AppColors.secondaryColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ),
@@ -558,7 +565,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                         AppLocalizations.text(LangKey.moreInformation)!,
                         style: TextStyle(
                             fontSize: 16.0,
-                            color: const Color(0xFF0067AC),
+                            color: AppColors.secondaryColor,
                             fontWeight: FontWeight.normal),
                       ),
                       showMore
@@ -567,7 +574,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                 AppLocalizations.text(LangKey.collapse)!,
                                 style: TextStyle(
                                     fontSize: 16.0,
-                                    color: const Color(0xFF0067AC),
+                                    color: AppColors.secondaryColor,
                                     fontWeight: FontWeight.normal),
                               ),
                               onTap: () {
@@ -591,14 +598,14 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                         AppLocalizations.text(LangKey.customerStyle)!,
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.w400),
                       ),
                       Text(
                         AppLocalizations.text(LangKey.potentialCustomer)!,
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.w600),
                       )
                     ],
@@ -634,7 +641,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                 widget.detail!.dealName!,
                                 style: TextStyle(
                                     fontSize: 15.0,
-                                    color: const Color(0xFF121212),
+                                    color: AppColors.textTitleColor,
                                     fontWeight: FontWeight.w600),
                               )
                             ],
@@ -804,7 +811,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       Text(
                         AppLocalizations.text(LangKey.workNeedCensorship)!,
                         style: TextStyle(
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500),
                       )
@@ -916,14 +923,14 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             selected
                 ? Icon(
                     Icons.radio_button_checked,
-                    color: Color(0xFF0067AC),
+                    color: AppColors.secondaryColor,
                   )
                 : Icon(Icons.radio_button_unchecked),
             SizedBox(width: 9.0),
             Text(
               title,
               style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.w400),
             )
@@ -948,7 +955,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       child: InkWell(
         onTap: () async {
 
@@ -1051,33 +1058,31 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
                         text: title,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*", style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

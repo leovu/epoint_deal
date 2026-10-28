@@ -26,7 +26,7 @@ class CustomMenu extends StatelessWidget {
         decoration: BoxDecoration(
             color: AppColors.borderColor.withValues(alpha: 0.2),
             border: Border.all(color: AppColors.borderColor),
-            borderRadius: BorderRadius.circular(10.0)
+            borderRadius: BorderRadius.circular(AppRadius.md)
         ),
         padding: EdgeInsets.all(AppSizes.minPadding),
         child: Row(
@@ -43,7 +43,7 @@ class CustomMenu extends StatelessWidget {
                 margin: EdgeInsets.only(right: AppSizes.minPadding),
                 child: CustomImageIcon(
                   icon: icon,
-                  color: iconColor??AppColors.grey500Color,
+                  color: iconColor??AppColors.textMutedColor,
                   size: iconSize / 3 * 2,
                 ),
               ),

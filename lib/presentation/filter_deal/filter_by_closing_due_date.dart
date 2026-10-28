@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/localization/global.dart';
@@ -99,7 +100,7 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
                           AppLocalizations.text(LangKey.customerTimeFrame)!,
                           style: TextStyle(
                               fontSize: 15.0,
-                              color: const Color(0xFF8E8E8E),
+                              color: AppColors.textSecondaryColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Container(height: 10,),
@@ -121,7 +122,7 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
                                 margin: EdgeInsets.only(left: 15, right: 5),
                                 child: Text(
                                   "-",
-                                  style: TextStyle(color: Color(0xFF8E8E8E)),
+                                  style: TextStyle(color: AppColors.textSecondaryColor),
                                 )),
                             Container(
                                 margin:
@@ -241,7 +242,7 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
       onTap: ontap,
       child: TextField(
         style: TextStyle(
-          color: Colors.black,
+          color: AppColors.textTitleColor,
         ),
         enabled: false,
         controller: fillText,
@@ -249,16 +250,19 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
         decoration: InputDecoration(
           isCollapsed: true,
           contentPadding: EdgeInsets.all(12.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          filled: true,
+          fillColor: AppGlass.surface,
+          border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
           // focusedBorder: OutlineInputBorder(
           //   borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
           // ),
           hintText: hintText,
           hintStyle: TextStyle(
               fontSize: 14.0,
-              color: Color(0xFF8E8E8E),
+              color: AppColors.textSecondaryColor,
               fontWeight: FontWeight.normal),
           isDense: true,
         ),
@@ -279,16 +283,16 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
                   height: 40,
                   // width: 100,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                       border: Border.all(
                           width: 1.0,
-                          color: Colors.blue,
+                          color: AppColors.primaryColor,
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
                       name!,
                       style: TextStyle(
-                          color: Color(0xFF0067AC),
+                          color: AppColors.secondaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -298,12 +302,12 @@ class _FilterByClosingDueDateState extends State<FilterByClosingDueDate> {
                   height: 40,
                   // width: 100,
                   decoration: BoxDecoration(
-                      color: Color(0xFFEAEAEA),
-                      borderRadius: BorderRadius.circular(5.0)),
+                      color: AppColors.primaryColorMix,
+                      borderRadius: BorderRadius.circular(AppRadius.sm)),
                   child: Center(
                     child: Text(
                       name!,
-                      style: TextStyle(color: Color(0xFF8E8E8E)),
+                      style: TextStyle(color: AppColors.textSecondaryColor),
                     ),
                   ),
                 ),

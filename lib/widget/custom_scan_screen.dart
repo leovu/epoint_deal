@@ -86,7 +86,7 @@ class CustomScreenScanState extends State<CustomScreenScan> {
     return SingleChildScrollView(
       padding: EdgeInsets.all(0.0),
       child: Container(
-        color: Colors.black,
+        color: AppColors.textTitleColor,
         height: AppSizes.maxHeight,
         child: Stack(
           fit: StackFit.expand,
@@ -104,7 +104,7 @@ class CustomScreenScanState extends State<CustomScreenScan> {
                     },
                   );
                 }
-                return Container(color: Colors.black,);
+                return Container(color: AppColors.textTitleColor,);
               }
             ),
             Container(
@@ -112,7 +112,7 @@ class CustomScreenScanState extends State<CustomScreenScan> {
                   shape: QrScannerOverlayShape(
                       cutOutSize: _sizeScan,
                       borderWidth: 10.0,
-                      borderRadius: 10.0,
+                      borderRadius: AppRadius.md,
                       borderColor: AppColors.primaryColor
                   )
               ),
@@ -161,15 +161,12 @@ class CustomScreenScanState extends State<CustomScreenScan> {
                                   child: Container(
                                     width: _inputSize,
                                     height: _inputSize,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: AppColors.whiteColor
-                                    ),
+                                    decoration: AppGlass.card(radius: AppRadius.md),
                                     child: Padding(
                                       padding: EdgeInsets.all(AppSizes.minPadding),
                                       child: CustomImageIcon(
                                         icon: Assets.iconTask,
-                                        color: AppColors.blackColor,
+                                        color: AppColors.textTitleColor,
                                       ),
                                     ),
                                   ),

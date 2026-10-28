@@ -32,7 +32,7 @@ class CustomEmpty extends StatelessWidget {
             title ?? "",
             style: TextStyle(
                 fontSize: 13.0,
-                color: Colors.black,
+                color: AppColors.textStrongColor,
                 fontWeight: FontWeight.normal),
           ),
           if (text != null)

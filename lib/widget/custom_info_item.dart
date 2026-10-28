@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomInfoItem extends StatelessWidget {
@@ -31,7 +32,7 @@ class CustomInfoItem extends StatelessWidget {
               maxLines: 4,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal),
               // maxLines: 1,

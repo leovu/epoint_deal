@@ -14,17 +14,11 @@ class CustomPopupDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: isExpanded?Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20.0))
-        ),
+        decoration: AppGlass.dialog(),
         height: MediaQuery.of(context).size.height * 0.5,
         child: child,
       ):Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20.0))
-        ),
+        decoration: AppGlass.dialog(),
         child: child,
       ),
       onTap: hideKeyboard,

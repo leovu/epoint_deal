@@ -113,7 +113,7 @@ class _CustomerPickerSheetState extends State<CustomerPickerSheet> {
             fontSize: 15.0,
             color: (item.selected ?? false)
                 ? AppColors.primaryColor
-                : Colors.black,
+                : AppColors.textTitleColor,
             fontWeight:
                 (item.selected ?? false) ? FontWeight.bold : FontWeight.normal,
           ),
@@ -140,7 +140,7 @@ class _CustomerPickerSheetState extends State<CustomerPickerSheet> {
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
         gradient: AppGlass.sheetGradient,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
       ),
       child: Column(
         children: [
@@ -148,7 +148,7 @@ class _CustomerPickerSheetState extends State<CustomerPickerSheet> {
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             decoration: BoxDecoration(
               color: AppColors.primaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,12 +175,12 @@ class _CustomerPickerSheetState extends State<CustomerPickerSheet> {
               decoration: InputDecoration(
                 isCollapsed: true,
                 contentPadding: EdgeInsets.all(12.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-                ),
+                filled: true,
+                fillColor: AppGlass.surface,
+                border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+                enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+                disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+                focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
                 hintText: AppLocalizations.text(LangKey.inputSearch),
                 isDense: true,
               ),
@@ -342,7 +342,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
             fontSize: 15.0,
             color: (item.selected ?? false)
                 ? AppColors.primaryColor
-                : Colors.black,
+                : AppColors.textTitleColor,
             fontWeight:
                 (item.selected ?? false) ? FontWeight.bold : FontWeight.normal,
           ),
@@ -370,7 +370,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
               decoration: BoxDecoration(
                 gradient: AppGlass.sheetGradient,
                 borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(16.0)),
+                    BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
               ),
               child: Column(
                 children: [
@@ -380,7 +380,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                     decoration: BoxDecoration(
                       gradient: AppGlass.sheetGradient,
                       borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16.0)),
+                          BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
                     ),
                     child: Stack(
                       alignment: Alignment.center,
@@ -389,7 +389,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                           child: Text(
                             AppLocalizations.text(LangKey.listLead)!,
                             style: const TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textTitleColor,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w600,
                             ),
@@ -399,7 +399,7 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () => Navigator.of(context).pop(),
-                            child: const Icon(Icons.close, color: Colors.black),
+                            child: const Icon(Icons.close, color: AppColors.textTitleColor),
                           ),
                         ),
                       ],
@@ -413,13 +413,12 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                       decoration: InputDecoration(
                         isCollapsed: true,
                         contentPadding: EdgeInsets.all(12.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-                        ),
+                        filled: true,
+                        fillColor: AppGlass.surface,
+                        border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+                        enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+                        disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+                        focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
                         hintText: AppLocalizations.text(LangKey.inputSearch),
                         isDense: true,
                       ),

@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/model/convert_status_model.dart';
 import 'package:flutter/material.dart';
 
@@ -42,16 +43,16 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
                   height: 40,
                   // width: 100,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                       border: Border.all(
                           width: 1.0,
-                          color: Colors.blue,
+                          color: AppColors.primaryColor,
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
                       name!,
                       style: TextStyle(
-                          color: Color(0xFF0067AC),
+                          color: AppColors.secondaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -61,12 +62,12 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
                   height: 40,
                   // width: 100,
                   decoration: BoxDecoration(
-                      color: Color(0xFFEAEAEA),
-                      borderRadius: BorderRadius.circular(5.0)),
+                      color: AppColors.primaryColorMix,
+                      borderRadius: BorderRadius.circular(AppRadius.sm)),
                   child: Center(
                     child: Text(
                       name!,
-                      style: TextStyle(color: Color(0xFF8E8E8E)),
+                      style: TextStyle(color: AppColors.textSecondaryColor),
                     ),
                   ),
                 ),

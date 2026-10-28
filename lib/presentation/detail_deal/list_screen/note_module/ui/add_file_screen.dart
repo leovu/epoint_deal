@@ -136,7 +136,7 @@ class _AddFileScreenState extends State<AddFileScreen>
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 2.0),
                 child: Row(
@@ -187,14 +187,12 @@ class _AddFileScreenState extends State<AddFileScreen>
             counterText: "",
             hintText: "Đây là một nội dung đính kèm",
             hintStyle: AppTextStyles.style13GrayWeight400,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
           ),
           maxLines: 4,
           minLines: 4,
@@ -210,9 +208,7 @@ class _AddFileScreenState extends State<AddFileScreen>
     return Container(
       height: 40,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+      decoration: AppGlass.button(),
       child: InkWell(
         onTap: () async {
           if (validateAllow()) {

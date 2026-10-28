@@ -282,24 +282,24 @@ Color parseStatusColor(int? id) {
     return AppColors.finish;
   }
   if (id == 4) {
-    return AppColors.blackColor;
+    return AppColors.textTitleColor;
   }
   if (id == 5) {
     return Colors.deepPurple;
   }
   if (id == 6) {
-    return Colors.red;
+    return AppColors.dangerColor;
   }
   return AppColors.hintColor;
 }
 
 Color parseOrderStatusColor(String? status) {
-  if (status == orderStatusNew) return Colors.orange;
-  if (status == orderStatusConfirmed) return Colors.blue;
+  if (status == orderStatusNew) return AppColors.warningColor;
+  if (status == orderStatusConfirmed) return AppColors.primaryColor;
   if (status == orderStatusPayHalf) return Colors.deepPurple;
-  if (status == orderStatusPaySuccess) return Colors.green;
-  if (status == orderStatusOrderCancle) return Colors.red;
-  return Colors.black;
+  if (status == orderStatusPaySuccess) return AppColors.successColor;
+  if (status == orderStatusOrderCancle) return AppColors.dangerColor;
+  return AppColors.textTitleColor;
 }
 
 double getBookingAmount(double amount, double discount, double surcharge,

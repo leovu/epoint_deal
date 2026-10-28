@@ -47,17 +47,24 @@ class CustomFileViewState extends State<CustomFileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppGlass.backgroundColor,
       appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.appBarShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             widget.title!,
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
         ),
       body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)?CustomNetworkImage(

@@ -254,20 +254,27 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         keyboardDismissOnTap(context);
       },
       child: Scaffold(
+          backgroundColor: AppGlass.backgroundColor,
           appBar: AppBar(
             iconTheme: const IconThemeData(
               color: Colors.white,
             ),
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            shape: AppGlass.appBarShape,
+            flexibleSpace: Container(decoration: AppGlass.header()),
             title: Text(
               AppLocalizations.text(LangKey.creatDeal)!,
-              style: const TextStyle(color: Colors.white, fontSize: 18.0),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600),
             ),
           ),
           body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
+              decoration: AppGlass.background(),
               child: _buildBody())),
     );
   }
@@ -337,7 +344,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           AppLocalizations.text(LangKey.dealInfomation)!,
           style: TextStyle(
               fontSize: AppTextSizes.size16,
-              color: const Color(0xFF0067AC),
+              color: AppColors.secondaryColor,
               fontWeight: FontWeight.normal),
         ),
         showMoreInfoDeal
@@ -350,7 +357,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                   AppLocalizations.text(LangKey.collapse)!,
                   style: TextStyle(
                       fontSize: AppTextSizes.size16,
-                      color: const Color(0xFF0067AC),
+                      color: AppColors.secondaryColor,
                       fontWeight: FontWeight.normal),
                 ),
               )
@@ -381,20 +388,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             decoration: BoxDecoration(
                 color: !selectedCustomer
                     ? AppColors.primaryColor
-                    : Color(0xFFF2F2F2),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
-                    color: Colors.black.withValues(alpha: 0.3),
-                  )
-                ]),
+                    : AppColors.primaryColorMix,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                boxShadow: AppGlass.shadow),
             child: Center(
               child: Text(
                 AppLocalizations.text(LangKey.potentialCustomer)!,
                 style: TextStyle(
-                    color: !selectedCustomer ? Colors.white : Color(0xFF8E8E8E),
+                    color: !selectedCustomer ? Colors.white : AppColors.textSecondaryColor,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400),
               ),
@@ -419,20 +420,14 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             decoration: BoxDecoration(
                 color: selectedCustomer
                     ? AppColors.primaryColor
-                    : Color(0xFFF2F2F2),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
-                    color: Colors.black.withValues(alpha: 0.3),
-                  )
-                ]),
+                    : AppColors.primaryColorMix,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                boxShadow: AppGlass.shadow),
             child: Center(
               child: Text(
                 AppLocalizations.text(LangKey.customerVi)!,
                 style: TextStyle(
-                    color: selectedCustomer ? Colors.white : Color(0xFF8E8E8E),
+                    color: selectedCustomer ? Colors.white : AppColors.textSecondaryColor,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400),
               ),
@@ -470,7 +465,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         Text(
                           AppLocalizations.text(LangKey.customerStyle)! + ": ",
                           style: TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textTitleColor,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400),
                         ),
@@ -484,7 +479,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                                   : AppLocalizations.text(LangKey.business)!
                               : "",
                           style: TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textTitleColor,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w500),
                         ),
@@ -498,7 +493,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         Text(
                           AppLocalizations.text(LangKey.phoneNumber)! + ": ",
                           style: TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textTitleColor,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400),
                         ),
@@ -506,7 +501,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         Text(
                           leadItem.phone ?? "N/A",
                           style: TextStyle(
-                              color: Colors.black,
+                              color: AppColors.textTitleColor,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w500),
                         ),
@@ -547,12 +542,12 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             child: Center(
               child: Column(
                 children: [
-                  Divider(),
+                  Divider(color: AppColors.primaryColorMix),
                   Text(
                     AppLocalizations.text(LangKey.showMore)!,
                     style: TextStyle(
                         fontSize: 16.0,
-                        color: const Color(0xFF0067AC),
+                        color: AppColors.secondaryColor,
                         fontWeight: FontWeight.normal),
                   ),
                   Container(height: 6.0),
@@ -861,33 +856,31 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
                         text: title,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*", style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(
@@ -927,7 +920,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       onTap: ontap,
       child: TextField(
         style: TextStyle(
-          color: Colors.black,
+          color: AppColors.textTitleColor,
         ),
         enabled: false,
         controller: fillText,
@@ -935,24 +928,27 @@ class _CreateDealScreenState extends State<CreateDealScreen>
         decoration: InputDecoration(
           isCollapsed: true,
           contentPadding: EdgeInsets.all(12.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          filled: true,
+          fillColor: AppGlass.surface,
+          border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
           // hintText: hintText,
           label: RichText(
               text: TextSpan(
                   text: hintText,
                   style: TextStyle(
                       fontSize: AppTextSizes.size15,
-                      color: const Color(0xFF858080),
+                      color: AppColors.textMutedColor,
                       fontWeight: FontWeight.normal),
                   children: [
-                TextSpan(text: "*", style: TextStyle(color: Colors.red))
+                TextSpan(text: "*", style: TextStyle(color: AppColors.dangerColor))
               ])),
 
           hintStyle: TextStyle(
               fontSize: 14.0,
-              color: Color(0xFF8E8E8E),
+              color: AppColors.textSecondaryColor,
               fontWeight: FontWeight.normal),
           isDense: true,
           suffixIcon: Padding(
@@ -976,7 +972,7 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       child: InkWell(
         onTap: () async {
           if (selectedCustomer) {

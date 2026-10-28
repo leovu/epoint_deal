@@ -31,7 +31,7 @@ class CustomRowImageContentWidget extends StatelessWidget {
               maxLines: 2,
               textAlign: TextAlign.start,
               style: titleStyle ?? TextStyle(
-                  color: AppColors.black,
+                  color: AppColors.textTitleColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal),
               // maxLines: 1,

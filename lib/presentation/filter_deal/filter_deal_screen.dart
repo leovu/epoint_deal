@@ -573,20 +573,27 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
   Widget build(BuildContext context) {
     return PopScope(
       child: Scaffold(
+          backgroundColor: AppGlass.backgroundColor,
           appBar: AppBar(
             iconTheme: const IconThemeData(
               color: Colors.white,
             ),
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            shape: AppGlass.appBarShape,
+            flexibleSpace: Container(decoration: AppGlass.header()),
             title: Text(
               AppLocalizations.text(LangKey.filter)!,
-              style: const TextStyle(color: Colors.white, fontSize: 20.0),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600),
             ),
           ),
           body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
+              decoration: AppGlass.background(),
               child: _buildBody())),
       canPop: false,
       onPopInvokedWithResult: (event, _) {
@@ -661,7 +668,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.accordingOrderSource)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterByOrderSource(
@@ -674,7 +681,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byConvertStatus)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterByConvertStatus(
@@ -686,7 +693,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byBranch)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
       Container(height: 10.0),
@@ -725,7 +732,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byCreationDate)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterByCreateDate(
@@ -738,7 +745,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.accordingExpectedEnding)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -752,7 +759,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.accordingActualEnding)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -766,7 +773,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byAllocator)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -807,7 +814,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byPipeline)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -862,7 +869,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byJourney)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -912,7 +919,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             AppLocalizations.text(LangKey.byHistoryCustomerCare)!,
             style: TextStyle(
                 fontSize: 16.0,
-                color: const Color(0xFF0067AC),
+                color: AppColors.secondaryColor,
                 fontWeight: FontWeight.bold),
           ),
           FilterHistoryCareDate(
@@ -929,7 +936,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         AppLocalizations.text(LangKey.byWorkStatus)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.secondaryColor,
             fontWeight: FontWeight.bold),
       ),
       Container(height: 10.0),
@@ -978,7 +985,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               color: AppColors.primaryColor,
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(AppRadius.md)),
           child: InkWell(
             onTap: () {
               print("ap dung");
@@ -1033,9 +1040,9 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           height: 40,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppRadius.md),
               border: Border.all(
-                  width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
+                  width: 1.0, color: AppColors.primaryColor, style: BorderStyle.solid)),
           child: InkWell(
             onTap: () async {
               allowPop = false;
@@ -1047,7 +1054,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                 AppLocalizations.text(LangKey.delete)!,
                 style: TextStyle(
                     fontSize: 14.0,
-                    color: Color(0xFF1A76B4),
+                    color: AppColors.primaryDarkColor,
                     fontWeight: FontWeight.bold),
                 maxLines: 1,
               ),
@@ -1218,33 +1225,31 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            filled: true,
+            fillColor: AppGlass.surface,
+            border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
                         text: title,
                         style: TextStyle(
                             fontSize: 15.0,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*", style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

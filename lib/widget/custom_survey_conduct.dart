@@ -121,7 +121,7 @@ class CustomSurveyConductContainer extends StatelessWidget {
                       ? result == surveyResultAnswerSuccess
                       ? AppColors.surveySuccess
                       : AppColors.surveyWrong
-                      : AppColors.blackColor
+                      : AppColors.textTitleColor
                 ),
                 children: [
                   if(isRequired)
@@ -188,7 +188,7 @@ class CustomSurveyConductSingleChoice extends StatelessWidget {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4.0),
+            borderRadius: BorderRadius.circular(AppRadius.xs),
             border: Border.all(
                 color: e.isSelected!
                     ? isHistory
@@ -301,7 +301,7 @@ class CustomSurveyConductMultiChoice extends StatelessWidget {
         children: (model!.listChoice ?? <SurveyProcessListChoiceModel>[]).map((e) => InkWell(
           child: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(AppRadius.xs),
                 border: Border.all(
                     color: e.isSelected!? AppColors.primaryColor: AppColors.gray50
                 ),
@@ -668,7 +668,7 @@ class CustomSurveyConductPhoto extends StatelessWidget {
 
   Widget _buildImage(){
     return ClipRRect(
-      borderRadius: BorderRadius.circular(4.0),
+      borderRadius: BorderRadius.circular(AppRadius.xs),
       child: Stack(
         children: [
           Container(
@@ -728,8 +728,8 @@ class CustomSurveyConductPhoto extends StatelessWidget {
   Widget _buildCapture(BuildContext context){
     return InkWell(
       child: DottedBorder(
-        radius: Radius.circular(4.0),
-        color: AppColors.black,
+        radius: Radius.circular(AppRadius.xs),
+        color: AppColors.textSecondaryColor,
         child: SizedBox(
           width: double.infinity,
           height: _height,
@@ -737,7 +737,7 @@ class CustomSurveyConductPhoto extends StatelessWidget {
             children: [
               Icon(
                 Icons.add,
-                color: AppColors.black,
+                color: AppColors.textSecondaryColor,
                 size: AppSizes.sizeOnTap,
               ),
               Container(height: AppSizes.minPadding,),
@@ -761,7 +761,7 @@ class CustomSurveyConductPhoto extends StatelessWidget {
       children: [
         _buildTitle("${AppLocalizations.text(LangKey.image)} ${index + 1}/2"),
         CustomNetworkImage(
-          radius: 4.0,
+          radius: AppRadius.sm,
         ),
         _buildTitle(AppLocalizations.text(LangKey.actual_photo)),
         index == 0?_buildImage():_buildCapture(context),

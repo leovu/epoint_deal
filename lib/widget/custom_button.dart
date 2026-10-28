@@ -36,9 +36,22 @@ class CustomButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: enable
-                  ? (backgroundColor ?? AppColors.primaryColor)
-                  : AppColors.grey200Color,
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ? (backgroundColor == null ||
+                          backgroundColor == AppColors.primaryColor
+                      ? null
+                      : backgroundColor)
+                  : AppColors.primaryColorMix,
+              gradient: enable &&
+                      (backgroundColor == null ||
+                          backgroundColor == AppColors.primaryColor)
+                  ? AppGlass.activeGradient
+                  : null,
+              boxShadow: enable &&
+                      (backgroundColor == null ||
+                          backgroundColor == AppColors.primaryColor)
+                  ? AppGlass.buttonShadow
+                  : null,
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
               border: borderColor == null
                   ? null
                   : Border.all(
@@ -61,7 +74,7 @@ class CustomButton extends StatelessWidget {
                                   color: iconColor ??
                                       (enable
                                           ? AppColors.whiteColor
-                                          : AppColors.grey500Color),
+                                          : AppColors.textMutedColor),
                                   size: 20.0,
                                 )
                               : Image.asset(
@@ -76,18 +89,20 @@ class CustomButton extends StatelessWidget {
                             text ?? "",
                             style: style ??
                                 AppTextStyles.style15WhiteNormal.copyWith(
+                                    fontWeight: FontWeight.w600,
                                     color: enable
                                         ? AppColors.whiteColor
-                                        : AppColors.grey500Color),
+                                        : AppColors.textMutedColor),
                             textAlign: TextAlign.center,
                           ))
                       : Text(
                           text ?? "",
                           style: style ??
                               AppTextStyles.style15WhiteNormal.copyWith(
+                                  fontWeight: FontWeight.w600,
                                   color: enable
                                       ? AppColors.whiteColor
-                                      : AppColors.grey500Color),
+                                      : AppColors.textMutedColor),
                           textAlign: TextAlign.center,
                         )
                 ],
@@ -112,7 +127,7 @@ class CustomQuantityButton extends StatelessWidget {
         width: iconSize,
         height: iconSize,
         decoration: BoxDecoration(
-            shape: BoxShape.circle, color: AppColors.primaryColor),
+            shape: BoxShape.circle, gradient: AppGlass.activeGradient),
         alignment: Alignment.center,
         child: Text(
           isPlus ? "+" : "-",

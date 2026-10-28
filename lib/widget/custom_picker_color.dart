@@ -26,7 +26,7 @@ class CustomPickerColor extends StatelessWidget {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
             color: backgroundColor ?? AppColors.whiteColor,
             boxShadow: [
                   BoxShadow(
@@ -50,12 +50,12 @@ class CustomPickerColor extends StatelessWidget {
                           ? CustomImageIcon(
                               icon: titleIcon,
                               size: 18.0,
-                              color:colorIcons ?? AppColors.grey500Color,
+                              color:colorIcons ?? AppColors.textMutedColor,
                             )
                           : Icon(
                               titleIconData,
                               size: 18.0,
-                              color:colorIcons ?? AppColors.grey500Color,
+                              color:colorIcons ?? AppColors.textMutedColor,
                             ),
                     ),
                   ),
@@ -75,7 +75,7 @@ class CustomPickerColor extends StatelessWidget {
                 width: 60.0,
                 decoration: BoxDecoration(
                     color: pickerColor ?? AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(5.0)),
+                    borderRadius: BorderRadius.circular(AppRadius.sm)),
               ),
             )),
           ],
