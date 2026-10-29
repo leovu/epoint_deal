@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 
 class FilterByWorkStatus extends StatefulWidget {
   List<GetStatusWorkData>? statusWorkData;
-   FilterByWorkStatus({ Key? key, this.statusWorkData }) : super(key: key);
+  FilterByWorkStatus({Key? key, this.statusWorkData}) : super(key: key);
 
   @override
   _FilterByWorkStatusState createState() => _FilterByWorkStatusState();
@@ -25,13 +26,11 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
   List<GetStatusWorkData>? statusWorkData;
   List<GetStatusWorkData>? statusWorkDataDisplay;
 
-
   @override
   void initState() {
     super.initState();
     statusWorkData = widget.statusWorkData;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      
       getData();
     });
   }
@@ -46,48 +45,37 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
     keyboardDismissOnTap(context);
 
     if (statusWorkData == null || statusWorkData!.length == 0) {
-              DealConnection.showLoading(context);
-              var statusWorkModel = await DealConnection.getStatusWork(context);
+      DealConnection.showLoading(context);
+      var statusWorkModel = await DealConnection.getStatusWork(context);
 
-              Navigator.of(context).pop();
-              if (statusWorkModel != null) {
-                statusWorkData = statusWorkModel.data;
-                statusWorkDataDisplay = statusWorkData;
-              }
-            } else {
-              statusWorkDataDisplay = statusWorkData;
-            }
+      Navigator.of(context).pop();
+      if (statusWorkModel != null) {
+        statusWorkData = statusWorkModel.data;
+        statusWorkDataDisplay = statusWorkData;
+      }
+    } else {
+      statusWorkDataDisplay = statusWorkData;
+    }
 
-   
-      setState(() {});
+    setState(() {});
     // }
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.byWorkStatus)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()));
+        body:
+            Container(decoration: AppGlass.background(), child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -148,8 +136,11 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
                   item.manageStatusName!,
                   style: TextStyle(
                       fontSize: 15.0,
-                      color: item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
-                      fontWeight:item.selected! ? FontWeight.bold : FontWeight.normal),
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
+                      fontWeight:
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
@@ -203,7 +194,9 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
-            if (!((model.manageStatusName ?? "").removeAccents().contains(element))) {
+            if (!((model.manageStatusName ?? "")
+                .removeAccents()
+                .contains(element))) {
               result = false;
               break;
             }

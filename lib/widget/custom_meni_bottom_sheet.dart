@@ -3,6 +3,7 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class CustomMenuBottomSheet extends StatelessWidget {
   final Widget? widget;
@@ -37,10 +38,9 @@ class CustomMenuBottomSheet extends StatelessWidget {
           ),
           Flexible(
               fit: FlexFit.loose,
-              child: Container(
+              child: CustomGlassSurface(
                 padding: EdgeInsets.symmetric(
                     horizontal: 15.0 * 1.5, vertical: 15.0 * 1.5),
-                decoration: AppGlass.sheet(),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -82,7 +82,8 @@ class CustomMenuBottomSheet extends StatelessWidget {
                       ],
                     ),
                     // CustomLine(),
-                    if ((title ?? "") != "") Divider(color: AppColors.primaryColorMix),
+                    if ((title ?? "") != "")
+                      Divider(color: AppColors.primaryColorMix),
                     if (haveBnConfirm)
                       Expanded(
                           child: Column(

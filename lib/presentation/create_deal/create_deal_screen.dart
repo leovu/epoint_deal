@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
@@ -255,27 +256,17 @@ class _CreateDealScreenState extends State<CreateDealScreen>
       },
       child: Scaffold(
           backgroundColor: AppGlass.backgroundColor,
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            shape: AppGlass.appBarShape,
-            flexibleSpace: Container(decoration: AppGlass.header()),
+          appBar: CustomGlassAppBar(
             title: Text(
               AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textTitleColor,
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600),
             ),
           ),
           body: Container(
-              decoration: AppGlass.background(),
-              child: _buildBody())),
+              decoration: AppGlass.background(), child: _buildBody())),
     );
   }
 
@@ -395,7 +386,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               child: Text(
                 AppLocalizations.text(LangKey.potentialCustomer)!,
                 style: TextStyle(
-                    color: !selectedCustomer ? Colors.white : AppColors.textSecondaryColor,
+                    color: !selectedCustomer
+                        ? Colors.white
+                        : AppColors.textSecondaryColor,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400),
               ),
@@ -427,7 +420,9 @@ class _CreateDealScreenState extends State<CreateDealScreen>
               child: Text(
                 AppLocalizations.text(LangKey.customerVi)!,
                 style: TextStyle(
-                    color: selectedCustomer ? Colors.white : AppColors.textSecondaryColor,
+                    color: selectedCustomer
+                        ? Colors.white
+                        : AppColors.textSecondaryColor,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400),
               ),
@@ -859,8 +854,10 @@ class _CreateDealScreenState extends State<CreateDealScreen>
             filled: true,
             fillColor: AppGlass.surface,
             border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
             focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
@@ -873,7 +870,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: AppColors.dangerColor))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
@@ -932,7 +930,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
           fillColor: AppGlass.surface,
           border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
           enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-          disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          disabledBorder:
+              AppGlass.inputBorder(color: AppColors.primaryColorMix),
           focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
           // hintText: hintText,
           label: RichText(
@@ -943,7 +942,8 @@ class _CreateDealScreenState extends State<CreateDealScreen>
                       color: AppColors.textMutedColor,
                       fontWeight: FontWeight.normal),
                   children: [
-                TextSpan(text: "*", style: TextStyle(color: AppColors.dangerColor))
+                TextSpan(
+                    text: "*", style: TextStyle(color: AppColors.dangerColor))
               ])),
 
           hintStyle: TextStyle(

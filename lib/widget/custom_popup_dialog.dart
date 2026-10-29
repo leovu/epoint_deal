@@ -1,26 +1,26 @@
 part of widget;
 
 class CustomPopupDialog extends StatelessWidget {
-
   final Widget child;
   final bool isExpanded;
 
-  CustomPopupDialog({
-    required this.child,
-    this.isExpanded = false
-  });
+  CustomPopupDialog({required this.child, this.isExpanded = false});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: isExpanded?Container(
-        decoration: AppGlass.dialog(),
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: child,
-      ):Container(
-        decoration: AppGlass.dialog(),
-        child: child,
-      ),
+      child: isExpanded
+          ? CustomGlassSurface(
+              floating: false,
+              borderRadius: AppRadius.card + 4.0,
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: child,
+            )
+          : CustomGlassSurface(
+              floating: false,
+              borderRadius: AppRadius.card + 4.0,
+              child: child,
+            ),
       onTap: hideKeyboard,
     );
   }

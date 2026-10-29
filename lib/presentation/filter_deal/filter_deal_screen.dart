@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -220,7 +221,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
         statusID: 0,
         selected: true)
   ];
-  
+
   ClosingDueDateModel? closingDueDateSeleted;
 
   List<OrderSourceData> orderSourceData = [
@@ -300,7 +301,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       id_created_at: widget.filterScreenModel!.id_created_at,
       fromDate_closing_due_date:
           widget.filterScreenModel!.fromDate_closing_due_date,
-      toDate_closing_due_date: widget.filterScreenModel!.toDate_closing_due_date,
+      toDate_closing_due_date:
+          widget.filterScreenModel!.toDate_closing_due_date,
       id_closing_due_date: widget.filterScreenModel!.id_closing_due_date,
       fromDate_history_care_date:
           widget.filterScreenModel!.fromDate_history_care_date,
@@ -323,7 +325,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     });
   }
 
-   getData() async {
+  getData() async {
     var orderSources = await DealConnection.getOrderSource(context);
     if (orderSources != null) {
       orderSourceData.addAll(orderSources.data!);
@@ -378,19 +380,23 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     }
 
     for (int i = 0; i < convertStatusOptions.length; i++) {
-      if (widget.filterScreenModel!.filterModel!.isConvert == convertStatusOptions[i].statusID) {
-          convertStatusOptions[i].selected = true;
-        } else {
-          convertStatusOptions[i].selected = false;
-        }
+      if (widget.filterScreenModel!.filterModel!.isConvert ==
+          convertStatusOptions[i].statusID) {
+        convertStatusOptions[i].selected = true;
+      } else {
+        convertStatusOptions[i].selected = false;
+      }
     }
 
     if (filterScreenModel.filterModel!.branchId!.length > 0) {
-      for (int i = 0; i < filterScreenModel.filterModel!.branchId!.length; i++) {
+      for (int i = 0;
+          i < filterScreenModel.filterModel!.branchId!.length;
+          i++) {
         try {
           branchData!
               .firstWhere((element) =>
-                  element.branchId == filterScreenModel.filterModel!.branchId![i])
+                  element.branchId ==
+                  filterScreenModel.filterModel!.branchId![i])
               .selected = true;
         } catch (e) {}
       }
@@ -574,27 +580,17 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     return PopScope(
       child: Scaffold(
           backgroundColor: AppGlass.backgroundColor,
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            shape: AppGlass.appBarShape,
-            flexibleSpace: Container(decoration: AppGlass.header()),
+          appBar: CustomGlassAppBar(
             title: Text(
               AppLocalizations.text(LangKey.filter)!,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textTitleColor,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600),
             ),
           ),
           body: Container(
-              decoration: AppGlass.background(),
-              child: _buildBody())),
+              decoration: AppGlass.background(), child: _buildBody())),
       canPop: false,
       onPopInvokedWithResult: (event, _) {
         if (!event) {
@@ -1017,7 +1013,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
               var convertStatusOption = convertStatusOptions
                   .firstWhere((element) => element.selected!);
 
-              filterScreenModel.filterModel!.isConvert = convertStatusOption.statusID;
+              filterScreenModel.filterModel!.isConvert =
+                  convertStatusOption.statusID;
 
               widget.filterScreenModel = filterScreenModel;
               Navigator.of(context).pop(widget.filterScreenModel);
@@ -1042,7 +1039,9 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.md),
               border: Border.all(
-                  width: 1.0, color: AppColors.primaryColor, style: BorderStyle.solid)),
+                  width: 1.0,
+                  color: AppColors.primaryColor,
+                  style: BorderStyle.solid)),
           child: InkWell(
             onTap: () async {
               allowPop = false;
@@ -1065,7 +1064,7 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
     );
   }
 
-   clearData() async {
+  clearData() async {
     widget.filterScreenModel = FilterScreenModel(
         filterModel: ListDealModelRequest(
             search: "",
@@ -1163,13 +1162,12 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
       }
     }
 
-
     for (int i = 0; i < pipeLineData!.length; i++) {
       pipeLineData![i].selected = false;
     }
     pipelineSelected = null;
 
-     for (int i = 0; i < journeysData!.length; i++) {
+    for (int i = 0; i < journeysData!.length; i++) {
       journeysData![i].selected = false;
     }
     journeySelected = null;
@@ -1210,7 +1208,9 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
 
   Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {GestureTapCallback? ontap, TextEditingController? fillText, int? maxlines}) {
+      {GestureTapCallback? ontap,
+      TextEditingController? fillText,
+      int? maxlines}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
@@ -1228,8 +1228,10 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
             filled: true,
             fillColor: AppGlass.surface,
             border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
             focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
@@ -1242,7 +1244,8 @@ class _FilterDealCustomerState extends State<FilterDealCustomer> {
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: AppColors.dangerColor))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,

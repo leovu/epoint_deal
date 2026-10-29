@@ -6,6 +6,7 @@ import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_tag_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class CreateNewTagModal extends StatefulWidget {
   CreateNewTagModal({Key? key}) : super(key: key);
@@ -48,9 +49,8 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
-      decoration: AppGlass.sheet(),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
           : MediaQuery.of(context).size.height * 0.28,
@@ -67,15 +67,9 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
                       fontWeight: FontWeight.w600),
                 ),
               )),
-          _tftCreateNewBusiness(
-              AppLocalizations.text(LangKey.enterNewTag),
-              "",
-              Assets.iconTag,
-              false,
-              false,
-              true,
-              fillText: _nameText,
-              focusNode: _nameFocusNode),
+          _tftCreateNewBusiness(AppLocalizations.text(LangKey.enterNewTag), "",
+              Assets.iconTag, false, false, true,
+              fillText: _nameText, focusNode: _nameFocusNode),
           SizedBox(
             height: 23.0,
           ),
@@ -85,21 +79,22 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
     );
   }
 
-   Widget _buildButton() {
+  Widget _buildButton() {
     return InkWell(
       onTap: () async {
         if (_nameText.text != "") {
           DealConnection.showLoading(context);
-          DescriptionModelResponse? result =
-              await DealConnection.addTag(
-                  context, AddTagModelRequest(
-                    name: _nameText.text,
-                  ));
-                  Navigator.of(context).pop();
+          DescriptionModelResponse? result = await DealConnection.addTag(
+              context,
+              AddTagModelRequest(
+                name: _nameText.text,
+              ));
+          Navigator.of(context).pop();
 
           if (result != null) {
             if (result.errorCode == 0) {
-              await DealConnection.showMyDialog(context, result.errorDescription);
+              await DealConnection.showMyDialog(
+                  context, result.errorDescription);
               await Future.delayed(Duration(seconds: 2));
 
               Navigator.of(context).pop(true);
@@ -130,6 +125,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
           )),
     );
   }
+
   Widget _tftCreateNewBusiness(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
       {GestureTapCallback? ontap,
@@ -152,8 +148,10 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
             filled: true,
             fillColor: AppGlass.surface,
             border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
             focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
@@ -166,7 +164,8 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: AppColors.dangerColor))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content,

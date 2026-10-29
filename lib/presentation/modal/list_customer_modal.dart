@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -74,28 +75,17 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.listCustomer)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
-          // leadingWidth: 20.0,
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()));
+        body:
+            Container(decoration: AppGlass.background(), child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -151,7 +141,7 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
 
   Widget _buildItemStaff(CustomerData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         height: 40,
         decoration: BoxDecoration(color: Colors.white),
@@ -164,9 +154,11 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
                   item.fullName ?? "",
                   style: TextStyle(
                       fontSize: 16.0,
-                      color:
-                          item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
-                      fontWeight:item.selected! ? FontWeight.bold : FontWeight.normal),
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
+                      fontWeight:
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                   maxLines: 1,
                 ),
               ),
@@ -180,22 +172,20 @@ class _ListCustomerModalState extends State<ListCustomerModal> {
   Widget dataNotFound() {
     return Expanded(
       child: CustomListView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(
-                            top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                        physics: NeverScrollableScrollPhysics(),
-                        separator: Divider(color: AppColors.primaryColorMix),
-                        children: List.generate(
-                          12,
-                          (index) => Container(
-                    margin: EdgeInsets.only(top: 15.0),
-                    child: CustomShimmer(
-                      child: CustomSkeleton(
-            height: 35,
-            radius: AppRadius.sm),
-                    ),
-                  ),
-              )),
+          shrinkWrap: true,
+          padding:
+              EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+          physics: NeverScrollableScrollPhysics(),
+          separator: Divider(color: AppColors.primaryColorMix),
+          children: List.generate(
+            12,
+            (index) => Container(
+              margin: EdgeInsets.only(top: 15.0),
+              child: CustomShimmer(
+                child: CustomSkeleton(height: 35, radius: AppRadius.sm),
+              ),
+            ),
+          )),
     );
   }
 

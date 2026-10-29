@@ -2,6 +2,7 @@ import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:flutter/material.dart';
 import 'package:epoint_deal_plugin/epoint_deal_plugin.dart';
 import 'dart:io';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -16,15 +17,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   HttpOverrides.global = MyHttpOverrides();
+  await LiquidGlassWidgets.initialize();
 
   // await PatchAllLocales.patchNumberSeperators(
   //   patchForSamsungKeyboards: true,
   // );
-  runApp(const MaterialApp(
-    locale: Locale('vi', 'VN'),
-    title: 'Navigation Basics',
-    debugShowCheckedModeBanner: false,
-    home: MyApp(),
+  runApp(LiquidGlassWidgets.wrap(
+    brightnessResolver: Theme.maybeBrightnessOf,
+    theme: GlassThemeData.simple(brightness: Brightness.light),
+    child: const MaterialApp(
+      locale: Locale('vi', 'VN'),
+      title: 'Navigation Basics',
+      debugShowCheckedModeBanner: false,
+      home: MyApp(),
+    ),
   ));
 }
 

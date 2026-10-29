@@ -9,6 +9,7 @@ import 'package:epoint_deal_plugin/model/response/list_deal_model_reponse.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 String _removeAccents(String input) {
   final a = "áàảạãăắằẳặẵâấầẩẫậ";
@@ -136,77 +137,79 @@ class _CustomerPickerSheetState extends State<CustomerPickerSheet> {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {},
-            child: Container(
-      height: MediaQuery.of(context).size.height * 0.85,
-      decoration: BoxDecoration(
-        gradient: AppGlass.sheetGradient,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.text(LangKey.listCustomer)!,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Icon(Icons.close, color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(12.0),
-            child: TextField(
-              controller: _searchText,
-              focusNode: _focusNode,
-              decoration: InputDecoration(
-                isCollapsed: true,
-                contentPadding: EdgeInsets.all(12.0),
-                filled: true,
-                fillColor: AppGlass.surface,
-                border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-                enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-                disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-                focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
-                hintText: AppLocalizations.text(LangKey.inputSearch),
-                isDense: true,
-              ),
-              onChanged: _searchModel,
-            ),
-          ),
-          Expanded(
-            child: (_model == null)
-                ? Center(child: CircularProgressIndicator())
-                : ((_model!.data?.isEmpty ?? true))
-                    ? CustomDataNotFound()
-                    : CustomListView(
-                        padding: EdgeInsets.only(
-                            left: 8.0, right: 8.0, bottom: 16.0),
-                        physics: AlwaysScrollableScrollPhysics(),
-                        controller: _controller,
-                        separator: Divider(height: 1),
-                        children: List.generate(
-                          _model!.data!.length,
-                          (i) => _buildItem(
-                              _model!.data![i], () => _selectCustomer(i)),
+            child: CustomGlassSurface(
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: Column(
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(AppRadius.card)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppLocalizations.text(LangKey.listCustomer)!,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600),
                         ),
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: Icon(Icons.close, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: TextField(
+                      controller: _searchText,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.all(12.0),
+                        filled: true,
+                        fillColor: AppGlass.surface,
+                        border: AppGlass.inputBorder(
+                            color: AppColors.primaryColorMix),
+                        enabledBorder: AppGlass.inputBorder(
+                            color: AppColors.primaryColorMix),
+                        disabledBorder: AppGlass.inputBorder(
+                            color: AppColors.primaryColorMix),
+                        focusedBorder:
+                            AppGlass.inputBorder(color: AppColors.primaryColor),
+                        hintText: AppLocalizations.text(LangKey.inputSearch),
+                        isDense: true,
                       ),
-          ),
-        ],
-      ),
+                      onChanged: _searchModel,
+                    ),
+                  ),
+                  Expanded(
+                    child: (_model == null)
+                        ? Center(child: CircularProgressIndicator())
+                        : ((_model!.data?.isEmpty ?? true))
+                            ? CustomDataNotFound()
+                            : CustomListView(
+                                padding: EdgeInsets.only(
+                                    left: 8.0, right: 8.0, bottom: 16.0),
+                                physics: AlwaysScrollableScrollPhysics(),
+                                controller: _controller,
+                                separator: Divider(height: 1),
+                                children: List.generate(
+                                  _model!.data!.length,
+                                  (i) => _buildItem(_model!.data![i],
+                                      () => _selectCustomer(i)),
+                                ),
+                              ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -365,23 +368,13 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {},
-            child: Container(
+            child: CustomGlassSurface(
               height: MediaQuery.of(context).size.height * 0.85,
-              decoration: BoxDecoration(
-                gradient: AppGlass.sheetGradient,
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
-              ),
               child: Column(
                 children: [
                   Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                    decoration: BoxDecoration(
-                      gradient: AppGlass.sheetGradient,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
-                    ),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -399,7 +392,8 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () => Navigator.of(context).pop(),
-                            child: const Icon(Icons.close, color: AppColors.textTitleColor),
+                            child: const Icon(Icons.close,
+                                color: AppColors.textTitleColor),
                           ),
                         ),
                       ],
@@ -415,10 +409,14 @@ class _LeadPickerSheetState extends State<LeadPickerSheet> {
                         contentPadding: EdgeInsets.all(12.0),
                         filled: true,
                         fillColor: AppGlass.surface,
-                        border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-                        enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-                        disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-                        focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
+                        border: AppGlass.inputBorder(
+                            color: AppColors.primaryColorMix),
+                        enabledBorder: AppGlass.inputBorder(
+                            color: AppColors.primaryColorMix),
+                        disabledBorder: AppGlass.inputBorder(
+                            color: AppColors.primaryColorMix),
+                        focusedBorder:
+                            AppGlass.inputBorder(color: AppColors.primaryColor),
                         hintText: AppLocalizations.text(LangKey.inputSearch),
                         isDense: true,
                       ),

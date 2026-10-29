@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -10,7 +11,6 @@ import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
-
 
 class BusinessAreasModal extends StatefulWidget {
   List<ListBusinessAreasItem>? listBusinessData = [];
@@ -49,7 +49,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
     if (widget.listBusinessData!.length == 0) {
       ListBusinessAreasModelResponse? model =
           await DealConnection.getListBusinessAreas(context);
-     
+
       if (model != null) {
         listBusinessData = model.data;
       }
@@ -60,9 +60,9 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
         listBusinessData = widget.listBusinessData;
       }
     }
-    
+
     listBusinessDataDisplay = listBusinessData;
-     Navigator.of(context).pop();
+    Navigator.of(context).pop();
     setState(() {});
     // }
   }
@@ -70,54 +70,46 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
-          title: Text(
-            AppLocalizations.text(LangKey.chooseBusinessAreas)!,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600),
-          ),
-          actions: [
-            Container(
-              margin: EdgeInsets.only(right: 10.0),
-              child: InkWell(
-                onTap: () async {
-                   var result = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return GestureDetector(
+      backgroundColor: AppGlass.backgroundColor,
+      appBar: CustomGlassAppBar(
+        title: Text(
+          AppLocalizations.text(LangKey.chooseBusinessAreas)!,
+          style: const TextStyle(
+              color: AppColors.textTitleColor,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 10.0),
+            child: InkWell(
+              onTap: () async {
+                var result = await showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
                           },
                           child: CreateNewBusinessAreaModal());
-                      });
-                  if (result != null && result) {
-                    getData();
-                    }
-                },
-                child: Icon(Icons.add, size: 30,),
+                    });
+                if (result != null && result) {
+                  getData();
+                }
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
               ),
-            )
-          ],
-          // leadingWidth: 20.0,
-        ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()),);
+            ),
+          )
+        ],
+      ),
+      body: Container(decoration: AppGlass.background(), child: _buildBody()),
+    );
   }
 
   Widget _buildBody() {
@@ -156,12 +148,14 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
 
   List<Widget> _listWidget() {
     return (listBusinessDataDisplay != null)
-        ? (listBusinessDataDisplay!.length > 0) ? List.generate(
-            listBusinessDataDisplay!.length,
-            (index) => _buildItem(listBusinessDataDisplay![index], () {
-                  selectedItem(listBusinessDataDisplay![index]);
-                }))
-        : [CustomDataNotFound()] : Expanded(child: Container()) as List<Widget>;
+        ? (listBusinessDataDisplay!.length > 0)
+            ? List.generate(
+                listBusinessDataDisplay!.length,
+                (index) => _buildItem(listBusinessDataDisplay![index], () {
+                      selectedItem(listBusinessDataDisplay![index]);
+                    }))
+            : [CustomDataNotFound()]
+        : Expanded(child: Container()) as List<Widget>;
   }
 
   Widget _buildItem(ListBusinessAreasItem item, GestureTapCallback ontap) {
@@ -178,8 +172,9 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
                   item.businessName!,
                   style: TextStyle(
                       fontSize: 15.0,
-                      color:
-                          item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
                       fontWeight:
                           item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
@@ -220,12 +215,12 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel( event);
+        searchModel(event);
       },
     );
   }
 
-  searchModel( String value) {
+  searchModel(String value) {
     if (value.isEmpty) {
       listBusinessDataDisplay = listBusinessData;
       setState(() {});
@@ -253,8 +248,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
   }
 
   selectedItem(ListBusinessAreasItem item) async {
-
-if (item.selected!) {
+    if (item.selected!) {
       return;
     }
     try {
@@ -264,7 +258,6 @@ if (item.selected!) {
     item.selected = true;
     setState(() {});
   }
-
 
   // if (!item.selected) {
   //     //   return;

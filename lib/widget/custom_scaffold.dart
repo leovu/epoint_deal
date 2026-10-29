@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
@@ -7,12 +5,13 @@ import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
 import 'package:epoint_deal_plugin/widget/custom_appbar.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
+import 'package:epoint_deal_plugin/widget/custom_image_icon.dart';
 import 'package:epoint_deal_plugin/widget/custom_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class CustomScaffold extends StatelessWidget {
-
   final Widget? body;
   final String? title;
   final Widget? customTitle;
@@ -30,68 +29,89 @@ class CustomScaffold extends StatelessWidget {
   final bool isExpanded;
   final String? backgroundImage;
 
-  CustomScaffold({
-    this.body,
-    this.title,
-    this.customTitle,
-    this.options,
-    this.onRefresh,
-    this.isBottom = false,
-    this.backgroundColor,
-    this.floatingActionButton,
-    this.actions,
-    this.icon,
-    this.tabs,
-    this.tabController,
-    this.onWillPop,
-    this.isBottomSheet = false,
-    this.isExpanded = true,
-    this.backgroundImage
-  });
+  CustomScaffold(
+      {this.body,
+      this.title,
+      this.customTitle,
+      this.options,
+      this.onRefresh,
+      this.isBottom = false,
+      this.backgroundColor,
+      this.floatingActionButton,
+      this.actions,
+      this.icon,
+      this.tabs,
+      this.tabController,
+      this.onWillPop,
+      this.isBottomSheet = false,
+      this.isExpanded = true,
+      this.backgroundImage});
 
-  Widget _buildContent(){
+  bool get _hasHeader => title != null || customTitle != null;
+
+  Widget _buildOption(CustomOptionAppBar model) {
+    final Widget child = model.child ??
+        (model.text != null
+            ? Text(
+                model.text!,
+                style: AppTextStyles.style15WhiteNormal
+                    .copyWith(color: AppColors.textTitleColor),
+              )
+            : CustomImageIcon(
+                icon: model.icon,
+                color: AppColors.textTitleColor,
+                size: 22.0,
+              ));
+    if (model.child != null) {
+      return child;
+    }
+    return CustomGlassAppBar.action(child: child, onTap: model.onTap);
+  }
+
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
+    if (!_hasHeader) {
+      return null;
+    }
+    return CustomGlassAppBar(
+      title: customTitle ?? Text(title!),
+      onBack: onWillPop,
+      backIcon: icon,
+      actions: options?.map((e) => _buildOption(e)).toList(),
+      wrapActions: false,
+    );
+  }
+
+  Widget _buildContent() {
     return Column(
       children: [
-        (title == null && customTitle == null)?Container():Container(
-          height: 90,
-          width: double.infinity,
-          decoration: AppGlass.header(),
-          padding: EdgeInsets.only(top: 30.0),
-          child: CustomAppBar(
-            title: title,
-            customTitle: customTitle,
-            options: options,
-            icon: icon,
-            onWillPop: onWillPop,
-          ),
-        ),
-        tabs == null?Container():CustomTabBar(
-          tabs: tabs,
-          group: AutoSizeGroup(),
-          controller: tabController,
-          isExpanded: isExpanded,
-        ),
+        tabs == null
+            ? Container()
+            : CustomTabBar(
+                tabs: tabs,
+                group: AutoSizeGroup(),
+                controller: tabController,
+                isExpanded: isExpanded,
+              ),
         Expanded(
-            child: tabs == null?ContainerScrollable(
-                child: body,
-                onRefresh: onRefresh
-            ):CustomTabBarView(
-              controller: tabController,
-              tabs: tabs,
-            )
-        )
+            child: tabs == null
+                ? ContainerScrollable(child: body, onRefresh: onRefresh)
+                : CustomTabBarView(
+                    controller: tabController,
+                    tabs: tabs,
+                  ))
       ],
     );
   }
 
-  Widget _buildBody(){
+  Widget _buildBody(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor??AppGlass.backgroundColor,
-        body: SafeArea(
-          top: false,
-          left: false,
-          right: false,
-          child: Container(
+      backgroundColor: backgroundColor ?? AppGlass.backgroundColor,
+      appBar: _buildAppBar(context),
+      body: SafeArea(
+        top: false,
+        left: false,
+        right: false,
+        child: Container(
             width: double.infinity,
             height: double.infinity,
             decoration: backgroundColor == null && backgroundImage == null
@@ -100,41 +120,42 @@ class CustomScaffold extends StatelessWidget {
             child: backgroundImage == null
                 ? _buildContent()
                 : Stack(
-              fit: StackFit.expand,
-              children: [
-                SingleChildScrollView(
-                  child: Container(
-                    // width: AppSizes.maxWidth,
-                    // height: AppSizes.maxHeight,
-                    child: Image.asset(backgroundImage!, fit: BoxFit.fill,),
-                  ),
-                ),
-                _buildContent()
-              ],
-            )
-        ),),
-        floatingActionButton: floatingActionButton,
-        resizeToAvoidBottomInset: !isBottomSheet,
+                    fit: StackFit.expand,
+                    children: [
+                      SingleChildScrollView(
+                        child: Container(
+                          child: Image.asset(
+                            backgroundImage!,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      _buildContent()
+                    ],
+                  )),
+      ),
+      floatingActionButton: floatingActionButton,
+      resizeToAvoidBottomInset: !isBottomSheet,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return KeyboardActions(
-      config: configKeyboardActions(actions??[]),
+      config: configKeyboardActions(actions ?? []),
       disableScroll: true,
       enable: Platform.isIOS || Platform.isMacOS,
       child: onWillPop == null
-          ? _buildBody()
+          ? _buildBody(context)
           : PopScope(
-        child: _buildBody(),
-        canPop: false,
-        onPopInvokedWithResult: (event, _) {
-          if (!event) {
-            onWillPop!();
-          }
-        },
-      ),
+              child: _buildBody(context),
+              canPop: false,
+              onPopInvokedWithResult: (event, _) {
+                if (!event) {
+                  onWillPop!();
+                }
+              },
+            ),
     );
   }
 }

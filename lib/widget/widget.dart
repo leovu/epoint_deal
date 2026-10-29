@@ -1,5 +1,7 @@
 library widget;
 
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -76,8 +78,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-
 
 part 'custom_popup_dialog.dart';
 part 'custom_network_image.dart';

@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -172,7 +173,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
     super.didChangeMetrics();
   }
 
-   _uploadFile() async {
+  _uploadFile() async {
     File? file = await CustomDocumentPicker.openDocument(context, params: [
       "txt",
       "pdf",
@@ -192,7 +193,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
       _bloc.workUploadFile(file);
     }
   }
-  
+
   String getNameFromPath(String path) {
     return path.contains("/") ? path.split("/").last : path;
   }
@@ -205,28 +206,17 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
       },
       child: Scaffold(
           backgroundColor: AppGlass.backgroundColor,
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            shape: AppGlass.appBarShape,
-            flexibleSpace: Container(decoration: AppGlass.header()),
+          appBar: CustomGlassAppBar(
             title: Text(
               AppLocalizations.text(LangKey.customerCareUpcase)!,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textTitleColor,
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600),
             ),
-            // leadingWidth: 20.0,
           ),
           body: Container(
-              decoration: AppGlass.background(),
-              child: _buildBody())),
+              decoration: AppGlass.background(), child: _buildBody())),
     );
   }
 
@@ -256,15 +246,9 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 9.0),
-          _buildTextField(
-              AppLocalizations.text(LangKey.enterWorkTitle),
-              "",
-              Assets.iconWorkTitle,
-              true,
-              false,
-              true,
-              fillText: _titleText,
-              focusNode: _titleFocusNode),
+          _buildTextField(AppLocalizations.text(LangKey.enterWorkTitle), "",
+              Assets.iconWorkTitle, true, false, true,
+              fillText: _titleText, focusNode: _titleFocusNode),
           _buildTextField(
               AppLocalizations.text(LangKey.chooseTypeOfWork),
               typeOfWorkSelected.manageTypeWorkName ?? "",
@@ -274,8 +258,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               false,
               fillText: _customerCareContentText,
               focusNode: _customerCareContentFocusNode, ontap: () async {
-
-                FocusScope.of(context).unfocus();
+            FocusScope.of(context).unfocus();
             if (typeOfWorkData!.length == 0) {
               DealConnection.showLoading(context);
               var types = await DealConnection.getTypeWork(context);
@@ -317,7 +300,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               false,
               true,
               false, ontap: () async {
-                FocusScope.of(context).unfocus();
+            FocusScope.of(context).unfocus();
             _showFromDate();
           }),
 
@@ -328,7 +311,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
               true,
               true,
               false, ontap: () async {
-                FocusScope.of(context).unfocus();
+            FocusScope.of(context).unfocus();
             _showToDate();
           }),
 
@@ -396,7 +379,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                               LangKey.chooseExecutorUpcase),
                         )));
 
-            if (_modelStaffSelected != null && _modelStaffSelected!.length > 0) {
+            if (_modelStaffSelected != null &&
+                _modelStaffSelected!.length > 0) {
               if (addWorkModel.processorId == _modelStaffSelected![0].staffId) {
                 return;
               }
@@ -481,7 +465,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                       radius: Radius.circular(AppRadius.md),
                       padding: EdgeInsets.all(6),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(AppRadius.md)),
                         child: Container(
                           height: 40.0,
                           width: MediaQuery.of(context).size.width,
@@ -688,7 +673,9 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                                 staffId:
                                     _modelStaffSSupportSelected![i].staffId));
                             if (staffs == "") {
-                              staffs = _modelStaffSSupportSelected![i].staffName ?? "";
+                              staffs =
+                                  _modelStaffSSupportSelected![i].staffName ??
+                                      "";
                             } else {
                               staffs +=
                                   ", ${_modelStaffSSupportSelected![i].staffName}";
@@ -730,8 +717,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
 
                           for (int i = 0; i < tagsData!.length; i++) {
                             if (tagsData![i].selected!) {
-                              listTag
-                                  .add(ListTag(manageTagId: tagsData![i].tagId));
+                              listTag.add(
+                                  ListTag(manageTagId: tagsData![i].tagId));
                               if (tagsString == "") {
                                 tagsString = tagsData![i].name ?? "";
                               } else {
@@ -757,7 +744,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                         for (int i = 0; i < listTagsSelected.length; i++) {
                           if (listTagsSelected[i].selected) {
                             listTag
-                                  .add(ListTag(manageTagId: tagsData![i].tagId));
+                                .add(ListTag(manageTagId: tagsData![i].tagId));
                             if (tagsString == "") {
                               tagsString = listTagsSelected[i].name;
                             } else {
@@ -910,7 +897,7 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           );
         });
   }
-  
+
   Widget typeOfWorkItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
@@ -958,17 +945,16 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
           borderRadius: BorderRadius.circular(AppRadius.md)),
       child: InkWell(
         onTap: () async {
-
-          List<String> list_document = []; 
+          List<String> list_document = [];
           if (_bloc.outputFiles.hasValue) {
             List<String> models = _bloc.outputFiles.value!;
-          if (models.length > 0) {
-            models.forEach((element) {
-              list_document.add(element);
-            });
+            if (models.length > 0) {
+              models.forEach((element) {
+                list_document.add(element);
+              });
+            }
           }
-          }
-          
+
           if ((_titleText.text == "") ||
               (_toDateText.text == "") ||
               (addWorkModel.manageStatusId == 0) ||
@@ -1061,8 +1047,10 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
             filled: true,
             fillColor: AppGlass.surface,
             border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
             focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
@@ -1075,7 +1063,8 @@ class _CustomerCareDealState extends State<CustomerCareDeal>
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: AppColors.dangerColor))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,

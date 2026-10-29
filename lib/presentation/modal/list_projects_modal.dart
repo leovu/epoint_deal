@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -76,7 +77,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
         //     );
         // }
       } else {
-        listProjectData!.addAll(model.data?.items! as Iterable<ListProjectItems>);
+        listProjectData!
+            .addAll(model.data?.items! as Iterable<ListProjectItems>);
       }
 
       for (int i = 0; i < listProjectData!.length; i++) {
@@ -103,28 +105,17 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.chooseProject)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
-          // leadingWidth: 20.0,
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()));
+        body:
+            Container(decoration: AppGlass.background(), child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -133,19 +124,21 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
       child: Column(
         children: [
           _buildSearch(),
-           Expanded(
-                  child: (listProjectData!.length > 0) ? CustomListView(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.only(
-                      top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: AlwaysScrollableScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(color: AppColors.primaryColorMix),
-                  children: _listWidget(),
-                ) : Container() )
-              ,
-          (_searchext.text == "" && listProjectData!.length > 0 &&
-                      this.currentPage < this.nextPage)
+          Expanded(
+              child: (listProjectData!.length > 0)
+                  ? CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      controller: _controller,
+                      separator: Divider(color: AppColors.primaryColorMix),
+                      children: _listWidget(),
+                    )
+                  : Container()),
+          (_searchext.text == "" &&
+                  listProjectData!.length > 0 &&
+                  this.currentPage < this.nextPage)
               ? Container(
                   height: 20.0,
                   margin: EdgeInsets.only(bottom: 40),
@@ -185,7 +178,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   // }
 
   List<Widget> _listWidget() {
-    return (listProjectDataDisplay != null && listProjectDataDisplay!.length > 0)
+    return (listProjectDataDisplay != null &&
+            listProjectDataDisplay!.length > 0)
         ? List.generate(
             listProjectDataDisplay!.length,
             (index) => _buildItem(listProjectDataDisplay![index], () {

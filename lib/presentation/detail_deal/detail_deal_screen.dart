@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
@@ -157,8 +158,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                     height: AppSizes.maxHeight * 0.1,
                     decoration: BoxDecoration(
                       color: AppGlass.surface,
-                      border: Border(
-                          top: BorderSide(color: AppGlass.borderColor)),
+                      border:
+                          Border(top: BorderSide(color: AppGlass.borderColor)),
                     ),
                     child: (index == 0)
                         ? _listButtonRelevant()
@@ -275,7 +276,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
               Text(
                 model.typeCustomer ?? "",
                 style: AppTextStyles.style14HintNormal
-                  .copyWith(color: AppColors.textSecondaryColor),
+                    .copyWith(color: AppColors.textSecondaryColor),
               ),
             if ((model.phone ?? "").isNotEmpty)
               Text(
@@ -1006,7 +1007,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                       Text(
                         '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
-                            color: AppColors.textTitleColor, fontWeight: FontWeight.bold),
+                            color: AppColors.textTitleColor,
+                            fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -1330,7 +1332,8 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(AppRadius.sm)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
                     child: Row(
@@ -1488,7 +1491,7 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: AppSizes.minPadding/2),
+            padding: EdgeInsets.only(left: AppSizes.minPadding / 2),
             child: Text(
               model.objectDescription ?? NULL_VALUE,
               textAlign: TextAlign.start,
@@ -1772,28 +1775,16 @@ class _DetailDealScreenState extends State<DetailDealScreen> {
     return PopScope(
       child: Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.detail_deal)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
-          // leadingWidth: 20.0,
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: buildBody()),
+        body: Container(decoration: AppGlass.background(), child: buildBody()),
         floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
         // floatingActionButton: ExpandableDraggableFab(
         //   initialDraggableOffset:

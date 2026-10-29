@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -10,18 +11,18 @@ import 'package:flutter/material.dart';
 
 class FilterByBranch extends StatefulWidget {
   final List<BranchData>? branchData;
-   FilterByBranch({ Key? key, this.branchData }) : super(key: key);
+  FilterByBranch({Key? key, this.branchData}) : super(key: key);
 
   @override
   _FilterByBranchState createState() => _FilterByBranchState();
 }
 
 class _FilterByBranchState extends State<FilterByBranch> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
   List<BranchData>? branchData;
- List<BranchData>? branchDataDisplay;
+  List<BranchData>? branchDataDisplay;
 
   @override
   void initState() {
@@ -41,27 +42,17 @@ class _FilterByBranchState extends State<FilterByBranch> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.chooseBranch)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()));
+        body:
+            Container(decoration: AppGlass.background(), child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -122,8 +113,9 @@ class _FilterByBranchState extends State<FilterByBranch> {
                   item.branchName!,
                   style: TextStyle(
                       fontSize: 15.0,
-                      color:
-                          item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
                       fontWeight:
                           item.selected! ? FontWeight.bold : FontWeight.normal),
                 )

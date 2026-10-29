@@ -26,6 +26,7 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
   cupertino_icons: ^1.0.2
+  liquid_glass_widgets: 1.16.0
 
 dev_dependencies:
   flutter_test:

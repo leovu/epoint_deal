@@ -3,6 +3,7 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/container_scrollable.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final List<KeyboardActionsItem>? actions;
@@ -31,9 +32,7 @@ class CustomBottomSheet extends StatelessWidget {
             Container(height: MediaQuery.of(context).padding.top + 40.0),
             Flexible(
               child: InkWell(
-                child: Container(
-                  decoration: AppGlass.sheet(),
-                  clipBehavior: Clip.antiAlias,
+                child: CustomGlassSurface(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -44,8 +43,10 @@ class CustomBottomSheet extends StatelessWidget {
                           width: 38.0,
                           height: 5.0,
                           decoration: BoxDecoration(
-                              color: AppColors.primaryDarkColor.withValues(alpha: 0.18),
-                              borderRadius: BorderRadius.circular(AppRadius.pill)),
+                              color: AppColors.primaryDarkColor
+                                  .withValues(alpha: 0.18),
+                              borderRadius:
+                                  BorderRadius.circular(AppRadius.pill)),
                         ),
                       ),
                       title == null

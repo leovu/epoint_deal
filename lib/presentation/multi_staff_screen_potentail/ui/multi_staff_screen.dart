@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -117,7 +118,8 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                                         border: Border.all(
                                             width: 1.0,
                                             color: AppColors.primaryColorMix),
-                                        borderRadius: BorderRadius.circular(AppRadius.sm)),
+                                        borderRadius: BorderRadius.circular(
+                                            AppRadius.sm)),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -176,7 +178,8 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                                         border: Border.all(
                                             width: 1.0,
                                             color: AppColors.primaryColorMix),
-                                        borderRadius: BorderRadius.circular(AppRadius.sm)),
+                                        borderRadius: BorderRadius.circular(
+                                            AppRadius.sm)),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -411,24 +414,14 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppGlass.backgroundColor,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        shape: AppGlass.appBarShape,
-        flexibleSpace: Container(decoration: AppGlass.header()),
+      appBar: CustomGlassAppBar(
         title: Text(
           AppLocalizations.text(LangKey.staff)!,
           style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textTitleColor,
               fontSize: 18.0,
               fontWeight: FontWeight.w600),
         ),
-        // leadingWidth: 20.0,
       ),
       body: _buildBody(),
     );

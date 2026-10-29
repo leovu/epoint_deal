@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' as lg;
 
 class AppColors {
   static const subColor = Color(0xFF2F2E41);
@@ -897,15 +898,26 @@ class AppGlass {
         ),
       ];
 
+  static const Color cardBorderColor = Color(0xFFE6EAF0);
+
+  static List<BoxShadow> get cardShadow => [
+        BoxShadow(
+          offset: Offset(0.0, 2.0),
+          blurRadius: 8.0,
+          color: Color(0xFF0F172A).withValues(alpha: 0.05),
+        ),
+      ];
+
   static LinearGradient get cardGradient => LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.white.withValues(alpha: 0.92),
-          Color.lerp(Colors.white, AppColors.primaryColor, 0.02)!
-              .withValues(alpha: 0.74),
-        ],
+        colors: [Colors.white, Colors.white],
       );
+
+  static const lg.LiquidGlassSettings sheetSettings = lg.LiquidGlassSettings(
+    glassColor: Color(0xD9F7F9FC),
+    blur: 24.0,
+    thickness: 30.0,
+    saturation: 1.8,
+  );
 
   static LinearGradient get sheetGradient => LinearGradient(
         begin: Alignment.topCenter,
@@ -933,10 +945,9 @@ class AppGlass {
   static BoxDecoration card({double radius = AppGlass.radius, Color? color}) {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(radius),
-      gradient: color != null ? null : cardGradient,
-      color: color,
-      border: Border.all(color: borderColor, width: 1.0),
-      boxShadow: shadow,
+      color: color ?? Colors.white,
+      border: Border.all(color: cardBorderColor, width: 0.5),
+      boxShadow: cardShadow,
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final String? title;
@@ -30,12 +31,10 @@ class CustomBottomSheet extends StatelessWidget {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {},
-            child: Container(
+            child: CustomGlassSurface(
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.9,
               ),
-              decoration: AppGlass.sheet(),
-              clipBehavior: Clip.antiAlias,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -83,7 +82,8 @@ class CustomBottomSheet extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Divider(height: 1.0, color: AppColors.primaryColorMix),
+                    const Divider(
+                        height: 1.0, color: AppColors.primaryColorMix),
                   ],
                   Flexible(
                     fit: FlexFit.loose,
@@ -92,8 +92,7 @@ class CustomBottomSheet extends StatelessWidget {
                   if (onConfirm != null) ...[
                     const SizedBox(height: 8.0),
                     Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 18.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       child: CustomButton(
                         text: confirmText ??
                             AppLocalizations.text(LangKey.confirm),
@@ -101,9 +100,7 @@ class CustomBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ],
-                  SizedBox(
-                      height:
-                          MediaQuery.of(context).padding.bottom + 12.0),
+                  const SizedBox(height: 12.0),
                 ],
               ),
             ),

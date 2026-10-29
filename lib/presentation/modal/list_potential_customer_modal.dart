@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -15,35 +16,36 @@ class ListCustomerPotentialModal extends StatefulWidget {
   List<ListCustomLeadItems>? items = <ListCustomLeadItems>[];
   ListCustomLeadItems? leadItem;
 
- ListCustomerPotentialModal({ Key? key, this.items ,this.leadItem});
+  ListCustomerPotentialModal({Key? key, this.items, this.leadItem});
 
   @override
-  _ListCustomerPotentialModalState createState() => _ListCustomerPotentialModalState();
+  _ListCustomerPotentialModalState createState() =>
+      _ListCustomerPotentialModalState();
 }
 
-class _ListCustomerPotentialModalState extends State<ListCustomerPotentialModal> {
+class _ListCustomerPotentialModalState
+    extends State<ListCustomerPotentialModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-ListCustomLeadData? _model ;
+  ListCustomLeadData? _model;
 
   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
-      search: "",
-          page: 1,
-          statusAssign: "",
-          customerType: "",
-          tagId: [],
-          customerSourceId: [],
-          staffId: [],
-          pipelineId: [],
-          journeyId: [],
-          careHistory: "",
-          isConvert: "",
-          createdAt: "",
-          allocationDate: "",
-
-      );
+    search: "",
+    page: 1,
+    statusAssign: "",
+    customerType: "",
+    tagId: [],
+    customerSourceId: [],
+    staffId: [],
+    pipelineId: [],
+    journeyId: [],
+    careHistory: "",
+    isConvert: "",
+    createdAt: "",
+    allocationDate: "",
+  );
 
   int? currentPage = 1;
   int? nextPage = 2;
@@ -76,42 +78,45 @@ ListCustomLeadData? _model ;
   getData(bool loadMore, {int? page}) async {
     keyboardDismissOnTap(context);
     FocusScope.of(context).unfocus();
-    ListCustomLeadModelReponse? model = await DealConnection.getListPotentialCustomer(
-        context,
-        ListCustomLeadModelRequest(
-            search: _searchext.text,
-            page: filterModel.page,
-            statusAssign: "",
-          customerType: "",
-          tagId: [],
-          customerSourceId: [],
-          staffId: [],
-          pipelineId: [],
-          journeyId: [],
-          careHistory: "",
-          isConvert: "",
-          createdAt: "",
-          allocationDate: "",));
+    ListCustomLeadModelReponse? model =
+        await DealConnection.getListPotentialCustomer(
+            context,
+            ListCustomLeadModelRequest(
+              search: _searchext.text,
+              page: filterModel.page,
+              statusAssign: "",
+              customerType: "",
+              tagId: [],
+              customerSourceId: [],
+              staffId: [],
+              pipelineId: [],
+              journeyId: [],
+              careHistory: "",
+              isConvert: "",
+              createdAt: "",
+              allocationDate: "",
+            ));
     if (model != null) {
       if (!loadMore) {
         widget.items = [];
         widget.items = model.data?.items;
         // ignore: null_aware_before_operator
-       if (widget.items!.length > 0) {
-         _controller.animateTo(
-              _controller.position.minScrollExtent,
-              duration: Duration(seconds: 2),
-              curve: Curves.fastOutSlowIn,
-            );
-       }
-              ;
+        if (widget.items!.length > 0) {
+          _controller.animateTo(
+            _controller.position.minScrollExtent,
+            duration: Duration(seconds: 2),
+            curve: Curves.fastOutSlowIn,
+          );
+        }
+        ;
       } else {
-        widget.items!.addAll(model.data?.items! as Iterable<ListCustomLeadItems>);
+        widget.items!
+            .addAll(model.data?.items! as Iterable<ListCustomLeadItems>);
       }
 
-
-      for (int i = 0; i < widget.items!.length ; i++) {
-        if ((widget.leadItem?.customerLeadCode ?? "") == widget.items![i].customerLeadCode ) {
+      for (int i = 0; i < widget.items!.length; i++) {
+        if ((widget.leadItem?.customerLeadCode ?? "") ==
+            widget.items![i].customerLeadCode) {
           widget.items![i].selected = true;
         } else {
           widget.items![i].selected = false;
@@ -119,11 +124,9 @@ ListCustomLeadData? _model ;
       }
 
       _model = ListCustomLeadData(
-        items: (widget.items ?? <ListCustomLeadItems>[])
-            .map((e) => ListCustomLeadItems.fromJson(e.toJson()))
-            .toList());
-
-
+          items: (widget.items ?? <ListCustomLeadItems>[])
+              .map((e) => ListCustomLeadItems.fromJson(e.toJson()))
+              .toList());
 
       currentPage = model.data?.pageInfo?.currentPage;
       nextPage = model.data?.pageInfo?.nextPage;
@@ -138,28 +141,17 @@ ListCustomLeadData? _model ;
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.listLead)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
-          // leadingWidth: 20.0,
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()));
+        body:
+            Container(decoration: AppGlass.background(), child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -189,31 +181,31 @@ ListCustomLeadData? _model ;
   }
 
   List<Widget> _listWidget() {
-    return (_model?.items != null && _model!.items!.length > 0) ? List.generate(
-        _model!.items!.length,
-        (index) => _buildItemStaff(_model!.items![index], () {
-              selectedStaff(index);
-            })) : [Container()];
+    return (_model?.items != null && _model!.items!.length > 0)
+        ? List.generate(
+            _model!.items!.length,
+            (index) => _buildItemStaff(_model!.items![index], () {
+                  selectedStaff(index);
+                }))
+        : [Container()];
   }
 
-   Widget dataNotFound() {
+  Widget dataNotFound() {
     return CustomListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                      physics: NeverScrollableScrollPhysics(),
-                      separator: Divider(color: AppColors.primaryColorMix),
-                      children: List.generate(
-                        5,
-                        (index) => Container(
-                  margin: EdgeInsets.only(top: 15.0),
-                  child: CustomShimmer(
-                    child: CustomSkeleton(
-          height: 50,
-          radius: AppRadius.sm),
-                  ),
-                ),
-            ));
+        shrinkWrap: true,
+        padding:
+            EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+        physics: NeverScrollableScrollPhysics(),
+        separator: Divider(color: AppColors.primaryColorMix),
+        children: List.generate(
+          5,
+          (index) => Container(
+            margin: EdgeInsets.only(top: 15.0),
+            child: CustomShimmer(
+              child: CustomSkeleton(height: 50, radius: AppRadius.sm),
+            ),
+          ),
+        ));
   }
 
   selectedStaff(int index) async {
@@ -242,7 +234,9 @@ ListCustomLeadData? _model ;
                   item.leadFullName!,
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
                       fontWeight: FontWeight.normal),
                   maxLines: 1,
                 ),
@@ -275,23 +269,24 @@ ListCustomLeadData? _model ;
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(widget.items,event);
+        searchModel(widget.items, event);
       },
     );
   }
 
-   searchModel(List<ListCustomLeadItems>? model, String value) {
+  searchModel(List<ListCustomLeadItems>? model, String value) {
     if (model == null || value.isEmpty) {
       _model!.items = widget.items;
-      setState(() {
-      });
+      setState(() {});
     } else {
       try {
         List<ListCustomLeadItems> models = model.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
-            if (!((model.leadFullName ?? "").removeAccents().contains(element))) {
+            if (!((model.leadFullName ?? "")
+                .removeAccents()
+                .contains(element))) {
               result = false;
               break;
             }
@@ -299,12 +294,9 @@ ListCustomLeadData? _model ;
           return result;
         }).toList();
         _model!.items = models;
-        setState(() {
-      });
+        setState(() {});
       } catch (_) {
-        setState(() {
-        
-      });
+        setState(() {});
       }
     }
   }

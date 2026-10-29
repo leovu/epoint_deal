@@ -6,6 +6,7 @@ import 'package:epoint_deal_plugin/connection/deal_connection.dart';
 import 'package:epoint_deal_plugin/model/request/add_business_areas_model_request.dart';
 import 'package:epoint_deal_plugin/model/response/description_model_response.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class CreateNewBusinessAreaModal extends StatefulWidget {
   CreateNewBusinessAreaModal({Key? key}) : super(key: key);
@@ -49,9 +50,8 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
-      decoration: AppGlass.sheet(),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
           : MediaQuery.of(context).size.height * 0.28,
@@ -94,23 +94,24 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
           // await Future.delayed(Duration(seconds: 2));
           DescriptionModelResponse? result =
               await DealConnection.addBusinessAreas(
-                  context, AddBusinessAreasModelRequest(
-                    name: _nameText.text,
-                    description: ""
-                  ));
-                  await Future.delayed(Duration(seconds: 2));
-                  Navigator.of(context).pop();
+                  context,
+                  AddBusinessAreasModelRequest(
+                      name: _nameText.text, description: ""));
+          await Future.delayed(Duration(seconds: 2));
+          Navigator.of(context).pop();
 
           if (result != null) {
             if (result.errorCode == 0) {
-              await DealConnection.showMyDialog(context, result.errorDescription);
+              await DealConnection.showMyDialog(
+                  context, result.errorDescription);
               Navigator.of(context).pop(true);
             } else {
               DealConnection.showMyDialog(context, result.errorDescription);
             }
           }
         } else {
-          DealConnection.showMyDialog(context, "Vui lòng nhập tên lĩnh vực kinh doanh");
+          DealConnection.showMyDialog(
+              context, "Vui lòng nhập tên lĩnh vực kinh doanh");
         }
       },
       child: Container(
@@ -155,8 +156,10 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
             filled: true,
             fillColor: AppGlass.surface,
             border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
             focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
@@ -169,7 +172,8 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: AppColors.dangerColor))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content,

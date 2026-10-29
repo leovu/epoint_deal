@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/constant.dart';
 import 'package:epoint_deal_plugin/common/globals.dart';
@@ -210,7 +211,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
   void bindingData() async {
     detailLead = DetailPotentialData.fromJson(widget.jsonDetailLead!);
     detailDeal.phone = detailLead!.phone ?? "";
-   _dealNameText.text = "Deal của ${detailLead?.fullName ?? ""}";
+    _dealNameText.text = "Deal của ${detailLead?.fullName ?? ""}";
     for (int i = 0; i < _modelStaff.length; i++) {
       if ((detailLead?.saleId ?? 0) == _modelStaff[i].staffId) {
         _modelStaff[i].isSelected = true;
@@ -231,8 +232,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
     try {
       var item = _modelStaff.firstWhere(
           (element) => element.staffId == (detailLead?.saleId ?? 0));
-        item.isSelected = true;
-        detailDeal.saleId = _modelStaffSelected[0].staffId;
+      item.isSelected = true;
+      detailDeal.saleId = _modelStaffSelected[0].staffId;
     } catch (e) {}
 
     detailDeal.saleId = _modelStaffSelected[0].staffId;
@@ -248,27 +249,17 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
       },
       child: Scaffold(
           backgroundColor: AppGlass.backgroundColor,
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            shape: AppGlass.appBarShape,
-            flexibleSpace: Container(decoration: AppGlass.header()),
+          appBar: CustomGlassAppBar(
             title: Text(
               AppLocalizations.text(LangKey.creatDeal)!,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textTitleColor,
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600),
             ),
           ),
           body: Container(
-              decoration: AppGlass.background(),
-              child: _buildBody())),
+              decoration: AppGlass.background(), child: _buildBody())),
     );
   }
 
@@ -366,8 +357,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                   child: Text(
                     AppLocalizations.text(LangKey.customerVi)!,
                     style: TextStyle(
-                        color:
-                            selectedCustomer ? Colors.white : AppColors.textSecondaryColor,
+                        color: selectedCustomer
+                            ? Colors.white
+                            : AppColors.textSecondaryColor,
                         fontSize: 14.0,
                         fontWeight: FontWeight.w400),
                   ),
@@ -405,8 +397,10 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       width: 20.0,
                     ),
                     Text(
-                      (detailLead?.customerType != null && detailLead?.customerType != "")
-                          ? (detailLead!.customerType!.toLowerCase() == "personal")
+                      (detailLead?.customerType != null &&
+                              detailLead?.customerType != "")
+                          ? (detailLead!.customerType!.toLowerCase() ==
+                                  "personal")
                               ? AppLocalizations.text(LangKey.personal)!
                               : AppLocalizations.text(LangKey.business)!
                           : "",
@@ -460,7 +454,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 )
               : Container(),
 
-      // nhập tên deal
+          // nhập tên deal
           _buildTextField(AppLocalizations.text(LangKey.inputDealName), "",
               Assets.iconDealName, true, false, true,
               fillText: _dealNameText,
@@ -810,17 +804,17 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
         });
   }
 
-    List<Widget> listBranch() {
+  List<Widget> listBranch() {
     return List.generate(
         branchData!.length,
         (index) => buildItemBranch(
-                branchData![index], branchData![index].selected!,
-                () {
+                branchData![index], branchData![index].selected!, () {
               selectedItem(index);
             }));
   }
 
-  Widget buildItemBranch(BranchData? item, bool selected, GestureTapCallback ontap) {
+  Widget buildItemBranch(
+      BranchData? item, bool selected, GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -849,8 +843,9 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                     colorFilter: ColorFilter.mode(
                         Colors.black.withValues(alpha: 0.3), BlendMode.dstATop),
                     image: ((item?.avatar == null)
-                        ? AssetImage(Assets.imgEpoint)
-                        : NetworkImage(item?.avatar ?? "")) as ImageProvider<Object>,
+                            ? AssetImage(Assets.imgEpoint)
+                            : NetworkImage(item?.avatar ?? ""))
+                        as ImageProvider<Object>,
                   )),
               child: Center(
                 child: Text(
@@ -914,8 +909,10 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
             filled: true,
             fillColor: AppGlass.surface,
             border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-            disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            enabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
+            disabledBorder:
+                AppGlass.inputBorder(color: AppColors.primaryColorMix),
             focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
             label: (content == "")
                 ? RichText(
@@ -928,7 +925,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: AppColors.dangerColor))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
@@ -958,15 +956,14 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                 BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
             isDense: true,
           ),
-          onChanged: (event) {
-          },
+          onChanged: (event) {},
         ),
       ),
     );
   }
 
-  Widget _buildDatePicker(
-      String? hintText, TextEditingController fillText, GestureTapCallback ontap) {
+  Widget _buildDatePicker(String? hintText, TextEditingController fillText,
+      GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
       child: TextField(
@@ -983,7 +980,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
           fillColor: AppGlass.surface,
           border: AppGlass.inputBorder(color: AppColors.primaryColorMix),
           enabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
-          disabledBorder: AppGlass.inputBorder(color: AppColors.primaryColorMix),
+          disabledBorder:
+              AppGlass.inputBorder(color: AppColors.primaryColorMix),
           focusedBorder: AppGlass.inputBorder(color: AppColors.primaryColor),
           // hintText: hintText,
           label: RichText(
@@ -994,7 +992,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
                       color: AppColors.textMutedColor,
                       fontWeight: FontWeight.normal),
                   children: [
-                TextSpan(text: "*", style: TextStyle(color: AppColors.dangerColor))
+                TextSpan(
+                    text: "*", style: TextStyle(color: AppColors.dangerColor))
               ])),
 
           hintStyle: TextStyle(
@@ -1026,7 +1025,7 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
           borderRadius: BorderRadius.circular(AppRadius.md)),
       child: InkWell(
         onTap: () async {
-            await addDealLead();
+          await addDealLead();
         },
         child: Center(
           child: Text(
@@ -1048,7 +1047,8 @@ class _CreateDealFromLeadScreenState extends State<CreateDealFromLeadScreen>
         detailDeal.pipelineCode == "" ||
         detailDeal.journeyCode == "" ||
         detailDeal.saleId == 0 ||
-        selectedClosingDueDate == null || detailDeal.branchCode == "") {
+        selectedClosingDueDate == null ||
+        detailDeal.branchCode == "") {
       DealConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);

@@ -6,71 +6,76 @@ import 'package:epoint_deal_plugin/utils/ultility.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class AllocatorModal extends StatefulWidget {
   List<AllocatorData>? allocatorData = <AllocatorData>[];
   AllocatorData? allocatorSelected;
-   AllocatorModal({ Key? key ,this.allocatorData, this.allocatorSelected}) : super(key: key);
+  AllocatorModal({Key? key, this.allocatorData, this.allocatorSelected})
+      : super(key: key);
 
   @override
   _AllocatorModalState createState() => _AllocatorModalState();
 }
 
 class _AllocatorModalState extends State<AllocatorModal> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
-@override
+  @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        AllocatorData? result = widget.allocatorData!.firstWhereOrNull((element) => element.staffId == widget.allocatorSelected?.staffId);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      AllocatorData? result = widget.allocatorData!.firstWhereOrNull(
+          (element) => element.staffId == widget.allocatorSelected?.staffId);
       if (result != null) {
-         widget.allocatorSelected = result;
-         result.selected = true;
+        widget.allocatorSelected = result;
+        result.selected = true;
       }
-         setState(() {
-           
-         });
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 10.0,bottom: 50),
-      decoration: AppGlass.sheet(),
+    return CustomGlassSurface(
+      padding: EdgeInsets.only(top: 10.0, bottom: 50),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(width: 30,),
-              Text(AppLocalizations.text(LangKey.chooseAllottedPerson)!,style: TextStyle(
-                  fontSize: 18.0,
-                  color: AppColors.textTitleColor,
-                  fontWeight: FontWeight.w500),),
+              Container(
+                width: 30,
+              ),
+              Text(
+                AppLocalizations.text(LangKey.chooseAllottedPerson)!,
+                style: TextStyle(
+                    fontSize: 18.0,
+                    color: AppColors.textTitleColor,
+                    fontWeight: FontWeight.w500),
+              ),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Padding(padding: EdgeInsets.only(right: 20),
-                child: Icon(Icons.clear),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.clear),
                 ),
               ),
-            
             ],
           ),
           Expanded(
             child: CustomListView(
-                  shrinkWrap: true,
-                  padding:
-                      EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: ClampingScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(color: AppColors.primaryColorMix),
-                  children: _listWidget(),
-                ),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(
+                  top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+              physics: ClampingScrollPhysics(),
+              controller: _controller,
+              separator: Divider(color: AppColors.primaryColorMix),
+              children: _listWidget(),
+            ),
           ),
         ],
       ),
@@ -78,13 +83,14 @@ class _AllocatorModalState extends State<AllocatorModal> {
   }
 
   List<Widget> _listWidget() {
-    return (widget.allocatorData != null) ? List.generate(
-        widget.allocatorData!.length,
-        (index) => _buildItem(
-                widget.allocatorData![index].fullName!, widget.allocatorData![index].selected!,
-                () {
-              selectedItem(index);
-            })) : [CustomDataNotFound()];
+    return (widget.allocatorData != null)
+        ? List.generate(
+            widget.allocatorData!.length,
+            (index) => _buildItem(widget.allocatorData![index].fullName!,
+                    widget.allocatorData![index].selected!, () {
+                  selectedItem(index);
+                }))
+        : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
@@ -98,7 +104,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
               title,
               style: TextStyle(
                   fontSize: 17.0,
-                  color: selected ? AppColors.primaryColor : AppColors.textTitleColor,
+                  color: selected
+                      ? AppColors.primaryColor
+                      : AppColors.textTitleColor,
                   fontWeight: FontWeight.normal),
             )
           ],

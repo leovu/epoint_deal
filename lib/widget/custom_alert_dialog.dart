@@ -1,10 +1,10 @@
-
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
 import 'package:epoint_deal_plugin/widget/custom_button.dart';
 import 'package:epoint_deal_plugin/widget/custom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   final String? title;
@@ -20,27 +20,26 @@ class CustomAlertDialog extends StatelessWidget {
   final bool showSubmitted;
 
   CustomAlertDialog(
-      {
-        required this.title,
-        this.content,
-        this.onSubmitted,
-        this.textSubmitted,
-        this.onSubSubmitted,
-        this.textSubSubmitted,
-        this.colorSubmitted,
-        this.enableCancel = false,
-        this.isTicket = false,
-        this.showSubmitted = true,
-        this.child
-      });
+      {required this.title,
+      this.content,
+      this.onSubmitted,
+      this.textSubmitted,
+      this.onSubSubmitted,
+      this.textSubSubmitted,
+      this.colorSubmitted,
+      this.enableCancel = false,
+      this.isTicket = false,
+      this.showSubmitted = true,
+      this.child});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.topRight,
       children: [
-        Container(
-          decoration: AppGlass.dialog(),
+        CustomGlassSurface(
+          floating: false,
+          borderRadius: AppRadius.card + 4.0,
           child: Column(
             children: [
               Container(
@@ -49,7 +48,8 @@ class CustomAlertDialog extends StatelessWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.sizeOnTap! - AppSizes.maxPadding),
+                          horizontal:
+                              AppSizes.sizeOnTap! - AppSizes.maxPadding),
                       child: Text(
                         title ?? "",
                         style: AppTextStyles.style20BlackBold,
@@ -59,25 +59,25 @@ class CustomAlertDialog extends StatelessWidget {
                     Container(
                       height: AppSizes.minPadding,
                     ),
-                    child ?? Text(
-                      content ?? "",
-                      style: AppTextStyles.style15BlackNormal,
-                      textAlign: TextAlign.center,
-                    ),
-                   if (showSubmitted)
-                      ...[
-                        SizedBox(
-                          height: AppSizes.minPadding,
+                    child ??
+                        Text(
+                          content ?? "",
+                          style: AppTextStyles.style15BlackNormal,
+                          textAlign: TextAlign.center,
                         ),
-                        CustomButton(
-                          text: textSubmitted ??
-                              AppLocalizations.text(LangKey.i_get_it),
-                          backgroundColor:
-                          colorSubmitted ?? AppColors.primaryColor,
-                          onTap:
-                          onSubmitted ?? () => CustomNavigator.pop(context),
-                        ),
-                      ],
+                    if (showSubmitted) ...[
+                      SizedBox(
+                        height: AppSizes.minPadding,
+                      ),
+                      CustomButton(
+                        text: textSubmitted ??
+                            AppLocalizations.text(LangKey.i_get_it),
+                        backgroundColor:
+                            colorSubmitted ?? AppColors.primaryColor,
+                        onTap:
+                            onSubmitted ?? () => CustomNavigator.pop(context),
+                      ),
+                    ],
                     textSubSubmitted == null
                         ? Container()
                         : Container(
@@ -101,7 +101,7 @@ class CustomAlertDialog extends StatelessWidget {
                   size: 24,
                   color: AppColors.primaryColor,
                 ),
-                onTap: () =>  Navigator.of(context).pop(),
+                onTap: () => Navigator.of(context).pop(),
               )
             : Container()
       ],

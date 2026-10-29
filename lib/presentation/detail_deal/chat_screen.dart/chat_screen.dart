@@ -1,5 +1,4 @@
-
-
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/assets.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
@@ -53,24 +52,25 @@ class _ChatScreenState extends State<ChatScreen> {
         WorkListCommentRequestModel(manageWorkId: widget.detail!.dealId));
   }
 
- _send() {
+  _send() {
     if (_controllerComment.text.isEmpty && _file == null) {
       return;
     }
     _bloc.workCreatedComment(
         WorkCreateCommentRequestModel(
-            dealID: widget.detail!.dealId,
-            parentDealCommentId: (_callbackModel?.dealParentCommentId) ??
-                (_callbackModel?.dealCommentId),
-            message: _controllerComment.text,
-            path: _file ?? "",),
+          dealID: widget.detail!.dealId,
+          parentDealCommentId: (_callbackModel?.dealParentCommentId) ??
+              (_callbackModel?.dealCommentId),
+          message: _controllerComment.text,
+          path: _file ?? "",
+        ),
         _controllerComment,
-       null);
+        null);
   }
 
   Future _onRefresh() {
-    return _bloc
-        .workListComment(WorkListCommentRequestModel(manageWorkId: widget.detail!.dealId));
+    return _bloc.workListComment(
+        WorkListCommentRequestModel(manageWorkId: widget.detail!.dealId));
   }
 
   _showOption() {
@@ -243,8 +243,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildChatBox() {
     return Container(
-      decoration:
-          BoxDecoration(border: Border(top: BorderSide(color: AppColors.textMutedColor))),
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.textMutedColor))),
       padding:
           EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
       child: Column(
@@ -370,31 +370,19 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppGlass.backgroundColor,
-      appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
-          title: Text(
-            AppLocalizations.text(LangKey.discuss)!,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600),
-          ),
+      appBar: CustomGlassAppBar(
+        title: Text(
+          AppLocalizations.text(LangKey.discuss)!,
+          style: TextStyle(
+              color: AppColors.textTitleColor,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
+      ),
       body: Column(
         children: [
           Expanded(
-            child: Container(
-                width: AppSizes.maxWidth,
-                child: _buildComments()),
+            child: Container(width: AppSizes.maxWidth, child: _buildComments()),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),

@@ -5,10 +5,11 @@ import 'package:epoint_deal_plugin/model/response/branch_model_response.dart';
 import 'package:epoint_deal_plugin/widget/custom_data_not_found.dart';
 import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:epoint_deal_plugin/widget/custom_glass_surface.dart';
 
 class BranchModal extends StatefulWidget {
   List<BranchData>? branchData;
-   BranchModal({ Key? key , this.branchData});
+  BranchModal({Key? key, this.branchData});
 
   @override
   _BranchModalState createState() => _BranchModalState();
@@ -19,9 +20,8 @@ class _BranchModalState extends State<BranchModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 10.0,bottom: 50),
-      decoration: AppGlass.sheet(),
+    return CustomGlassSurface(
+      padding: EdgeInsets.only(top: 10.0, bottom: 50),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -29,33 +29,34 @@ class _BranchModalState extends State<BranchModal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(width: 30),
-              Text(AppLocalizations.text(LangKey.chooseItinerary)!
-              
-              ,style: TextStyle(
-                  fontSize: 18.0,
-                  color: AppColors.textTitleColor,
-                  fontWeight: FontWeight.w500),),
+              Text(
+                AppLocalizations.text(LangKey.chooseItinerary)!,
+                style: TextStyle(
+                    fontSize: 18.0,
+                    color: AppColors.textTitleColor,
+                    fontWeight: FontWeight.w500),
+              ),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Padding(padding: EdgeInsets.only(right: 20),
-                child: Icon(Icons.clear),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.clear),
                 ),
               ),
-            
             ],
           ),
           Expanded(
             child: CustomListView(
-                  shrinkWrap: true,
-                  padding:
-                      EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: ClampingScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(color: AppColors.primaryColorMix),
-                  children: _listWidget(),
-                ),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(
+                  top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+              physics: ClampingScrollPhysics(),
+              controller: _controller,
+              separator: Divider(color: AppColors.primaryColorMix),
+              children: _listWidget(),
+            ),
           ),
         ],
       ),
@@ -63,13 +64,14 @@ class _BranchModalState extends State<BranchModal> {
   }
 
   List<Widget> _listWidget() {
-    return (widget.branchData != null) ?  List.generate(
-        widget.branchData!.length,
-        (index) => _buildItem(
-                widget.branchData![index].address!, widget.branchData![index].selected!,
-                () {
-              selectedItem(index);
-            })) : [CustomDataNotFound()];
+    return (widget.branchData != null)
+        ? List.generate(
+            widget.branchData!.length,
+            (index) => _buildItem(widget.branchData![index].address!,
+                    widget.branchData![index].selected!, () {
+                  selectedItem(index);
+                }))
+        : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
@@ -83,7 +85,9 @@ class _BranchModalState extends State<BranchModal> {
               title,
               style: TextStyle(
                   fontSize: 17.0,
-                  color: selected ? AppColors.primaryColor : AppColors.textTitleColor,
+                  color: selected
+                      ? AppColors.primaryColor
+                      : AppColors.textTitleColor,
                   fontWeight: FontWeight.normal),
             )
           ],

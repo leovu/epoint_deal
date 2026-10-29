@@ -1,7 +1,6 @@
 part of widget;
 
 class CustomFileView extends StatefulWidget {
-
   final String? url;
   final String? title;
 
@@ -12,7 +11,6 @@ class CustomFileView extends StatefulWidget {
 }
 
 class CustomFileViewState extends State<CustomFileView> {
-
   late WebViewController _controller;
 
   @override
@@ -21,21 +19,21 @@ class CustomFileViewState extends State<CustomFileView> {
     super.initState();
 
     _controller = WebViewController()
-  ..setJavaScriptMode(JavaScriptMode.unrestricted)
-  ..setBackgroundColor(const Color(0x00000000))
-  ..setNavigationDelegate(
-    NavigationDelegate(
-      onProgress: (int progress) {
-        // Update loading bar.
-      },
-      onPageStarted: (String url) {},
-      onPageFinished: (String url) {
-
-      },
-      onWebResourceError: (WebResourceError error) {},
-    ),
-  )
-  ..loadRequest(Uri.parse(Platform.isAndroid?"https://docs.google.com/viewer?embedded=true&url=${widget.url}":widget.url!));
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadRequest(Uri.parse(Platform.isAndroid
+          ? "https://docs.google.com/viewer?embedded=true&url=${widget.url}"
+          : widget.url!));
   }
 
   @override
@@ -48,31 +46,17 @@ class CustomFileViewState extends State<CustomFileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppGlass.backgroundColor,
-      appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
-          title: Text(
-            widget.title!,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600),
-          ),
-        ),
-      body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)?CustomNetworkImage(
-        width: double.infinity,
-        height: double.infinity,
-        url: widget.url,
-        fit: BoxFit.contain,
-      ):WebViewWidget(controller: _controller),
+      appBar: CustomGlassAppBar(
+        title: Text(widget.title!),
+      ),
+      body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)
+          ? CustomNetworkImage(
+              width: double.infinity,
+              height: double.infinity,
+              url: widget.url,
+              fit: BoxFit.contain,
+            )
+          : WebViewWidget(controller: _controller),
     );
   }
 }

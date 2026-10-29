@@ -1,3 +1,4 @@
+import 'package:epoint_deal_plugin/widget/custom_glass_app_bar.dart';
 import 'package:epoint_deal_plugin/common/lang_key.dart';
 import 'package:epoint_deal_plugin/common/localization/app_localizations.dart';
 import 'package:epoint_deal_plugin/common/theme.dart';
@@ -9,7 +10,7 @@ import 'package:epoint_deal_plugin/widget/custom_listview.dart';
 import 'package:flutter/material.dart';
 
 class FilterByPipeline extends StatefulWidget {
-    List<PipelineData>? pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
   FilterByPipeline(this.pipeLineData);
 
   @override
@@ -41,27 +42,17 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppGlass.backgroundColor,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shape: AppGlass.appBarShape,
-          flexibleSpace: Container(decoration: AppGlass.header()),
+        appBar: CustomGlassAppBar(
           title: Text(
             AppLocalizations.text(LangKey.choosePipeline)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textTitleColor,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
         ),
-        body: Container(
-            decoration: AppGlass.background(),
-            child: _buildBody()));
+        body:
+            Container(decoration: AppGlass.background(), child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -110,7 +101,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
 
   Widget _buildItem(PipelineData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -122,8 +113,9 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
                   item.pipelineName!,
                   style: TextStyle(
                       fontSize: 15.0,
-                      color:
-                          item.selected! ? AppColors.primaryColor : AppColors.textTitleColor,
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
                       fontWeight:
                           item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
@@ -179,7 +171,9 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
-            if (!((model.pipelineName ?? "").removeAccents().contains(element))) {
+            if (!((model.pipelineName ?? "")
+                .removeAccents()
+                .contains(element))) {
               result = false;
               break;
             }
